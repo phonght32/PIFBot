@@ -1,0 +1,364 @@
+/* Includes ------------------------------------------------------------------*/
+#include "stm32f4xx.h"
+#include "stm32f4xx_rcc.h"
+
+#include "include/timer.h"
+
+
+/* Internal define -----------------------------------------------------------*/
+#define GPIO_SPEED_FREQ	GPIO_Speed_100MHz
+#define GPIO_PUPD 		GPIO_PuPd_UP
+
+
+/* Internal typedef ----------------------------------------------------------*/
+typedef enum
+{
+	PWM_PARAM_MAPPING_GPIOx = 0,
+	PWM_PARAM_MAPPING_GPIO_Pin_x,
+	PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx,
+	PWM_PARAM_MAPPING_PinSourcex,
+	PWM_PARAM_MAPPING_RCC_APBxPeriph_TIMx,
+	PWM_PARAM_MAPPING_GPIO_AF_TIMx,
+	PWM_PARAM_MAPPING_MAX_INDEX
+} pwm_param_mapping_index_t;
+
+
+/* Internal variable ---------------------------------------------------------*/
+/*
+ * PWM Parameters map
+ * Column:	Selected by Timer
+ * Row:   	Selected by PWM channel
+ * Index:
+ *	- 0:	(GPIO_TypeDef *) GPIOx
+ *  - 1:    (uint16_t)       GPIO_Pin_x
+ *  - 2:	(uint32_t)       RCC_AHBxPeriph_GPIOx
+ *  - 3:    (uint8_t)        GPIO_PinSourcex
+ *  - 4:	(uint32_t        RCC_APBxPeriph_TIMx
+ *  - 5:    (uint8_t)        GPIO_AF_TIMx
+ */
+uint32_t PWM_PARAM_MAPPING_PP1[PWM_CHANNEL_MAX][TIMER_NUM_MAX][PWM_PARAM_MAPPING_MAX_INDEX] = {
+	{	{(uint32_t)GPIOA,  GPIO_Pin_8, RCC_AHB1Periph_GPIOA,  GPIO_PinSource8,  RCC_APB2Periph_TIM1,  GPIO_AF_TIM1},
+		{(uint32_t)GPIOA,  GPIO_Pin_0, RCC_AHB1Periph_GPIOA,  GPIO_PinSource0,  RCC_APB1Periph_TIM2,  GPIO_AF_TIM2},
+		{(uint32_t)GPIOA,  GPIO_Pin_6, RCC_AHB1Periph_GPIOA,  GPIO_PinSource6,  RCC_APB1Periph_TIM3,  GPIO_AF_TIM3},
+		{(uint32_t)GPIOB,  GPIO_Pin_6, RCC_AHB1Periph_GPIOB,  GPIO_PinSource6,  RCC_APB1Periph_TIM4,  GPIO_AF_TIM4},
+		{(uint32_t)GPIOA,  GPIO_Pin_0, RCC_AHB1Periph_GPIOA,  GPIO_PinSource0,  RCC_APB1Periph_TIM5,  GPIO_AF_TIM5},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOC,  GPIO_Pin_6, RCC_AHB1Periph_GPIOC,  GPIO_PinSource6,  RCC_APB2Periph_TIM8,  GPIO_AF_TIM8},
+		{(uint32_t)GPIOA,  GPIO_Pin_2, RCC_AHB1Periph_GPIOA,  GPIO_PinSource2,  RCC_APB2Periph_TIM9,  GPIO_AF_TIM9},
+		{(uint32_t)GPIOB,  GPIO_Pin_8, RCC_AHB1Periph_GPIOB,  GPIO_PinSource8, RCC_APB2Periph_TIM10, GPIO_AF_TIM10},
+		{(uint32_t)GPIOB,  GPIO_Pin_9, RCC_AHB1Periph_GPIOB,  GPIO_PinSource9, RCC_APB2Periph_TIM11, GPIO_AF_TIM11},
+		{(uint32_t)GPIOB, GPIO_Pin_14, RCC_AHB1Periph_GPIOB, GPIO_PinSource14, RCC_APB1Periph_TIM12, GPIO_AF_TIM12},
+		{(uint32_t)GPIOA,  GPIO_Pin_6, RCC_AHB1Periph_GPIOA,  GPIO_PinSource6, RCC_APB1Periph_TIM13, GPIO_AF_TIM13},
+		{(uint32_t)GPIOA,  GPIO_Pin_7, RCC_AHB1Periph_GPIOA,  GPIO_PinSource7, RCC_APB1Periph_TIM14, GPIO_AF_TIM14}
+	},
+
+	{	{(uint32_t)GPIOA,  GPIO_Pin_9, RCC_AHB1Periph_GPIOA,  GPIO_PinSource9,  RCC_APB2Periph_TIM1,  GPIO_AF_TIM1},
+		{(uint32_t)GPIOA,  GPIO_Pin_1, RCC_AHB1Periph_GPIOA,  GPIO_PinSource1,  RCC_APB1Periph_TIM2,  GPIO_AF_TIM2},
+		{(uint32_t)GPIOA,  GPIO_Pin_7, RCC_AHB1Periph_GPIOA,  GPIO_PinSource7,  RCC_APB1Periph_TIM3,  GPIO_AF_TIM3},
+		{(uint32_t)GPIOB,  GPIO_Pin_7, RCC_AHB1Periph_GPIOB,  GPIO_PinSource7,  RCC_APB1Periph_TIM4,  GPIO_AF_TIM4},
+		{(uint32_t)GPIOA,  GPIO_Pin_1, RCC_AHB1Periph_GPIOA,  GPIO_PinSource1,  RCC_APB1Periph_TIM5,  GPIO_AF_TIM5},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOC,  GPIO_Pin_7, RCC_AHB1Periph_GPIOC,  GPIO_PinSource7,  RCC_APB2Periph_TIM8,  GPIO_AF_TIM8},
+		{(uint32_t)GPIOA,  GPIO_Pin_3, RCC_AHB1Periph_GPIOA,  GPIO_PinSource3,  RCC_APB2Periph_TIM9,  GPIO_AF_TIM9},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOB, GPIO_Pin_15, RCC_AHB1Periph_GPIOB, GPIO_PinSource15, RCC_APB1Periph_TIM12, GPIO_AF_TIM12},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0}
+	},
+
+	{	{(uint32_t)GPIOA, GPIO_Pin_10, RCC_AHB1Periph_GPIOA, GPIO_PinSource10,  RCC_APB2Periph_TIM1,  GPIO_AF_TIM1},
+		{(uint32_t)GPIOA,  GPIO_Pin_2, RCC_AHB1Periph_GPIOA,  GPIO_PinSource2,  RCC_APB1Periph_TIM2,  GPIO_AF_TIM2},
+		{(uint32_t)GPIOB,  GPIO_Pin_0, RCC_AHB1Periph_GPIOB,  GPIO_PinSource0,  RCC_APB1Periph_TIM3,  GPIO_AF_TIM3},
+		{(uint32_t)GPIOB,  GPIO_Pin_8, RCC_AHB1Periph_GPIOB,  GPIO_PinSource8,  RCC_APB1Periph_TIM4,  GPIO_AF_TIM4},
+		{(uint32_t)GPIOA,  GPIO_Pin_2, RCC_AHB1Periph_GPIOA,  GPIO_PinSource2,  RCC_APB1Periph_TIM5,  GPIO_AF_TIM5},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOC,  GPIO_Pin_8, RCC_AHB1Periph_GPIOC,  GPIO_PinSource8,  RCC_APB2Periph_TIM8,  GPIO_AF_TIM8},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0}
+	},
+
+	{	{(uint32_t)GPIOA, GPIO_Pin_11, RCC_AHB1Periph_GPIOA, GPIO_PinSource11,  RCC_APB2Periph_TIM1,  GPIO_AF_TIM1},
+		{(uint32_t)GPIOA,  GPIO_Pin_3, RCC_AHB1Periph_GPIOA,  GPIO_PinSource3,  RCC_APB1Periph_TIM2,  GPIO_AF_TIM2},
+		{(uint32_t)GPIOB,  GPIO_Pin_1, RCC_AHB1Periph_GPIOB,  GPIO_PinSource1,  RCC_APB1Periph_TIM3,  GPIO_AF_TIM3},
+		{(uint32_t)GPIOB,  GPIO_Pin_9, RCC_AHB1Periph_GPIOB,  GPIO_PinSource9,  RCC_APB1Periph_TIM4,  GPIO_AF_TIM4},
+		{(uint32_t)GPIOA,  GPIO_Pin_3, RCC_AHB1Periph_GPIOA,  GPIO_PinSource3,  RCC_APB1Periph_TIM5,  GPIO_AF_TIM5},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOC,  GPIO_Pin_9, RCC_AHB1Periph_GPIOC,  GPIO_PinSource9,  RCC_APB2Periph_TIM8,  GPIO_AF_TIM8},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0}
+	}
+};
+
+uint32_t PWM_PARAM_MAPPING_PP2[PWM_CHANNEL_MAX][TIMER_NUM_MAX][PWM_PARAM_MAPPING_MAX_INDEX] = {
+	{	{(uint32_t)GPIOE,  GPIO_Pin_9, RCC_AHB1Periph_GPIOE,  GPIO_PinSource9,  RCC_APB2Periph_TIM1,  GPIO_AF_TIM1},
+		{(uint32_t)GPIOA,  GPIO_Pin_5, RCC_AHB1Periph_GPIOA,  GPIO_PinSource5,  RCC_APB1Periph_TIM2,  GPIO_AF_TIM2},
+		{(uint32_t)GPIOB,  GPIO_Pin_4, RCC_AHB1Periph_GPIOB,  GPIO_PinSource4,  RCC_APB1Periph_TIM3,  GPIO_AF_TIM3},
+		{(uint32_t)GPIOD, GPIO_Pin_12, RCC_AHB1Periph_GPIOD, GPIO_PinSource12,  RCC_APB1Periph_TIM4,  GPIO_AF_TIM4},
+		{(uint32_t)GPIOH, GPIO_Pin_10, RCC_AHB1Periph_GPIOH, GPIO_PinSource10,  RCC_APB1Periph_TIM5,  GPIO_AF_TIM5},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOI,  GPIO_Pin_5, RCC_AHB1Periph_GPIOI,  GPIO_PinSource5,  RCC_APB2Periph_TIM8,  GPIO_AF_TIM8},
+		{(uint32_t)GPIOE,  GPIO_Pin_5, RCC_AHB1Periph_GPIOE,  GPIO_PinSource5,  RCC_APB2Periph_TIM9,  GPIO_AF_TIM9},
+		{(uint32_t)GPIOF,  GPIO_Pin_6, RCC_AHB1Periph_GPIOF,  GPIO_PinSource6, RCC_APB2Periph_TIM10, GPIO_AF_TIM10},
+		{(uint32_t)GPIOF,  GPIO_Pin_7, RCC_AHB1Periph_GPIOF,  GPIO_PinSource7, RCC_APB2Periph_TIM11, GPIO_AF_TIM11},
+		{(uint32_t)GPIOH,  GPIO_Pin_6, RCC_AHB1Periph_GPIOH,  GPIO_PinSource6, RCC_APB1Periph_TIM12, GPIO_AF_TIM12},
+		{(uint32_t)GPIOF,  GPIO_Pin_8, RCC_AHB1Periph_GPIOF,  GPIO_PinSource8, RCC_APB1Periph_TIM13, GPIO_AF_TIM13},
+		{(uint32_t)GPIOF,  GPIO_Pin_9, RCC_AHB1Periph_GPIOF,  GPIO_PinSource9, RCC_APB1Periph_TIM14, GPIO_AF_TIM14}
+	},
+
+	{	{(uint32_t)GPIOE, GPIO_Pin_10, RCC_AHB1Periph_GPIOE, GPIO_PinSource10,  RCC_APB2Periph_TIM1,  GPIO_AF_TIM1},
+		{(uint32_t)GPIOB,  GPIO_Pin_3, RCC_AHB1Periph_GPIOB,  GPIO_PinSource3,  RCC_APB1Periph_TIM2,  GPIO_AF_TIM2},
+		{(uint32_t)GPIOB,  GPIO_Pin_5, RCC_AHB1Periph_GPIOB,  GPIO_PinSource5,  RCC_APB1Periph_TIM3,  GPIO_AF_TIM3},
+		{(uint32_t)GPIOD, GPIO_Pin_13, RCC_AHB1Periph_GPIOD, GPIO_PinSource13,  RCC_APB1Periph_TIM4,  GPIO_AF_TIM4},
+		{(uint32_t)GPIOH, GPIO_Pin_11, RCC_AHB1Periph_GPIOH, GPIO_PinSource11,  RCC_APB1Periph_TIM5,  GPIO_AF_TIM5},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOI,  GPIO_Pin_6, RCC_AHB1Periph_GPIOI,  GPIO_PinSource6,  RCC_APB2Periph_TIM8,  GPIO_AF_TIM8},
+		{(uint32_t)GPIOE,  GPIO_Pin_6, RCC_AHB1Periph_GPIOE,  GPIO_PinSource6,  RCC_APB2Periph_TIM9,  GPIO_AF_TIM9},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOH,  GPIO_Pin_9, RCC_AHB1Periph_GPIOH,  GPIO_PinSource9, RCC_APB1Periph_TIM12, GPIO_AF_TIM12},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0}
+	},
+
+	{	{(uint32_t)GPIOE, GPIO_Pin_13, RCC_AHB1Periph_GPIOE, GPIO_PinSource13,  RCC_APB2Periph_TIM1,  GPIO_AF_TIM1},
+		{(uint32_t)GPIOB, GPIO_Pin_10, RCC_AHB1Periph_GPIOB, GPIO_PinSource10,  RCC_APB1Periph_TIM2,  GPIO_AF_TIM2},
+		{(uint32_t)GPIOC,  GPIO_Pin_8, RCC_AHB1Periph_GPIOC,  GPIO_PinSource8,  RCC_APB1Periph_TIM3,  GPIO_AF_TIM3},
+		{(uint32_t)GPIOD, GPIO_Pin_14, RCC_AHB1Periph_GPIOD, GPIO_PinSource14,  RCC_APB1Periph_TIM4,  GPIO_AF_TIM4},
+		{(uint32_t)GPIOH, GPIO_Pin_12, RCC_AHB1Periph_GPIOH, GPIO_PinSource12,  RCC_APB1Periph_TIM5,  GPIO_AF_TIM5},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOI,  GPIO_Pin_7, RCC_AHB1Periph_GPIOI,  GPIO_PinSource7,  RCC_APB2Periph_TIM8,  GPIO_AF_TIM8},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0}
+	},
+
+	{	{(uint32_t)GPIOE, GPIO_Pin_14, RCC_AHB1Periph_GPIOE, GPIO_PinSource14,  RCC_APB2Periph_TIM1,  GPIO_AF_TIM1},
+		{(uint32_t)GPIOB, GPIO_Pin_11, RCC_AHB1Periph_GPIOB, GPIO_PinSource11,  RCC_APB1Periph_TIM2,  GPIO_AF_TIM2},
+		{(uint32_t)GPIOC,  GPIO_Pin_9, RCC_AHB1Periph_GPIOC,  GPIO_PinSource9,  RCC_APB1Periph_TIM3,  GPIO_AF_TIM3},
+		{(uint32_t)GPIOD, GPIO_Pin_15, RCC_AHB1Periph_GPIOD, GPIO_PinSource15,  RCC_APB1Periph_TIM4,  GPIO_AF_TIM4},
+		{(uint32_t)GPIOI,  GPIO_Pin_0, RCC_AHB1Periph_GPIOI,  GPIO_PinSource0,  RCC_APB1Periph_TIM5,  GPIO_AF_TIM5},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOI,  GPIO_Pin_2, RCC_AHB1Periph_GPIOI,  GPIO_PinSource2,  RCC_APB2Periph_TIM8,  GPIO_AF_TIM8},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0}
+	}
+};
+
+uint32_t PWM_PARAM_MAPPING_PP3[PWM_CHANNEL_MAX][TIMER_NUM_MAX][PWM_PARAM_MAPPING_MAX_INDEX] = {
+	{	{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOA, GPIO_Pin_15, RCC_AHB1Periph_GPIOA, GPIO_PinSource15,  RCC_APB1Periph_TIM2,  GPIO_AF_TIM2},
+		{(uint32_t)GPIOC,  GPIO_Pin_6, RCC_AHB1Periph_GPIOC,  GPIO_PinSource6,  RCC_APB1Periph_TIM3,  GPIO_AF_TIM3},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0}
+	},
+
+	{	{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{(uint32_t)GPIOC,  GPIO_Pin_7, RCC_AHB1Periph_GPIOC,  GPIO_PinSource7,  RCC_APB1Periph_TIM3,  GPIO_AF_TIM3},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0}
+	},
+
+	{	{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0}
+	},
+
+	{	{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0},
+		{              0,           0,                    0,                0,                    0,             0}
+	},
+};
+
+/*
+ * TIMx map
+ */
+
+TIM_TypeDef *TIMx_MAPPING[TIMER_NUM_MAX] = {
+	TIM1,
+	TIM2, 
+	TIM3, 
+	TIM4, 
+	TIM5, 
+	TIM6, 
+	TIM7, 
+	TIM8, 
+	TIM9, 
+	TIM10, 
+	TIM11, 
+	TIM12, 
+	TIM13, 
+	TIM14
+};
+
+
+
+/* Internal function ---------------------------------------------------------*/
+
+
+/* External function ---------------------------------------------------------*/
+int pwm_init(pwm_config_t *config)
+{
+	/*Mapping implement */
+	GPIO_TypeDef *GPIOx;
+ 	uint16_t GPIO_Pin_x;
+ 	uint32_t RCC_AHBxPeriph_GPIOx;
+ 	uint8_t GPIO_PinSourcex;
+ 	uint32_t RCC_APBxPeriph_TIMx;
+ 	uint8_t GPIO_AF_TIMx;
+ 	TIM_TypeDef *TIMx;
+
+	if (config->pins_pack == PWM_PINS_PACK_1)
+	{
+		GPIOx                = (GPIO_TypeDef *)PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_GPIOx];
+		GPIO_Pin_x           = (uint16_t)      PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_Pin_x];
+		RCC_AHBxPeriph_GPIOx = (uint32_t)      PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx];
+		GPIO_PinSourcex      = (uint8_t)       PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_PinSourcex];
+		RCC_APBxPeriph_TIMx  = (uint32_t)      PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_APBxPeriph_TIMx];
+		GPIO_AF_TIMx         = (uint8_t)       PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_AF_TIMx];
+	}
+
+	if (config->pins_pack == PWM_PINS_PACK_2)
+	{
+		GPIOx                = (GPIO_TypeDef *)PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_GPIOx];
+		GPIO_Pin_x           = (uint16_t)      PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_Pin_x];
+		RCC_AHBxPeriph_GPIOx = (uint32_t)      PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx];
+		GPIO_PinSourcex      = (uint8_t)       PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_PinSourcex];
+		RCC_APBxPeriph_TIMx  = (uint32_t)      PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_APBxPeriph_TIMx];
+		GPIO_AF_TIMx         = (uint8_t)       PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_AF_TIMx];
+	}
+
+	if (config->pins_pack == PWM_PINS_PACK_3)
+	{
+		GPIOx                = (GPIO_TypeDef *)PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_GPIOx];
+		GPIO_Pin_x           = (uint16_t)      PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_Pin_x];
+		RCC_AHBxPeriph_GPIOx = (uint32_t)      PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx];
+		GPIO_PinSourcex      = (uint8_t)       PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_PinSourcex];
+		RCC_APBxPeriph_TIMx  = (uint32_t)      PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_APBxPeriph_TIMx];
+		GPIO_AF_TIMx         = (uint8_t)       PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_AF_TIMx];
+	}
+
+	TIMx = TIMx_MAPPING[config->timer];
+
+	/* Enable Timer clock source */
+	if((config->timer == TIMER_NUM_1) || (config->timer == TIMER_NUM_8) || (config->timer == TIMER_NUM_9) || (config->timer == TIMER_NUM_10) || (config->timer == TIMER_NUM_11))
+	{
+		RCC_APB2PeriphClockCmd(RCC_APBxPeriph_TIMx, ENABLE);
+	}
+	else
+	{
+		RCC_APB1PeriphClockCmd(RCC_APBxPeriph_TIMx, ENABLE);
+	}
+
+	/* Enable GPIO clock source */
+	RCC_AHB1PeriphClockCmd(RCC_AHBxPeriph_GPIOx, ENABLE);
+
+	/*GPIO configuration */
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_x;
+  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+  	GPIO_InitStructure.GPIO_Speed = GPIO_SPEED_FREQ;
+  	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  	GPIO_InitStructure.GPIO_PuPd = GPIO_PUPD ;
+  	GPIO_Init(GPIOx, &GPIO_InitStructure);
+
+  	/* Connect TIMx pin to AFx */
+  	GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_TIMx);
+
+  	uint16_t CCR_Val=650;
+	uint16_t PrescalerValue = 0;
+
+	/* Compute the prescaler value */
+  	PrescalerValue = (uint16_t) ((SystemCoreClock /2) / 21000000) - 1;
+
+	/* Time base configuration */
+  	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+    TIM_TimeBaseStructure.TIM_Period = 665;
+  	TIM_TimeBaseStructure.TIM_Prescaler = PrescalerValue;
+  	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+  	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+  	TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
+
+  	 /* PWM Mode configuration */
+  	TIM_OCInitTypeDef  TIM_OCInitStructure;
+  	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+  	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+  	TIM_OCInitStructure.TIM_Pulse = CCR_Val;
+  	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+  	TIM_OC1Init(TIMx, &TIM_OCInitStructure);
+  	TIM_OC1PreloadConfig(TIMx, TIM_OCPreload_Enable);
+
+  	TIM_ARRPreloadConfig(TIMx, ENABLE);
+
+  	/* TIM3 enable counter */
+  	TIM_Cmd(TIMx, ENABLE);
+
+	return 0;
+}
+
+
+
