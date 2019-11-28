@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
 #include "stm32f4xx_rcc.h"
+#include "stm32f4xx_conf.h"
 
 #include "stdlib.h"
 
@@ -385,27 +386,36 @@ int pwm_start(pwm_handle_t handle)
 
 int pwm_set_timer_prescaler(pwm_handle_t handle, uint16_t timer_prescaler)
 {
-	TIM_PrescalerConfig(TIMx_MAPPING[handle->timer],timer_prescaler, TIM_PSCReloadMode_Immediate);
-	handle->timer_prescaler = timer_prescaler;
+	assert_param(IS_TIM_ALL_PERIPH(TIMx));
+	assert_param(IS_TIM_PRESCALER_RELOAD(TIM_PSCReloadMode));
+	TIMx_MAPPING[handle->timer]->PSC = timer_prescaler;
+	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
 
+	handle->timer_prescaler = timer_prescaler;
+	return 0;
+}
+
+int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period)
+{
+	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
+	TIMx_MAPPING[handle->timer]->ARR = timer_period;
+	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
+
+	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
+	TIMx_MAPPING[handle->timer]->CCR1 = (handle->pwm_duty)*timer_period/100;
+	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
+
+	handle->timer_period = timer_period;
 	return 0;
 }
 
 int pwm_set_duty(pwm_handle_t handle, uint8_t pwm_duty)
 {
-	uint16_t CCR_Val = (uint16_t)((handle->pwm_duty)* (handle->timer_period)/100);
-
-	TIM_OCInitTypeDef  TIM_OCInitStructure;
-	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-	TIM_OCInitStructure.TIM_Pulse = CCR_Val;
-	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OC1Init(TIMx_MAPPING[handle->timer], &TIM_OCInitStructure);
-	TIM_OC1PreloadConfig(TIMx_MAPPING[handle->timer], TIM_OCPreload_Enable);
-	TIM_ARRPreloadConfig(TIMx_MAPPING[handle->timer], ENABLE);
+	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
+	TIMx_MAPPING[handle->timer]->CCR1 = pwm_duty*(handle->timer_period)/100;
+	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
 
 	handle->pwm_duty = pwm_duty;
-
 	return 0;
 }
 
