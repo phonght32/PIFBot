@@ -2,6 +2,8 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_rcc.h"
 
+#include "stdlib.h"
+
 #include "include/timer.h"
 
 
@@ -11,8 +13,7 @@
 
 
 /* Internal typedef ----------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
 	PWM_PARAM_MAPPING_GPIOx = 0,
 	PWM_PARAM_MAPPING_GPIO_Pin_x,
 	PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx,
@@ -21,6 +22,16 @@ typedef enum
 	PWM_PARAM_MAPPING_GPIO_AF_TIMx,
 	PWM_PARAM_MAPPING_MAX_INDEX
 } pwm_param_mapping_index_t;
+
+typedef struct pwm_param {
+	timer_num_t 	timer;
+    uint32_t 		timer_period;
+    uint16_t 		timer_prescaler;
+    pwm_channel_t 	pwm_channel;
+    pwm_pins_pack_t pwm_pins_pack;
+    uint8_t 		pwm_duty;
+    uint32_t 		pwm_freq_hz;
+} pwm_param_t;
 
 
 /* Internal variable ---------------------------------------------------------*/
@@ -261,7 +272,7 @@ TIM_TypeDef *TIMx_MAPPING[TIMER_NUM_MAX] = {
 
 
 /* External function ---------------------------------------------------------*/
-int pwm_init(pwm_config_t *config)
+pwm_handle_t pwm_init(pwm_config_t *config)
 {
 	/*Mapping implement */
 	GPIO_TypeDef *GPIOx;
@@ -272,34 +283,34 @@ int pwm_init(pwm_config_t *config)
  	uint8_t GPIO_AF_TIMx;
  	TIM_TypeDef *TIMx;
 
-	if (config->pins_pack == PWM_PINS_PACK_1)
+	if (config->pwm_pins_pack == PWM_PINS_PACK_1)
 	{
-		GPIOx                = (GPIO_TypeDef *)PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_GPIOx];
-		GPIO_Pin_x           = (uint16_t)      PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_Pin_x];
-		RCC_AHBxPeriph_GPIOx = (uint32_t)      PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx];
-		GPIO_PinSourcex      = (uint8_t)       PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_PinSourcex];
-		RCC_APBxPeriph_TIMx  = (uint32_t)      PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_APBxPeriph_TIMx];
-		GPIO_AF_TIMx         = (uint8_t)       PWM_PARAM_MAPPING_PP1[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_AF_TIMx];
+		GPIOx                = (GPIO_TypeDef *)PWM_PARAM_MAPPING_PP1[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_GPIOx];
+		GPIO_Pin_x           = (uint16_t)      PWM_PARAM_MAPPING_PP1[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_GPIO_Pin_x];
+		RCC_AHBxPeriph_GPIOx = (uint32_t)      PWM_PARAM_MAPPING_PP1[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx];
+		GPIO_PinSourcex      = (uint8_t)       PWM_PARAM_MAPPING_PP1[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_PinSourcex];
+		RCC_APBxPeriph_TIMx  = (uint32_t)      PWM_PARAM_MAPPING_PP1[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_RCC_APBxPeriph_TIMx];
+		GPIO_AF_TIMx         = (uint8_t)       PWM_PARAM_MAPPING_PP1[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_GPIO_AF_TIMx];
 	}
 
-	if (config->pins_pack == PWM_PINS_PACK_2)
+	if (config->pwm_pins_pack == PWM_PINS_PACK_2)
 	{
-		GPIOx                = (GPIO_TypeDef *)PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_GPIOx];
-		GPIO_Pin_x           = (uint16_t)      PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_Pin_x];
-		RCC_AHBxPeriph_GPIOx = (uint32_t)      PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx];
-		GPIO_PinSourcex      = (uint8_t)       PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_PinSourcex];
-		RCC_APBxPeriph_TIMx  = (uint32_t)      PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_APBxPeriph_TIMx];
-		GPIO_AF_TIMx         = (uint8_t)       PWM_PARAM_MAPPING_PP2[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_AF_TIMx];
+		GPIOx                = (GPIO_TypeDef *)PWM_PARAM_MAPPING_PP2[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_GPIOx];
+		GPIO_Pin_x           = (uint16_t)      PWM_PARAM_MAPPING_PP2[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_GPIO_Pin_x];
+		RCC_AHBxPeriph_GPIOx = (uint32_t)      PWM_PARAM_MAPPING_PP2[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx];
+		GPIO_PinSourcex      = (uint8_t)       PWM_PARAM_MAPPING_PP2[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_PinSourcex];
+		RCC_APBxPeriph_TIMx  = (uint32_t)      PWM_PARAM_MAPPING_PP2[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_RCC_APBxPeriph_TIMx];
+		GPIO_AF_TIMx         = (uint8_t)       PWM_PARAM_MAPPING_PP2[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_GPIO_AF_TIMx];
 	}
 
-	if (config->pins_pack == PWM_PINS_PACK_3)
+	if (config->pwm_pins_pack == PWM_PINS_PACK_3)
 	{
-		GPIOx                = (GPIO_TypeDef *)PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_GPIOx];
-		GPIO_Pin_x           = (uint16_t)      PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_Pin_x];
-		RCC_AHBxPeriph_GPIOx = (uint32_t)      PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx];
-		GPIO_PinSourcex      = (uint8_t)       PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_PinSourcex];
-		RCC_APBxPeriph_TIMx  = (uint32_t)      PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_RCC_APBxPeriph_TIMx];
-		GPIO_AF_TIMx         = (uint8_t)       PWM_PARAM_MAPPING_PP3[config->channel][config->timer][PWM_PARAM_MAPPING_GPIO_AF_TIMx];
+		GPIOx                = (GPIO_TypeDef *)PWM_PARAM_MAPPING_PP3[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_GPIOx];
+		GPIO_Pin_x           = (uint16_t)      PWM_PARAM_MAPPING_PP3[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_GPIO_Pin_x];
+		RCC_AHBxPeriph_GPIOx = (uint32_t)      PWM_PARAM_MAPPING_PP3[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_RCC_AHBxPeriph_GPIOx];
+		GPIO_PinSourcex      = (uint8_t)       PWM_PARAM_MAPPING_PP3[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_PinSourcex];
+		RCC_APBxPeriph_TIMx  = (uint32_t)      PWM_PARAM_MAPPING_PP3[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_RCC_APBxPeriph_TIMx];
+		GPIO_AF_TIMx         = (uint8_t)       PWM_PARAM_MAPPING_PP3[config->pwm_channel][config->timer][PWM_PARAM_MAPPING_GPIO_AF_TIMx];
 	}
 
 	TIMx = TIMx_MAPPING[config->timer];
@@ -329,16 +340,12 @@ int pwm_init(pwm_config_t *config)
   	/* Connect TIMx pin to AFx */
   	GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_TIMx);
 
-  	uint16_t CCR_Val=650;
-	uint16_t PrescalerValue = 0;
-
-	/* Compute the prescaler value */
-  	PrescalerValue = (uint16_t) ((SystemCoreClock /2) / 21000000) - 1;
+  	uint16_t CCR_Val = (uint16_t)((config->pwm_duty)* (config->timer_period)/100);
 
 	/* Time base configuration */
   	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-    TIM_TimeBaseStructure.TIM_Period = 665;
-  	TIM_TimeBaseStructure.TIM_Prescaler = PrescalerValue;
+    TIM_TimeBaseStructure.TIM_Period = config->timer_period;
+  	TIM_TimeBaseStructure.TIM_Prescaler = config->timer_prescaler;
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
   	TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
@@ -355,9 +362,21 @@ int pwm_init(pwm_config_t *config)
   	TIM_ARRPreloadConfig(TIMx, ENABLE);
 
   	/* TIM3 enable counter */
-  	TIM_Cmd(TIMx, ENABLE);
+  	// TIM_Cmd(TIMx, ENABLE);
 
-	return 0;
+  	pwm_handle_t handle = calloc(1, sizeof(pwm_param_t));
+  	if(handle == NULL)
+  	{
+  		return -1;
+  	}
+
+  	handle->timer           = config->timer;
+  	handle->timer_period    = config->timer_period;
+  	handle->timer_prescaler = config->timer_prescaler;
+  	handle->pwm_channel     = config->pwm_channel;
+  	handle->pwm_pins_pack   = config->pwm_pins_pack;
+  	handle->pwm_duty        = config->pwm_duty;
+	return -1;
 }
 
 

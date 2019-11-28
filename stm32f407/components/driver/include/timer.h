@@ -35,6 +35,9 @@ extern "C" {
 * 	- TIM10, TIM11, TIM13 and TIM14 have only one PWM channel
 * 	- All channels at one timer have the same PWM frequency!
 */
+
+typedef struct pwm_param *pwm_handle_t;
+
 typedef enum {
     TIMER_NUM_1 = 0,
     TIMER_NUM_2,
@@ -69,16 +72,15 @@ typedef enum {
 } pwm_channel_t;
 
 typedef struct {
-    timer_num_t timer;
-    pwm_channel_t channel;
-    pwm_pins_pack_t pins_pack;
-    uint32_t freq_hz;
-    uint8_t duty_percent;
-    uint32_t period;
-    uint16_t timer_prescaler;
+    timer_num_t 		timer;
+    uint32_t 			timer_period;
+    uint16_t 			timer_prescaler;
+    pwm_channel_t 		pwm_channel;
+    pwm_pins_pack_t 	pwm_pins_pack;
+    uint8_t 			pwm_duty;
 } pwm_config_t;
 
-int pwm_init(pwm_config_t *config);
+pwm_handle_t pwm_init(pwm_config_t *config);
 
 #ifdef __cplusplus
 }
