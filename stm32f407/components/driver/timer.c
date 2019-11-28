@@ -376,7 +376,7 @@ pwm_handle_t pwm_init(pwm_config_t *config)
   	handle->pwm_channel     = config->pwm_channel;
   	handle->pwm_pins_pack   = config->pwm_pins_pack;
   	handle->pwm_duty        = config->pwm_duty;
-	return -1;
+	return handle;
 }
 
 
