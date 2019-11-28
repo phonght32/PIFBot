@@ -378,22 +378,15 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 int pwm_start(pwm_handle_t handle)
 {
   	/* TIM enable counter */
-  	 TIM_Cmd(TIMx_MAPPING[handle->timer], ENABLE);
+  	TIM_Cmd(TIMx_MAPPING[handle->timer], ENABLE);
 
   	 return 0;
 }
 
-int pwm_set_timer_params(pwm_handle_t handle, uint16_t timer_prescaler, uint32_t timer_period)
+int pwm_set_timer_prescaler(pwm_handle_t handle, uint16_t timer_prescaler)
 {
-	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-	TIM_TimeBaseStructure.TIM_Period = timer_period;
-	TIM_TimeBaseStructure.TIM_Prescaler = timer_prescaler;
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseInit(TIMx_MAPPING[handle->timer], &TIM_TimeBaseStructure);
-
+	TIM_PrescalerConfig(TIMx_MAPPING[handle->timer],timer_prescaler, TIM_PSCReloadMode_Immediate);
 	handle->timer_prescaler = timer_prescaler;
-	handle->timer_period    = timer_period;
 
 	return 0;
 }
