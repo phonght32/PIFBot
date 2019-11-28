@@ -121,7 +121,7 @@ typedef struct {
 
 pwm_handle_t pwm_init(pwm_config_t *config);
 int pwm_start(pwm_handle_t handle);
-int pwm_set_timer_params(pwm_handle_t, uint16_t timer_prescaler, uint32_t timer_period);
+int pwm_set_timer_params(pwm_handle_t handle, uint16_t timer_prescaler, uint32_t timer_period);
 
 #ifdef __cplusplus
 }
