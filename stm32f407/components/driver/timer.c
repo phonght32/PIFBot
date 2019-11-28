@@ -361,9 +361,6 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 
   	TIM_ARRPreloadConfig(TIMx, ENABLE);
 
-  	/* TIM3 enable counter */
-  	// TIM_Cmd(TIMx, ENABLE);
-
   	pwm_handle_t handle = calloc(1, sizeof(pwm_param_t));
   	if(handle == NULL)
   	{
@@ -377,6 +374,15 @@ pwm_handle_t pwm_init(pwm_config_t *config)
   	handle->pwm_pins_pack   = config->pwm_pins_pack;
   	handle->pwm_duty        = config->pwm_duty;
 	return handle;
+}
+
+int pwm_start(pwm_handle_t handle)
+{
+	TIM_TypeDef *TIMx = TIMx_MAPPING[handle->timer];
+
+  	/* TIM enable counter */
+  	 TIM_Cmd(TIMx, ENABLE);
+  	 return 0;
 }
 
 

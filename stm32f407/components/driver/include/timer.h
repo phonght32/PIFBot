@@ -120,6 +120,7 @@ typedef struct {
 } pwm_config_t;
 
 pwm_handle_t pwm_init(pwm_config_t *config);
+int pwm_start(pwm_handle_t handle);
 
 #ifdef __cplusplus
 }
