@@ -388,6 +388,8 @@ int pwm_set_timer_params(pwm_handle_t handle, uint16_t timer_prescaler, uint32_t
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	TIM_TimeBaseStructure.TIM_Period = timer_period;
 	TIM_TimeBaseStructure.TIM_Prescaler = timer_prescaler;
+	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIMx_MAPPING[handle->timer], &TIM_TimeBaseStructure);
 
 	handle->timer_prescaler = timer_prescaler;
