@@ -345,7 +345,7 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 
 	/* Time base configuration */
   	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-    TIM_TimeBaseStructure.TIM_Period = config->timer_period;
+  	TIM_TimeBaseStructure.TIM_Period = config->timer_period;
   	TIM_TimeBaseStructure.TIM_Prescaler = config->timer_prescaler;
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
