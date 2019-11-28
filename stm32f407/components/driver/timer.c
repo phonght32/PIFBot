@@ -451,5 +451,13 @@ int pwm_stop(pwm_handle_t handle)
 	return 0;
 }
 
+int pwm_deinit(pwm_handle_t handle)
+{
+	TIM_DeInit(TIMx_MAPPING[handle->timer]);
+	free(handle);
+
+	return 0;
+}
+
 
 
