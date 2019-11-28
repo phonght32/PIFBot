@@ -358,7 +358,6 @@ pwm_handle_t pwm_init(pwm_config_t *config)
   	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
   	TIM_OC1Init(TIMx, &TIM_OCInitStructure);
   	TIM_OC1PreloadConfig(TIMx, TIM_OCPreload_Enable);
-
   	TIM_ARRPreloadConfig(TIMx, ENABLE);
 
   	pwm_handle_t handle = calloc(1, sizeof(pwm_param_t));
@@ -393,6 +392,22 @@ int pwm_set_timer_params(pwm_handle_t handle, uint16_t timer_prescaler, uint32_t
 
 	handle->timer_prescaler = timer_prescaler;
 	handle->timer_period    = timer_period;
+
+	return 0;
+}
+
+int pwm_set_duty(pwm_handle_t handle, uint8_t pwm_duty)
+{
+	uint16_t CCR_Val = (uint16_t)((handle->pwm_duty)* (handle->timer_period)/100);
+
+	TIM_OCInitTypeDef  TIM_OCInitStructure;
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OCInitStructure.TIM_Pulse = CCR_Val;
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	TIM_OC1Init(TIMx_MAPPING[handle->timer], &TIM_OCInitStructure);
+	TIM_OC1PreloadConfig(TIMx_MAPPING[handle->timer], TIM_OCPreload_Enable);
+	TIM_ARRPreloadConfig(TIMx_MAPPING[handle->timer], ENABLE);
 
 	return 0;
 }
