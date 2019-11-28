@@ -44,28 +44,28 @@ extern "C" {
  *	TIMER   |   Type   | Resolution | Prescalder| Channels | Interface |  Timer   |  APB  |
  *	        |          |            |           |          |   Clock   |  Clock   |       |
  *  ----------------------------------------------------------------------------------------------
- *	TIM 1,  | Advanced |    16bit   |   16bit   |    4     | SysClk/2  |  SysClk  |   2   |
+ *	TIM 1,  | Advanced |    16bit   |   16bit   |    4     | SysClk/2  | SysClk   |   2   |
  *	TIM 8   |          |            |           |          |           |          |       |
  *	----------------------------------------------------------------------------------------------
- *	TIM 2,  | General  |    32bit   |   16bit   |    4     | SysClk/4  | SysClk,  |   2   |
+ *	TIM 2,  | General  |    32bit   |   16bit   |    4     | SysClk/4  | SysClk,  |   1   |
  *	TIM 5   | purpose  |            |           |          |           | SysClk/2 |       |
  *	----------------------------------------------------------------------------------------------
- *	TIM 3,  | General  |    16bit   |   16bit   |    4     | SysClk/4  | SysClk,  |   2   |
+ *	TIM 3,  | General  |    16bit   |   16bit   |    4     | SysClk/4  | SysClk,  |   1   |
  *	TIM 4   | purpose  |            |           |          |           | SysClk/2 |       |
  *	----------------------------------------------------------------------------------------------
- *	TIM 9   | General  |    16bit   |   16bit   |    2     | SysClk/2  |  SysClk  |   2   |
+ *	TIM 9   | General  |    16bit   |   16bit   |    2     | SysClk/2  | SysClk   |   2   |
  *	        | purpose  |            |           |          |           |          |       |
  *	----------------------------------------------------------------------------------------------
- *	TIM 10  | General  |    16bit   |   16bit   |    1     | SysClk/2  |  SysClk  |   2   |
+ *	TIM 10  | General  |    16bit   |   16bit   |    1     | SysClk/2  | SysClk   |   2   |
  *	TIM 11  | purpose  |            |           |          |           |          |       |
  *	----------------------------------------------------------------------------------------------
- *	TIM 12  | General  |    16bit   |   16bit   |    2     | SysClk/4  | SysClk,  |   2   |
+ *	TIM 12  | General  |    16bit   |   16bit   |    2     | SysClk/4  | SysClk,  |   1   |
  *	        | purpose  |            |           |          |           | SysClk/2 |       |
  *	----------------------------------------------------------------------------------------------
- *	TIM 13  | General  |    16bit   |   16bit   |    1     | SysClk/4  | SysClk,  |   2   |
+ *	TIM 13  | General  |    16bit   |   16bit   |    1     | SysClk/4  | SysClk,  |   1   |
  *	TIM 14  | purpose  |            |           |          |           | SysClk/2 |       |
  *	----------------------------------------------------------------------------------------------
- *	TIM 6   |  Basic   |    16bit   |   16bit   |    0     | SysClk/4  | SysClk,  |   2   |
+ *	TIM 6   |  Basic   |    16bit   |   16bit   |    0     | SysClk/4  | SysClk,  |   1   |
  *	TIM 7   |          |            |           |          |           | SysClk/2 |       |
  *	----------------------------------------------------------------------------------------------
  *
