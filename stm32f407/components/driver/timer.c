@@ -381,7 +381,7 @@ int pwm_start(pwm_handle_t handle)
   	/* TIM enable counter */
   	TIM_Cmd(TIMx_MAPPING[handle->timer], ENABLE);
 
-  	 return 0;
+  	return 0;
 }
 
 int pwm_set_timer_prescaler(pwm_handle_t handle, uint16_t timer_prescaler)
@@ -416,6 +416,14 @@ int pwm_set_duty(pwm_handle_t handle, uint8_t pwm_duty)
 	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
 
 	handle->pwm_duty = pwm_duty;
+	return 0;
+}
+
+int pwm_stop(pwm_handle_t handle)
+{
+	/* TIM disable counter */
+	TIM_Cmd(TIMx_MAPPING[handle->timer], DISABLE);
+
 	return 0;
 }
 
