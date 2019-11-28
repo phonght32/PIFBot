@@ -378,10 +378,9 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 
 int pwm_start(pwm_handle_t handle)
 {
-	TIM_TypeDef *TIMx = TIMx_MAPPING[handle->timer];
-
   	/* TIM enable counter */
-  	 TIM_Cmd(TIMx, ENABLE);
+  	 TIM_Cmd(TIMx_MAPPING[handle->timer], ENABLE);
+
   	 return 0;
 }
 
