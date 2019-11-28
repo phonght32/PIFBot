@@ -357,8 +357,32 @@ pwm_handle_t pwm_init(pwm_config_t *config)
   	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
   	TIM_OCInitStructure.TIM_Pulse = CCR_Val;
   	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-  	TIM_OC1Init(TIMx, &TIM_OCInitStructure);
-  	TIM_OC1PreloadConfig(TIMx, TIM_OCPreload_Enable);
+
+  	switch (config->pwm_channel) {
+		case PWM_CHANNEL_1: {
+			TIM_OC1Init(TIMx, &TIM_OCInitStructure);
+			TIM_OC1PreloadConfig(TIMx, TIM_OCPreload_Enable);
+			break;
+		}
+		case PWM_CHANNEL_2: {
+			TIM_OC2Init(TIMx, &TIM_OCInitStructure);
+			TIM_OC2PreloadConfig(TIMx, TIM_OCPreload_Enable);
+			break;
+		}
+		case PWM_CHANNEL_3: {
+			TIM_OC3Init(TIMx, &TIM_OCInitStructure);
+			TIM_OC3PreloadConfig(TIMx, TIM_OCPreload_Enable);
+			break;
+		}
+		case PWM_CHANNEL_4: {
+			TIM_OC4Init(TIMx, &TIM_OCInitStructure);
+			TIM_OC4PreloadConfig(TIMx, TIM_OCPreload_Enable);
+			break;
+		}
+		default:
+			break;
+	}
+
   	TIM_ARRPreloadConfig(TIMx, ENABLE);
 
   	pwm_handle_t handle = calloc(1, sizeof(pwm_param_t));
