@@ -409,6 +409,8 @@ int pwm_set_duty(pwm_handle_t handle, uint8_t pwm_duty)
 	TIM_OC1PreloadConfig(TIMx_MAPPING[handle->timer], TIM_OCPreload_Enable);
 	TIM_ARRPreloadConfig(TIMx_MAPPING[handle->timer], ENABLE);
 
+	handle->pwm_duty = pwm_duty;
+
 	return 0;
 }
 
