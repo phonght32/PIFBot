@@ -162,16 +162,7 @@ usart_handle_t uart_init(usart_config_t *config)
     return handle;
 }
 
-int uart_write_char(usart_handle_t handle, uint8_t data)
-{
-	assert_param(IS_USART_ALL_PERIPH(USARTx_MAPPING[handle->usart_num]));
-	assert_param(IS_USART_DATA(Data));
-	USARTx_MAPPING[handle->usart_num]->DR = ((uint16_t)data & (uint16_t)0x01FF);
-
-	return 0;
-}
-
-int uart_write_string(usart_handle_t handle, uint8_t *data, uint16_t length)
+int uart_write_bytes(usart_handle_t handle, uint8_t *data, uint16_t length)
 {
 	uint16_t i;
 	for (i = 0; i < length; i++)
