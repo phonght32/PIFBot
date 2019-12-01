@@ -51,7 +51,8 @@ typedef struct {
     uint32_t usart_baudrate;
 } usart_config_t;
 
-usart_handle_t usart_init(usart_config_t *config);
+usart_handle_t uart_init(usart_config_t *config);
+
 
 #ifdef __cplusplus
 }

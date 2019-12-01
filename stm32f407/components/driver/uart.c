@@ -81,7 +81,7 @@ USART_TypeDef *USARTx_MAPPING[USART_NUM_MAX] = {
 
 
 /* External function ---------------------------------------------------------*/
-usart_handle_t usart_init(usart_config_t *config)
+usart_handle_t uart_init(usart_config_t *config)
 {
     /*Mapping implement */
     GPIO_TypeDef *GPIOx_Tx, *GPIOx_Rx;
