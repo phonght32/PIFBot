@@ -146,8 +146,15 @@ usart_handle_t uart_init(usart_config_t *config)
 
     usart_handle_t handle  = calloc(1, sizeof(usart_t));
     handle->usart_num = config->usart_num;
-    handle->usart_num = config->usart_pins_pack;
+    handle->usart_pins_pack = config->usart_pins_pack;
     handle->usart_baudrate = config->usart_baudrate;
 
     return handle;
+}
+
+int uart_send_char(usart_handle_t handle, uint16_t data)
+{
+	USART_SendData(USARTx_MAPPING[handle->usart_num],(uint16_t)data);
+
+	return 0;
 }

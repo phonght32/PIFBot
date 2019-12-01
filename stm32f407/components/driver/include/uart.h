@@ -52,7 +52,7 @@ typedef struct {
 } usart_config_t;
 
 usart_handle_t uart_init(usart_config_t *config);
-
+int uart_send_char(usart_handle_t handle, uint16_t data);
 
 #ifdef __cplusplus
 }
