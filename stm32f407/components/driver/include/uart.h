@@ -53,8 +53,8 @@ typedef struct {
 } usart_config_t;
 
 usart_handle_t uart_init(usart_config_t *config);
-int uart_send_char(usart_handle_t handle, uint8_t data);
-int uart_send_string(usart_handle_t handle, uint8_t *data, uint16_t length);
+int uart_write_char(usart_handle_t handle, uint8_t data);
+int uart_write_string(usart_handle_t handle, uint8_t *data, uint16_t length);
 
 #ifdef __cplusplus
 }
