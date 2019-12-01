@@ -10,8 +10,7 @@
 
 
 /* Internal define -----------------------------------------------------------*/
-#define USART_TXEMPTY(USARTx)               ((USARTx)->SR & USART_FLAG_TXE)
-#define USART_WAIT(USARTx)                  do { while (!USART_TXEMPTY(USARTx)); } while (0)
+
 
 /* Internal typedef ----------------------------------------------------------*/
 typedef enum {
@@ -79,8 +78,17 @@ USART_TypeDef *USARTx_MAPPING[USART_NUM_MAX] = {
     UART8
 };
 
-/* Internal function ---------------------------------------------------------*/
 
+
+/* Internal function ---------------------------------------------------------*/
+static int _usart_wait_buffer_empty(USART_TypeDef *USARTx)
+{
+	 do {
+		 while (!((USARTx)->SR & USART_FLAG_TXE));
+	 } while (0);
+
+	 return 0;
+}
 
 /* External function ---------------------------------------------------------*/
 usart_handle_t uart_init(usart_config_t *config)
@@ -156,7 +164,9 @@ usart_handle_t uart_init(usart_config_t *config)
 
 int uart_send_char(usart_handle_t handle, uint8_t data)
 {
-	USART_SendData(USARTx_MAPPING[handle->usart_num],(uint16_t)data);
+	assert_param(IS_USART_ALL_PERIPH(USARTx_MAPPING[handle->usart_num]));
+	assert_param(IS_USART_DATA(Data));
+	USARTx_MAPPING[handle->usart_num]->DR = ((uint16_t)data & (uint16_t)0x01FF);
 
 	return 0;
 }
@@ -164,14 +174,12 @@ int uart_send_char(usart_handle_t handle, uint8_t data)
 int uart_send_string(usart_handle_t handle, uint8_t *data, uint16_t length)
 {
 	uint16_t i;
-	for (i = 0; i < length; i++) {
-			/* Wait to be ready, buffer empty */
-			USART_WAIT(USARTx_MAPPING[handle->usart_num]);
-			/* Send data */
-			USARTx_MAPPING[handle->usart_num]->DR = (uint16_t)(data[i]);
-			/* Wait to be ready, buffer empty */
-			USART_WAIT(USARTx_MAPPING[handle->usart_num]);
-		}
+	for (i = 0; i < length; i++)
+	{
+		_usart_wait_buffer_empty(USARTx_MAPPING[handle->usart_num]);
+		USARTx_MAPPING[handle->usart_num]->DR = (uint16_t)(data[i]);
+		_usart_wait_buffer_empty(USARTx_MAPPING[handle->usart_num]);
+	}
 
 	return 0;
 }
