@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "stdint.h"
+#include "stddef.h"
 
 /* NOTE: Change HSE_VALUE in stm32f4xx.h to 8000000 before start your application */    
 
@@ -52,7 +53,8 @@ typedef struct {
 } usart_config_t;
 
 usart_handle_t uart_init(usart_config_t *config);
-int uart_send_char(usart_handle_t handle, uint16_t data);
+int uart_send_char(usart_handle_t handle, uint8_t data);
+int uart_send_string(usart_handle_t handle, uint8_t *data, uint16_t length);
 
 #ifdef __cplusplus
 }

@@ -5,11 +5,13 @@
 
 #include "stdlib.h"
 
+
 #include "include/uart.h"
 
 
 /* Internal define -----------------------------------------------------------*/
-
+#define USART_TXEMPTY(USARTx)               ((USARTx)->SR & USART_FLAG_TXE)
+#define USART_WAIT(USARTx)                  do { while (!USART_TXEMPTY(USARTx)); } while (0)
 
 /* Internal typedef ----------------------------------------------------------*/
 typedef enum {
@@ -152,9 +154,24 @@ usart_handle_t uart_init(usart_config_t *config)
     return handle;
 }
 
-int uart_send_char(usart_handle_t handle, uint16_t data)
+int uart_send_char(usart_handle_t handle, uint8_t data)
 {
 	USART_SendData(USARTx_MAPPING[handle->usart_num],(uint16_t)data);
+
+	return 0;
+}
+
+int uart_send_string(usart_handle_t handle, uint8_t *data, uint16_t length)
+{
+	uint16_t i;
+	for (i = 0; i < length; i++) {
+			/* Wait to be ready, buffer empty */
+			USART_WAIT(USARTx_MAPPING[handle->usart_num]);
+			/* Send data */
+			USARTx_MAPPING[handle->usart_num]->DR = (uint16_t)(data[i]);
+			/* Wait to be ready, buffer empty */
+			USART_WAIT(USARTx_MAPPING[handle->usart_num]);
+		}
 
 	return 0;
 }
