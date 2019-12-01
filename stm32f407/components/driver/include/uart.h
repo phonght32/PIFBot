@@ -24,17 +24,19 @@ extern "C" {
  *  USART8   |  PE1   PE0  |  -     -    |  -     -    |   1   |
  */
 
+typedef struct usart *usart_handle_t;
+
 typedef enum {
     USART_NUM_1 = 0,
     USART_NUM_2,
     USART_NUM_3,
-    USART_NUM_4,
-    USART_NUM_5,
+    UART_NUM_4,
+    UART_NUM_5,
     USART_NUM_6,
-    USART_NUM_7,
-    USART_NUM_8,
+    UART_NUM_7,
+    UART_NUM_8,
     USART_NUM_MAX
-}usart_num_t;
+} usart_num_t;
 
 typedef enum {
     USART_PINS_PACK_1 = 0,
@@ -42,6 +44,14 @@ typedef enum {
     USART_PINS_PACK_3,
     USART_PINS_PACK_MAX
 } usart_pins_pack_t;
+
+typedef struct {
+    usart_num_t  usart_num;
+    usart_pins_pack_t usart_pins_pack;
+    uint32_t usart_baudrate;
+} usart_config_t;
+
+usart_handle_t usart_init(usart_config_t *config);
 
 #ifdef __cplusplus
 }
