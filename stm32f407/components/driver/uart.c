@@ -30,11 +30,6 @@ typedef struct usart {
     usart_num_t         usart_num;
     usart_pins_pack_t   usart_pins_pack;
     uint32_t            usart_baudrate;
-    uint16_t            usart_word_lenth;
-    uint16_t            usart_stop_bits;
-    uint16_t            usart_parity;
-    uint16_t            usart_mode;
-    uint16_t            usart_hardware_flow_ctrl;
 } usart_t;
 
 
@@ -149,5 +144,10 @@ usart_handle_t usart_init(usart_config_t *config)
 
     USART_Cmd(USARTx, ENABLE);
 
-    return 0;
+    usart_handle_t handle  = calloc(1, sizeof(usart_t));
+    handle->usart_num = config->usart_num;
+    handle->usart_num = config->usart_pins_pack;
+    handle->usart_baudrate = config->usart_baudrate;
+
+    return handle;
 }
