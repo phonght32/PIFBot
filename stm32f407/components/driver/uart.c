@@ -81,14 +81,7 @@ USART_TypeDef *USARTx_MAPPING[USART_NUM_MAX] = {
 
 
 /* Internal function ---------------------------------------------------------*/
-static int _usart_wait_buffer_empty(USART_TypeDef *USARTx)
-{
-	 do {
-		 while (!((USARTx)->SR & USART_FLAG_TXE));
-	 } while (0);
 
-	 return 0;
-}
 
 /* External function ---------------------------------------------------------*/
 usart_handle_t uart_init(usart_config_t *config)
@@ -167,9 +160,21 @@ int uart_write_bytes(usart_handle_t handle, uint8_t *data, uint16_t length)
 	uint16_t i;
 	for (i = 0; i < length; i++)
 	{
-		_usart_wait_buffer_empty(USARTx_MAPPING[handle->usart_num]);
+		while (USART_GetFlagStatus(USARTx_MAPPING[handle->usart_num], USART_FLAG_TXE) == RESET);
 		USARTx_MAPPING[handle->usart_num]->DR = (uint16_t)(data[i]);
-		_usart_wait_buffer_empty(USARTx_MAPPING[handle->usart_num]);
+		while (USART_GetFlagStatus(USARTx_MAPPING[handle->usart_num], USART_FLAG_TXE) == RESET);
+	}
+
+	return 0;
+}
+
+int uart_read_bytes(usart_handle_t handle, uint8_t *buffer, uint16_t length)
+{
+	int i = 0;
+	for(i=0;i<length;i++)
+	{
+		while(USART_GetFlagStatus(USARTx_MAPPING[handle->usart_num], USART_FLAG_RXNE) == RESET);
+		buffer[i++] = USART_ReceiveData(USARTx_MAPPING[handle->usart_num]);
 	}
 
 	return 0;
