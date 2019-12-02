@@ -174,7 +174,7 @@ int uart_read_bytes(usart_handle_t handle, uint8_t *buffer, uint16_t length)
 	for(i=0;i<length;i++)
 	{
 		while(USART_GetFlagStatus(USARTx_MAPPING[handle->usart_num], USART_FLAG_RXNE) == RESET);
-		buffer[i++] = USART_ReceiveData(USARTx_MAPPING[handle->usart_num]);
+		buffer[i++] = (uint8_t)USART_ReceiveData(USARTx_MAPPING[handle->usart_num]);
 	}
 
 	return 0;
