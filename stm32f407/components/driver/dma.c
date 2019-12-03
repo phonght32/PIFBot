@@ -64,4 +64,3 @@ void init(void)
 	  /* Transfer complete interrupt mask */
 	  DMA_ITConfig(DMA1_Stream2, DMA_IT_TC, ENABLE);
 }
-
