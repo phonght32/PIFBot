@@ -46,15 +46,26 @@ typedef enum {
     USART_PINS_PACK_MAX
 } usart_pins_pack_t;
 
+typedef enum {
+
+} usart_dma_
+
 typedef struct {
     usart_num_t  usart_num;
     usart_pins_pack_t usart_pins_pack;
     uint32_t usart_baudrate;
 } usart_config_t;
 
+typedef struct 
+{
+
+} usart_dma_config_t;
+
 usart_handle_t uart_init(usart_config_t *config);
 int uart_write_bytes(usart_handle_t handle, uint8_t *data, uint16_t length);
 int uart_read_bytes(usart_handle_t handle, uint8_t *buffer, uint16_t length);
+int uart_dma_enable_tx(usart_handle_t handle);
+int uart_dma_enable_rx(usart_handle_t handle);
 
 
 #ifdef __cplusplus
