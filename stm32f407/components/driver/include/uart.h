@@ -46,9 +46,6 @@ typedef enum {
     USART_PINS_PACK_MAX
 } usart_pins_pack_t;
 
-typedef enum {
-
-} usart_dma_
 
 typedef struct {
     usart_num_t  usart_num;
