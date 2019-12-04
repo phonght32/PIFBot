@@ -291,15 +291,19 @@ dma_handle_t dma_init(dma_config_t *config)
 	{
 		PeriphBaseAddr = DMA1_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_PeripheralBaseAddr];
 		DMA_Dir        = DMA1_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_DIR];
+
+		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
 	}
 	else 
 	{
 		PeriphBaseAddr = DMA2_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_PeripheralBaseAddr];
 		DMA_Dir        = DMA2_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_DIR];
+
+		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
 	}
 	DMA_Stream = DMA_STREAM_MAPPING[config->dma_stream][config->dma_num];
 
-	/* DMA1 Stream2 Channel4 for USART4 Rx configuration */
+
 	DMA_InitTypeDef   DMA_InitStructure;
 	DMA_InitStructure.DMA_Channel            = DMA_CHANNEL_MAPPING[config->dma_channel];
 	DMA_InitStructure.DMA_PeripheralBaseAddr = PeriphBaseAddr;
