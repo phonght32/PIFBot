@@ -289,7 +289,8 @@ dma_handle_t dma_init(dma_config_t *config)
 
 	if(config->dma_num == DMA_NUM_1)
 	{
-
+		PeriphBaseAddr = DMA1_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_PeripheralBaseAddr];
+		DMA_Dir        = DMA1_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_DIR];
 	}
 	else 
 	{
