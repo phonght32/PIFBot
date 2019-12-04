@@ -307,7 +307,7 @@ dma_handle_t dma_init(dma_config_t *config)
 	DMA_InitTypeDef   DMA_InitStructure;
 	DMA_InitStructure.DMA_Channel            = DMA_CHANNEL_MAPPING[config->dma_channel];
 	DMA_InitStructure.DMA_PeripheralBaseAddr = PeriphBaseAddr;
-	DMA_InitStructure.DMA_Memory0BaseAddr    = (uint32_t)&config->buffer;
+	DMA_InitStructure.DMA_Memory0BaseAddr    = config->buffer_addr;
 	DMA_InitStructure.DMA_DIR                = DMA_Dir;
 	DMA_InitStructure.DMA_BufferSize         = config->buffer_size;
 	DMA_InitStructure.DMA_PeripheralInc      = DMA_PERIPH_INC_DEFAULT;
