@@ -26,12 +26,12 @@ typedef enum {
 
 typedef struct pwm_param {
 	timer_num_t 	timer;
-    uint32_t 		timer_period;
-    uint16_t 		timer_prescaler;
-    pwm_channel_t 	pwm_channel;
-    pwm_pins_pack_t pwm_pins_pack;
-    uint8_t 		pwm_duty;
-    uint32_t 		pwm_freq_hz;
+	uint32_t 		timer_period;
+	uint16_t 		timer_prescaler;
+	pwm_channel_t 	pwm_channel;
+	pwm_pins_pack_t pwm_pins_pack;
+	uint8_t 		pwm_duty;
+	uint32_t 		pwm_freq_hz;
 } pwm_param_t;
 
 
@@ -252,18 +252,18 @@ uint32_t PWM_PARAM_MAPPING_PP3[PWM_CHANNEL_MAX][TIMER_NUM_MAX][PWM_PARAM_MAPPING
 
 TIM_TypeDef *TIMx_MAPPING[TIMER_NUM_MAX] = {
 	TIM1,
-	TIM2, 
-	TIM3, 
-	TIM4, 
-	TIM5, 
-	TIM6, 
-	TIM7, 
-	TIM8, 
-	TIM9, 
-	TIM10, 
-	TIM11, 
-	TIM12, 
-	TIM13, 
+	TIM2,
+	TIM3,
+	TIM4,
+	TIM5,
+	TIM6,
+	TIM7,
+	TIM8,
+	TIM9,
+	TIM10,
+	TIM11,
+	TIM12,
+	TIM13,
 	TIM14
 };
 
@@ -277,12 +277,12 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 {
 	/*Mapping implement */
 	GPIO_TypeDef *GPIOx;
- 	uint16_t GPIO_Pin_x;
- 	uint32_t RCC_AHBxPeriph_GPIOx;
- 	uint8_t GPIO_PinSourcex;
- 	uint32_t RCC_APBxPeriph_TIMx;
- 	uint8_t GPIO_AF_TIMx;
- 	TIM_TypeDef *TIMx;
+	uint16_t GPIO_Pin_x;
+	uint32_t RCC_AHBxPeriph_GPIOx;
+	uint8_t GPIO_PinSourcex;
+	uint32_t RCC_APBxPeriph_TIMx;
+	uint8_t GPIO_AF_TIMx;
+	TIM_TypeDef *TIMx;
 
 	if (config->pwm_pins_pack == PWM_PINS_PACK_1)
 	{
@@ -317,7 +317,7 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 	TIMx = TIMx_MAPPING[config->timer];
 
 	/* Enable Timer clock source */
-	if((config->timer == TIMER_NUM_1) || (config->timer == TIMER_NUM_8) || (config->timer == TIMER_NUM_9) || (config->timer == TIMER_NUM_10) || (config->timer == TIMER_NUM_11))
+	if ((config->timer == TIMER_NUM_1) || (config->timer == TIMER_NUM_8) || (config->timer == TIMER_NUM_9) || (config->timer == TIMER_NUM_10) || (config->timer == TIMER_NUM_11))
 	{
 		RCC_APB2PeriphClockCmd(RCC_APBxPeriph_TIMx, ENABLE);
 	}
@@ -332,80 +332,80 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 	/*GPIO configuration */
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_x;
-  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  	GPIO_InitStructure.GPIO_Speed = GPIO_SPEED_FREQ;
-  	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  	GPIO_InitStructure.GPIO_PuPd = GPIO_PUPD ;
-  	GPIO_Init(GPIOx, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_Speed = GPIO_SPEED_FREQ;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PUPD ;
+	GPIO_Init(GPIOx, &GPIO_InitStructure);
 
-  	/* Connect TIMx pin to AFx */
-  	GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_TIMx);
+	/* Connect TIMx pin to AFx */
+	GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_TIMx);
 
-  	uint16_t CCR_Val = (uint16_t)((config->pwm_duty)* (config->timer_period)/100);
+	uint16_t CCR_Val = (uint16_t)((config->pwm_duty) * (config->timer_period) / 100);
 
 	/* Time base configuration */
-  	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-  	TIM_TimeBaseStructure.TIM_Period = config->timer_period;
-  	TIM_TimeBaseStructure.TIM_Prescaler = config->timer_prescaler;
-  	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-  	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-  	TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
+	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	TIM_TimeBaseStructure.TIM_Period = config->timer_period;
+	TIM_TimeBaseStructure.TIM_Prescaler = config->timer_prescaler;
+	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
 
-  	 /* PWM Mode configuration */
-  	TIM_OCInitTypeDef  TIM_OCInitStructure;
-  	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-  	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-  	TIM_OCInitStructure.TIM_Pulse = CCR_Val;
-  	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	/* PWM Mode configuration */
+	TIM_OCInitTypeDef  TIM_OCInitStructure;
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OCInitStructure.TIM_Pulse = CCR_Val;
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 
-  	switch (config->pwm_channel) {
-		case PWM_CHANNEL_1: {
-			TIM_OC1Init(TIMx, &TIM_OCInitStructure);
-			TIM_OC1PreloadConfig(TIMx, TIM_OCPreload_Enable);
-			break;
-		}
-		case PWM_CHANNEL_2: {
-			TIM_OC2Init(TIMx, &TIM_OCInitStructure);
-			TIM_OC2PreloadConfig(TIMx, TIM_OCPreload_Enable);
-			break;
-		}
-		case PWM_CHANNEL_3: {
-			TIM_OC3Init(TIMx, &TIM_OCInitStructure);
-			TIM_OC3PreloadConfig(TIMx, TIM_OCPreload_Enable);
-			break;
-		}
-		case PWM_CHANNEL_4: {
-			TIM_OC4Init(TIMx, &TIM_OCInitStructure);
-			TIM_OC4PreloadConfig(TIMx, TIM_OCPreload_Enable);
-			break;
-		}
-		default:
-			break;
+	switch (config->pwm_channel) {
+	case PWM_CHANNEL_1: {
+		TIM_OC1Init(TIMx, &TIM_OCInitStructure);
+		TIM_OC1PreloadConfig(TIMx, TIM_OCPreload_Enable);
+		break;
+	}
+	case PWM_CHANNEL_2: {
+		TIM_OC2Init(TIMx, &TIM_OCInitStructure);
+		TIM_OC2PreloadConfig(TIMx, TIM_OCPreload_Enable);
+		break;
+	}
+	case PWM_CHANNEL_3: {
+		TIM_OC3Init(TIMx, &TIM_OCInitStructure);
+		TIM_OC3PreloadConfig(TIMx, TIM_OCPreload_Enable);
+		break;
+	}
+	case PWM_CHANNEL_4: {
+		TIM_OC4Init(TIMx, &TIM_OCInitStructure);
+		TIM_OC4PreloadConfig(TIMx, TIM_OCPreload_Enable);
+		break;
+	}
+	default:
+		break;
 	}
 
-  	TIM_ARRPreloadConfig(TIMx, ENABLE);
+	TIM_ARRPreloadConfig(TIMx, ENABLE);
 
-  	pwm_handle_t handle = calloc(1, sizeof(pwm_param_t));
-  	if(handle == NULL)
-  	{
-  		return -1;
-  	}
+	pwm_handle_t handle = calloc(1, sizeof(pwm_param_t));
+	if (handle == NULL)
+	{
+		return 0;
+	}
 
-  	handle->timer           = config->timer;
-  	handle->timer_period    = config->timer_period;
-  	handle->timer_prescaler = config->timer_prescaler;
-  	handle->pwm_channel     = config->pwm_channel;
-  	handle->pwm_pins_pack   = config->pwm_pins_pack;
-  	handle->pwm_duty        = config->pwm_duty;
+	handle->timer           = config->timer;
+	handle->timer_period    = config->timer_period;
+	handle->timer_prescaler = config->timer_prescaler;
+	handle->pwm_channel     = config->pwm_channel;
+	handle->pwm_pins_pack   = config->pwm_pins_pack;
+	handle->pwm_duty        = config->pwm_duty;
 	return handle;
 }
 
 int pwm_start(pwm_handle_t handle)
 {
-  	/* TIM enable counter */
-  	TIM_Cmd(TIMx_MAPPING[handle->timer], ENABLE);
+	/* TIM enable counter */
+	TIM_Cmd(TIMx_MAPPING[handle->timer], ENABLE);
 
-  	return 0;
+	return 0;
 }
 
 int pwm_set_timer_prescaler(pwm_handle_t handle, uint16_t timer_prescaler)
@@ -426,7 +426,7 @@ int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period)
 	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
 
 	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
-	TIMx_MAPPING[handle->timer]->CCR1 = (handle->pwm_duty)*timer_period/100;
+	TIMx_MAPPING[handle->timer]->CCR1 = (handle->pwm_duty) * timer_period / 100;
 	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
 
 	handle->timer_period = timer_period;
@@ -436,7 +436,7 @@ int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period)
 int pwm_set_duty(pwm_handle_t handle, uint8_t pwm_duty)
 {
 	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
-	TIMx_MAPPING[handle->timer]->CCR1 = pwm_duty*(handle->timer_period)/100;
+	TIMx_MAPPING[handle->timer]->CCR1 = pwm_duty * (handle->timer_period) / 100;
 	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
 
 	handle->pwm_duty = pwm_duty;

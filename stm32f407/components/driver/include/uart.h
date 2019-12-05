@@ -1,5 +1,5 @@
-#ifndef _UART_H 
-#define _UART_H 
+#ifndef _UART_H
+#define _UART_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -8,11 +8,11 @@ extern "C" {
 #include "stdint.h"
 #include "stddef.h"
 
-/* NOTE: Change HSE_VALUE in stm32f4xx.h to 8000000 before start your application */    
+/* NOTE: Change HSE_VALUE in stm32f4xx.h to 8000000 before start your application */
 
-/* Table below shows all possible pins for each uart 
+/* Table below shows all possible pins for each uart
  *
- *  U(S)ARTx | Pins pack 1 | Pins pack 2 | Pins pack 3 |  APB  | 
+ *  U(S)ARTx | Pins pack 1 | Pins pack 2 | Pins pack 3 |  APB  |
  *           |  TX    RX   |  TX    RX   |  TX    RX   |       |
  *--------------------------------------------------------------
  *  USART1   |  PA9   PA10 |  PB6   PB7  |  -     -    |   2   |
@@ -53,7 +53,7 @@ typedef struct {
     uint32_t usart_baudrate;
 } usart_config_t;
 
-typedef struct 
+typedef struct
 {
 
 } usart_dma_config_t;

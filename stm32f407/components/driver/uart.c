@@ -158,27 +158,27 @@ usart_handle_t uart_init(usart_config_t *config)
 
 int uart_write_bytes(usart_handle_t handle, uint8_t *data, uint16_t length)
 {
-	uint16_t i;
-	for (i = 0; i < length; i++)
-	{
-		while (USART_GetFlagStatus(USARTx_MAPPING[handle->usart_num], USART_FLAG_TXE) == RESET);
-		USARTx_MAPPING[handle->usart_num]->DR = (uint16_t)(data[i]);
-		while (USART_GetFlagStatus(USARTx_MAPPING[handle->usart_num], USART_FLAG_TXE) == RESET);
-	}
+    uint16_t i;
+    for (i = 0; i < length; i++)
+    {
+        while (USART_GetFlagStatus(USARTx_MAPPING[handle->usart_num], USART_FLAG_TXE) == RESET);
+        USARTx_MAPPING[handle->usart_num]->DR = (uint16_t)(data[i]);
+        while (USART_GetFlagStatus(USARTx_MAPPING[handle->usart_num], USART_FLAG_TXE) == RESET);
+    }
 
-	return 0;
+    return 0;
 }
 
 int uart_read_bytes(usart_handle_t handle, uint8_t *buffer, uint16_t length)
 {
-	int i = 0;
-	for(i=0;i<length;i++)
-	{
-		while(USART_GetFlagStatus(USARTx_MAPPING[handle->usart_num], USART_FLAG_RXNE) == RESET);
-		buffer[i++] = (uint8_t)USART_ReceiveData(USARTx_MAPPING[handle->usart_num]);
-	}
+    int i = 0;
+    for (i = 0; i < length; i++)
+    {
+        while (USART_GetFlagStatus(USARTx_MAPPING[handle->usart_num], USART_FLAG_RXNE) == RESET);
+        buffer[i++] = (uint8_t)USART_ReceiveData(USARTx_MAPPING[handle->usart_num]);
+    }
 
-	return 0;
+    return 0;
 }
 
 int uart_dma_enable_rx(usart_handle_t handle)
