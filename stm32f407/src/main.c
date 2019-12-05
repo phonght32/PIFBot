@@ -1,12 +1,20 @@
 
 #include "stm32f4xx.h"
 
+#include "../components/driver/include/gpio.h"
+
+
 void delay_01ms(uint16_t period);
 
 int main(void)
 {	
+	gpio_config_t gpio_cfg;
+	gpio_cfg.GPIOx = GPIOD;
+	gpio_cfg.GPIO_Pin = GPIO_Pin_12;
+	gpio_handle_t gpio_d15 = gpio_output_init(&gpio_cfg);
 	while(1)
 	{
+		gpio_toggle(gpio_d15);
 		delay_01ms(1000);
 	}
 }
