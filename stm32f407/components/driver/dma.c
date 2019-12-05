@@ -278,14 +278,18 @@ uint8_t DMA_Stream_IRQ_MAPPING[DMA_STREAM_MAX][DMA_NUM_MAX] = {
 	{DMA1_Stream7_IRQn, DMA2_Stream7_IRQn},
 };
 /* Internal function ---------------------------------------------------------*/
-
+#define		BUFF_SIZE			4
+uint8_t 	rxbuff[BUFF_SIZE];
+uint8_t 	a[4*BUFF_SIZE];
+uint16_t	index = 0;
+uint16_t 	rcv_flag = 0;
 
 /* External function ---------------------------------------------------------*/
 dma_handle_t dma_init(dma_config_t *config)
 {
 	uint32_t PeriphBaseAddr;
 	uint32_t DMA_Dir;
-	DMA_Stream_TypeDef * DMA_Stream;
+	DMA_Stream_TypeDef *DMA_Stream;
 
 	if(config->dma_num == DMA_NUM_1)
 	{
@@ -294,7 +298,7 @@ dma_handle_t dma_init(dma_config_t *config)
 
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
 	}
-	else 
+	else
 	{
 		PeriphBaseAddr = DMA2_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_PeripheralBaseAddr];
 		DMA_Dir        = DMA2_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_DIR];
@@ -303,11 +307,10 @@ dma_handle_t dma_init(dma_config_t *config)
 	}
 	DMA_Stream = DMA_STREAM_MAPPING[config->dma_stream][config->dma_num];
 
-
 	DMA_InitTypeDef   DMA_InitStructure;
 	DMA_InitStructure.DMA_Channel            = DMA_CHANNEL_MAPPING[config->dma_channel];
 	DMA_InitStructure.DMA_PeripheralBaseAddr = PeriphBaseAddr;
-	DMA_InitStructure.DMA_Memory0BaseAddr    = config->buffer_addr;
+	DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)rxbuff;
 	DMA_InitStructure.DMA_DIR                = DMA_Dir;
 	DMA_InitStructure.DMA_BufferSize         = config->buffer_size;
 	DMA_InitStructure.DMA_PeripheralInc      = DMA_PERIPH_INC_DEFAULT;
@@ -316,7 +319,7 @@ dma_handle_t dma_init(dma_config_t *config)
 	DMA_InitStructure.DMA_MemoryDataSize     = DMA_MEM_DATA_SIZE_DEFAULT;
 	DMA_InitStructure.DMA_Mode               = config->dma_mode;
 	DMA_InitStructure.DMA_Priority           = config->dma_priority;
-	DMA_InitStructure.DMA_FIFOMode           = DMA_FIFO_MODE_DEFAULT ;
+	DMA_InitStructure.DMA_FIFOMode           = DMA_FIFO_MODE_DEFAULT;
 	DMA_InitStructure.DMA_FIFOThreshold      = DMA_FIFO_THRESHOLD_DEFAULT;
 	DMA_InitStructure.DMA_MemoryBurst        = DMA_MEM_BURST_DEFAULT;
 	DMA_InitStructure.DMA_PeripheralBurst    = DMA_PERIPH_BURST_DEFAULT;
@@ -348,6 +351,23 @@ int dma_intr_enable(dma_handle_t handle, uint32_t intr_type)
 	DMA_ITConfig(DMA_Stream_IRQ_MAPPING[handle->dma_stream][handle->dma_num], intr_type, ENABLE);
 
 	return 0;
+}
+
+void DMA1_Stream2_IRQHandler(void)
+{
+  uint16_t i;
+
+  /* Clear the DMA1_Stream2 TCIF2 pending bit */
+  DMA_ClearITPendingBit(DMA1_Stream2, DMA_IT_TCIF2);
+
+  for(i=0; i<BUFF_SIZE; i++)
+
+    a[index + i] = rxbuff[i];
+
+	index = index + BUFF_SIZE;
+  rcv_flag = 1;
+
+	DMA_Cmd(DMA1_Stream2, ENABLE);
 }
 
 
