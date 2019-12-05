@@ -25,7 +25,7 @@ typedef struct {
     tb6560_micro_step_t micro_step_div;
 } tb6560_config_t;
 
-int tb6560_init(tb6560_config_t *config);
+tb6560_handle_t tb6560_init(tb6560_config_t *config);
 
 #ifdef __cplusplus
 }
