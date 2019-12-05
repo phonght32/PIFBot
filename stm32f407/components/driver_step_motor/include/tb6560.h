@@ -8,6 +8,7 @@ extern "C" {
 #include "../../driver/include/timer.h"
 #include "../../driver/include/gpio.h"
 
+typedef struct tb6560 *tb6560_handle_t;
 typedef gpio_config_t pin_dir_t;
 typedef pwm_config_t pin_clk_t;
 
