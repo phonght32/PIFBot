@@ -14,3 +14,9 @@
 
 
 /* External function ---------------------------------------------------------*/
+int tb6560_init(tb6560_config_t *config)
+{
+	pwm_init(&config->pin_clk);
+	gpio_output_init(&config->pin_dir);
+	return 0;
+}
