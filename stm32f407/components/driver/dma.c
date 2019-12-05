@@ -339,7 +339,6 @@ dma_handle_t dma_init(dma_config_t *config)
 
 int dma_intr_enable(dma_handle_t handle, uint32_t intr_type)
 {
-	/* Enable DMA Interrupt to the highest priority */
 	NVIC_InitTypeDef  NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = DMA_Stream_IRQ_MAPPING[handle->dma_stream][handle->dma_num];
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
@@ -347,9 +346,7 @@ int dma_intr_enable(dma_handle_t handle, uint32_t intr_type)
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 
-	/* Transfer complete interrupt mask */
-	DMA_ITConfig(DMA_Stream_IRQ_MAPPING[handle->dma_stream][handle->dma_num], intr_type, ENABLE);
-
+	DMA_ITConfig(DMA_STREAM_MAPPING[handle->dma_stream][handle->dma_num], intr_type, ENABLE);
 	return 0;
 }
 
