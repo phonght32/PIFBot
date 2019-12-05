@@ -32,7 +32,7 @@
 #define I2S1_ADDR	0
 #define I2S2_ADDR	0
 #define I2S3_ADDR   0
-		
+
 #define TIM1_ADDR	0
 #define TIM2_ADDR	0
 #define TIM3_ADDR	0
@@ -64,13 +64,13 @@
 
 /* Internal typedef ----------------------------------------------------------*/
 typedef struct dma {
-    dma_stream_t    dma_stream;
-    dma_channel_t   dma_channel;
-    dma_num_t       dma_num;
-    uint32_t        dma_mode;
-    uint8_t         *buffer;
-    uint8_t         buffer_size;
-    uint32_t        dma_priority;
+	dma_stream_t    dma_stream;
+	dma_channel_t   dma_channel;
+	dma_num_t       dma_num;
+	uint32_t        dma_mode;
+	uint8_t         *buffer;
+	uint8_t         buffer_size;
+	uint32_t        dma_priority;
 } dma_t;
 
 typedef enum {
@@ -161,7 +161,7 @@ uint32_t DMA1_PARAM_MAPPING[DMA_STREAM_MAX][DMA_CHANNEL_MAX][DMA_PARAM_MAPPING_I
 		{   I2C2_ADDR,           0}
 	},
 
-	
+
 };
 
 uint32_t DMA2_PARAM_MAPPING[DMA_STREAM_MAX][DMA_CHANNEL_MAX][DMA_PARAM_MAPPING_INDEX_MAX] = {
@@ -287,7 +287,7 @@ dma_handle_t dma_init(dma_config_t *config)
 	uint32_t DMA_Dir;
 	DMA_Stream_TypeDef *DMA_Stream;
 
-	if(config->dma_num == DMA_NUM_1)
+	if (config->dma_num == DMA_NUM_1)
 	{
 		PeriphBaseAddr = DMA1_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_PeripheralBaseAddr];
 		DMA_Dir        = DMA1_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_DIR];
