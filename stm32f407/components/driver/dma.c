@@ -17,8 +17,9 @@
 #define SPI2_ADDR	0
 #define SPI3_ADDR	0
 
-#define IC1_ADDR	0
-#define IC2_ADDR	0
+#define I2C1_ADDR	0
+#define I2C2_ADDR	0
+#define I2C3_ADDR	0
 
 #define UART4_ADDR	&UART4->DR
 #define UART5_ADDR	&UART5->DR
@@ -30,7 +31,8 @@
 
 #define I2S1_ADDR	0
 #define I2S2_ADDR	0
-		
+#define I2S3_ADDR   0
+
 #define TIM1_ADDR	0
 #define TIM2_ADDR	0
 #define TIM3_ADDR	0
@@ -62,13 +64,13 @@
 
 /* Internal typedef ----------------------------------------------------------*/
 typedef struct dma {
-    dma_stream_t    dma_stream;
-    dma_channel_t   dma_channel;
-    dma_num_t       dma_num;
-    uint32_t        dma_mode;
-    uint8_t         *buffer;
-    uint8_t         buffer_size;
-    uint32_t        dma_priority;
+	dma_stream_t    dma_stream;
+	dma_channel_t   dma_channel;
+	dma_num_t       dma_num;
+	uint32_t        dma_mode;
+	uint8_t         *buffer;
+	uint8_t         buffer_size;
+	uint32_t        dma_priority;
 } dma_t;
 
 typedef enum {
@@ -78,6 +80,90 @@ typedef enum {
 } dma_mapping_index_t;
 
 /* Internal variable ---------------------------------------------------------*/
+uint32_t DMA1_PARAM_MAPPING[DMA_STREAM_MAX][DMA_CHANNEL_MAX][DMA_PARAM_MAPPING_INDEX_MAX] = {
+	{	{   SPI3_ADDR,  DMA_DIR_IN},
+		{   I2C1_ADDR,  DMA_DIR_IN},
+		{   TIM4_ADDR,           0},
+		{   I2S3_ADDR,           0},
+		{  UART5_ADDR,  DMA_DIR_IN},
+		{           0,           0},
+		{   TIM5_ADDR,},
+		{           0,           0}
+	},
+
+	{	{           0,           0},
+		{           0,           0},
+		{           0,           0},
+		{   TIM2_ADDR,           0},
+		{ USART3_ADDR,  DMA_DIR_IN},
+		{           0,           0},
+		{   TIM5_ADDR,           0},
+		{   TIM6_ADDR,           0}
+	},
+
+	{	{   SPI3_ADDR,  DMA_DIR_IN},
+		{   TIM7_ADDR,           0},
+		{   I2S2_ADDR,  DMA_DIR_IN},
+		{   I2C3_ADDR,  DMA_DIR_IN},
+		{  UART4_ADDR,  DMA_DIR_IN},
+		{   TIM3_ADDR,           0},
+		{   TIM5_ADDR,           0},
+		{   I2C2_ADDR,  DMA_DIR_IN}
+	},
+
+	{	{   SPI2_ADDR,  DMA_DIR_IN},
+		{           0,           0},
+		{   TIM4_ADDR,           0},
+		{   I2S2_ADDR,  DMA_DIR_IN},
+		{ USART3_ADDR,  DMA_DIR_IN},
+		{           0,           0},
+		{   TIM5_ADDR,           0},
+		{   I2C2_ADDR,  DMA_DIR_IN}
+	},
+
+	{	{   SPI2_ADDR,           0},
+		{   TIM7_ADDR,           0},
+		{   I2S2_ADDR,           0},
+		{   I2C3_ADDR,           0},
+		{  UART4_ADDR,           0},
+		{   TIM3_ADDR,           0},
+		{   TIM5_ADDR,           0},
+		{ USART3_ADDR,           0}
+	},
+
+	{	{   SPI3_ADDR,           0},
+		{   I2C1_ADDR,           0},
+		{   I2S3_ADDR,           0},
+		{   TIM2_ADDR,           0},
+		{ USART2_ADDR,  DMA_DIR_IN},
+		{   TIM3_ADDR,           0},
+		{           0,           0},
+		{   DAC1_ADDR,           0}
+	},
+
+	{	{           0,           0},
+		{   I2C1_ADDR,           0},
+		{   TIM4_ADDR,           0},
+		{   TIM2_ADDR,           0},
+		{ USART2_ADDR,  DMA_DIR_IN},
+		{           0,           0},
+		{   TIM5_ADDR,           0},
+		{   DAC2_ADDR,           0}
+	},
+
+	{	{   SPI3_ADDR,           0},
+		{   I2C1_ADDR,           0},
+		{   TIM4_ADDR,           0},
+		{   TIM2_ADDR,           0},
+		{  UART5_ADDR,           0},
+		{   TIM3_ADDR,           0},
+		{           0,           0},
+		{   I2C2_ADDR,           0}
+	},
+
+
+};
+
 uint32_t DMA2_PARAM_MAPPING[DMA_STREAM_MAX][DMA_CHANNEL_MAX][DMA_PARAM_MAPPING_INDEX_MAX] = {
 	{	{   ADC1_ADDR,  DMA_DIR_IN},
 		{           0,           0},
@@ -199,24 +285,28 @@ dma_handle_t dma_init(dma_config_t *config)
 {
 	uint32_t PeriphBaseAddr;
 	uint32_t DMA_Dir;
-	DMA_Stream_TypeDef * DMA_Stream;
+	DMA_Stream_TypeDef *DMA_Stream;
 
-	if(config->dma_num == DMA_NUM_1)
+	if (config->dma_num == DMA_NUM_1)
 	{
+		PeriphBaseAddr = DMA1_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_PeripheralBaseAddr];
+		DMA_Dir        = DMA1_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_DIR];
 
+		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
 	}
-	else 
+	else
 	{
 		PeriphBaseAddr = DMA2_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_PeripheralBaseAddr];
 		DMA_Dir        = DMA2_PARAM_MAPPING[config->dma_stream][config->dma_channel][DMA_PARAM_MAPPING_DIR];
+
+		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
 	}
 	DMA_Stream = DMA_STREAM_MAPPING[config->dma_stream][config->dma_num];
 
-	/* DMA1 Stream2 Channel4 for USART4 Rx configuration */
 	DMA_InitTypeDef   DMA_InitStructure;
 	DMA_InitStructure.DMA_Channel            = DMA_CHANNEL_MAPPING[config->dma_channel];
 	DMA_InitStructure.DMA_PeripheralBaseAddr = PeriphBaseAddr;
-	DMA_InitStructure.DMA_Memory0BaseAddr    = (uint32_t)&config->buffer;
+	DMA_InitStructure.DMA_Memory0BaseAddr    = (uint32_t)config->buffer;
 	DMA_InitStructure.DMA_DIR                = DMA_Dir;
 	DMA_InitStructure.DMA_BufferSize         = config->buffer_size;
 	DMA_InitStructure.DMA_PeripheralInc      = DMA_PERIPH_INC_DEFAULT;
@@ -225,7 +315,7 @@ dma_handle_t dma_init(dma_config_t *config)
 	DMA_InitStructure.DMA_MemoryDataSize     = DMA_MEM_DATA_SIZE_DEFAULT;
 	DMA_InitStructure.DMA_Mode               = config->dma_mode;
 	DMA_InitStructure.DMA_Priority           = config->dma_priority;
-	DMA_InitStructure.DMA_FIFOMode           = DMA_FIFO_MODE_DEFAULT ;
+	DMA_InitStructure.DMA_FIFOMode           = DMA_FIFO_MODE_DEFAULT;
 	DMA_InitStructure.DMA_FIFOThreshold      = DMA_FIFO_THRESHOLD_DEFAULT;
 	DMA_InitStructure.DMA_MemoryBurst        = DMA_MEM_BURST_DEFAULT;
 	DMA_InitStructure.DMA_PeripheralBurst    = DMA_PERIPH_BURST_DEFAULT;
@@ -245,7 +335,6 @@ dma_handle_t dma_init(dma_config_t *config)
 
 int dma_intr_enable(dma_handle_t handle, uint32_t intr_type)
 {
-	/* Enable DMA Interrupt to the highest priority */
 	NVIC_InitTypeDef  NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = DMA_Stream_IRQ_MAPPING[handle->dma_stream][handle->dma_num];
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
@@ -253,10 +342,10 @@ int dma_intr_enable(dma_handle_t handle, uint32_t intr_type)
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 
-	/* Transfer complete interrupt mask */
-	DMA_ITConfig(DMA_Stream_IRQ_MAPPING[handle->dma_stream][handle->dma_num], intr_type, ENABLE);
-
+	DMA_ITConfig(DMA_STREAM_MAPPING[handle->dma_stream][handle->dma_num], intr_type, ENABLE);
 	return 0;
 }
+
+
 
 

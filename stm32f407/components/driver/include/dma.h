@@ -42,7 +42,7 @@ typedef struct {
     dma_channel_t   dma_channel;
     dma_num_t       dma_num;
     uint32_t        dma_mode;
-    uint8_t         *buffer;
+    uint32_t        *buffer;
     uint8_t         buffer_size;
     uint32_t        dma_priority;
 } dma_config_t;
