@@ -278,11 +278,7 @@ uint8_t DMA_Stream_IRQ_MAPPING[DMA_STREAM_MAX][DMA_NUM_MAX] = {
 	{DMA1_Stream7_IRQn, DMA2_Stream7_IRQn},
 };
 /* Internal function ---------------------------------------------------------*/
-#define		BUFF_SIZE			4
-uint8_t 	rxbuff[BUFF_SIZE];
-uint8_t 	a[4*BUFF_SIZE];
-uint16_t	index = 0;
-uint16_t 	rcv_flag = 0;
+
 
 /* External function ---------------------------------------------------------*/
 dma_handle_t dma_init(dma_config_t *config)
@@ -310,7 +306,7 @@ dma_handle_t dma_init(dma_config_t *config)
 	DMA_InitTypeDef   DMA_InitStructure;
 	DMA_InitStructure.DMA_Channel            = DMA_CHANNEL_MAPPING[config->dma_channel];
 	DMA_InitStructure.DMA_PeripheralBaseAddr = PeriphBaseAddr;
-	DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)rxbuff;
+	DMA_InitStructure.DMA_Memory0BaseAddr    = (uint32_t)config->buffer;
 	DMA_InitStructure.DMA_DIR                = DMA_Dir;
 	DMA_InitStructure.DMA_BufferSize         = config->buffer_size;
 	DMA_InitStructure.DMA_PeripheralInc      = DMA_PERIPH_INC_DEFAULT;
@@ -350,21 +346,6 @@ int dma_intr_enable(dma_handle_t handle, uint32_t intr_type)
 	return 0;
 }
 
-void DMA1_Stream2_IRQHandler(void)
-{
-  uint16_t i;
 
-  /* Clear the DMA1_Stream2 TCIF2 pending bit */
-  DMA_ClearITPendingBit(DMA1_Stream2, DMA_IT_TCIF2);
-
-  for(i=0; i<BUFF_SIZE; i++)
-
-    a[index + i] = rxbuff[i];
-
-	index = index + BUFF_SIZE;
-  rcv_flag = 1;
-
-	DMA_Cmd(DMA1_Stream2, ENABLE);
-}
 
 

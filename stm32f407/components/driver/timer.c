@@ -388,7 +388,7 @@ pwm_handle_t pwm_init(pwm_config_t *config)
   	pwm_handle_t handle = calloc(1, sizeof(pwm_param_t));
   	if(handle == NULL)
   	{
-  		return -1;
+  		return 0;
   	}
 
   	handle->timer           = config->timer;
