@@ -5,6 +5,11 @@
 extern "C" {
 #endif
 
+/* Table below shows all possible DMA.
+ *
+ *
+ */  
+
 typedef struct dma *dma_handle_t;
 
 typedef enum {
@@ -50,6 +55,7 @@ typedef struct {
 
 dma_handle_t dma_init(dma_config_t *config);
 int dma_intr_enable(dma_handle_t handle, uint32_t intr_type);
+int dma_deinit(dma_handle_t handle);
 
 #ifdef __cplusplus
 }
