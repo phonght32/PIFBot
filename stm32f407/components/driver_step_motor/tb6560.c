@@ -11,9 +11,11 @@
 
 /* Internal variable ---------------------------------------------------------*/
 typedef struct tb6560 {
-	pin_clk_t *pin_clk;
-	pin_dir_t *pin_dir;
+	pin_clk_t 			*pin_clk;
+	pin_dir_t 			*pin_dir;
 	tb6560_micro_step_t micro_step_div;
+	uint8_t				dir;
+	uint16_t 			speed;
 } tb6560_t;
 
 /* Internal function ---------------------------------------------------------*/
@@ -34,6 +36,8 @@ tb6560_handle_t tb6560_init(tb6560_config_t *config)
 	handle->pin_clk = (pin_clk_t *)pwm_init(&config->pin_clk);
 	handle->pin_dir = (pin_dir_t *)gpio_output_init(&config->pin_dir);
 	handle->micro_step_div = config->micro_step_div;
+	handle->dir = 0;
+	handle->speed;
 
 	return handle;
 }
@@ -48,6 +52,13 @@ int tb6560_start(tb6560_handle_t handle)
 int tb6560_stop(tb6560_handle_t handle)
 {
 	pwm_stop((pwm_handle_t *)handle->pin_clk);
+
+	return 0;
+}
+
+int tb6560_set_dir(tb6560_handle_t handle, uint8_t dir)
+{
+	gpio_set_level((gpio_handle_t *)handle->pin_dir,dir);
 
 	return 0;
 }
