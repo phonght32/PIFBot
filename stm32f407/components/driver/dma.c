@@ -324,6 +324,10 @@ dma_handle_t dma_init(dma_config_t *config)
 	DMA_Cmd(DMA_Stream, ENABLE);
 
 	dma_handle_t handle  = calloc(1, sizeof(dma_t));
+	if(!handle) 
+	{
+		return -1;
+	}
 	handle->dma_stream   = config->dma_stream;
 	handle->dma_channel  = config->dma_channel;
 	handle->dma_num      = config->dma_num;
