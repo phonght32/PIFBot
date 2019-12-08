@@ -386,10 +386,10 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 	TIM_ARRPreloadConfig(TIMx, ENABLE);
 
 	pwm_handle_t handle = calloc(1, sizeof(pwm_param_t));
-	if (handle == NULL)
-	{
-		return 0;
-	}
+	if(!handle)
+    {
+        return -1;
+    }
 
 	handle->timer           = config->timer;
 	handle->timer_period    = config->timer_period;

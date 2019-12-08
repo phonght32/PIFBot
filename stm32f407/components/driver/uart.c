@@ -149,6 +149,10 @@ usart_handle_t uart_init(usart_config_t *config)
     USART_Cmd(USARTx, ENABLE);
 
     usart_handle_t handle  = calloc(1, sizeof(usart_t));
+    if(!handle)
+    {
+        return -1;
+    }
     handle->usart_num = config->usart_num;
     handle->usart_pins_pack = config->usart_pins_pack;
     handle->usart_baudrate = config->usart_baudrate;

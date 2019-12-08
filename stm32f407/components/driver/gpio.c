@@ -80,6 +80,10 @@ gpio_handle_t gpio_output_init(gpio_config_t *config)
     GPIO_Init(config->GPIOx, &GPIO_InitDef);
 
     gpio_handle_t handle = calloc(1,sizeof(gpio_t));
+    if(!handle)
+    {
+        return -1;
+    }
     handle->GPIOx = config->GPIOx;
     handle->GPIO_Pin = config->GPIO_Pin;
 
