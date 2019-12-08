@@ -59,6 +59,7 @@ int tb6560_stop(tb6560_handle_t handle)
 int tb6560_set_dir(tb6560_handle_t handle, uint8_t dir)
 {
 	gpio_set_level((gpio_handle_t *)handle->pin_dir,dir);
+	handle->dir = dir;
 
 	return 0;
 }
