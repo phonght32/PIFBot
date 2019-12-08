@@ -26,6 +26,7 @@ typedef struct {
 } tb6560_config_t;
 
 tb6560_handle_t tb6560_init(tb6560_config_t *config);
+int tb6560_start(tb6560_handle_t handle);
 int tb6560_deinit(tb6560_handle_t handle);
 
 #ifdef __cplusplus
