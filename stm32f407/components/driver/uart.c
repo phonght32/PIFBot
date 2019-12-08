@@ -2,7 +2,7 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_conf.h"
 #include "stm32f4xx_rcc.h"
-#include "stm32f4xx_dma.h"
+#include "stm32f4xx_usart.h"
 
 #include "stdlib.h"
 
@@ -191,6 +191,14 @@ int uart_dma_enable_rx(usart_handle_t handle)
 int uart_dma_enable_tx(usart_handle_t handle)
 {
     USART_DMACmd(USARTx_MAPPING[handle->usart_num], USART_DMAReq_Tx, ENABLE);
+
+    return 0;
+}
+
+int uart_deinit(usart_handle_t handle)
+{
+    USART_DeInit(USARTx_MAPPING[handle->usart_num]);
+    free(handle);
 
     return 0;
 }
