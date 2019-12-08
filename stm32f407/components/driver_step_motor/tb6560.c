@@ -49,5 +49,8 @@ int tb6560_cleanup(tb6560_handle_t handle)
 
 int tb6560_deinit(tb6560_handle_t handle)
 {
+	pwm_deinit((pwm_handle_t *)handle->pin_clk);
+	tb6560_cleanup(handle);
+
 	return 0;
 }
