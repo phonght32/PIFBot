@@ -46,3 +46,8 @@ int tb6560_cleanup(tb6560_handle_t handle)
 
 	return 0;
 }
+
+int tb6560_deinit(tb6560_handle_t handle)
+{
+	return 0;
+}
