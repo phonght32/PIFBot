@@ -45,6 +45,13 @@ int tb6560_start(tb6560_handle_t handle)
 	return 0;
 }
 
+int tb6560_stop(tb6560_handle_t handle)
+{
+	pwm_stop((pwm_handle_t *)handle->pin_clk));
+
+	return 0;
+}
+
 int tb6560_cleanup(tb6560_handle_t handle)
 {
 	free(handle->pin_clk);
