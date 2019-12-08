@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
 #include "stm32f4xx_dma.h"
+#include "stm32f4xx_rcc.h"
 
 #include "include/dma.h"
 
@@ -343,6 +344,14 @@ int dma_intr_enable(dma_handle_t handle, uint32_t intr_type)
 	NVIC_Init(&NVIC_InitStructure);
 
 	DMA_ITConfig(DMA_STREAM_MAPPING[handle->dma_stream][handle->dma_num], intr_type, ENABLE);
+	return 0;
+}
+
+int dma_deinit(dma_handle_t handle)
+{
+	DMA_DeInit(DMA_STREAM_MAPPING[handle->dma_stream][handle->dma_num]);
+	free(handle);
+
 	return 0;
 }
 
