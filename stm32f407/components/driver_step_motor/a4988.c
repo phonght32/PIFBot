@@ -53,6 +53,14 @@ int a4988_stop(a4988_handle_t handle)
     return 0;
 }
 
+int a4988_set_dir(a4988_handle_t handle, uint8_t dir)
+{
+    gpio_set_level((gpio_handle_t *)handle->pin_dir, dir);
+    handle->dir = dir;
+
+    return 0;
+}
+
 static int a4988_cleanup(a4988_handle_t handle)
 {
 	free(handle->pin_clk);
