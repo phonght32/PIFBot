@@ -61,6 +61,14 @@ int a4988_set_dir(a4988_handle_t handle, uint8_t dir)
     return 0;
 }
 
+int a4988_deinit(a4988_handle_t handle)
+{
+    pwm_deinit((pwm_handle_t *)handle->pin_clk);
+    a4988_cleanup(handle);
+
+    return 0;
+}
+
 static int a4988_cleanup(a4988_handle_t handle)
 {
 	free(handle->pin_clk);

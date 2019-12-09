@@ -25,6 +25,7 @@ a4988_handle_t a4988_init(a4988_config_t *config);
 int a4988_start(a4988_handle_t handle);
 int a4988_stop(a4988_handle_t handle);
 int a4988_set_dir(a4988_handle_t handle, uint8_t dir);
+int a4988_deinit(a4988_handle_t handle);
 
 
 #ifdef __cplusplus
