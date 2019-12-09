@@ -14,8 +14,8 @@ int main(void)
     tb6560_cfg.pin_clk.pwm_pins_pack = PWM_PINS_PACK_2;
     tb6560_cfg.pin_clk.pwm_duty = 50;
     tb6560_cfg.pin_clk.timer = TIMER_NUM_4;
-    tb6560_cfg.pin_clk.timer_prescaler = 10000;
-    tb6560_cfg.pin_clk.timer_period = 4200;
+    tb6560_cfg.pin_clk.timer_prescaler = 84;
+    tb6560_cfg.pin_clk.timer_period = 1000;
     tb6560_cfg.pin_dir.GPIOx = GPIOD;
     tb6560_cfg.pin_dir.GPIO_Pin = GPIO_Pin_15;
     tb6560_cfg.pin_dir.pull_reg = GPIO_PULL_REG_DISABLE;
