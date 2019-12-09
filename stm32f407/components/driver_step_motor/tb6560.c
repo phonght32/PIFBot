@@ -13,7 +13,7 @@
 typedef struct tb6560 {
 	pin_clk_t 			*pin_clk;
 	pin_dir_t 			*pin_dir;
-	tb6560_micro_step_t micro_step_div;
+	micro_step_div_t 	micro_step_div;
 	uint8_t				dir;
 	uint16_t 			speed;
 } tb6560_t;
