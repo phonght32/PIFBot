@@ -24,7 +24,7 @@ a4988_handle_t a4988_init(a4988_config_t *config)
          (handle->pin_clk = calloc(1, sizeof(pin_clk_t)))  &&
          (handle->pin_dir = calloc(1, sizeof(pin_dir_t)))  == NULL)
     {
-//        tb6560_cleanup(handle);
+        a4988_cleanup(handle);
         return -1;
     }
 
