@@ -19,7 +19,7 @@ typedef struct {
     micro_step_div_t micro_step_div;
 } a4988_config_t;
 
-
+a4988_handle_t a4988_init(a4988_config_t *config);
 
 #ifdef __cplusplus
 }
