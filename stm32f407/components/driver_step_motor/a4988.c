@@ -39,6 +39,13 @@ a4988_handle_t a4988_init(a4988_config_t *config)
     return handle;
 }
 
+int a4988_start(a4988_handle_t handle)
+{
+    pwm_start((pwm_handle_t *)handle->pin_clk);
+
+    return 0;
+}
+
 static int a4988_cleanup(a4988_handle_t handle)
 {
 	free(handle->pin_clk);
