@@ -36,8 +36,8 @@ tb6560_handle_t tb6560_init(tb6560_config_t *config)
 	handle->pin_clk = (pin_clk_t *)pwm_init(&config->pin_clk);
 	handle->pin_dir = (pin_dir_t *)gpio_output_init(&config->pin_dir);
 	handle->micro_step_div = config->micro_step_div;
-	handle->dir = 0;
-	handle->speed;
+	handle->dir = config->dir;
+	handle->speed = config->speed;
 
 	return handle;
 }

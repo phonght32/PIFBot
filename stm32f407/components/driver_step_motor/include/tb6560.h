@@ -12,9 +12,11 @@ extern "C" {
 typedef struct tb6560 *tb6560_handle_t;
 
 typedef struct {
-    pin_clk_t pin_clk;
-    pin_dir_t pin_dir;
-    micro_step_div_t micro_step_div;
+    pin_clk_t           pin_clk;
+    pin_dir_t           pin_dir;
+    micro_step_div_t    micro_step_div;
+    uint8_t             dir;
+    uint16_t            speed;
 } tb6560_config_t;
 
 tb6560_handle_t tb6560_init(tb6560_config_t *config);
