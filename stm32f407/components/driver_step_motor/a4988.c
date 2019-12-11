@@ -15,7 +15,14 @@ typedef struct a4988 {
 } a4988_t;
 
 /* Internal function ---------------------------------------------------------*/
-static int a4988_cleanup(a4988_handle_t handle);
+static int a4988_cleanup(a4988_handle_t handle)
+{
+    free(handle->pin_clk);
+    free(handle->pin_dir);
+    free(handle);
+
+    return 0;
+}
 
 /* External function ---------------------------------------------------------*/
 a4988_handle_t a4988_init(a4988_config_t *config)
@@ -82,11 +89,4 @@ int a4988_deinit(a4988_handle_t handle)
     return 0;
 }
 
-static int a4988_cleanup(a4988_handle_t handle)
-{
-	free(handle->pin_clk);
-	free(handle->pin_dir);
-	free(handle);
 
-	return 0;
-}
