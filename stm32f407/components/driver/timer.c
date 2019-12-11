@@ -414,12 +414,15 @@ pwm_handle_t pwm_init(pwm_config_t *config)
         return -1;
     }
 
+	uint32_t freq_hz = APBx_CLOCK_MAPPING[config->timer] / (config->timer_period + 1) / (config->timer_prescaler + 1);
+
 	handle->timer           = config->timer;
 	handle->timer_period    = config->timer_period;
 	handle->timer_prescaler = config->timer_prescaler;
 	handle->pwm_channel     = config->pwm_channel;
 	handle->pwm_pins_pack   = config->pwm_pins_pack;
 	handle->pwm_duty        = config->pwm_duty;
+	handle->pwm_freq_hz		= freq_hz;
 	return handle;
 }
 
