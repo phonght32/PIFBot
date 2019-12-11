@@ -10,7 +10,7 @@ extern "C" {
 /* Table below shows all possible pins for each timer and channel.
  * You can select any of max 3 pins for each output channel.
  *
- *    TIMER |       CHANNEL       |      CHANNEL 2      |      CHANNEL 3      |      CHANNEL 4
+ *    TIMER |      CHANNEL1       |      CHANNEL 2      |      CHANNEL 3      |      CHANNEL 4
  *          |PP1    PP2    PP3    |PP1    PP2    PP3    |PP1    PP2    PP3    |PP1    PP2    PP3
  *  ----------------------------------------------------------------------------------------------
  *  TIM 1   |PA8    PE9    -      |PA9    PE10   -      |PA10   PE13   -      |PA11   PE14   -
@@ -124,8 +124,10 @@ int pwm_start(pwm_handle_t handle);
 int pwm_stop(pwm_handle_t handle);
 int pwm_set_timer_prescaler(pwm_handle_t handle, uint16_t timer_prescaler);
 int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period);
+int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz);
 int pwm_set_duty(pwm_handle_t handle, uint8_t pwm_duty);
 int pwm_deinit(pwm_handle_t handle);
+
 
 #ifdef __cplusplus
 }
