@@ -61,6 +61,13 @@ int a4988_set_dir(a4988_handle_t handle, uint8_t dir)
     return 0;
 }
 
+int a4988_toggle_dir(a4988_handle_t handle)
+{
+    gpio_toggle((gpio_handle_t *)handle->pin_dir);
+
+	return 0;
+}
+
 int a4988_deinit(a4988_handle_t handle)
 {
     pwm_deinit((pwm_handle_t *)handle->pin_clk);
