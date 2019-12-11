@@ -25,6 +25,7 @@ void delay_01ms(uint16_t period){
   	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, DISABLE);
 }
 
+
 int main(void)
 {
     SysTick_Config(SystemCoreClock);
@@ -32,10 +33,9 @@ int main(void)
     a4988_config_t a4988_cfg;
     a4988_cfg.pin_clk.pwm_channel = PWM_CHANNEL_1;
     a4988_cfg.pin_clk.pwm_pins_pack = PWM_PINS_PACK_2;
-    a4988_cfg.pin_clk.pwm_duty = 50;
     a4988_cfg.pin_clk.timer = TIMER_NUM_4;
-    a4988_cfg.pin_clk.timer_prescaler = 0;
-    a4988_cfg.pin_clk.timer_period = 0;
+    a4988_cfg.pin_clk.duty_percent = 50;
+    a4988_cfg.pin_clk.freq_hz = 10;
     a4988_cfg.pin_dir.GPIOx = GPIOD;
     a4988_cfg.pin_dir.GPIO_Pin = GPIO_Pin_15;
     a4988_cfg.pin_dir.pull_reg = GPIO_PULL_REG_DISABLE;
