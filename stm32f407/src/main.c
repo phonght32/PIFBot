@@ -42,17 +42,17 @@ int main(void)
     a4988_cfg.micro_step_div = MICRO_STEP_DIV16;
     a4988_handle_t a4988_handle = a4988_init(&a4988_cfg);
 
-    a4988_set_freq(a4988_handle,3200);
+    a4988_set_freq(a4988_handle,800);
     a4988_set_dir(a4988_handle,0);
     a4988_start(a4988_handle);
 
     while (1)
     {
-    	a4988_stop(a4988_handle);
+//    	a4988_stop(a4988_handle);
     	a4988_toggle_dir(a4988_handle);
-    	delay_01ms(5000);
-    	a4988_start(a4988_handle);
-    	delay_01ms(10000);
+//    	delay_01ms(5000);
+//    	a4988_start(a4988_handle);
+    	delay_01ms(20000);
     }
 
     return 0;
