@@ -5,7 +5,7 @@
 
 #include "system_timetick.h"
 
-#include "../components/driver_step_motor/include/tb6560.h"
+#include "../components/driver/include/timer.h"
 
 
 int main(void)
@@ -15,20 +15,19 @@ int main(void)
 
     SysTick_Config(SystemCoreClock/100);
 
-    tb6560_config_t tb6560_cfg;
-    tb6560_cfg.pin_clk.pwm_channel = PWM_CHANNEL_1;
-    tb6560_cfg.pin_clk.pwm_pins_pack = PWM_PINS_PACK_1;
-    tb6560_cfg.pin_clk.pwm_duty = 50;
-    tb6560_cfg.pin_clk.timer = TIMER_NUM_1;
-    tb6560_cfg.pin_clk.timer_prescaler = 0;
-    tb6560_cfg.pin_clk.timer_period = 2;
-    tb6560_cfg.pin_dir.GPIOx = GPIOD;
-    tb6560_cfg.pin_dir.GPIO_Pin = GPIO_Pin_15;
-    tb6560_cfg.pin_dir.pull_reg = GPIO_PULL_REG_DISABLE;
-    tb6560_cfg.micro_step_div = MICRO_STEP_DIV16;
-    tb6560_handle_t tb6560_handle = tb6560_init(&tb6560_cfg);
-    tb6560_start(tb6560_handle);
-    tb6560_set_dir(tb6560_handle,1);
+    pwm_config_t pwm_cfg;
+    pwm_cfg.timer 			= TIMER_NUM_2;
+    pwm_cfg.pwm_pins_pack 	= PWM_PINS_PACK_2;
+    pwm_cfg.pwm_channel 	= PWM_CHANNEL_3;
+    pwm_cfg.pwm_duty 		= 50;
+    pwm_cfg.timer_prescaler = 83;
+    pwm_cfg.timer_period 	= 9999;
+
+    pwm_handle_t pwm_handle = pwm_init(&pwm_cfg);
+    pwm_set_freq(pwm_handle, 100);
+    pwm_set_duty(pwm_handle, 50);
+    pwm_start(pwm_handle);
+
 
     while (1)
     {
