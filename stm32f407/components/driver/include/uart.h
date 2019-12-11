@@ -63,6 +63,7 @@ int uart_write_bytes(usart_handle_t handle, uint8_t *data, uint16_t length);
 int uart_read_bytes(usart_handle_t handle, uint8_t *buffer, uint16_t length);
 int uart_dma_enable_tx(usart_handle_t handle);
 int uart_dma_enable_rx(usart_handle_t handle);
+int uart_deinit(usart_handle_t handle);
 
 
 #ifdef __cplusplus

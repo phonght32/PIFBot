@@ -2,7 +2,7 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_conf.h"
 #include "stm32f4xx_rcc.h"
-#include "stm32f4xx_dma.h"
+#include "stm32f4xx_usart.h"
 
 #include "stdlib.h"
 
@@ -149,6 +149,10 @@ usart_handle_t uart_init(usart_config_t *config)
     USART_Cmd(USARTx, ENABLE);
 
     usart_handle_t handle  = calloc(1, sizeof(usart_t));
+    if(!handle)
+    {
+        return -1;
+    }
     handle->usart_num = config->usart_num;
     handle->usart_pins_pack = config->usart_pins_pack;
     handle->usart_baudrate = config->usart_baudrate;
@@ -191,6 +195,14 @@ int uart_dma_enable_rx(usart_handle_t handle)
 int uart_dma_enable_tx(usart_handle_t handle)
 {
     USART_DMACmd(USARTx_MAPPING[handle->usart_num], USART_DMAReq_Tx, ENABLE);
+
+    return 0;
+}
+
+int uart_deinit(usart_handle_t handle)
+{
+    USART_DeInit(USARTx_MAPPING[handle->usart_num]);
+    free(handle);
 
     return 0;
 }
