@@ -7,12 +7,20 @@
 
 
 /* Internal typedef ----------------------------------------------------------*/
+typedef enum {
+    MODE_STOP = 0,
+    MODE_RUNNING,
+    MODE_SLEEP
+} a4988_status_t;
+
 typedef struct a4988 {
-    pin_clk_t *pin_clk;
-    pin_dir_t *pin_dir;
-    micro_step_div_t micro_step_div;
-    uint8_t dir;
+    pin_clk_t           *pin_clk;
+    pin_dir_t           *pin_dir;
+    micro_step_div_t    micro_step_div;
+    uint8_t             dir;
+    a4988_status_t      status;
 } a4988_t;
+
 
 /* Internal function ---------------------------------------------------------*/
 static int a4988_cleanup(a4988_handle_t handle)
@@ -40,6 +48,7 @@ a4988_handle_t a4988_init(a4988_config_t *config)
     handle->pin_dir = (pin_dir_t *)gpio_output_init(&config->pin_dir);
     handle->micro_step_div = config->micro_step_div;
     handle->dir = config->dir;
+    handle->status = MODE_STOP;
 
     return handle;
 }
@@ -47,6 +56,7 @@ a4988_handle_t a4988_init(a4988_config_t *config)
 int a4988_start(a4988_handle_t handle)
 {
     pwm_start((pwm_handle_t *)handle->pin_clk);
+    handle->status = MODE_RUNNING;
 
     return 0;
 }
@@ -54,6 +64,7 @@ int a4988_start(a4988_handle_t handle)
 int a4988_stop(a4988_handle_t handle)
 {
     pwm_stop((pwm_handle_t *)handle->pin_clk);
+    handle->status = MODE_STOP;
 
     return 0;
 }
