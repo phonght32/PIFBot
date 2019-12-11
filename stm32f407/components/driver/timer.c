@@ -433,6 +433,11 @@ int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period)
 	return 0;
 }
 
+int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz)
+{
+	return 0;
+}
+
 int pwm_set_duty(pwm_handle_t handle, uint8_t pwm_duty)
 {
 	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
