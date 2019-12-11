@@ -435,30 +435,30 @@ int pwm_start(pwm_handle_t handle)
 	return 0;
 }
 
-int pwm_set_timer_prescaler(pwm_handle_t handle, uint16_t timer_prescaler)
-{
-	assert_param(IS_TIM_ALL_PERIPH(TIMx));
-	assert_param(IS_TIM_PRESCALER_RELOAD(TIM_PSCReloadMode));
-	TIMx_MAPPING[handle->timer]->PSC = timer_prescaler;
-	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
-
-	handle->timer_prescaler = timer_prescaler;
-	return 0;
-}
-
-int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period)
-{
-	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
-	TIMx_MAPPING[handle->timer]->ARR = timer_period;
-	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
-
-	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
-	TIMx_MAPPING[handle->timer]->CCR1 = (handle->pwm_duty) * timer_period / 100;
-	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
-
-	handle->timer_period = timer_period;
-	return 0;
-}
+//int pwm_set_timer_prescaler(pwm_handle_t handle, uint16_t timer_prescaler)
+//{
+//	assert_param(IS_TIM_ALL_PERIPH(TIMx));
+//	assert_param(IS_TIM_PRESCALER_RELOAD(TIM_PSCReloadMode));
+//	TIMx_MAPPING[handle->timer]->PSC = timer_prescaler;
+//	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
+//
+//	handle->timer_prescaler = timer_prescaler;
+//	return 0;
+//}
+//
+//int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period)
+//{
+//	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
+//	TIMx_MAPPING[handle->timer]->ARR = timer_period;
+//	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
+//
+//	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
+//	TIMx_MAPPING[handle->timer]->CCR1 = (handle->pwm_duty) * timer_period / 100;
+//	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
+//
+//	handle->timer_period = timer_period;
+//	return 0;
+//}
 
 int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz)
 {
@@ -483,6 +483,7 @@ int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz)
 
 	handle->timer_period = timer_period;
 	handle->timer_prescaler = timer_prescaler;
+	handle->pwm_freq_hz = freq_hz;
 
 	return 0;
 }
