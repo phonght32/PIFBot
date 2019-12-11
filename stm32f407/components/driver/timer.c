@@ -12,6 +12,12 @@
 #define GPIO_SPEED_FREQ	GPIO_Speed_100MHz
 #define GPIO_PUPD 		GPIO_PuPd_UP
 
+#define SYSTEM_CLOCK	168000000
+#define APB1_CLOCK		(SYSTEM_CLOCK/2)
+#define APB2_CLOCK 		(SYSTEM_CLOCK)
+
+#define TIMER_MAX_RELOAD	0xFFFF
+
 
 /* Internal typedef ----------------------------------------------------------*/
 typedef enum {
@@ -267,6 +273,23 @@ TIM_TypeDef *TIMx_MAPPING[TIMER_NUM_MAX] = {
 	TIM14
 };
 
+uint32_t APBx_CLOCK_MAPPING[TIMER_NUM_MAX] = {
+	APB2_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB2_CLOCK,
+	APB2_CLOCK,
+	APB2_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK
+};
+
 
 
 /* Internal function ---------------------------------------------------------*/
@@ -391,12 +414,15 @@ pwm_handle_t pwm_init(pwm_config_t *config)
         return -1;
     }
 
+	uint32_t freq_hz = APBx_CLOCK_MAPPING[config->timer] / (config->timer_period + 1) / (config->timer_prescaler + 1);
+
 	handle->timer           = config->timer;
 	handle->timer_period    = config->timer_period;
 	handle->timer_prescaler = config->timer_prescaler;
 	handle->pwm_channel     = config->pwm_channel;
 	handle->pwm_pins_pack   = config->pwm_pins_pack;
 	handle->pwm_duty        = config->pwm_duty;
+	handle->pwm_freq_hz		= freq_hz;
 	return handle;
 }
 
@@ -430,6 +456,33 @@ int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period)
 	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
 
 	handle->timer_period = timer_period;
+	return 0;
+}
+
+int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz)
+{
+	TIM_TypeDef *TIMx;
+	TIMx = TIMx_MAPPING[handle->timer];
+	uint32_t conduct = (uint32_t) (APBx_CLOCK_MAPPING[handle->timer]/freq_hz);
+	uint16_t timer_prescaler = conduct / TIMER_MAX_RELOAD + 1;
+	uint16_t timer_period = (uint16_t)(conduct /(timer_prescaler+1)) -1;
+
+	assert_param(IS_TIM_ALL_PERIPH(TIMx));
+	assert_param(IS_TIM_PRESCALER_RELOAD(TIM_PSCReloadMode));
+	TIMx->PSC = timer_prescaler;
+	TIMx->EGR = TIM_PSCReloadMode_Immediate;
+
+	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
+	TIMx->ARR = timer_period;
+	TIMx->EGR = TIM_PSCReloadMode_Immediate;
+
+	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
+	TIMx->CCR1 = (handle->pwm_duty) * timer_period / 100;
+	TIMx->EGR = TIM_PSCReloadMode_Immediate;
+
+	handle->timer_period = timer_period;
+	handle->timer_prescaler = timer_prescaler;
+
 	return 0;
 }
 
