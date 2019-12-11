@@ -12,6 +12,12 @@
 #define GPIO_SPEED_FREQ	GPIO_Speed_100MHz
 #define GPIO_PUPD 		GPIO_PuPd_UP
 
+#define SYSTEM_CLOCK	168000000
+#define APB1_CLOCK		(SYSTEM_CLOCK/2)
+#define APB2_CLOCK 		(SYSTEM_CLOCK)
+
+#define TIMER_MAX_RELOAD	0xFFFF
+
 
 /* Internal typedef ----------------------------------------------------------*/
 typedef enum {
@@ -267,6 +273,23 @@ TIM_TypeDef *TIMx_MAPPING[TIMER_NUM_MAX] = {
 	TIM14
 };
 
+uint32_t PWM_CLOCK_SOURCE_MAPPING[TIMER_NUM_MAX] = {
+	APB2_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB2_CLOCK,
+	APB2_CLOCK,
+	APB2_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK,
+	APB1_CLOCK
+};
+
 
 
 /* Internal function ---------------------------------------------------------*/
@@ -435,6 +458,8 @@ int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period)
 
 int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz)
 {
+//	uint32_t conduct = (uint32_t)
+
 	return 0;
 }
 
