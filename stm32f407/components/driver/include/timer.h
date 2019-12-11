@@ -112,11 +112,10 @@ typedef enum {
 
 typedef struct {
     timer_num_t         timer;
-    uint32_t            timer_period;
-    uint16_t            timer_prescaler;
     pwm_channel_t       pwm_channel;
     pwm_pins_pack_t     pwm_pins_pack;
-    uint8_t             pwm_duty;
+    uint8_t             duty_percent;
+    uint32_t 			freq_hz;
 } pwm_config_t;
 
 pwm_handle_t pwm_init(pwm_config_t *config);
