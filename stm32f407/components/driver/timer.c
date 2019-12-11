@@ -483,6 +483,7 @@ int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz)
 
 	handle->timer_period = timer_period;
 	handle->timer_prescaler = timer_prescaler;
+	handle->pwm_freq_hz = freq_hz;
 
 	return 0;
 }
