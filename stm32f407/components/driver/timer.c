@@ -36,8 +36,8 @@ typedef struct pwm_param {
 	uint16_t 		timer_prescaler;
 	pwm_channel_t 	pwm_channel;
 	pwm_pins_pack_t pwm_pins_pack;
-	uint8_t 		pwm_duty;
-	uint32_t 		pwm_freq_hz;
+	uint8_t 		duty_percent;
+	uint32_t 		freq_hz;
 } pwm_param_t;
 
 
@@ -424,8 +424,8 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 	handle->timer_prescaler = timer_prescaler;
 	handle->pwm_channel     = config->pwm_channel;
 	handle->pwm_pins_pack   = config->pwm_pins_pack;
-	handle->pwm_duty        = config->duty_percent;
-	handle->pwm_freq_hz		= freq_hz;
+	handle->duty_percent    = config->duty_percent;
+	handle->freq_hz		= freq_hz;
 	return handle;
 }
 
@@ -455,7 +455,7 @@ int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period)
 	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
 
 	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
-	TIMx_MAPPING[handle->timer]->CCR1 = (handle->pwm_duty) * timer_period / 100;
+	TIMx_MAPPING[handle->timer]->CCR1 = (handle->duty_percent) * timer_period / 100;
 	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
 
 	handle->timer_period = timer_period;
@@ -480,22 +480,23 @@ int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz)
 	TIMx->EGR = TIM_PSCReloadMode_Immediate;
 
 	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
-	TIMx->CCR1 = (handle->pwm_duty) * timer_period / 100;
+	TIMx->CCR1 = (handle->duty_percent) * timer_period / 100;
 	TIMx->EGR = TIM_PSCReloadMode_Immediate;
 
 	handle->timer_period = timer_period;
 	handle->timer_prescaler = timer_prescaler;
+	handle->freq_hz = freq_hz;
 
 	return 0;
 }
 
-int pwm_set_duty(pwm_handle_t handle, uint8_t pwm_duty)
+int pwm_set_duty(pwm_handle_t handle, uint8_t duty_percent)
 {
 	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
-	TIMx_MAPPING[handle->timer]->CCR1 = pwm_duty * (handle->timer_period) / 100;
+	TIMx_MAPPING[handle->timer]->CCR1 = duty_percent * (handle->timer_period) / 100;
 	TIMx_MAPPING[handle->timer]->EGR = TIM_PSCReloadMode_Immediate;
 
-	handle->pwm_duty = pwm_duty;
+	handle->duty_percent = duty_percent;
 	return 0;
 }
 
