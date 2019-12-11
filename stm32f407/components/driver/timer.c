@@ -273,7 +273,7 @@ TIM_TypeDef *TIMx_MAPPING[TIMER_NUM_MAX] = {
 	TIM14
 };
 
-uint32_t PWM_CLOCK_SOURCE_MAPPING[TIMER_NUM_MAX] = {
+uint32_t APBx_CLOCK_MAPPING[TIMER_NUM_MAX] = {
 	APB2_CLOCK,
 	APB1_CLOCK,
 	APB1_CLOCK,
@@ -458,7 +458,27 @@ int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period)
 
 int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz)
 {
-//	uint32_t conduct = (uint32_t)
+	TIM_TypeDef *TIMx;
+	TIMx = TIMx_MAPPING[handle->timer];
+	uint32_t conduct = (uint32_t) (APBx_CLOCK_MAPPING[handle->timer]/freq_hz);
+	uint16_t timer_prescaler = conduct / TIMER_MAX_RELOAD + 1;
+	uint16_t timer_period = (uint16_t)(conduct /(timer_prescaler+1)) -1;
+
+	assert_param(IS_TIM_ALL_PERIPH(TIMx));
+	assert_param(IS_TIM_PRESCALER_RELOAD(TIM_PSCReloadMode));
+	TIMx->PSC = timer_prescaler;
+	TIMx->EGR = TIM_PSCReloadMode_Immediate;
+
+	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
+	TIMx->ARR = timer_period;
+	TIMx->EGR = TIM_PSCReloadMode_Immediate;
+
+	assert_param(IS_TIM_ALL_PERIPH(TIMx_MAPPING[handle->timer]));
+	TIMx->CCR1 = (handle->pwm_duty) * timer_period / 100;
+	TIMx->EGR = TIM_PSCReloadMode_Immediate;
+
+	handle->timer_period = timer_period;
+	handle->timer_prescaler = timer_prescaler;
 
 	return 0;
 }
