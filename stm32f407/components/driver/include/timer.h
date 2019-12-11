@@ -121,8 +121,6 @@ typedef struct {
 pwm_handle_t pwm_init(pwm_config_t *config);
 int pwm_start(pwm_handle_t handle);
 int pwm_stop(pwm_handle_t handle);
-int pwm_set_timer_prescaler(pwm_handle_t handle, uint16_t timer_prescaler);
-int pwm_set_timer_period(pwm_handle_t handle, uint32_t timer_period);
 int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz);
 int pwm_set_duty(pwm_handle_t handle, uint8_t duty_percent);
 int pwm_deinit(pwm_handle_t handle);
