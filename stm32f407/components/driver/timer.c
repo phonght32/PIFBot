@@ -363,13 +363,16 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 
 	/* Connect TIMx pin to AFx */
 	GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_TIMx);
+	uint32_t conduct = (uint32_t) (APBx_CLOCK_MAPPING[config->timer]/config->freq_hz);
+	uint16_t timer_prescaler = conduct / TIMER_MAX_RELOAD + 1;
+	uint16_t timer_period = (uint16_t)(conduct /(timer_prescaler+1)) -1;
 
-	uint16_t CCR_Val = (uint16_t)((config->pwm_duty) * (config->timer_period) / 100);
+	uint16_t CCR_Val = (uint16_t)((config->duty_percent) * timer_period / 100);
 
 	/* Time base configuration */
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-	TIM_TimeBaseStructure.TIM_Period = config->timer_period;
-	TIM_TimeBaseStructure.TIM_Prescaler = config->timer_prescaler;
+	TIM_TimeBaseStructure.TIM_Period = timer_period;
+	TIM_TimeBaseStructure.TIM_Prescaler = timer_prescaler;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
@@ -414,15 +417,13 @@ pwm_handle_t pwm_init(pwm_config_t *config)
         return -1;
     }
 
-	uint32_t freq_hz = APBx_CLOCK_MAPPING[config->timer] / (config->timer_period + 1) / (config->timer_prescaler + 1);
-
 	handle->timer           = config->timer;
-	handle->timer_period    = config->timer_period;
-	handle->timer_prescaler = config->timer_prescaler;
+	handle->timer_period    = timer_period;
+	handle->timer_prescaler = timer_prescaler;
 	handle->pwm_channel     = config->pwm_channel;
 	handle->pwm_pins_pack   = config->pwm_pins_pack;
-	handle->pwm_duty        = config->pwm_duty;
-	handle->pwm_freq_hz		= freq_hz;
+	handle->pwm_duty        = config->duty_percent;
+	handle->pwm_freq_hz		= config->freq_hz;
 	return handle;
 }
 
