@@ -68,6 +68,13 @@ int a4988_toggle_dir(a4988_handle_t handle)
 	return 0;
 }
 
+int a4988_set_freq(a4988_handle_t handle, uint32_t freq_hz)
+{
+    pwm_set_freq((pin_clk_t *)handle->pin_clk, freq_hz);
+
+    return 0;
+}
+
 int a4988_deinit(a4988_handle_t handle)
 {
     pwm_deinit((pwm_handle_t *)handle->pin_clk);

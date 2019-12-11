@@ -26,6 +26,7 @@ int a4988_start(a4988_handle_t handle);
 int a4988_stop(a4988_handle_t handle);
 int a4988_set_dir(a4988_handle_t handle, uint8_t dir);
 int a4988_toggle_dir(a4988_handle_t handle);
+int a4988_set_freq(a4988_handle_t handle, uint32_t freq_hz);
 int a4988_deinit(a4988_handle_t handle);
 
 
