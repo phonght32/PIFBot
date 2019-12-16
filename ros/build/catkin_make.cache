@@ -1,0 +1,2 @@
+robot_msgs:robot_simulations/robot_gazebo
+-DCATKIN_DEVEL_PREFIX=/home/phong/Documents/thesis/ros/devel -DCMAKE_INSTALL_PREFIX=/home/phong/Documents/thesis/ros/install -G Unix Makefiles
