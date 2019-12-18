@@ -31,18 +31,9 @@ import rospy
 from geometry_msgs.msg import Twist
 import sys, select, os
 if os.name == 'nt':
-  import msvcrt
+    import msvcrt
 else:
-  import tty, termios
-
-BURGER_MAX_LIN_VEL = 0.22
-BURGER_MAX_ANG_VEL = 2.84
-
-WAFFLE_MAX_LIN_VEL = 0.26
-WAFFLE_MAX_ANG_VEL = 1.82
-
-LIN_VEL_STEP_SIZE = 0.01
-ANG_VEL_STEP_SIZE = 0.1
+    import tty, termios
 
 ROBOT_MAX_LIN_VEL = 0.22
 ROBOT_MAX_ANG_VEL = 2.84
@@ -50,29 +41,31 @@ ROBOT_MAX_ANG_VEL = 2.84
 ROBOT_LINEAR_VEL_STEP_SIZE = 0.01
 ROBOT_ANGULAR_VEL_STEP_SIZE = 0.1
 
+robot_node_name = 'robot_teleop'
+
 msg = """
-Control Your TurtleBot3!
----------------------------
-Moving around:
+Control your robot!
+-------------------
+Moving key
         w
-   a    s    d
-        x
+    a   s   d
+        x 
 
-w/x : increase/decrease linear velocity (Burger : ~ 0.22, Waffle and Waffle Pi : ~ 0.26)
-a/d : increase/decrease angular velocity (Burger : ~ 2.84, Waffle and Waffle Pi : ~ 1.82)
+w/x     : increase/decrease linear velocity
+a/d     : increase/decrease angular velocity
+s/space : stop robot
 
-space key, s : force stop
-
-CTRL-C to quit
+Press Ctrl+C to quit
 """
 
-e = """
-Communications Failed
+err = """
+Communications failed -_-
 """
+
 
 def getKey():
     if os.name == 'nt':
-      return msvcrt.getch()
+        return msvcrt.getch();
 
     tty.setraw(sys.stdin.fileno())
     rlist, _, _ = select.select([sys.stdin], [], [], 0.1)
@@ -82,56 +75,44 @@ def getKey():
         key = ''
 
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key
+    return key 
 
 def vels(target_linear_vel, target_angular_vel):
-    return "currently:\tlinear vel %s\t angular vel %s " % (target_linear_vel,target_angular_vel)
+    return "currently:\tlinear vel %s\t angular vel %s " % (target_linear_vel, target_angular_vel)
 
 def makeSimpleProfile(output, input, slop):
     if input > output:
-        output = min( input, output + slop )
+        output = min(input, output + slop)
     elif input < output:
-        output = max( input, output - slop )
+        output = max(input, output - slop)
     else:
         output = input
-
     return output
 
 def constrain(input, low, high):
     if input < low:
-      input = low
+        input = low
     elif input > high:
-      input = high
+        input = high
     else:
-      input = input
-
+        input = input
     return input
 
 def checkLinearLimitVelocity(vel):
-    if robot_model == "v1_0":
-        vel = constrain(vel, -ROBOT_MAX_LIN_VEL, ROBOT_MAX_LIN_VEL)
-    return vel
+    vel = constrain(vel, -ROBOT_MAX_LIN_VEL, ROBOT_MAX_LIN_VEL)
+    return vel 
 
 def checkAngularLimitVelocity(vel):
-    if turtlebot3_model == "burger":
-      vel = constrain(vel, -BURGER_MAX_ANG_VEL, BURGER_MAX_ANG_VEL)
-    elif turtlebot3_model == "waffle" or turtlebot3_model == "waffle_pi":
-      vel = constrain(vel, -WAFFLE_MAX_ANG_VEL, WAFFLE_MAX_ANG_VEL)
-    else:
-      vel = constrain(vel, -BURGER_MAX_ANG_VEL, BURGER_MAX_ANG_VEL)
-
+    vel = constrain(vel, -ROBOT_MAX_ANG_VEL, ROBOT_MAX_ANG_VEL)
     return vel
 
-if __name__=="__main__":
+if __name__ == "__main__":
     if os.name != 'nt':
         settings = termios.tcgetattr(sys.stdin)
 
-    rospy.init_node('turtlebot3_teleop')
+    rospy.init_node(robot_node_name)
     pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
-    turtlebot3_model = rospy.get_param("model")
-
-    status = 0
     target_linear_vel   = 0.0
     target_angular_vel  = 0.0
     control_linear_vel  = 0.0
@@ -141,48 +122,45 @@ if __name__=="__main__":
         print(msg)
         while(1):
             key = getKey()
-            if key == 'q' :
-                target_linear_vel = checkLinearLimitVelocity(target_linear_vel + LIN_VEL_STEP_SIZE)
-                status = status + 1
-                print(vels(target_linear_vel,target_angular_vel))
-            elif key == 'x' :
-                target_linear_vel = checkLinearLimitVelocity(target_linear_vel - LIN_VEL_STEP_SIZE)
-                status = status + 1
-                print(vels(target_linear_vel,target_angular_vel))
-            elif key == 'a' :
-                target_angular_vel = checkAngularLimitVelocity(target_angular_vel + ANG_VEL_STEP_SIZE)
-                status = status + 1
-                print(vels(target_linear_vel,target_angular_vel))
-            elif key == 'd' :
-                target_angular_vel = checkAngularLimitVelocity(target_angular_vel - ANG_VEL_STEP_SIZE)
-                status = status + 1
-                print(vels(target_linear_vel,target_angular_vel))
-            elif key == ' ' or key == 's' :
+            if key == 'w': 
+                target_linear_vel = checkLinearLimitVelocity(target_linear_vel+ROBOT_LINEAR_VEL_STEP_SIZE)
+                print(vels(target_linear_vel, target_angular_vel))
+            elif key == 'x':
+                target_linear_vel = checkLinearLimitVelocity(target_linear_vel-ROBOT_LINEAR_VEL_STEP_SIZE)
+                print(vels(target_linear_vel, target_angular_vel))
+            elif key == 'a':
+                target_angular_vel = checkAngularLimitVelocity(target_angular_vel+ROBOT_ANGULAR_VEL_STEP_SIZE)
+                print(vels(target_linear_vel, target_angular_vel))
+            elif key == 'd':
+                target_angular_vel = checkAngularLimitVelocity(target_angular_vel-ROBOT_ANGULAR_VEL_STEP_SIZE)
+                print(vels(target_linear_vel, target_angular_vel))
+            elif key == ' ' or key == 's':
                 target_linear_vel   = 0.0
                 control_linear_vel  = 0.0
                 target_angular_vel  = 0.0
                 control_angular_vel = 0.0
                 print(vels(target_linear_vel, target_angular_vel))
-            else:
+            else: 
                 if (key == '\x03'):
                     break
 
-            if status == 20 :
-                print(msg)
-                status = 0
 
             twist = Twist()
 
-            control_linear_vel = makeSimpleProfile(control_linear_vel, target_linear_vel, (LIN_VEL_STEP_SIZE/2.0))
-            twist.linear.x = control_linear_vel; twist.linear.y = 0.0; twist.linear.z = 0.0
+            control_linear_vel = makeSimpleProfile(control_linear_vel, target_linear_vel, (ROBOT_LINEAR_VEL_STEP_SIZE/2.0))
+            twist.linear.x = control_linear_vel
+            twist.linear.y = 0.0
+            twist.linear.z = 0.0
 
-            control_angular_vel = makeSimpleProfile(control_angular_vel, target_angular_vel, (ANG_VEL_STEP_SIZE/2.0))
-            twist.angular.x = 0.0; twist.angular.y = 0.0; twist.angular.z = control_angular_vel
+            control_angular_vel = makeSimpleProfile(control_angular_vel, target_angular_vel, (ROBOT_ANGULAR_VEL_STEP_SIZE/2.0))
+            twist.angular.x = 0.0
+            twist.angular.y = 0.0
+            twist.angular.z = control_angular_vel
 
             pub.publish(twist)
 
     except:
-        print(e)
+        print(err)
 
     finally:
         twist = Twist()
