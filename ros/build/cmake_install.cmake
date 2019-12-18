@@ -134,6 +134,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/phong/Documents/thesis/ros/build/robot_msgs/cmake_install.cmake")
   include("/home/phong/Documents/thesis/ros/build/robot/robot_teleop/cmake_install.cmake")
   include("/home/phong/Documents/thesis/ros/build/robot/robot_bringup/cmake_install.cmake")
+  include("/home/phong/Documents/thesis/ros/build/robot/robot_slam/cmake_install.cmake")
   include("/home/phong/Documents/thesis/ros/build/robot_simulatioins/robot_gazebo/cmake_install.cmake")
   include("/home/phong/Documents/thesis/ros/build/robot/robot_description/cmake_install.cmake")
 

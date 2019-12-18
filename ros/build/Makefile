@@ -857,6 +857,19 @@ robot_diagnostics/fast:
 .PHONY : robot_diagnostics/fast
 
 #=============================================================================
+# Target rules for targets named flat_world_imu_node
+
+# Build rule for target.
+flat_world_imu_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 flat_world_imu_node
+.PHONY : flat_world_imu_node
+
+# fast build rule for target.
+flat_world_imu_node/fast:
+	$(MAKE) -f robot/robot_slam/CMakeFiles/flat_world_imu_node.dir/build.make robot/robot_slam/CMakeFiles/flat_world_imu_node.dir/build
+.PHONY : flat_world_imu_node/fast
+
+#=============================================================================
 # Target rules for targets named robot_drive
 
 # Build rule for target.
@@ -1572,6 +1585,7 @@ help:
 	@echo "... sensor_msgs_generate_messages_eus"
 	@echo "... sensor_msgs_generate_messages_lisp"
 	@echo "... robot_diagnostics"
+	@echo "... flat_world_imu_node"
 	@echo "... robot_drive"
 	@echo "... nav_msgs_generate_messages_py"
 	@echo "... nav_msgs_generate_messages_nodejs"

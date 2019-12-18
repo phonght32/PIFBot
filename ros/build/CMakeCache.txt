@@ -880,6 +880,12 @@ robot_msgs_DIR:PATH=/home/phong/Documents/thesis/ros/devel/share/robot_msgs/cmak
 robot_msgs_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/robot_msgs
 
 //Value Computed by CMake
+robot_slam_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/robot/robot_slam
+
+//Value Computed by CMake
+robot_slam_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/robot/robot_slam
+
+//Value Computed by CMake
 robot_teleop_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/robot/robot_teleop
 
 //Value Computed by CMake
@@ -1350,7 +1356,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=9
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=10
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
