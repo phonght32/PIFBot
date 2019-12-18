@@ -270,7 +270,7 @@ if __name__ == '__main__':
 
         if not args.local:
             # environment at generation time
-            CMAKE_PREFIX_PATH = '/home/phong/ros_robot_programming_book/devel;/home/phong/Documents/workspace/workspace_ros/catkin_ws/devel;/home/phong/Documents/workspace/workspace_ros/ros_test/devel;/opt/ros/melodic'.split(';')
+            CMAKE_PREFIX_PATH = '/home/phong/Documents/thesis/ros/devel;/home/phong/ros_robot_programming_book/devel;/home/phong/Documents/workspace/workspace_ros/catkin_ws/devel;/home/phong/Documents/workspace/workspace_ros/ros_test/devel;/opt/ros/melodic'.split(';')
         else:
             # don't consider any other prefix path than this one
             CMAKE_PREFIX_PATH = []
