@@ -1,7 +1,4 @@
 <launch>
-  #<arg name="model" default="$(env ROBOT_THESIS_MODEL)" doc="model type [v1_0]"/>
-  #<param name="model" value="$(env ROBOT_THESIS_MODEL)"/>
-
   <!-- robot_teleop_key already has its own built in velocity smoother -->
   <node pkg="robot_teleop" type="robot_teleop_key" name="robot_teleop_keyboard"  output="screen">
   </node>

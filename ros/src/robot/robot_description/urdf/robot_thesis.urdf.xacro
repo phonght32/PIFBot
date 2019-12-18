@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
-<robot name="robot_thesis_v1_0" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="robot_thesis" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find robot_description)/urdf/common_properties.xacro"/>
-  <xacro:include filename="$(find robot_description)/urdf/robot_thesis_v1_0.gazebo.xacro"/>
+  <xacro:include filename="$(find robot_description)/urdf/robot_thesis.gazebo.xacro"/>
 
   <link name="base_footprint"/>
 
