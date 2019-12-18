@@ -1,0 +1,8 @@
+prefix=/home/phong/Documents/thesis/ros/devel
+
+Name: turtlebot3_teleop
+Description: Description of turtlebot3_teleop
+Version: 1.2.1
+Cflags: 
+Libs: -L/home/phong/Documents/thesis/ros/devel/lib 
+Requires: rospy geometry_msgs

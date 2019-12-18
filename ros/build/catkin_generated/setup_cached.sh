@@ -8,9 +8,6 @@
 
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/phong/Documents/thesis/ros/devel:$CMAKE_PREFIX_PATH"
-export LD_LIBRARY_PATH="/home/phong/Documents/thesis/ros/devel/lib:$LD_LIBRARY_PATH"
-export PKG_CONFIG_PATH="/home/phong/Documents/thesis/ros/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD="/home/phong/Documents/thesis/ros/build"
-export PYTHONPATH="/home/phong/Documents/thesis/ros/devel/lib/python2.7/dist-packages:$PYTHONPATH"
 export ROSLISP_PACKAGE_DIRECTORIES="/home/phong/Documents/thesis/ros/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
 export ROS_PACKAGE_PATH="/home/phong/Documents/thesis/ros/src:$ROS_PACKAGE_PATH"
