@@ -1,0 +1,8 @@
+prefix=/home/phong/Documents/thesis/ros/install
+
+Name: rplidar_ros
+Description: Description of rplidar_ros
+Version: 1.9.0
+Cflags: 
+Libs: -L/home/phong/Documents/thesis/ros/install/lib 
+Requires: 
