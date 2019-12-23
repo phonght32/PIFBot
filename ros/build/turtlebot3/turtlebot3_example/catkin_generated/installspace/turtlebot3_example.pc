@@ -1,0 +1,8 @@
+prefix=/home/phong/Documents/thesis/ros/install
+
+Name: turtlebot3_example
+Description: Description of turtlebot3_example
+Version: 1.2.1
+Cflags: -I/home/phong/Documents/thesis/ros/install/include
+Libs: -L/home/phong/Documents/thesis/ros/install/lib 
+Requires: rospy actionlib interactive_markers std_msgs sensor_msgs geometry_msgs nav_msgs visualization_msgs actionlib_msgs turtlebot3_msgs message_runtime

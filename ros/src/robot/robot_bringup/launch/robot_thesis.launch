@@ -1,0 +1,13 @@
+<launch>
+  <arg name="multi_robot_name" default=""/>
+  #<arg name="set_lidar_frame_id" default="base_scan"/>
+
+  <include file="$(find robot_bringup)/launch/robot_core.launch">
+    <arg name="multi_robot_name" value="$(arg multi_robot_name)"/>
+  </include>
+  <include file="$(find robot_bringup)/launch/robot_lidar.launch">
+    #<arg name="set_frame_id" value="$(arg set_lidar_frame_id)"/>
+  </include>
+
+  <node pkg="robot_bringup" type="robot_diagnostics" name="robot_diagnostics" output="screen"/>
+</launch>

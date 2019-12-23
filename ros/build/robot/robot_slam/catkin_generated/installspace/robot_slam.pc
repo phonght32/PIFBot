@@ -1,0 +1,8 @@
+prefix=/home/phong/Documents/thesis/ros/install
+
+Name: robot_slam
+Description: Description of robot_slam
+Version: 0.0.0
+Cflags: -I/home/phong/Documents/thesis/ros/install/include
+Libs: -L/home/phong/Documents/thesis/ros/install/lib 
+Requires: roscpp sensor_msgs

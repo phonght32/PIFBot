@@ -1,0 +1,5 @@
+<launch>
+  <include file="$(find robot_bringup)/launch/robot_remote.launch"/>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot_gazebo)/rviz/robot_gazebo_model.rviz"/>
+</launch>
