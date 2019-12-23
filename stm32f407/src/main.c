@@ -1,63 +1,72 @@
-
 #include "stm32f4xx.h"
-#include "stm32f4xx_gpio.h"
-
-#include "../components/driver_step_motor/include/tb6560.h"
-#include "../components/driver_step_motor/include/a4988.h"
-
-
 #include "system_timetick.h"
 
-void delay_01ms(uint16_t period){
+#include "../components/driver/include/dma.h"
+#include "../components/driver/include/uart.h"
+#include "../components/driver/include/timer.h"
 
-  	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);
-  	TIM6->PSC = 8399;		// clk = SystemCoreClock / 4 / (PSC+1) *2 = 10KHz
-  	TIM6->ARR = period-1;
-  	TIM6->CNT = 0;
-  	TIM6->EGR = 1;		// update registers;
+#define		BUFF_SIZE			4
+uint8_t 	rxbuff[BUFF_SIZE];
+uint8_t 	a[4*BUFF_SIZE];
+uint16_t	index = 0;
+uint16_t 	rcv_flag = 0;
 
-  	TIM6->SR  = 0;		// clear overflow flag
-  	TIM6->CR1 = 1;		// enable Timer6
 
-  	while (!TIM6->SR);
 
-  	TIM6->CR1 = 0;		// stop Timer6
-  	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, DISABLE);
-}
 
+void init_main(void);
 
 int main(void)
 {
-    SysTick_Config(SystemCoreClock);
 
-    a4988_config_t a4988_cfg;
-    a4988_cfg.pin_clk.pwm_channel = PWM_CHANNEL_1;
-    a4988_cfg.pin_clk.pwm_pins_pack = PWM_PINS_PACK_2;
-    a4988_cfg.pin_clk.timer = TIMER_NUM_4;
-    a4988_cfg.pin_clk.duty_percent = 50;
-    a4988_cfg.pin_clk.freq_hz = 1;
-    a4988_cfg.pin_dir.GPIOx = GPIOD;
-    a4988_cfg.pin_dir.GPIO_Pin = GPIO_Pin_15;
-    a4988_cfg.pin_dir.pull_reg = GPIO_PULL_REG_DISABLE;
-    a4988_cfg.micro_step_div = MICRO_STEP_DIV16;
-    a4988_handle_t a4988_handle = a4988_init(&a4988_cfg);
+	SysTick_Config(SystemCoreClock/100);
 
-    a4988_set_freq(a4988_handle,800);
-    a4988_set_dir(a4988_handle,0);
-    a4988_start(a4988_handle);
+	init_main();
 
-    while (1)
-    {
-//    	a4988_stop(a4988_handle);
-    	a4988_toggle_dir(a4988_handle);
-//    	delay_01ms(5000);
-//    	a4988_start(a4988_handle);
-    	delay_01ms(20000);
-    }
+	while(1){
+		if(tick_count == 100){
+			tick_count = 0;
 
-    return 0;
+		}
+	}
 }
 
+void init_main(void)
+{
+  usart_config_t uart_config;
+  uart_config.usart_baudrate = 115200;
+  uart_config.usart_num = UART_NUM_4;
+  uart_config.usart_pins_pack = USART_PINS_PACK_1;
+  usart_handle_t uart_handle = uart_init(&uart_config);
 
+  uart_dma_enable_rx(uart_handle);
 
+  dma_config_t dma_config;
+  dma_config.buffer = rxbuff;
+  dma_config.buffer_size = 4;
+  dma_config.dma_channel = DMA_CHANNEL_4;
+  dma_config.dma_mode = DMA_Mode_Normal;
+  dma_config.dma_num = DMA_NUM_1;
+  dma_config.dma_priority = DMA_Priority_High;
+  dma_config.dma_stream = DMA_STREAM_2;
+  dma_handle_t dma_handle = dma_init(&dma_config);
 
+  dma_intr_enable(dma_handle, DMA_IT_TC);
+}
+
+void DMA1_Stream2_IRQHandler(void)
+{
+  uint16_t i;
+
+  /* Clear the DMA1_Stream2 TCIF2 pending bit */
+  DMA_ClearITPendingBit(DMA1_Stream2, DMA_IT_TCIF2);
+
+  for(i=0; i<BUFF_SIZE; i++)
+
+    a[index + i] = rxbuff[i];
+
+	index = index + BUFF_SIZE;
+  rcv_flag = 1;
+
+	DMA_Cmd(DMA1_Stream2, ENABLE);
+}
