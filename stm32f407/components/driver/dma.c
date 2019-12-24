@@ -88,7 +88,7 @@ uint32_t DMA1_PARAM_MAPPING[DMA_STREAM_MAX][DMA_CHANNEL_MAX][DMA_PARAM_MAPPING_I
 		{   I2S3_ADDR,           0},
 		{  UART5_ADDR,  DMA_DIR_IN},
 		{           0,           0},
-		{   TIM5_ADDR,},
+		{   TIM5_ADDR,           0},
 		{           0,           0}
 	},
 
@@ -126,7 +126,7 @@ uint32_t DMA1_PARAM_MAPPING[DMA_STREAM_MAX][DMA_CHANNEL_MAX][DMA_PARAM_MAPPING_I
 		{   TIM7_ADDR,           0},
 		{   I2S2_ADDR,           0},
 		{   I2C3_ADDR,           0},
-		{  UART4_ADDR,           0},
+		{  UART4_ADDR, DMA_DIR_OUT},
 		{   TIM3_ADDR,           0},
 		{   TIM5_ADDR,           0},
 		{ USART3_ADDR,           0}

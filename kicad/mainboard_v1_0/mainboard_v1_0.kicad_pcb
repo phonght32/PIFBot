@@ -34,7 +34,7 @@
   )
 
   (setup
-    (last_trace_width 0.5)
+    (last_trace_width 0.6)
     (user_trace_width 0.5)
     (user_trace_width 1)
     (user_trace_width 2)
@@ -63,7 +63,6 @@
     (pad_to_mask_clearance 0.051)
     (solder_mask_min_width 0.25)
     (aux_axis_origin 0 0)
-    (grid_origin 16.002 135.382)
     (visible_elements FFFFFF7F)
     (pcbplotparams
       (layerselection 0x010fc_ffffffff)
@@ -1924,6 +1923,8 @@
   (gr_line (start 149.5552 36.322) (end 149.8092 135.4836) (layer Edge.Cuts) (width 0.05))
 
   (segment (start 70.485 117.6655) (end 70.5485 117.729) (width 0.5) (layer B.Cu) (net 0))
+  (via (at 130.7132 43.6348) (size 5) (drill 3) (layers F.Cu B.Cu) (net 0))
+  (via (at 130.7132 110.6348) (size 5) (drill 3) (layers F.Cu B.Cu) (net 0) (tstamp 5DFD4EB2))
   (segment (start 70.485 115.1255) (end 70.5485 115.189) (width 0.5) (layer B.Cu) (net 1))
   (segment (start 42.3545 115.1255) (end 70.485 115.1255) (width 0.5) (layer B.Cu) (net 1))
   (via (at 34.2392 87.8332) (size 1.7) (drill 1) (layers F.Cu B.Cu) (net 2))
@@ -2001,8 +2002,6 @@
   (via (at 88.138 53.594) (size 1.7) (drill 1) (layers F.Cu B.Cu) (net 4))
   (via (at 107.188 53.594) (size 1.7) (drill 1) (layers F.Cu B.Cu) (net 4))
   (segment (start 107.188 53.594) (end 88.138 53.594) (width 0.5) (layer F.Cu) (net 4))
-  (via (at 130.7132 43.6348) (size 5) (drill 3) (layers F.Cu B.Cu) (net 0))
-  (via (at 130.7132 110.6348) (size 5) (drill 3) (layers F.Cu B.Cu) (net 0) (tstamp 5DFD4EB2))
   (segment (start 42.3545 122.7455) (end 42.3545 120.2055) (width 0.5) (layer B.Cu) (net 5))
   (segment (start 45.847 120.2055) (end 46.101 119.9515) (width 0.5) (layer B.Cu) (net 5))
   (segment (start 42.3545 120.2055) (end 45.847 120.2055) (width 0.5) (layer B.Cu) (net 5))
