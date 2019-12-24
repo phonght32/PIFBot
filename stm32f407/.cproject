@@ -42,6 +42,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/device&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/core&quot;"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f407/ros_lib"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f407/STM32F4xx_HAL_Driver/Inc}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.files.1362229542" name="Include files (-include)" superClass="gnu.c.compiler.option.include.files" useByScannerDiscovery="false" valueType="includeFiles">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/components/driver/timer/include/timer.h}&quot;"/>
@@ -58,6 +59,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/device&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/core&quot;"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f407/ros_lib"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f407/STM32F4xx_HAL_Driver/Inc}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.147843211" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32"/>
@@ -93,6 +95,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/device&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/core&quot;"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f407/ros_lib"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f407/STM32F4xx_HAL_Driver/Inc}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1168783890" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1614844294" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
