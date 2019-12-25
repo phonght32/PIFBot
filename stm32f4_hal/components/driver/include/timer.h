@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include "stdint.h"
+
 
 /*
  * Table below shows all possible pins for each timer and channel.
