@@ -5,17 +5,17 @@
 #include "../components/driver/include/uart.h"
 #include "../components/driver/include/timer.h"
 
- #include <ros.h>
-#include <std_msgs/String.h>
-#include <std_msgs/UInt16.h>
-
- void led_cb( const std_msgs::UInt16& cmd_msg)
- {
- }
- ros::NodeHandle nh;
- std_msgs::String str_msg;
- ros::Publisher chatter("chatter", &str_msg);
- ros::Subscriber<std_msgs::UInt16> sub("led", led_cb);
+ #include "../ros_lib/ros.h"
+#include "../ros_lib/std_msgs/String.h"
+#include "../ros_lib/std_msgs/UInt16.h"
+//
+// void led_cb( const std_msgs::UInt16& cmd_msg)
+// {
+// }
+// ros::NodeHandle nh;
+// std_msgs::String str_msg;
+// ros::Publisher chatter("chatter", &str_msg);
+// ros::Subscriber<std_msgs::UInt16> sub("led", led_cb);
 
 
  uint8_t rx_buf_phong[73];
@@ -64,8 +64,8 @@ int main(void)
 {
 
 	SysTick_Config(SystemCoreClock/1000);
-	STM32Hardware stm32hardware;
-	stm32hardware.init();
+//	STM32Hardware stm32hardware;
+//	stm32hardware.init();
 //	usart_config_t uart_config;
 //	  uart_config.usart_baudrate = 57600;
 //	  uart_config.usart_num = UART_NUM_4;

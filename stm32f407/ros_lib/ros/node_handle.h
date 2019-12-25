@@ -125,7 +125,7 @@ protected:
    * Setup Functions
    */
 public:
-  NodeHandle_() : configured_(true)
+  NodeHandle_() : configured_(false)
   {
 
     for (unsigned int i = 0; i < MAX_PUBLISHERS; i++)
@@ -548,7 +548,7 @@ public:
    * Logging
    */
 
-protected:
+private:
   void log(char byte, const char * msg)
   {
     rosserial_msgs::Log l;
@@ -583,7 +583,7 @@ public:
    * Parameters
    */
 
-protected:
+private:
   bool param_recieved;
   rosserial_msgs::RequestParamResponse req_param_resp;
 
@@ -652,24 +652,6 @@ public:
         //copy it over
         for (int i = 0; i < length; i++)
           strcpy(param[i], req_param_resp.strings[i]);
-        return true;
-      }
-      else
-      {
-        logwarn("Failed to get param: length mismatch");
-      }
-    }
-    return false;
-  }
-  bool getParam(const char* name, bool* param, int length = 1, int timeout = 1000)
-  {
-    if (requestParam(name, timeout))
-    {
-      if (length == req_param_resp.ints_length)
-      {
-        //copy it over
-        for (int i = 0; i < length; i++)
-          param[i] = req_param_resp.ints[i];
         return true;
       }
       else
