@@ -76,6 +76,13 @@ USART_TypeDef *USARTx_MAPPING[USART_NUM_MAX] = {
 	USART6
 };
 
+int uart_cleanup(uart_handle_t handle)
+{
+	free(handle);
+
+	return 0;
+}
+
 
 uart_handle_t uart_init(uart_config_t *config)
 {
@@ -85,6 +92,8 @@ uart_handle_t uart_init(uart_config_t *config)
 	{
 		return -1;
 	}
+
+	int err;
 
 	uint32_t RCC_APBxENR_USARTxEN;
 	USART_TypeDef *USARTx;
@@ -156,8 +165,7 @@ uart_handle_t uart_init(uart_config_t *config)
 		UNUSED(tmpreg);
 	} while (0U);
 
-	handle->uart_num = config->uart_num;
-	handle->uart_pins_pack = config->uart_pins_pack;
+
 	handle->hal_handle.Instance = USARTx;
 	handle->hal_handle.Init.BaudRate = config->baudrate;
 	handle->hal_handle.Init.WordLength = UART_WORDLENGTH_DEFAULT;
@@ -166,7 +174,12 @@ uart_handle_t uart_init(uart_config_t *config)
 	handle->hal_handle.Init.Mode = UART_MODE_DEFAULT;
 	handle->hal_handle.Init.HwFlowCtl = UART_HW_FLOWCTRL_DEFAULT;
 	handle->hal_handle.Init.OverSampling = UART_OVERSAMPLING_DEFAULT;
-	HAL_UART_Init(&handle->hal_handle);
+	err = HAL_UART_Init(&handle->hal_handle);
+	if(err != HAL_OK)
+	{
+		uart_cleanup(handle);
+		return -1;
+	}
 
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 	GPIO_InitStruct.Pin = GPIO_PIN_x_TX;
@@ -183,19 +196,22 @@ uart_handle_t uart_init(uart_config_t *config)
 	GPIO_InitStruct.Alternate = GPIO_AFx_USARTx;
 	HAL_GPIO_Init(GPIOx_RX, &GPIO_InitStruct);
 
+	handle->uart_num = config->uart_num;
+	handle->uart_pins_pack = config->uart_pins_pack;
+
     return handle;
 }
 
-int uart_write_byte(uart_handle_t handle, uint8_t *data, uint16_t length, uint32_t timeout_ms)
+int uart_write_bytes(uart_handle_t handle, uint8_t *data, uint16_t length, uint32_t timeout_ms)
 {
 	HAL_UART_Transmit(&handle->hal_handle,data, 7, 100);
 
 	return 0;
 }
 
-int uart_read_byte(uart_handle_t handle, uint8_t *buf, uint16_t length, uint32_t timeout_ms)
+int uart_read_bytes(uart_handle_t handle, uint8_t *buf, uint16_t length, uint32_t timeout_ms)
 {
+	HAL_UART_Receive(&handle->hal_handle, buf, length, timeout_ms);
 
-
-	return HAL_UART_Receive(&handle->hal_handle, buf, length, timeout_ms);
+	return 0;
 }

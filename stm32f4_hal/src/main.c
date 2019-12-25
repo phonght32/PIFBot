@@ -1,53 +1,34 @@
-
+/* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "../components/driver/include/uart.h"
+#include "../components/driver/include/timer.h"
 
 
 
 
-/* USER CODE BEGIN PV */
 
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-
-uart_handle_t handle;
+pwm_handle_t pwm_handle;
 
 int main(void)
 {
-
 
   HAL_Init();
 
 
   SystemClock_Config();
 
-  uart_config_t config;
-  config.uart_num = UART_NUM_4;
-  config.baudrate = 115200;
-  config.uart_pins_pack = USART_PINS_PACK_1;
-  handle = uart_init(&config);
+  pwm_config_t pwm_config;
+  pwm_config.timer_num = TIMER_NUM_4;
+  pwm_config.timer_channel = TIMER_CHANNEL_2;
+  pwm_config.timer_pins_pack = TIMER_PINS_PACK_2;
+  pwm_handle = pwm_init(&pwm_config);
 
+  pwm_set_freq(pwm_handle,1);
+  pwm_set_duty(pwm_handle, 50);
+  pwm_start(pwm_handle);
 
- uart_init(&config);
-
-
-
-
-  /* USER CODE BEGIN 2 */
-
-  /* USER CODE END 2 */
-  uint8_t *data = "phong \n";
-  uint8_t buf_rec[10];
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(!uart_read_byte(handle, buf_rec, 4, 100))
-	  {
-		  uart_write_byte(handle, buf_rec, 4, 100);
-	  }
 
   }
   /* USER CODE END 3 */
@@ -82,12 +63,12 @@ void SystemClock_Config(void)
   }
   /** Initializes the CPU, AHB and APB busses clocks
   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-                                | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
@@ -96,11 +77,10 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief UART4 Initialization Function
+  * @brief TIM4 Initialization Function
   * @param None
   * @retval None
   */
-
 
 /**
   * @brief GPIO Initialization Function

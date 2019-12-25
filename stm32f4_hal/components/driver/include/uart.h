@@ -49,8 +49,8 @@ typedef struct {
 } uart_config_t;
 
 uart_handle_t uart_init(uart_config_t *config);
-int uart_write_byte(uart_handle_t handle, uint8_t *data, uint16_t length, uint32_t timeout_ms);
-int uart_read_byte(uart_handle_t handle, uint8_t *buf, uint16_t length, uint32_t timeout_ms);
+int uart_write_bytes(uart_handle_t handle, uint8_t *data, uint16_t length, uint32_t timeout_ms);
+int uart_read_bytes(uart_handle_t handle, uint8_t *buf, uint16_t length, uint32_t timeout_ms);
 
 #ifdef __cplusplus
 }

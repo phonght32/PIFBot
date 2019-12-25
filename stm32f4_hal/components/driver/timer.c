@@ -297,6 +297,14 @@ static int pwm_cleanup(pwm_handle_t handle)
 
 pwm_handle_t pwm_init(pwm_config_t *config)
 {
+	pwm_handle_t handle = calloc(1, sizeof(timer_t));
+	if (handle == NULL)
+	{
+		return -1;
+	}
+
+	int err;
+
 	uint32_t RCC_APBxENR_GPIOxEN;
 	uint16_t GPIO_PIN_x;
 	uint8_t GPIO_AFx_TIMx;
@@ -358,34 +366,51 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 	GPIO_InitStruct.Alternate = GPIO_AFx_TIMx;
 	HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
 
-	TIM_HandleTypeDef htimx;
-	htimx.Instance = TIMx;
-	htimx.Init.Prescaler = 0;
-	htimx.Init.CounterMode = PWM_COUNTERMODE_DEFAULT;
-	htimx.Init.Period = 0;
-	htimx.Init.ClockDivision = PWM_TIM_CLOCK_DIV_DEFAULT;
-	htimx.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-	HAL_TIM_Base_Init(&htimx);
-	HAL_TIM_PWM_Init(&htimx);
+	handle->hal_handle.Instance 				= TIMx;
+	handle->hal_handle.Init.Prescaler 			= 0;
+	handle->hal_handle.Init.CounterMode 		= PWM_COUNTERMODE_DEFAULT;
+	handle->hal_handle.Init.Period 				= 0;
+	handle->hal_handle.Init.ClockDivision 		= PWM_TIM_CLOCK_DIV_DEFAULT;
+	handle->hal_handle.Init.AutoReloadPreload 	= TIM_AUTORELOAD_PRELOAD_DISABLE;
+	err = HAL_TIM_Base_Init(&handle->hal_handle);
+	if(err != HAL_OK)
+	{
+		pwm_cleanup(handle);
+		return -1;
+	}
+	err = HAL_TIM_PWM_Init(&handle->hal_handle);
+	if(err != HAL_OK)
+	{
+		pwm_cleanup(handle);
+		return -1;
+	}
 
 	TIM_ClockConfigTypeDef sClockSourceConfig = {0};
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-	HAL_TIM_ConfigClockSource(&htimx, &sClockSourceConfig);
+	err = HAL_TIM_ConfigClockSource(&handle->hal_handle, &sClockSourceConfig);
+	if(err != HAL_OK)
+	{
+		pwm_cleanup(handle);
+		return -1;
+	}
 
 	TIM_MasterConfigTypeDef sMasterConfig = {0};
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	HAL_TIMEx_MasterConfigSynchronization(&htimx, &sMasterConfig);
+	err = HAL_TIMEx_MasterConfigSynchronization(&handle->hal_handle, &sMasterConfig);
+	if(err != HAL_OK)
+	{
+		pwm_cleanup(handle);
+		return -1;
+	}
 
 	TIM_OC_InitTypeDef sConfigOC = {0};
 	sConfigOC.OCMode = TIM_OCMODE_PWM1;
 	sConfigOC.Pulse = 0;
 	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-	HAL_TIM_PWM_ConfigChannel(&htimx, &sConfigOC, TIM_CHANNEL_x);
-
-	pwm_handle_t handle = calloc(1, sizeof(timer_t));
-	if (handle == NULL)
+	err = HAL_TIM_PWM_ConfigChannel(&handle->hal_handle, &sConfigOC, TIM_CHANNEL_x);
+	if(err != HAL_OK)
 	{
 		pwm_cleanup(handle);
 		return -1;
@@ -396,12 +421,6 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 	handle->timer_pins_pack  = config->timer_pins_pack;
 	handle->pwm_freq_hz 	 = config->pwm_freq_hz;
 	handle->pwm_duty_percent = config->pwm_duty_percent;
-	handle->hal_handle.Instance 				= TIMx;
-	handle->hal_handle.Init.Prescaler 			= 0;
-	handle->hal_handle.Init.CounterMode 		= PWM_COUNTERMODE_DEFAULT;
-	handle->hal_handle.Init.Period 				= 0;
-	handle->hal_handle.Init.ClockDivision 		= PWM_TIM_CLOCK_DIV_DEFAULT;
-	handle->hal_handle.Init.AutoReloadPreload 	= TIM_AUTORELOAD_PRELOAD_DISABLE;
 
 	return handle;
 }
