@@ -212,7 +212,56 @@ int uart_write_bytes(uart_handle_t handle, uint8_t *data, uint16_t length, uint3
 
 int uart_read_bytes(uart_handle_t handle, uint8_t *buf, uint16_t length, uint32_t timeout_ms)
 {
-	HAL_UART_Receive(&handle->hal_handle, buf, length, timeout_ms);
+	return HAL_UART_Receive(&handle->hal_handle, buf, length, timeout_ms);
+}
+
+int uart_dma_init(uart_handle_t handle)
+{
+	__HAL_RCC_DMA1_CLK_ENABLE();
+
+	HAL_NVIC_SetPriority(DMA1_Stream2_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(DMA1_Stream2_IRQn);
+
+	HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
+	
+	DMA_HandleTypeDef hdma_uart4_rx;
+	hdma_uart4_rx.Instance = DMA1_Stream2;
+	hdma_uart4_rx.Init.Channel = DMA_CHANNEL_4;
+	hdma_uart4_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+	hdma_uart4_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+	hdma_uart4_rx.Init.MemInc = DMA_MINC_ENABLE;
+	hdma_uart4_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+	hdma_uart4_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+	hdma_uart4_rx.Init.Mode = DMA_NORMAL;
+	hdma_uart4_rx.Init.Priority = DMA_PRIORITY_LOW;
+	hdma_uart4_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+	HAL_DMA_Init(&hdma_uart4_rx);
+	__HAL_LINKDMA(&handle->hal_handle, hdmarx, hdma_uart4_rx);
+
+	DMA_HandleTypeDef hdma_uart4_tx;
+	hdma_uart4_tx.Instance = DMA1_Stream4;
+	hdma_uart4_tx.Init.Channel = DMA_CHANNEL_4;
+	hdma_uart4_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+	hdma_uart4_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+	hdma_uart4_tx.Init.MemInc = DMA_MINC_ENABLE;
+	hdma_uart4_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+	hdma_uart4_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+	hdma_uart4_tx.Init.Mode = DMA_NORMAL;
+	hdma_uart4_tx.Init.Priority = DMA_PRIORITY_LOW;
+	hdma_uart4_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+	HAL_DMA_Init(&hdma_uart4_tx);
+	__HAL_LINKDMA(&handle->hal_handle, hdmatx, hdma_uart4_tx);
+
+	HAL_NVIC_SetPriority(UART4_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(UART4_IRQn);
+
+	return 0;
+}
+
+int uart_dma_write(uart_handle_t handle, uint8_t *data, uint32_t length)
+{
+	HAL_UART_Transmit_DMA(&handle->hal_handle, data, length);
 
 	return 0;
 }
