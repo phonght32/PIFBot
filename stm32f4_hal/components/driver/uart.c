@@ -1,5 +1,6 @@
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_uart.h"
+#include "stm32f4xx_hal_rcc.h"
 
 #include "stdlib.h"
 

@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "../components/driver/include/timer.h"
+#include "../components/driver/include/gpio.h"
 
 
 
@@ -17,19 +18,17 @@ int main(void)
 
   SystemClock_Config();
 
-  pwm_config_t pwm_config;
-  pwm_config.timer_num = TIMER_NUM_4;
-  pwm_config.timer_channel = TIMER_CHANNEL_2;
-  pwm_config.timer_pins_pack = TIMER_PINS_PACK_2;
-  pwm_handle = pwm_init(&pwm_config);
-
-  pwm_set_freq(pwm_handle,1);
-  pwm_set_duty(pwm_handle, 50);
-  pwm_start(pwm_handle);
+  gpio_config_t config;
+  config.gpio_port = GPIO_PORT_D;
+  config.gpio_num = GPIO_NUM_15;
+  config.gpio_mode = GPIO_OUTPUT;
+  config.gpio_reg_pull = GPIO_REG_PULL_NONE;
+  gpio_handle_t handle = gpio_init(&config);
 
   while (1)
   {
-
+	  gpio_toggle_level(handle);
+	  HAL_Delay(500);
   }
   /* USER CODE END 3 */
 }
