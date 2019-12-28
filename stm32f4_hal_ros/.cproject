@@ -177,7 +177,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Utilities/Components/ampire640480&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Utilities/Components/lsm303dlhc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/core&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/ros_lib}&quot;"/>
+									<listOptionValue builtIn="false" value="/stm32f4_hal_ros/ros_lib"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.133056671" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1706330084" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
