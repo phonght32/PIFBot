@@ -714,43 +714,56 @@ geometry_msgs_generate_messages_py/fast:
 .PHONY : geometry_msgs_generate_messages_py/fast
 
 #=============================================================================
-# Target rules for targets named diagnostic_msgs_generate_messages_py
+# Target rules for targets named hlds_laser_segment_publisher
 
 # Build rule for target.
-diagnostic_msgs_generate_messages_py: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 diagnostic_msgs_generate_messages_py
-.PHONY : diagnostic_msgs_generate_messages_py
+hlds_laser_segment_publisher: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 hlds_laser_segment_publisher
+.PHONY : hlds_laser_segment_publisher
 
 # fast build rule for target.
-diagnostic_msgs_generate_messages_py/fast:
-	$(MAKE) -f robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_py.dir/build.make robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_py.dir/build
-.PHONY : diagnostic_msgs_generate_messages_py/fast
+hlds_laser_segment_publisher/fast:
+	$(MAKE) -f hls_lfcd_lds_driver/CMakeFiles/hlds_laser_segment_publisher.dir/build.make hls_lfcd_lds_driver/CMakeFiles/hlds_laser_segment_publisher.dir/build
+.PHONY : hlds_laser_segment_publisher/fast
 
 #=============================================================================
-# Target rules for targets named diagnostic_msgs_generate_messages_nodejs
+# Target rules for targets named sensor_msgs_generate_messages_eus
 
 # Build rule for target.
-diagnostic_msgs_generate_messages_nodejs: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 diagnostic_msgs_generate_messages_nodejs
-.PHONY : diagnostic_msgs_generate_messages_nodejs
+sensor_msgs_generate_messages_eus: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_eus
+.PHONY : sensor_msgs_generate_messages_eus
 
 # fast build rule for target.
-diagnostic_msgs_generate_messages_nodejs/fast:
-	$(MAKE) -f robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_nodejs.dir/build.make robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_nodejs.dir/build
-.PHONY : diagnostic_msgs_generate_messages_nodejs/fast
+sensor_msgs_generate_messages_eus/fast:
+	$(MAKE) -f hls_lfcd_lds_driver/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build.make hls_lfcd_lds_driver/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build
+.PHONY : sensor_msgs_generate_messages_eus/fast
 
 #=============================================================================
-# Target rules for targets named diagnostic_msgs_generate_messages_lisp
+# Target rules for targets named hlds_laser_publisher
 
 # Build rule for target.
-diagnostic_msgs_generate_messages_lisp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 diagnostic_msgs_generate_messages_lisp
-.PHONY : diagnostic_msgs_generate_messages_lisp
+hlds_laser_publisher: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 hlds_laser_publisher
+.PHONY : hlds_laser_publisher
 
 # fast build rule for target.
-diagnostic_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_lisp.dir/build.make robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_lisp.dir/build
-.PHONY : diagnostic_msgs_generate_messages_lisp/fast
+hlds_laser_publisher/fast:
+	$(MAKE) -f hls_lfcd_lds_driver/CMakeFiles/hlds_laser_publisher.dir/build.make hls_lfcd_lds_driver/CMakeFiles/hlds_laser_publisher.dir/build
+.PHONY : hlds_laser_publisher/fast
+
+#=============================================================================
+# Target rules for targets named sensor_msgs_generate_messages_lisp
+
+# Build rule for target.
+sensor_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_lisp
+.PHONY : sensor_msgs_generate_messages_lisp
+
+# fast build rule for target.
+sensor_msgs_generate_messages_lisp/fast:
+	$(MAKE) -f hls_lfcd_lds_driver/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make hls_lfcd_lds_driver/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
+.PHONY : sensor_msgs_generate_messages_lisp/fast
 
 #=============================================================================
 # Target rules for targets named sensor_msgs_generate_messages_nodejs
@@ -762,8 +775,21 @@ sensor_msgs_generate_messages_nodejs: cmake_check_build_system
 
 # fast build rule for target.
 sensor_msgs_generate_messages_nodejs/fast:
-	$(MAKE) -f robot/robot_bringup/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build.make robot/robot_bringup/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build
+	$(MAKE) -f hls_lfcd_lds_driver/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build.make hls_lfcd_lds_driver/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build
 .PHONY : sensor_msgs_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named sensor_msgs_generate_messages_cpp
+
+# Build rule for target.
+sensor_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_cpp
+.PHONY : sensor_msgs_generate_messages_cpp
+
+# fast build rule for target.
+sensor_msgs_generate_messages_cpp/fast:
+	$(MAKE) -f hls_lfcd_lds_driver/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make hls_lfcd_lds_driver/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
+.PHONY : sensor_msgs_generate_messages_cpp/fast
 
 #=============================================================================
 # Target rules for targets named sensor_msgs_generate_messages_py
@@ -775,21 +801,8 @@ sensor_msgs_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 sensor_msgs_generate_messages_py/fast:
-	$(MAKE) -f robot/robot_bringup/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make robot/robot_bringup/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
+	$(MAKE) -f hls_lfcd_lds_driver/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make hls_lfcd_lds_driver/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
 .PHONY : sensor_msgs_generate_messages_py/fast
-
-#=============================================================================
-# Target rules for targets named diagnostic_msgs_generate_messages_cpp
-
-# Build rule for target.
-diagnostic_msgs_generate_messages_cpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 diagnostic_msgs_generate_messages_cpp
-.PHONY : diagnostic_msgs_generate_messages_cpp
-
-# fast build rule for target.
-diagnostic_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_cpp.dir/build.make robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_cpp.dir/build
-.PHONY : diagnostic_msgs_generate_messages_cpp/fast
 
 #=============================================================================
 # Target rules for targets named diagnostic_msgs_generate_messages_eus
@@ -805,43 +818,56 @@ diagnostic_msgs_generate_messages_eus/fast:
 .PHONY : diagnostic_msgs_generate_messages_eus/fast
 
 #=============================================================================
-# Target rules for targets named sensor_msgs_generate_messages_cpp
+# Target rules for targets named diagnostic_msgs_generate_messages_cpp
 
 # Build rule for target.
-sensor_msgs_generate_messages_cpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_cpp
-.PHONY : sensor_msgs_generate_messages_cpp
+diagnostic_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 diagnostic_msgs_generate_messages_cpp
+.PHONY : diagnostic_msgs_generate_messages_cpp
 
 # fast build rule for target.
-sensor_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f robot/robot_bringup/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make robot/robot_bringup/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
-.PHONY : sensor_msgs_generate_messages_cpp/fast
+diagnostic_msgs_generate_messages_cpp/fast:
+	$(MAKE) -f robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_cpp.dir/build.make robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_cpp.dir/build
+.PHONY : diagnostic_msgs_generate_messages_cpp/fast
 
 #=============================================================================
-# Target rules for targets named sensor_msgs_generate_messages_eus
+# Target rules for targets named diagnostic_msgs_generate_messages_lisp
 
 # Build rule for target.
-sensor_msgs_generate_messages_eus: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_eus
-.PHONY : sensor_msgs_generate_messages_eus
+diagnostic_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 diagnostic_msgs_generate_messages_lisp
+.PHONY : diagnostic_msgs_generate_messages_lisp
 
 # fast build rule for target.
-sensor_msgs_generate_messages_eus/fast:
-	$(MAKE) -f robot/robot_bringup/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build.make robot/robot_bringup/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build
-.PHONY : sensor_msgs_generate_messages_eus/fast
+diagnostic_msgs_generate_messages_lisp/fast:
+	$(MAKE) -f robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_lisp.dir/build.make robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_lisp.dir/build
+.PHONY : diagnostic_msgs_generate_messages_lisp/fast
 
 #=============================================================================
-# Target rules for targets named sensor_msgs_generate_messages_lisp
+# Target rules for targets named diagnostic_msgs_generate_messages_nodejs
 
 # Build rule for target.
-sensor_msgs_generate_messages_lisp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_lisp
-.PHONY : sensor_msgs_generate_messages_lisp
+diagnostic_msgs_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 diagnostic_msgs_generate_messages_nodejs
+.PHONY : diagnostic_msgs_generate_messages_nodejs
 
 # fast build rule for target.
-sensor_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f robot/robot_bringup/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make robot/robot_bringup/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
-.PHONY : sensor_msgs_generate_messages_lisp/fast
+diagnostic_msgs_generate_messages_nodejs/fast:
+	$(MAKE) -f robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_nodejs.dir/build.make robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_nodejs.dir/build
+.PHONY : diagnostic_msgs_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named diagnostic_msgs_generate_messages_py
+
+# Build rule for target.
+diagnostic_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 diagnostic_msgs_generate_messages_py
+.PHONY : diagnostic_msgs_generate_messages_py
+
+# fast build rule for target.
+diagnostic_msgs_generate_messages_py/fast:
+	$(MAKE) -f robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_py.dir/build.make robot/robot_bringup/CMakeFiles/diagnostic_msgs_generate_messages_py.dir/build
+.PHONY : diagnostic_msgs_generate_messages_py/fast
 
 #=============================================================================
 # Target rules for targets named robot_diagnostics
@@ -1756,16 +1782,18 @@ help:
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_lisp"
 	@echo "... geometry_msgs_generate_messages_py"
-	@echo "... diagnostic_msgs_generate_messages_py"
-	@echo "... diagnostic_msgs_generate_messages_nodejs"
-	@echo "... diagnostic_msgs_generate_messages_lisp"
-	@echo "... sensor_msgs_generate_messages_nodejs"
-	@echo "... sensor_msgs_generate_messages_py"
-	@echo "... diagnostic_msgs_generate_messages_cpp"
-	@echo "... diagnostic_msgs_generate_messages_eus"
-	@echo "... sensor_msgs_generate_messages_cpp"
+	@echo "... hlds_laser_segment_publisher"
 	@echo "... sensor_msgs_generate_messages_eus"
+	@echo "... hlds_laser_publisher"
 	@echo "... sensor_msgs_generate_messages_lisp"
+	@echo "... sensor_msgs_generate_messages_nodejs"
+	@echo "... sensor_msgs_generate_messages_cpp"
+	@echo "... sensor_msgs_generate_messages_py"
+	@echo "... diagnostic_msgs_generate_messages_eus"
+	@echo "... diagnostic_msgs_generate_messages_cpp"
+	@echo "... diagnostic_msgs_generate_messages_lisp"
+	@echo "... diagnostic_msgs_generate_messages_nodejs"
+	@echo "... diagnostic_msgs_generate_messages_py"
 	@echo "... robot_diagnostics"
 	@echo "... flat_world_imu_node"
 	@echo "... rplidarNodeClient"

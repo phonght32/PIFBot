@@ -7,6 +7,7 @@
 subdirs("gtest")
 subdirs("robot_msgs")
 subdirs("robot/robot_teleop")
+subdirs("hls_lfcd_lds_driver")
 subdirs("robot/robot_bringup")
 subdirs("robot/robot_slam")
 subdirs("rplidar_ros")
