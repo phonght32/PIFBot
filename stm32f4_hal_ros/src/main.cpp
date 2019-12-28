@@ -97,7 +97,7 @@ void SystemClock_Config(void)
 
 
 
-static void MX_DMA_Init(void) 
+static void MX_DMA_Init(void)
 {
   __HAL_RCC_DMA1_CLK_ENABLE();
 
@@ -116,7 +116,7 @@ void Error_Handler(void)
 #ifdef  USE_FULL_ASSERT
 
 void assert_failed(uint8_t *file, uint32_t line)
-{ 
+{
 
 }
 #endif /* USE_FULL_ASSERT */

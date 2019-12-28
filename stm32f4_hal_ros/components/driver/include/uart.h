@@ -55,7 +55,7 @@ typedef struct {
 uart_handle_t uart_init(uart_config_t *config);
 int uart_write_bytes(uart_handle_t handle, uint8_t *data, uint16_t length, uint32_t timeout_ms);
 int uart_read_bytes(uart_handle_t handle, uint8_t *buf, uint16_t length, uint32_t timeout_ms);
-DMA_HandleTypeDef uart_dma_tx_init(uart_handle_t handle);
+void uart_dma_tx_init(uart_handle_t handle,DMA_HandleTypeDef *hdma_uart_tx);
 DMA_HandleTypeDef uart_dma_rx_init(uart_handle_t handle);
 int uart_dma_write(uart_handle_t handle, uint8_t *data, uint32_t length);
 UART_HandleTypeDef uart_get_hal_handle(uart_handle_t handle);

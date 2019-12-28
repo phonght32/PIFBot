@@ -214,39 +214,38 @@ int uart_read_bytes(uart_handle_t handle, uint8_t *buf, uint16_t length, uint32_
 	return HAL_UART_Receive(&handle->hal_handle, buf, length, timeout_ms);
 }
 
-DMA_HandleTypeDef uart_dma_tx_init(uart_handle_t handle)
+void uart_dma_tx_init(uart_handle_t handle,DMA_HandleTypeDef *hdma_uart_tx)
 {
-	DMA_HandleTypeDef *hdma_uart_tx= calloc(1, sizeof(DMA_HandleTypeDef));
-
-//	hdma_uart_tx->Instance = DMA1_Stream4;
-//	hdma_uart_tx->Init.Channel = DMA_CHANNEL_4;
-//	hdma_uart_tx->Init.Direction = DMA_MEMORY_TO_PERIPH;
-//	hdma_uart_tx->Init.PeriphInc = DMA_PINC_DISABLE;
-//	hdma_uart_tx->Init.MemInc = DMA_MINC_ENABLE;
-//	hdma_uart_tx->Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-//	hdma_uart_tx->Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-//	hdma_uart_tx->Init.Mode = DMA_NORMAL;
-//	hdma_uart_tx->Init.Priority = DMA_PRIORITY_LOW;
-//	hdma_uart_tx->Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-//	HAL_DMA_Init(hdma_uart_tx);
-//	__HAL_LINKDMA(&handle->hal_handle, hdmatx, *hdma_uart_tx);
+//	DMA_HandleTypeDef *hdma_uart_tx= calloc(1, sizeof(DMA_HandleTypeDef));
 
 	hdma_uart_tx->Instance = DMA1_Stream4;
-	    hdma_uart_tx->Init.Channel = DMA_CHANNEL_4;
-	    hdma_uart_tx->Init.Direction = DMA_MEMORY_TO_PERIPH;
-	    hdma_uart_tx->Init.PeriphInc = DMA_PINC_DISABLE;
-	    hdma_uart_tx->Init.MemInc = DMA_MINC_ENABLE;
-	    hdma_uart_tx->Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-	    hdma_uart_tx->Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-	    hdma_uart_tx->Init.Mode = DMA_NORMAL;
-	    hdma_uart_tx->Init.Priority = DMA_PRIORITY_LOW;
-	    hdma_uart_tx->Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-	    HAL_DMA_Init(hdma_uart_tx);
+	hdma_uart_tx->Init.Channel = DMA_CHANNEL_4;
+	hdma_uart_tx->Init.Direction = DMA_MEMORY_TO_PERIPH;
+	hdma_uart_tx->Init.PeriphInc = DMA_PINC_DISABLE;
+	hdma_uart_tx->Init.MemInc = DMA_MINC_ENABLE;
+	hdma_uart_tx->Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+	hdma_uart_tx->Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+	hdma_uart_tx->Init.Mode = DMA_NORMAL;
+	hdma_uart_tx->Init.Priority = DMA_PRIORITY_LOW;
+	hdma_uart_tx->Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+	HAL_DMA_Init(hdma_uart_tx);
+	__HAL_LINKDMA(&handle->hal_handle, hdmatx, *hdma_uart_tx);
+
+//	hdma_uart_tx->Instance = DMA1_Stream4;
+//	    hdma_uart_tx->Init.Channel = DMA_CHANNEL_4;
+//	    hdma_uart_tx->Init.Direction = DMA_MEMORY_TO_PERIPH;
+//	    hdma_uart_tx->Init.PeriphInc = DMA_PINC_DISABLE;
+//	    hdma_uart_tx->Init.MemInc = DMA_MINC_ENABLE;
+//	    hdma_uart_tx->Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+//	    hdma_uart_tx->Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+//	    hdma_uart_tx->Init.Mode = DMA_NORMAL;
+//	    hdma_uart_tx->Init.Priority = DMA_PRIORITY_LOW;
+//	    hdma_uart_tx->Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+//	    HAL_DMA_Init(hdma_uart_tx);
 
 
-	    __HAL_LINKDMA(&handle->hal_handle,hdmatx,*hdma_uart_tx);
 
-	return *hdma_uart_tx;
+
 }
 
 DMA_HandleTypeDef uart_dma_rx_init(uart_handle_t handle)

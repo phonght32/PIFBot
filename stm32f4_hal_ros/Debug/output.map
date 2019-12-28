@@ -16937,7 +16937,7 @@ Discarded input sections
  .text.uart_read_bytes
                 0x0000000000000000       0x28 components/driver/uart.o
  .text.uart_dma_tx_init
-                0x0000000000000000       0x88 components/driver/uart.o
+                0x0000000000000000       0x6c components/driver/uart.o
  .text.uart_dma_rx_init
                 0x0000000000000000       0x6c components/driver/uart.o
  .text.uart_dma_write
@@ -20318,35 +20318,35 @@ LOAD /home/phong/Ac6/SystemWorkbench/plugins/fr.ac6.mcu.externaltools.arm-none.l
                 0x00000000000014bf       0x22 /home/phong/Ac6/SystemWorkbench/plugins/fr.ac6.mcu.externaltools.arm-none.linux64_1.17.0.201812190825/tools/compiler/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
 OUTPUT(stm32f4_hal_ros.elf elf32-littlearm)
 
-.debug_info     0x0000000000000000     0xd465
+.debug_info     0x0000000000000000     0xd461
  .debug_info    0x0000000000000000      0x921 HAL_Driver/Src/stm32f4xx_hal.o
  .debug_info    0x0000000000000921      0xdd6 HAL_Driver/Src/stm32f4xx_hal_cortex.o
  .debug_info    0x00000000000016f7      0x916 HAL_Driver/Src/stm32f4xx_hal_dma.o
  .debug_info    0x000000000000200d      0x763 HAL_Driver/Src/stm32f4xx_hal_gpio.o
  .debug_info    0x0000000000002770      0x8a4 HAL_Driver/Src/stm32f4xx_hal_rcc.o
  .debug_info    0x0000000000003014     0x11d5 HAL_Driver/Src/stm32f4xx_hal_uart.o
- .debug_info    0x00000000000041e9     0x14fa components/driver/uart.o
- .debug_info    0x00000000000056e3     0x573e src/main.o
- .debug_info    0x000000000000ae21      0xb66 src/stm32f4xx_hal_msp.o
- .debug_info    0x000000000000b987      0x68c src/stm32f4xx_it.o
- .debug_info    0x000000000000c013      0xf2e src/syscalls.o
- .debug_info    0x000000000000cf41      0x502 src/system_stm32f4xx.o
- .debug_info    0x000000000000d443       0x22 startup/startup_stm32f407xx.o
+ .debug_info    0x00000000000041e9     0x14f6 components/driver/uart.o
+ .debug_info    0x00000000000056df     0x573e src/main.o
+ .debug_info    0x000000000000ae1d      0xb66 src/stm32f4xx_hal_msp.o
+ .debug_info    0x000000000000b983      0x68c src/stm32f4xx_it.o
+ .debug_info    0x000000000000c00f      0xf2e src/syscalls.o
+ .debug_info    0x000000000000cf3d      0x502 src/system_stm32f4xx.o
+ .debug_info    0x000000000000d43f       0x22 startup/startup_stm32f407xx.o
 
-.debug_abbrev   0x0000000000000000     0x1f76
+.debug_abbrev   0x0000000000000000     0x1f90
  .debug_abbrev  0x0000000000000000      0x1cb HAL_Driver/Src/stm32f4xx_hal.o
  .debug_abbrev  0x00000000000001cb      0x2fa HAL_Driver/Src/stm32f4xx_hal_cortex.o
  .debug_abbrev  0x00000000000004c5      0x229 HAL_Driver/Src/stm32f4xx_hal_dma.o
  .debug_abbrev  0x00000000000006ee      0x1c9 HAL_Driver/Src/stm32f4xx_hal_gpio.o
  .debug_abbrev  0x00000000000008b7      0x245 HAL_Driver/Src/stm32f4xx_hal_rcc.o
  .debug_abbrev  0x0000000000000afc      0x242 HAL_Driver/Src/stm32f4xx_hal_uart.o
- .debug_abbrev  0x0000000000000d3e      0x2a0 components/driver/uart.o
- .debug_abbrev  0x0000000000000fde      0x8df src/main.o
- .debug_abbrev  0x00000000000018bd      0x19c src/stm32f4xx_hal_msp.o
- .debug_abbrev  0x0000000000001a59      0x150 src/stm32f4xx_it.o
- .debug_abbrev  0x0000000000001ba9      0x2aa src/syscalls.o
- .debug_abbrev  0x0000000000001e53      0x111 src/system_stm32f4xx.o
- .debug_abbrev  0x0000000000001f64       0x12 startup/startup_stm32f407xx.o
+ .debug_abbrev  0x0000000000000d3e      0x2ba components/driver/uart.o
+ .debug_abbrev  0x0000000000000ff8      0x8df src/main.o
+ .debug_abbrev  0x00000000000018d7      0x19c src/stm32f4xx_hal_msp.o
+ .debug_abbrev  0x0000000000001a73      0x150 src/stm32f4xx_it.o
+ .debug_abbrev  0x0000000000001bc3      0x2aa src/syscalls.o
+ .debug_abbrev  0x0000000000001e6d      0x111 src/system_stm32f4xx.o
+ .debug_abbrev  0x0000000000001f7e       0x12 startup/startup_stm32f407xx.o
 
 .debug_aranges  0x0000000000000000      0x9d0
  .debug_aranges
@@ -20437,20 +20437,20 @@ OUTPUT(stm32f4_hal_ros.elf elf32-littlearm)
  .debug_macro   0x0000000000005c07       0x88 src/syscalls.o
  .debug_macro   0x0000000000005c8f      0x35b src/system_stm32f4xx.o
 
-.debug_line     0x0000000000000000     0x999e
+.debug_line     0x0000000000000000     0x999b
  .debug_line    0x0000000000000000      0xba6 HAL_Driver/Src/stm32f4xx_hal.o
  .debug_line    0x0000000000000ba6      0xcce HAL_Driver/Src/stm32f4xx_hal_cortex.o
  .debug_line    0x0000000000001874      0xc79 HAL_Driver/Src/stm32f4xx_hal_dma.o
  .debug_line    0x00000000000024ed      0xb89 HAL_Driver/Src/stm32f4xx_hal_gpio.o
  .debug_line    0x0000000000003076      0xbee HAL_Driver/Src/stm32f4xx_hal_rcc.o
  .debug_line    0x0000000000003c64     0x12a1 HAL_Driver/Src/stm32f4xx_hal_uart.o
- .debug_line    0x0000000000004f05      0xb4b components/driver/uart.o
- .debug_line    0x0000000000005a50     0x1a0b src/main.o
- .debug_line    0x000000000000745b      0xa2d src/stm32f4xx_hal_msp.o
- .debug_line    0x0000000000007e88      0xabf src/stm32f4xx_it.o
- .debug_line    0x0000000000008947      0x60b src/syscalls.o
- .debug_line    0x0000000000008f52      0x9cd src/system_stm32f4xx.o
- .debug_line    0x000000000000991f       0x7f startup/startup_stm32f407xx.o
+ .debug_line    0x0000000000004f05      0xb49 components/driver/uart.o
+ .debug_line    0x0000000000005a4e     0x1a0a src/main.o
+ .debug_line    0x0000000000007458      0xa2d src/stm32f4xx_hal_msp.o
+ .debug_line    0x0000000000007e85      0xabf src/stm32f4xx_it.o
+ .debug_line    0x0000000000008944      0x60b src/syscalls.o
+ .debug_line    0x0000000000008f4f      0x9cd src/system_stm32f4xx.o
+ .debug_line    0x000000000000991c       0x7f startup/startup_stm32f407xx.o
 
 .debug_str      0x0000000000000000    0xef357
  .debug_str     0x0000000000000000    0xe3758 HAL_Driver/Src/stm32f4xx_hal.o
