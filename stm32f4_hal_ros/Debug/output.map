@@ -16730,6 +16730,8 @@ Discarded input sections
  .text          0x0000000000000000        0x0 components/driver/timer.o
  .data          0x0000000000000000      0xb38 components/driver/timer.o
  .bss           0x0000000000000000        0x0 components/driver/timer.o
+ .text.tim_pwm_get_hw_info
+                0x0000000000000000       0x20 components/driver/timer.o
  .text.pwm_cleanup
                 0x0000000000000000       0x18 components/driver/timer.o
  .text.pwm_init
@@ -16744,12 +16746,12 @@ Discarded input sections
                 0x0000000000000000       0xec components/driver/timer.o
  .text.pwm_set_duty
                 0x0000000000000000       0x94 components/driver/timer.o
- .debug_info    0x0000000000000000     0x16c1 components/driver/timer.o
- .debug_abbrev  0x0000000000000000      0x286 components/driver/timer.o
+ .debug_info    0x0000000000000000     0x1716 components/driver/timer.o
+ .debug_abbrev  0x0000000000000000      0x28f components/driver/timer.o
  .debug_aranges
-                0x0000000000000000       0x50 components/driver/timer.o
- .debug_ranges  0x0000000000000000       0x40 components/driver/timer.o
- .debug_macro   0x0000000000000000      0x44e components/driver/timer.o
+                0x0000000000000000       0x58 components/driver/timer.o
+ .debug_ranges  0x0000000000000000       0x48 components/driver/timer.o
+ .debug_macro   0x0000000000000000      0x613 components/driver/timer.o
  .debug_macro   0x0000000000000000      0xa72 components/driver/timer.o
  .debug_macro   0x0000000000000000       0x2f components/driver/timer.o
  .debug_macro   0x0000000000000000       0x22 components/driver/timer.o
@@ -16837,10 +16839,10 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x32a components/driver/timer.o
  .debug_macro   0x0000000000000000       0x16 components/driver/timer.o
  .debug_macro   0x0000000000000000       0x29 components/driver/timer.o
- .debug_line    0x0000000000000000      0xb8c components/driver/timer.o
- .debug_str     0x0000000000000000    0xe6613 components/driver/timer.o
+ .debug_line    0x0000000000000000      0xb9e components/driver/timer.o
+ .debug_str     0x0000000000000000    0xe9835 components/driver/timer.o
  .comment       0x0000000000000000       0x80 components/driver/timer.o
- .debug_frame   0x0000000000000000      0x118 components/driver/timer.o
+ .debug_frame   0x0000000000000000      0x140 components/driver/timer.o
  .ARM.attributes
                 0x0000000000000000       0x39 components/driver/timer.o
  .group         0x0000000000000000        0xc components/driver/uart.o

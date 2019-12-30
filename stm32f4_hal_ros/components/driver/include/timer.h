@@ -107,7 +107,8 @@ typedef enum {
 typedef enum {
     TIMER_PINS_PACK_1 = 0,
     TIMER_PINS_PACK_2,
-    TIMER_PINS_PACK_3
+    TIMER_PINS_PACK_3,
+	TIMER_PINS_PACK_MAX
 } timer_pins_pack_t;
 
 typedef struct {
