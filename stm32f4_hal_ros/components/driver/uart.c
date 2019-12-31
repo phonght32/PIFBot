@@ -13,6 +13,138 @@
 #define UART_OVERSAMPLING_DEFAULT 		UART_OVERSAMPLING_16
 #define UART_MODE_DEFAULT 				UART_MODE_TX_RX
 
+#define UART1_PP1_HW_INFO	{.rcc_apbenr_usarten = RCC_APB2ENR_USART1EN,     \
+                             .usart = USART1,                                \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOAEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOAEN,    \
+                             .port_tx = GPIOA,                               \
+                             .port_rx = GPIOA,                               \
+                             .pin_tx = GPIO_PIN_9,                           \
+                             .pin_rx = GPIO_PIN_10,                          \
+                             .alternate_func = GPIO_AF7_USART1}
+
+#define UART1_PP2_HW_INFO  {.rcc_apbenr_usarten = RCC_APB2ENR_USART1EN,      \
+                             .usart = USART1,                                \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOBEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOBEN,    \
+                             .port_tx = GPIOB,                               \
+                             .port_rx = GPIOB,                               \
+                             .pin_tx = GPIO_PIN_7,                           \
+                             .pin_rx = GPIO_PIN_7,                           \
+                             .alternate_func = GPIO_AF7_USART1}
+
+#define UART2_PP1_HW_INFO  {.rcc_apbenr_usarten = RCC_APB1ENR_USART2EN,     \
+                             .usart = USART2,                                \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOAEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOAEN,    \
+                             .port_tx = GPIOA,                               \
+                             .port_rx = GPIOA,                               \
+                             .pin_tx = GPIO_PIN_2,                           \
+                             .pin_rx = GPIO_PIN_3,                           \
+                             .alternate_func = GPIO_AF7_USART2}
+
+#define UART2_PP2_HW_INFO  {.rcc_apbenr_usarten = RCC_APB1ENR_USART2EN,     \
+                             .usart = USART2,                                \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIODEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIODEN,    \
+                             .port_tx = GPIOD,                               \
+                             .port_rx = GPIOD,                               \
+                             .pin_tx = GPIO_PIN_5,                           \
+                             .pin_rx = GPIO_PIN_6,                           \
+                             .alternate_func = GPIO_AF7_USART2}
+                                
+#define UART3_PP1_HW_INFO  {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,     \
+                             .usart = USART3,                                \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOBEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOBEN,    \
+                             .port_tx = GPIOB,                               \
+                             .port_rx = GPIOB,                               \
+                             .pin_tx = GPIO_PIN_10,                          \
+                             .pin_rx = GPIO_PIN_11,                          \
+                             .alternate_func = GPIO_AF7_USART3}
+
+#define UART3_PP2_HW_INFO  {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,     \
+                             .usart = USART3,                                \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOCEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOCEN,    \
+                             .port_tx = GPIOC,                               \
+                             .port_rx = GPIOC,                               \
+                             .pin_tx = GPIO_PIN_10,                          \
+                             .pin_rx = GPIO_PIN_11,                          \
+                             .alternate_func = GPIO_AF7_USART3}
+
+#define UART3_PP3_HW_INFO  {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,     \
+                             .usart = USART3,                                \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIODEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIODEN,    \
+                             .port_tx = GPIOD,                               \
+                             .port_rx = GPIOD,                               \
+                             .pin_tx = GPIO_PIN_8,                           \
+                             .pin_rx = GPIO_PIN_9,                           \
+                             .alternate_func = GPIO_AF7_USART3}
+
+#define UART4_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_UART4EN,      \
+                             .usart = UART4,                                 \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOAEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOAEN,    \
+                             .port_tx = GPIOA,                               \
+                             .port_rx = GPIOA,                               \
+                             .pin_tx = GPIO_PIN_0,                           \
+                             .pin_rx = GPIO_PIN_1,                           \
+                             .alternate_func = GPIO_AF8_UART4}
+
+#define UART4_PP2_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_UART4EN,      \
+                             .usart = UART4,                                 \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOCEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOCEN,    \
+                             .port_tx = GPIOC,                               \
+                             .port_rx = GPIOC,                               \
+                             .pin_tx = GPIO_PIN_10,                          \
+                             .pin_rx = GPIO_PIN_11,                          \
+                             .alternate_func = GPIO_AF8_UART4}
+         
+#define UART5_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_UART5EN,      \
+                             .usart = UART5,                                 \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOCEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIODEN,    \
+                             .port_tx = GPIOC,                               \
+                             .port_rx = GPIOD,                               \
+                             .pin_tx = GPIO_PIN_12,                          \
+                             .pin_rx = GPIO_PIN_2,                           \
+                             .alternate_func = GPIO_AF8_UART5}
+
+#define UART6_PP1_HW_INFO  {.rcc_apbenr_usarten = RCC_APB2ENR_USART6EN,     \
+                             .usart = USART6,                                \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOCEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOCEN,    \
+                             .port_tx = GPIOC,                               \
+                             .port_rx = GPIOC,                               \
+                             .pin_tx = GPIO_PIN_6,                           \
+                             .pin_rx = GPIO_PIN_7,                           \
+                             .alternate_func = GPIO_AF8_USART6}
+
+#define UART6_PP2_HW_INFO  {.rcc_apbenr_usarten = RCC_APB2ENR_USART6EN,     \
+                             .usart = USART6,                                \
+                             .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOGEN,    \
+                             .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOGEN,    \
+                             .port_tx = GPIOG,                               \
+                             .port_rx = GPIOG,                               \
+                             .pin_tx = GPIO_PIN_14,                          \
+                             .pin_rx = GPIO_PIN_9,                           \
+                             .alternate_func = GPIO_AF8_USART6}
+
+typedef struct {
+	uint32_t rcc_apbenr_usarten;
+    USART_TypeDef *usart;
+	uint32_t rcc_ahbenr_gpioen_tx;
+	uint32_t rcc_ahbenr_gpioen_rx;
+	GPIO_TypeDef *port_tx;
+	GPIO_TypeDef *port_rx;
+	uint16_t pin_tx;
+	uint16_t pin_rx;
+	uint8_t alternate_func;
+} uart_hw_info_t;
+
 
 typedef enum {
 	USART_PARAM_MAPPING_RCC_AHB1ENR_GPIOAEN_TX,
@@ -26,57 +158,30 @@ typedef enum {
 } usart_param_mapping_index_t;
 
 typedef struct uart {
-    usart_num_t         uart_num;
-    usart_pins_pack_t   uart_pins_pack;
-    UART_HandleTypeDef  hal_handle;
+    uart_num_t         uart_num;
+    uart_pins_pack_t   uart_pins_pack;
+    uart_hw_info_t     hw_info;
+    UART_HandleTypeDef hal_handle;
 } uart_t;
 
-uint32_t USART_PARAM_MAPPING_PP1[USART_NUM_MAX][USART_PARAM_MAPPING_INDEX_MAX] = {
-    {RCC_AHB1ENR_GPIOAEN, RCC_AHB1ENR_GPIOAEN, GPIO_PIN_9 , GPIO_PIN_10, GPIO_AF7_USART1, (uint32_t)GPIOA, (uint32_t)GPIOA},
-    {RCC_AHB1ENR_GPIOAEN, RCC_AHB1ENR_GPIOAEN, GPIO_PIN_2 , GPIO_PIN_3 , GPIO_AF7_USART2, (uint32_t)GPIOA, (uint32_t)GPIOA},
-    {RCC_AHB1ENR_GPIOBEN, RCC_AHB1ENR_GPIOBEN, GPIO_PIN_10, GPIO_PIN_11, GPIO_AF7_USART3, (uint32_t)GPIOB, (uint32_t)GPIOB},
-    {RCC_AHB1ENR_GPIOAEN, RCC_AHB1ENR_GPIOAEN, GPIO_PIN_0 , GPIO_PIN_1 , GPIO_AF8_UART4 , (uint32_t)GPIOA, (uint32_t)GPIOA},
-    {RCC_AHB1ENR_GPIOCEN, RCC_AHB1ENR_GPIODEN, GPIO_PIN_12, GPIO_PIN_2 , GPIO_AF8_UART5 , (uint32_t)GPIOC, (uint32_t)GPIOD},
-    {RCC_AHB1ENR_GPIOCEN, RCC_AHB1ENR_GPIOCEN, GPIO_PIN_6 , GPIO_PIN_7 , GPIO_AF8_USART6, (uint32_t)GPIOC, (uint32_t)GPIOC}
+
+uart_hw_info_t UART_HW_INFO_MAPPING[UART_NUM_MAX][UART_PINS_PACK_MAX] = {
+    {UART1_PP1_HW_INFO, UART1_PP2_HW_INFO,                  0},
+    {UART2_PP1_HW_INFO, UART2_PP2_HW_INFO,                  0},
+    {UART3_PP1_HW_INFO, UART3_PP2_HW_INFO, UART3_PP3_HW_INFO},
+    { UART4_PP1_HW_INFO,  UART4_PP2_HW_INFO,                  0},
+    { UART5_PP1_HW_INFO,                  0,                  0},
+    {UART6_PP1_HW_INFO, UART6_PP2_HW_INFO,                  0}
 };
 
-uint32_t USART_PARAM_MAPPING_PP2[USART_NUM_MAX][USART_PARAM_MAPPING_INDEX_MAX] = {
-    {RCC_AHB1ENR_GPIOBEN, RCC_AHB1ENR_GPIOBEN, GPIO_PIN_6 , GPIO_PIN_7 , GPIO_AF7_USART1, (uint32_t)GPIOB, (uint32_t)GPIOB},
-    {RCC_AHB1ENR_GPIODEN, RCC_AHB1ENR_GPIODEN, GPIO_PIN_5 , GPIO_PIN_6 , GPIO_AF7_USART2, (uint32_t)GPIOD, (uint32_t)GPIOD},
-    {RCC_AHB1ENR_GPIOCEN, RCC_AHB1ENR_GPIOCEN, GPIO_PIN_10, GPIO_PIN_11, GPIO_AF7_USART3, (uint32_t)GPIOC, (uint32_t)GPIOC},
-    {RCC_AHB1ENR_GPIOCEN, RCC_AHB1ENR_GPIOCEN, GPIO_PIN_10, GPIO_PIN_11, GPIO_AF8_UART4 , (uint32_t)GPIOC, (uint32_t)GPIOC},
-    {                  0,                   0,           0,           0,               0,               0,               0},
-    {                  0,                   0,           0,           0,               0,               0,               0}
-};
+static uart_hw_info_t uart_get_hw_info(uart_num_t uart_num, uart_pins_pack_t uart_pins_pack)
+{
+    uart_hw_info_t hw_info;
+    hw_info = UART_HW_INFO_MAPPING[uart_num][uart_pins_pack];
+    return hw_info;
+}
 
-uint32_t USART_PARAM_MAPPING_PP3[USART_NUM_MAX][USART_PARAM_MAPPING_INDEX_MAX] = {
-    {                  0,                   0,           0,           0,               0,               0,               0},
-    {                  0,                   0,           0,           0,               0,               0,               0},
-    {RCC_AHB1ENR_GPIODEN, RCC_AHB1ENR_GPIODEN, GPIO_PIN_8 , GPIO_PIN_9 , GPIO_AF7_USART3, (uint32_t)GPIOD, (uint32_t)GPIOD},
-    {                  0,                   0,           0,           0,               0,               0,               0},
-    {                  0,                   0,           0,           0,               0,               0,               0},
-    {                  0,                   0,           0,           0,               0,               0,               0}
-};
-
-uint32_t RCC_APBxENR_USARTxEN_MAPPING[USART_NUM_MAX] ={
-	RCC_APB2ENR_USART1EN,
-	RCC_APB1ENR_USART2EN,
-	RCC_APB1ENR_USART3EN,
-	RCC_APB1ENR_UART4EN,
-	RCC_APB1ENR_UART5EN,
-	RCC_APB2ENR_USART6EN
-};
-
-USART_TypeDef *USARTx_MAPPING[USART_NUM_MAX] = {
-	USART1,
-	USART2,
-	USART3,
-	UART4,
-	UART5,
-	USART6
-};
-
-int uart_cleanup(uart_handle_t handle)
+static int uart_cleanup(uart_handle_t handle)
 {
 	free(handle);
 
@@ -92,81 +197,37 @@ uart_handle_t uart_init(uart_config_t *config)
 	{
 		return -1;
 	}
+    handle->hw_info = uart_get_hw_info(config->uart_num, config->uart_pins_pack);
 
 	int err;
 
-	uint32_t RCC_APBxENR_USARTxEN;
-	USART_TypeDef *USARTx;
-	uint32_t RCC_APB1ENR_GPIOxEN_TX;
-	uint32_t RCC_APB1ENR_GPIOxEN_RX;
-	uint16_t GPIO_PIN_x_TX;
-	uint16_t GPIO_PIN_x_RX;
-	uint8_t GPIO_AFx_USARTx;
-	GPIO_TypeDef *GPIOx_TX;
-	GPIO_TypeDef *GPIOx_RX;
-
-	if(config->uart_pins_pack == USART_PINS_PACK_1)
-	{
-		RCC_APB1ENR_GPIOxEN_TX = (uint32_t)      USART_PARAM_MAPPING_PP1[config->uart_num][USART_PARAM_MAPPING_RCC_AHB1ENR_GPIOAEN_TX];
-		RCC_APB1ENR_GPIOxEN_RX = (uint32_t)      USART_PARAM_MAPPING_PP1[config->uart_num][USART_PARAM_MAPPING_RCC_AHB1ENR_GPIOAEN_RX];
-		GPIO_PIN_x_TX          = (uint16_t)      USART_PARAM_MAPPING_PP1[config->uart_num][USART_PARAM_MAPPING_GPIO_PIN_x_TX];
-		GPIO_PIN_x_RX          = (uint16_t)      USART_PARAM_MAPPING_PP1[config->uart_num][USART_PARAM_MAPPING_GPIO_PIN_x_RX];
-		GPIO_AFx_USARTx        = (uint8_t)       USART_PARAM_MAPPING_PP1[config->uart_num][USART_PARAM_MAPPING_GPIO_AFx_USARTx];
-		GPIOx_TX               = (GPIO_TypeDef *)USART_PARAM_MAPPING_PP1[config->uart_num][USART_PARAM_MAPPING_GPIOx_TX];
-		GPIOx_RX               = (GPIO_TypeDef *)USART_PARAM_MAPPING_PP1[config->uart_num][USART_PARAM_MAPPING_GPIOx_RX];
-	}
-	if(config->uart_pins_pack == USART_PINS_PACK_2)
-	{
-		RCC_APB1ENR_GPIOxEN_TX = (uint32_t)      USART_PARAM_MAPPING_PP2[config->uart_num][USART_PARAM_MAPPING_RCC_AHB1ENR_GPIOAEN_TX];
-		RCC_APB1ENR_GPIOxEN_RX = (uint32_t)      USART_PARAM_MAPPING_PP2[config->uart_num][USART_PARAM_MAPPING_RCC_AHB1ENR_GPIOAEN_RX];
-		GPIO_PIN_x_TX          = (uint16_t)      USART_PARAM_MAPPING_PP2[config->uart_num][USART_PARAM_MAPPING_GPIO_PIN_x_TX];
-		GPIO_PIN_x_RX          = (uint16_t)      USART_PARAM_MAPPING_PP2[config->uart_num][USART_PARAM_MAPPING_GPIO_PIN_x_RX];
-		GPIO_AFx_USARTx        = (uint8_t)       USART_PARAM_MAPPING_PP2[config->uart_num][USART_PARAM_MAPPING_GPIO_AFx_USARTx];
-		GPIOx_TX               = (GPIO_TypeDef *)USART_PARAM_MAPPING_PP2[config->uart_num][USART_PARAM_MAPPING_GPIOx_TX];
-		GPIOx_RX               = (GPIO_TypeDef *)USART_PARAM_MAPPING_PP2[config->uart_num][USART_PARAM_MAPPING_GPIOx_RX];
-	}
-	if(config->uart_pins_pack == USART_PINS_PACK_2)
-	{
-		RCC_APB1ENR_GPIOxEN_TX = (uint32_t)      USART_PARAM_MAPPING_PP3[config->uart_num][USART_PARAM_MAPPING_RCC_AHB1ENR_GPIOAEN_TX];
-		RCC_APB1ENR_GPIOxEN_RX = (uint32_t)      USART_PARAM_MAPPING_PP3[config->uart_num][USART_PARAM_MAPPING_RCC_AHB1ENR_GPIOAEN_RX];
-		GPIO_PIN_x_TX          = (uint16_t)      USART_PARAM_MAPPING_PP3[config->uart_num][USART_PARAM_MAPPING_GPIO_PIN_x_TX];
-		GPIO_PIN_x_RX          = (uint16_t)      USART_PARAM_MAPPING_PP3[config->uart_num][USART_PARAM_MAPPING_GPIO_PIN_x_RX];
-		GPIO_AFx_USARTx        = (uint8_t)       USART_PARAM_MAPPING_PP3[config->uart_num][USART_PARAM_MAPPING_GPIO_AFx_USARTx];
-		GPIOx_TX               = (GPIO_TypeDef *)USART_PARAM_MAPPING_PP3[config->uart_num][USART_PARAM_MAPPING_GPIOx_TX];
-		GPIOx_RX               = (GPIO_TypeDef *)USART_PARAM_MAPPING_PP3[config->uart_num][USART_PARAM_MAPPING_GPIOx_RX];
-	}
-
-	RCC_APBxENR_USARTxEN = RCC_APBxENR_USARTxEN_MAPPING[config->uart_num];
-	USARTx = USARTx_MAPPING[config->uart_num];
-
 	do {
 		__IO uint32_t tmpreg = 0x00U;
-		if ((config->uart_num == USART_NUM_1) || (config->uart_num == USART_NUM_6)) {
-			SET_BIT(RCC->APB2ENR, RCC_APBxENR_USARTxEN);
-			tmpreg = READ_BIT(RCC->APB2ENR, RCC_APBxENR_USARTxEN);
+		if ((config->uart_num == UART_NUM_1) || (config->uart_num == UART_NUM_6)) {
+			SET_BIT(RCC->APB2ENR, handle->hw_info.rcc_apbenr_usarten);
+			tmpreg = READ_BIT(RCC->APB2ENR, handle->hw_info.rcc_apbenr_usarten);
 		}
 		else {
-			SET_BIT(RCC->APB1ENR, RCC_APBxENR_USARTxEN);
-			tmpreg = READ_BIT(RCC->APB1ENR, RCC_APBxENR_USARTxEN);
+			SET_BIT(RCC->APB1ENR, handle->hw_info.rcc_apbenr_usarten);
+			tmpreg = READ_BIT(RCC->APB1ENR, handle->hw_info.rcc_apbenr_usarten);
 		}
 		UNUSED(tmpreg);
 	} while (0U);
 
 	do {
 		__IO uint32_t tmpreg = 0x00U;
-		SET_BIT(RCC->AHB1ENR,  RCC_APB1ENR_GPIOxEN_TX);
-		tmpreg = READ_BIT(RCC->AHB1ENR, RCC_APB1ENR_GPIOxEN_TX);
+		SET_BIT(RCC->AHB1ENR,  handle->hw_info.rcc_ahbenr_gpioen_tx);
+		tmpreg = READ_BIT(RCC->AHB1ENR, handle->hw_info.rcc_ahbenr_gpioen_tx);
 		UNUSED(tmpreg);
 	} while (0U);
 	do {
 		__IO uint32_t tmpreg = 0x00U;
-		SET_BIT(RCC->AHB1ENR, RCC_APB1ENR_GPIOxEN_RX);
-		tmpreg = READ_BIT(RCC->AHB1ENR, RCC_APB1ENR_GPIOxEN_RX);
+		SET_BIT(RCC->AHB1ENR, handle->hw_info.rcc_ahbenr_gpioen_rx);
+		tmpreg = READ_BIT(RCC->AHB1ENR, handle->hw_info.rcc_ahbenr_gpioen_rx);
 		UNUSED(tmpreg);
 	} while (0U);
 
-
-	handle->hal_handle.Instance = USARTx;
+	handle->hal_handle.Instance = handle->hw_info.usart;
 	handle->hal_handle.Init.BaudRate = config->baudrate;
 	handle->hal_handle.Init.WordLength = UART_WORDLENGTH_DEFAULT;
 	handle->hal_handle.Init.StopBits = UART_STOPBITS_DEFAULT;
@@ -182,19 +243,19 @@ uart_handle_t uart_init(uart_config_t *config)
 	}
 
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	GPIO_InitStruct.Pin = GPIO_PIN_x_TX;
+	GPIO_InitStruct.Pin = handle->hw_info.pin_tx;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	GPIO_InitStruct.Alternate = GPIO_AFx_USARTx;
-	HAL_GPIO_Init(GPIOx_TX, &GPIO_InitStruct);
+	GPIO_InitStruct.Alternate = handle->hw_info.alternate_func;
+	HAL_GPIO_Init(handle->hw_info.port_tx, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = GPIO_PIN_x_RX;
+	GPIO_InitStruct.Pin = handle->hw_info.pin_rx;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	GPIO_InitStruct.Alternate = GPIO_AFx_USARTx;
-	HAL_GPIO_Init(GPIOx_RX, &GPIO_InitStruct);
+	GPIO_InitStruct.Alternate = handle->hw_info.alternate_func;
+	HAL_GPIO_Init(handle->hw_info.port_rx, &GPIO_InitStruct);
 
 	handle->uart_num = config->uart_num;
 	handle->uart_pins_pack = config->uart_pins_pack;
@@ -204,13 +265,22 @@ uart_handle_t uart_init(uart_config_t *config)
 
 int uart_write_bytes(uart_handle_t handle, uint8_t *data, uint16_t length, uint32_t timeout_ms)
 {
-	HAL_UART_Transmit(&handle->hal_handle,data, 7, 100);
+    if(data == NULL || handle == NULL)
+    {
+        return -1;
+    }
 
+	HAL_UART_Transmit(&handle->hal_handle,data, 7, 100);
 	return 0;
 }
 
 int uart_read_bytes(uart_handle_t handle, uint8_t *buf, uint16_t length, uint32_t timeout_ms)
 {
+    if(buf == NULL || length == 0)
+    {
+        return -1;
+    }
+    
 	return HAL_UART_Receive(&handle->hal_handle, buf, length, timeout_ms);
 }
 

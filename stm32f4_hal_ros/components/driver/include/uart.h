@@ -30,26 +30,26 @@ extern "C" {
 typedef struct uart *uart_handle_t;
 
 typedef enum {
-    USART_NUM_1 = 0,
-    USART_NUM_2,
-    USART_NUM_3,
+    UART_NUM_1 = 0,
+    UART_NUM_2,
+    UART_NUM_3,
     UART_NUM_4,
     UART_NUM_5,
-    USART_NUM_6,
-    USART_NUM_MAX
-} usart_num_t;
+    UART_NUM_6,
+    UART_NUM_MAX
+} uart_num_t;
 
 typedef enum {
-    USART_PINS_PACK_1 = 0,
-    USART_PINS_PACK_2,
-    USART_PINS_PACK_3,
-    USART_PINS_PACK_MAX
-} usart_pins_pack_t;
+    UART_PINS_PACK_1 = 0,
+    UART_PINS_PACK_2,
+    UART_PINS_PACK_3,
+    UART_PINS_PACK_MAX
+} uart_pins_pack_t;
 
 typedef struct {
-    usart_num_t         uart_num;
-    usart_pins_pack_t   uart_pins_pack;
-    uint32_t            baudrate;
+    uart_num_t         uart_num;
+    uart_pins_pack_t   uart_pins_pack;
+    uint32_t           baudrate;
 } uart_config_t;
 
 uart_handle_t uart_init(uart_config_t *config);

@@ -486,6 +486,7 @@
 								 	 .pin = GPIO_PIN_9, 						\
 								 	 .alternate_func = GPIO_AF9_TIM14}
 
+
 typedef struct {
 	uint32_t 		rcc_apbenr_timen;
 	uint32_t 		rcc_ahbenr_gpioen;
@@ -514,8 +515,6 @@ typedef enum {
 } timer_param_mapping_t;
 
 
-
-
 uint32_t TIM_CHANNEL_x_MAPPING[TIMER_CHANNEL_MAX] = {
 	TIM_CHANNEL_1,
 	TIM_CHANNEL_2,
@@ -541,52 +540,52 @@ uint32_t APBx_CLOCK_MAPPING[TIMER_NUM_MAX] = {
 };
 
 tim_pwm_hw_info_t TIM_PWM_HW_INFO_MAPPING[TIMER_NUM_MAX][TIMER_CHANNEL_MAX][TIMER_PINS_PACK_MAX] = {
-	{	{TIM1_PWM_CH1_PP1_HW_INFO, TIM1_PWM_CH1_PP2_HW_INFO,                        0},
-		{TIM1_PWM_CH2_PP1_HW_INFO, TIM1_PWM_CH2_PP2_HW_INFO,                        0},
-		{TIM1_PWM_CH3_PP1_HW_INFO, TIM1_PWM_CH3_PP2_HW_INFO,                        0},
-		{TIM1_PWM_CH4_PP1_HW_INFO, TIM1_PWM_CH4_PP2_HW_INFO,                        0}
+	{	{TIM1_PWM_CH1_PP1_HW_INFO , TIM1_PWM_CH1_PP2_HW_INFO ,                        0},
+		{TIM1_PWM_CH2_PP1_HW_INFO , TIM1_PWM_CH2_PP2_HW_INFO ,                        0},
+		{TIM1_PWM_CH3_PP1_HW_INFO , TIM1_PWM_CH3_PP2_HW_INFO ,                        0},
+		{TIM1_PWM_CH4_PP1_HW_INFO , TIM1_PWM_CH4_PP2_HW_INFO ,                        0}
 	},
 
-	{	{TIM2_PWM_CH1_PP1_HW_INFO, TIM2_PWM_CH1_PP2_HW_INFO, TIM2_PWM_CH1_PP3_HW_INFO},
-		{TIM2_PWM_CH2_PP1_HW_INFO, TIM2_PWM_CH2_PP2_HW_INFO,                        0},
-		{TIM2_PWM_CH3_PP1_HW_INFO, TIM2_PWM_CH3_PP2_HW_INFO,                        0},
-		{TIM2_PWM_CH4_PP1_HW_INFO, TIM2_PWM_CH4_PP2_HW_INFO,                        0}
+	{	{TIM2_PWM_CH1_PP1_HW_INFO , TIM2_PWM_CH1_PP2_HW_INFO , TIM2_PWM_CH1_PP3_HW_INFO},
+		{TIM2_PWM_CH2_PP1_HW_INFO , TIM2_PWM_CH2_PP2_HW_INFO ,                        0},
+		{TIM2_PWM_CH3_PP1_HW_INFO , TIM2_PWM_CH3_PP2_HW_INFO ,                        0},
+		{TIM2_PWM_CH4_PP1_HW_INFO , TIM2_PWM_CH4_PP2_HW_INFO ,                        0}
 	},
 
-	{	{TIM3_PWM_CH1_PP1_HW_INFO, TIM3_PWM_CH1_PP2_HW_INFO, TIM3_PWM_CH1_PP3_HW_INFO},
-		{TIM3_PWM_CH2_PP1_HW_INFO, TIM3_PWM_CH2_PP2_HW_INFO, TIM3_PWM_CH2_PP3_HW_INFO},
-		{TIM3_PWM_CH3_PP1_HW_INFO, TIM3_PWM_CH3_PP2_HW_INFO,                        0},
-		{TIM3_PWM_CH4_PP1_HW_INFO, TIM3_PWM_CH4_PP2_HW_INFO,                        0}
+	{	{TIM3_PWM_CH1_PP1_HW_INFO , TIM3_PWM_CH1_PP2_HW_INFO , TIM3_PWM_CH1_PP3_HW_INFO},
+		{TIM3_PWM_CH2_PP1_HW_INFO , TIM3_PWM_CH2_PP2_HW_INFO , TIM3_PWM_CH2_PP3_HW_INFO},
+		{TIM3_PWM_CH3_PP1_HW_INFO , TIM3_PWM_CH3_PP2_HW_INFO ,                        0},
+		{TIM3_PWM_CH4_PP1_HW_INFO , TIM3_PWM_CH4_PP2_HW_INFO ,                        0}
 	},
 
-	{	{TIM4_PWM_CH1_PP1_HW_INFO, TIM4_PWM_CH1_PP2_HW_INFO,                        0},
-		{TIM4_PWM_CH2_PP1_HW_INFO, TIM4_PWM_CH2_PP2_HW_INFO,                        0 },
-		{TIM4_PWM_CH3_PP1_HW_INFO, TIM4_PWM_CH3_PP2_HW_INFO,                        0},
-		{TIM4_PWM_CH4_PP1_HW_INFO, TIM4_PWM_CH4_PP2_HW_INFO,                        0}
+	{	{TIM4_PWM_CH1_PP1_HW_INFO , TIM4_PWM_CH1_PP2_HW_INFO ,                        0},
+		{TIM4_PWM_CH2_PP1_HW_INFO , TIM4_PWM_CH2_PP2_HW_INFO ,                        0 },
+		{TIM4_PWM_CH3_PP1_HW_INFO , TIM4_PWM_CH3_PP2_HW_INFO ,                        0},
+		{TIM4_PWM_CH4_PP1_HW_INFO , TIM4_PWM_CH4_PP2_HW_INFO ,                        0}
 	},
 
-	{	{TIM5_PWM_CH1_PP1_HW_INFO, TIM5_PWM_CH1_PP2_HW_INFO,                        0},
-		{TIM5_PWM_CH2_PP1_HW_INFO, TIM5_PWM_CH2_PP2_HW_INFO,                        0},
-		{TIM5_PWM_CH3_PP1_HW_INFO, TIM5_PWM_CH3_PP2_HW_INFO,                        0},
-		{TIM5_PWM_CH4_PP1_HW_INFO, TIM5_PWM_CH4_PP2_HW_INFO,                        0}
+	{	{TIM5_PWM_CH1_PP1_HW_INFO , TIM5_PWM_CH1_PP2_HW_INFO ,                        0},
+		{TIM5_PWM_CH2_PP1_HW_INFO , TIM5_PWM_CH2_PP2_HW_INFO ,                        0},
+		{TIM5_PWM_CH3_PP1_HW_INFO , TIM5_PWM_CH3_PP2_HW_INFO ,                        0},
+		{TIM5_PWM_CH4_PP1_HW_INFO , TIM5_PWM_CH4_PP2_HW_INFO ,                        0}
 	},
 
-	{	{},
-		{},
-		{},
-		{}
+	{	{                        0,                         0,                        0},
+		{                        0,                         0,                        0},
+		{                        0,                         0,                        0},
+		{                        0,                         0,                        0}
 	},
 
-	{	{},
-		{},
-		{},
-		{}
+	{	{                        0,                         0,                        0},
+		{                        0,                         0,                        0},
+		{                        0,                         0,                        0},
+		{                        0,                         0,                        0}
 	},
 
-	{	{ TIM8_PWM_CH1_PP1_HW_INFO,  TIM8_PWM_CH1_PP2_HW_INFO,                        0},
-		{ TIM8_PWM_CH2_PP1_HW_INFO,  TIM8_PWM_CH2_PP2_HW_INFO,                        0},
-		{ TIM8_PWM_CH3_PP1_HW_INFO,  TIM8_PWM_CH3_PP2_HW_INFO,                        0},
-		{ TIM8_PWM_CH4_PP1_HW_INFO,  TIM8_PWM_CH4_PP2_HW_INFO,                        0}
+	{	{TIM8_PWM_CH1_PP1_HW_INFO , TIM8_PWM_CH1_PP2_HW_INFO ,                        0},
+		{TIM8_PWM_CH2_PP1_HW_INFO , TIM8_PWM_CH2_PP2_HW_INFO ,                        0},
+		{TIM8_PWM_CH3_PP1_HW_INFO , TIM8_PWM_CH3_PP2_HW_INFO ,                        0},
+		{TIM8_PWM_CH4_PP1_HW_INFO , TIM8_PWM_CH4_PP2_HW_INFO ,                        0}
 	},
 
 	{	{TIM9_PWM_CH1_PP1_HW_INFO , TIM9_PWM_CH1_PP2_HW_INFO ,                        0},
@@ -628,6 +627,7 @@ tim_pwm_hw_info_t TIM_PWM_HW_INFO_MAPPING[TIMER_NUM_MAX][TIMER_CHANNEL_MAX][TIME
 
 };
 
+
 static tim_pwm_hw_info_t tim_pwm_get_hw_info(timer_num_t timer_num, timer_channel_t timer_channel, timer_pins_pack_t timer_pins_pack)
 {
 	tim_pwm_hw_info_t hw_info;
@@ -641,6 +641,7 @@ static int pwm_cleanup(pwm_handle_t handle)
 
 	return 0;
 }
+
 
 pwm_handle_t pwm_init(pwm_config_t *config)
 {
@@ -659,7 +660,6 @@ pwm_handle_t pwm_init(pwm_config_t *config)
 		tmpreg = READ_BIT(RCC->AHB1ENR, handle->hw_info.rcc_ahbenr_gpioen);
 		UNUSED(tmpreg);
 	} while (0U);
-
 
 	do {
 		__IO uint32_t tmpreg = 0x00U;
@@ -776,6 +776,7 @@ int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz)
 	handle->pwm_freq_hz = freq_hz;
 	return 0;
 }
+
 int pwm_set_duty(pwm_handle_t handle, uint8_t duty_percent)
 {
 	uint32_t compare_value;

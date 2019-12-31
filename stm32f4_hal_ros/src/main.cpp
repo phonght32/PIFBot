@@ -33,7 +33,7 @@ int main(void)
   uart_config_t config;
   config.uart_num = UART_NUM_4;
   config.baudrate = 57600;
-  config.uart_pins_pack = USART_PINS_PACK_1;
+  config.uart_pins_pack = UART_PINS_PACK_1;
   uart_handle_t handle = uart_init(&config);
 
   huart4 = uart_get_hal_handle(handle);
