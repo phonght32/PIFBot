@@ -23,7 +23,7 @@
                              .pin_rx = GPIO_PIN_10,                          \
                              .alternate_func = GPIO_AF7_USART1}
 
-#define UART1_PP2_HW_INFO  {.rcc_apbenr_usarten = RCC_APB2ENR_USART1EN,      \
+#define UART1_PP2_HW_INFO   {.rcc_apbenr_usarten = RCC_APB2ENR_USART1EN,      \
                              .usart = USART1,                                \
                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOBEN,    \
                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOBEN,    \
@@ -33,7 +33,7 @@
                              .pin_rx = GPIO_PIN_7,                           \
                              .alternate_func = GPIO_AF7_USART1}
 
-#define UART2_PP1_HW_INFO  {.rcc_apbenr_usarten = RCC_APB1ENR_USART2EN,      \
+#define UART2_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_USART2EN,      \
                              .usart = USART2,                                \
                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOAEN,    \
                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOAEN,    \
@@ -43,7 +43,7 @@
                              .pin_rx = GPIO_PIN_3,                           \
                              .alternate_func = GPIO_AF7_USART2}
 
-#define UART2_PP2_HW_INFO  {.rcc_apbenr_usarten = RCC_APB1ENR_USART2EN,      \
+#define UART2_PP2_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_USART2EN,      \
                              .usart = USART2,                                \
                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIODEN,    \
                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIODEN,    \
@@ -53,7 +53,7 @@
                              .pin_rx = GPIO_PIN_6,                           \
                              .alternate_func = GPIO_AF7_USART2}
                                 
-#define UART3_PP1_HW_INFO  {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,      \
+#define UART3_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,      \
                              .usart = USART3,                                \
                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOBEN,    \
                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOBEN,    \
@@ -63,7 +63,7 @@
                              .pin_rx = GPIO_PIN_11,                          \
                              .alternate_func = GPIO_AF7_USART3}
 
-#define UART3_PP2_HW_INFO  {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,      \
+#define UART3_PP2_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,      \
                              .usart = USART3,                                \
                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOCEN,    \
                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOCEN,    \
@@ -73,7 +73,7 @@
                              .pin_rx = GPIO_PIN_11,                          \
                              .alternate_func = GPIO_AF7_USART3}
 
-#define UART3_PP3_HW_INFO  {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,      \
+#define UART3_PP3_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,      \
                              .usart = USART3,                                \
                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIODEN,    \
                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIODEN,    \
@@ -113,7 +113,7 @@
                              .pin_rx = GPIO_PIN_2,                           \
                              .alternate_func = GPIO_AF8_UART5}
 
-#define UART6_PP1_HW_INFO  {.rcc_apbenr_usarten = RCC_APB2ENR_USART6EN,      \
+#define UART6_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB2ENR_USART6EN,      \
                              .usart = USART6,                                \
                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOCEN,    \
                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOCEN,    \
@@ -123,7 +123,7 @@
                              .pin_rx = GPIO_PIN_7,                           \
                              .alternate_func = GPIO_AF8_USART6}
 
-#define UART6_PP2_HW_INFO  {.rcc_apbenr_usarten = RCC_APB2ENR_USART6EN,      \
+#define UART6_PP2_HW_INFO   {.rcc_apbenr_usarten = RCC_APB2ENR_USART6EN,      \
                              .usart = USART6,                                \
                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOGEN,    \
                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOGEN,    \
@@ -134,15 +134,15 @@
                              .alternate_func = GPIO_AF8_USART6}
 
 typedef struct {
-	uint32_t rcc_apbenr_usarten;
-    USART_TypeDef *usart;
-	uint32_t rcc_ahbenr_gpioen_tx;
-	uint32_t rcc_ahbenr_gpioen_rx;
-	GPIO_TypeDef *port_tx;
-	GPIO_TypeDef *port_rx;
-	uint16_t pin_tx;
-	uint16_t pin_rx;
-	uint8_t alternate_func;
+	uint32_t       rcc_apbenr_usarten;
+    USART_TypeDef  *usart;
+	uint32_t       rcc_ahbenr_gpioen_tx;
+	uint32_t       rcc_ahbenr_gpioen_rx;
+	GPIO_TypeDef   *port_tx;
+	GPIO_TypeDef   *port_rx;
+	uint16_t       pin_tx;
+	uint16_t       pin_rx;
+	uint8_t        alternate_func;
 } uart_hw_info_t;
 
 
@@ -178,6 +178,7 @@ static uart_hw_info_t uart_get_hw_info(uart_num_t uart_num, uart_pins_pack_t uar
 {
     uart_hw_info_t hw_info;
     hw_info = UART_HW_INFO_MAPPING[uart_num][uart_pins_pack];
+    
     return hw_info;
 }
 
@@ -280,7 +281,7 @@ int uart_read_bytes(uart_handle_t handle, uint8_t *buf, uint16_t length, uint32_
     {
         return -1;
     }
-    
+
 	return HAL_UART_Receive(&handle->hal_handle, buf, length, timeout_ms);
 }
 
