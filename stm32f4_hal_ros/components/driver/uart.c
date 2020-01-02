@@ -146,17 +146,6 @@ typedef struct {
 } uart_hw_info_t;
 
 
-typedef enum {
-	USART_PARAM_MAPPING_RCC_AHB1ENR_GPIOAEN_TX,
-	USART_PARAM_MAPPING_RCC_AHB1ENR_GPIOAEN_RX,
-	USART_PARAM_MAPPING_GPIO_PIN_x_TX,
-	USART_PARAM_MAPPING_GPIO_PIN_x_RX,
-	USART_PARAM_MAPPING_GPIO_AFx_USARTx,
-	USART_PARAM_MAPPING_GPIOx_TX,
-	USART_PARAM_MAPPING_GPIOx_RX,
-	USART_PARAM_MAPPING_INDEX_MAX
-} usart_param_mapping_index_t;
-
 typedef struct uart {
     uart_num_t         uart_num;
     uart_pins_pack_t   uart_pins_pack;
@@ -166,12 +155,12 @@ typedef struct uart {
 
 
 uart_hw_info_t UART_HW_INFO_MAPPING[UART_NUM_MAX][UART_PINS_PACK_MAX] = {
-    {UART1_PP1_HW_INFO, UART1_PP2_HW_INFO,                  0},
-    {UART2_PP1_HW_INFO, UART2_PP2_HW_INFO,                  0},
+    {UART1_PP1_HW_INFO, UART1_PP2_HW_INFO,                 0},
+    {UART2_PP1_HW_INFO, UART2_PP2_HW_INFO,                 0},
     {UART3_PP1_HW_INFO, UART3_PP2_HW_INFO, UART3_PP3_HW_INFO},
-    { UART4_PP1_HW_INFO,  UART4_PP2_HW_INFO,                  0},
-    { UART5_PP1_HW_INFO,                  0,                  0},
-    {UART6_PP1_HW_INFO, UART6_PP2_HW_INFO,                  0}
+    {UART4_PP1_HW_INFO, UART4_PP2_HW_INFO,                 0},
+    {UART5_PP1_HW_INFO,                 0,                 0},
+    {UART6_PP1_HW_INFO, UART6_PP2_HW_INFO,                 0}
 };
 
 static uart_hw_info_t uart_get_hw_info(uart_num_t uart_num, uart_pins_pack_t uart_pins_pack)
