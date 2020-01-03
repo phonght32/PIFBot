@@ -260,7 +260,7 @@ int uart_write_bytes(uart_handle_t handle, uint8_t *data, uint16_t length, uint3
         return -1;
     }
 
-	HAL_UART_Transmit(&handle->hal_handle,data, 7, timeout_ms);
+	HAL_UART_Transmit(&handle->hal_handle,data, length, timeout_ms);
 	return 0;
 }
 
@@ -334,7 +334,7 @@ int uart_dma_write(uart_handle_t handle, uint8_t *data, uint32_t length)
 	return 0;
 }
 
-UART_HandleTypeDef uart_get_hal_handle(uart_handle_t handle)
+UART_HandleTypeDef uart_get_UART_HandleTypeDef(uart_handle_t handle)
 {
 	return handle->hal_handle;
 }

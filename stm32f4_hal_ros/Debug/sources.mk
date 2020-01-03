@@ -49,6 +49,7 @@ Utilities/Components/ts3510 \
 Utilities/Components/wm8994 \
 Utilities/STM32F4-Discovery \
 components/driver \
+components/mpu6050 \
 src \
 startup \
 
