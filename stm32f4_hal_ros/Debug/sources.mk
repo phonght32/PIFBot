@@ -50,6 +50,7 @@ Utilities/Components/wm8994 \
 Utilities/STM32F4-Discovery \
 components/driver \
 components/mpu6050 \
+components/step_driver \
 src \
 startup \
 

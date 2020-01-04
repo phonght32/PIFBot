@@ -1,4 +1,5 @@
 src/main.o: ../src/main.cpp \
+ /home/phong/Documents/thesis/stm32f4_hal_ros/inc/main.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_conf.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -80,13 +81,18 @@ src/main.o: ../src/main.cpp \
  /home/phong/Documents/thesis/stm32f4_hal_ros/inc/stm32f4xx_it.h \
  /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/String.h \
  /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/UInt16.h \
+ ../src/../components/driver/include/timer.h \
+ ../src/../components/driver/include/i2c.h \
+ ../src/../components/driver/include/gpio.h \
  ../src/../components/driver/include/uart.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_dma.h \
- ../src/../components/driver/include/gpio.h \
- ../src/../components/driver/include/timer.h \
- ../src/../components/driver/include/i2c.h \
- ../src/../components/mpu6050/include/mpu6050.h
+ ../src/../components/mpu6050/include/mpu6050.h \
+ ../src/../components/step_driver/include/step_driver.h \
+ ../src/../components/step_driver/include/../../driver/include/timer.h \
+ ../src/../components/step_driver/include/../../driver/include/gpio.h
+
+/home/phong/Documents/thesis/stm32f4_hal_ros/inc/main.h:
 
 /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal.h:
 
@@ -250,16 +256,22 @@ src/main.o: ../src/main.cpp \
 
 /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/UInt16.h:
 
+../src/../components/driver/include/timer.h:
+
+../src/../components/driver/include/i2c.h:
+
+../src/../components/driver/include/gpio.h:
+
 ../src/../components/driver/include/uart.h:
 
 /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 
 /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_dma.h:
 
-../src/../components/driver/include/gpio.h:
-
-../src/../components/driver/include/timer.h:
-
-../src/../components/driver/include/i2c.h:
-
 ../src/../components/mpu6050/include/mpu6050.h:
+
+../src/../components/step_driver/include/step_driver.h:
+
+../src/../components/step_driver/include/../../driver/include/timer.h:
+
+../src/../components/step_driver/include/../../driver/include/gpio.h:

@@ -115,6 +115,7 @@
 "components/driver/timer.o"
 "components/driver/uart.o"
 "components/mpu6050/mpu6050.o"
+"components/step_driver/step_driver.o"
 "src/main.o"
 "src/stm32f4xx_hal_msp.o"
 "src/stm32f4xx_it.o"
