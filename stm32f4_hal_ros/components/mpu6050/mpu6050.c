@@ -5,6 +5,7 @@
 #include "string.h"
 
 #include "include/mpu6050.h"
+#include "include/MadgwickAHRS.h"
 
 /* SELF TEST REGISTERS */
 #define MPU6050_SELF_TEST_X         0x0D
@@ -158,8 +159,25 @@
 
 static float accelScalingFactor, gyroScalingFactor;
 
+static float accel_x_bias = 0.0;
+static float accel_y_bias = 0.0;
+static float accel_z_bias = 0.0;
+
+static float gyro_x_bias = 0.0;
+static float gyro_y_bias = 0.0;
+static float gyro_z_bias = 0.0;
+
+extern volatile float q0, q1, q2, q3;
 
 I2C_HandleTypeDef mpu6050_i2c_handle;
+
+typedef struct mpu6050 {
+    mpu6050_clksel_t        clksel;
+    mpu6050_dlpf_cfg_t      dlpf_cfg;
+    mpu6050_sleep_mode_t    sleep_mode;
+    mpu6050_fs_sel_t        fs_sel;
+    mpu6050_afs_sel_t       afs_sel;
+} mpu6050_t;
 
 static int mpu6050_write_reg(uint8_t reg_addr, uint8_t data)
 {
@@ -189,8 +207,20 @@ int mpu6050_i2c_config(I2C_HandleTypeDef *i2c_handle)
 	return 0;
 }
 
-int mpu6050_init(mpu6050_config_t *config)
+mpu6050_handle_t mpu6050_init(mpu6050_config_t *config)
 {
+	mpu6050_handle_t handle;
+	handle = calloc(1, sizeof(mpu6050_t));
+	if(handle == NULL)
+	{
+		return -1;
+	}
+
+	handle->afs_sel = config->afs_sel;
+	handle->clksel = config->clksel;
+	handle->dlpf_cfg = config->dlpf_cfg;
+	handle->fs_sel = config->fs_sel;
+	handle->sleep_mode = config->sleep_mode;
     uint8_t buffer = 0;
 
     mpu6050_write_reg(MPU6050_PWR_MGMT_1, 0x80);
@@ -258,7 +288,7 @@ int mpu6050_init(mpu6050_config_t *config)
             break;
     }
 
-    return 0;
+    return handle;
 }
 
 int mpu6050_get_accel_raw(mpu6050_raw_data_t *raw_data)
@@ -291,7 +321,7 @@ int mpu6050_get_gyro_raw(mpu6050_raw_data_t *raw_data)
     return 0;
 }
 
-int mpu6050_get_accel_scale(mpu6050_raw_data_t *scale_data)
+int mpu6050_get_accel_scale(mpu6050_scaled_data_t *scale_data)
 {
 	uint8_t buffer, accel_raw_data[6];
 	    mpu6050_read_reg(MPU6050_INT_STATUS, &buffer, 1);
@@ -306,7 +336,7 @@ int mpu6050_get_accel_scale(mpu6050_raw_data_t *scale_data)
 	    return 0;
 }
 
-int mpu6050_get_gyro_scale(mpu6050_raw_data_t *scale_data)
+int mpu6050_get_gyro_scale(mpu6050_scaled_data_t *scale_data)
 {
 	uint8_t buffer, gyro_raw_data[6];
 	    mpu6050_read_reg(MPU6050_INT_STATUS, &buffer, 1);
@@ -319,6 +349,45 @@ int mpu6050_get_gyro_scale(mpu6050_raw_data_t *scale_data)
 	    }
 
 	    return 0;
+}
+
+int mpu6050_get_accel_cali(mpu6050_cali_data_t *cali_data)
+{
+	mpu6050_scaled_data_t scale_data;
+	mpu6050_get_accel_scale(&scale_data);
+
+	cali_data->x_axis = scale_data.x_axis - accel_x_bias;
+	cali_data->y_axis = scale_data.y_axis - accel_y_bias;
+	cali_data->z_axis = scale_data.z_axis - accel_z_bias;
+
+	return 0;
+}
+
+int mpu6050_get_gyro_cali(mpu6050_cali_data_t *cali_data)
+{
+	mpu6050_scaled_data_t scale_data;
+	mpu6050_get_gyro_scale(&scale_data);
+
+	cali_data->x_axis = scale_data.x_axis - gyro_x_bias;
+	cali_data->y_axis = scale_data.y_axis - gyro_x_bias;
+	cali_data->z_axis = scale_data.z_axis - gyro_x_bias;
+
+	return 0;
+}
+
+int mpu6050_get_quat(mpu6050_quat_data_t *quat)
+{
+	mpu6050_cali_data_t accel_cali, gyro_cali;
+	mpu6050_get_accel_cali(&accel_cali);
+	mpu6050_get_gyro_cali(&gyro_cali);
+
+	MadgwickAHRSupdateIMU(gyro_cali.x_axis, gyro_cali.y_axis, gyro_cali.z_axis, accel_cali.x_axis, accel_cali.y_axis, accel_cali.z_axis);
+	quat->q0 = q0;
+	quat->q1 = q1;
+	quat->q2 = q2;
+	quat->q3 = q3;
+
+	return 0;
 }
 
 

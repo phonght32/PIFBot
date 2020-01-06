@@ -1,5 +1,4 @@
 src/main.o: ../src/main.cpp \
- /home/phong/Documents/thesis/stm32f4_hal_ros/inc/main.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_conf.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -62,6 +61,9 @@ src/main.o: ../src/main.cpp \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_hcd.h \
+ /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
+ /home/phong/Documents/thesis/stm32f4_hal_ros/inc/main.h \
+ ../src/../robot/include/robot_core_config.h \
  /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/ros.h \
  /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/ros/node_handle.h \
  /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/Time.h \
@@ -79,8 +81,30 @@ src/main.o: ../src/main.cpp \
  /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/STM32Hardware.h \
  /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/SerialClass.h \
  /home/phong/Documents/thesis/stm32f4_hal_ros/inc/stm32f4xx_it.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/Bool.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/Empty.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/Int32.h \
  /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/String.h \
  /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/UInt16.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/sensor_msgs/Imu.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/Header.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Quaternion.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Vector3.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/sensor_msgs/JointState.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/sensor_msgs/BatteryState.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/sensor_msgs/MagneticField.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Twist.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/tf/tf.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/TransformStamped.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Transform.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/tf/transform_broadcaster.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/tf/tfMessage.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/nav_msgs/Odometry.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/PoseWithCovariance.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Pose.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Point.h \
+ /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/TwistWithCovariance.h \
+ /home/phong/Documents/thesis/stm32f4_hal_ros/robot/include/robot_model_param.h \
  ../src/../components/driver/include/timer.h \
  ../src/../components/driver/include/i2c.h \
  ../src/../components/driver/include/gpio.h \
@@ -91,8 +115,6 @@ src/main.o: ../src/main.cpp \
  ../src/../components/step_driver/include/step_driver.h \
  ../src/../components/step_driver/include/../../driver/include/timer.h \
  ../src/../components/step_driver/include/../../driver/include/gpio.h
-
-/home/phong/Documents/thesis/stm32f4_hal_ros/inc/main.h:
 
 /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal.h:
 
@@ -218,6 +240,12 @@ src/main.o: ../src/main.cpp \
 
 /home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_hcd.h:
 
+/home/phong/Documents/thesis/stm32f4_hal_ros/HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
+
+/home/phong/Documents/thesis/stm32f4_hal_ros/inc/main.h:
+
+../src/../robot/include/robot_core_config.h:
+
 /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/ros.h:
 
 /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/ros/node_handle.h:
@@ -252,9 +280,53 @@ src/main.o: ../src/main.cpp \
 
 /home/phong/Documents/thesis/stm32f4_hal_ros/inc/stm32f4xx_it.h:
 
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/Bool.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/Empty.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/Int32.h:
+
 /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/String.h:
 
 /home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/UInt16.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/sensor_msgs/Imu.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/std_msgs/Header.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Quaternion.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Vector3.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/sensor_msgs/JointState.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/sensor_msgs/BatteryState.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/sensor_msgs/MagneticField.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Twist.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/tf/tf.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/TransformStamped.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Transform.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/tf/transform_broadcaster.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/tf/tfMessage.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/nav_msgs/Odometry.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/PoseWithCovariance.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Pose.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/Point.h:
+
+/home/phong/Documents/workspace/workspace_sw4stm32/stm32f4_hal_ros/ros_lib/geometry_msgs/TwistWithCovariance.h:
+
+/home/phong/Documents/thesis/stm32f4_hal_ros/robot/include/robot_model_param.h:
 
 ../src/../components/driver/include/timer.h:
 

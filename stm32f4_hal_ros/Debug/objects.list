@@ -114,6 +114,7 @@
 "components/driver/i2c.o"
 "components/driver/timer.o"
 "components/driver/uart.o"
+"components/mpu6050/MadgwickAHRS.o"
 "components/mpu6050/mpu6050.o"
 "components/step_driver/step_driver.o"
 "src/main.o"

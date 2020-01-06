@@ -75,6 +75,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/components/mpu6050/include}&quot;"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_hal_ros/components/mpu6050/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/components/step_driver/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/robot/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/ros_lib}&quot;"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.957449416" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.23619802" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -122,6 +124,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/components/mpu6050/include}&quot;"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_hal_ros/components/mpu6050/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/components/step_driver/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/robot/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/ros_lib}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1517759493" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32"/>
@@ -189,6 +193,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/components/driver/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/components/mpu6050/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/components/step_driver/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/robot/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_hal_ros/ros_lib}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.133056671" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1706330084" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -201,6 +207,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="components/driver"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="components/mpu6050"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="components/step_driver"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="robot"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup"/>
 					</sourceEntries>
