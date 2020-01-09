@@ -144,6 +144,7 @@
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.s.1516708891" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.s"/>
 							</tool>
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.c.linker.1521990870" name="MCU GCC Linker" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.linker">
+								<option id="fr.ac6.managedbuild.tool.gnu.cross.c.linker.script.1218724268" name="Linker Script (-T)" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.linker.script" value="/home/phong/Documents/thesis/stm32f4_ros/LinkerScript.ld" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1242895968" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -193,11 +194,11 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Utilities/Components/ampire640480&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Utilities/Components/lsm303dlhc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/core&quot;"/>
-									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/ros_lib"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/driver/include"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/mpu6050/include"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/step_driver/include"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/robot/include"/>
+									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/ros_lib"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.790468759" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1431855379" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>

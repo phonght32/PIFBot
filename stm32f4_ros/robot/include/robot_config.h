@@ -22,6 +22,13 @@
 
 #include <robot_model_param.h>
 
+#define CONTROL_MOTOR_TIME_INDEX				0
+#define CMD_VEL_PUBLISH_TIME_INDEX				1
+#define DRIVE_INFORMATION_PUBLISH_TIME_INDEX	2
+#define IMU_PUBLISH_TIME_INDEX					3
+#define CONTROL_MOTOR_TIMEOUT_TIME_INDEX		6
+
+
 #define CONTROL_MOTOR_SPEED_FREQUENCY          30   //hz
 #define CONTROL_MOTOR_TIMEOUT                  500  //ms
 #define IMU_PUBLISH_FREQUENCY                  200  //hz
@@ -152,10 +159,9 @@ double  last_velocity[WHEEL_NUM]  = {0.0, 0.0};
 * Declaration for controllers
 *******************************************************************************/
 float zero_velocity[WHEEL_NUM] = {0.0, 0.0};
-float goal_velocity[WHEEL_NUM] = {0.0, 0.0};
-float goal_velocity_from_button[WHEEL_NUM] = {0.0, 0.0};
-float goal_velocity_from_cmd[WHEEL_NUM] = {0.0, 0.0};
-float goal_velocity_from_motor[WHEEL_NUM] = {0.0, 0.0};
+float goal_velocity[WHEEL_NUM] = {0.0, 0.0};			//vel control to motor
+float goal_velocity_from_cmd[WHEEL_NUM] = {0.0, 0.0};	//vel from "cmd_vel" topic
+float goal_velocity_from_motor[WHEEL_NUM] = {0.0, 0.0};	//vel from motor read by encoder
 
 /*******************************************************************************
 * Declaration for SLAM and navigation

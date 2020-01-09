@@ -1,5 +1,6 @@
 /******************************** Include *********************************** */
 
+#include "../robot/include/robot_config.h"
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_rcc.h"
 #include "main.h"
@@ -8,8 +9,6 @@
 #include "math.h"
 #include "string.h"
 
-#include "../robot/include/robot_core_config.h"
-
 #include "../components/driver/include/timer.h"
 #include "../components/driver/include/i2c.h"
 #include "../components/driver/include/gpio.h"
@@ -17,10 +16,12 @@
 #include "../components/mpu6050/include/mpu6050.h"
 #include "../components/step_driver/include/step_driver.h"
 
+
+
 /*************************** ***** Define *********************************** */
 
-#define MOTOR_LEFT_FORWARD(_handle_)	step_driver_set_dir(_handle_, 1);
-#define MOTOR_LEFT_BACKWARD(_handle_)	step_driver_set_dir(_handle_, 0);
+#define MOTOR_LEFT_FORWARD(_handle_)	step_driver_set_dir(_handle_, 0);
+#define MOTOR_LEFT_BACKWARD(_handle_)	step_driver_set_dir(_handle_, 1);
 #define MOTOR_RIGHT_FORWARD(_handle_)	step_driver_set_dir(_handle_, 1);
 #define MOTOR_RIGHT_BACKWARD(_handle_)	step_driver_set_dir(_handle_, 0);
 
@@ -53,19 +54,19 @@ void ros_setup(void);
 void initIMU(void);
 void calibrationGyro(void);
 void getOrientation(float *orientation);
-int constrain(int x, int a, int b);
+float constrain(float x, float low_val, float high_val);
+void controlMotor(float *goal_vel);
+void getMotorSpeed(float *vel);
 
 uint32_t tickcount_ms;
 uint32_t millis(void);
-void led_cb( const std_msgs::UInt16& cmd_msg)
-{
 
-}
-ros::Subscriber<std_msgs::UInt16> sub("led", led_cb);
+
 
 std_msgs::String str_msg;
 ros::Publisher chatter("chatter", &str_msg);
 
+ros::Time time_ros;
 
 int main(void)
 {
@@ -84,55 +85,60 @@ int main(void)
     timer_interval_init();
     HAL_TIM_Base_Start_IT(&htim5);
 
-//        ros_setup();
+    ros_setup();
 
-    // OK
-    nh.initNode();
-    nh.subscribe(sub);
-    nh.subscribe(cmd_vel_sub);
-    nh.subscribe(reset_sub);
-    nh.advertise(chatter);
-    const char * hello = "Hello Phong!!";
-    int chatter_interval = 1000.0 / 2;
-    int chatter_last = HAL_GetTick();
-//    nh.advertise(imu_pub);
+    step_driver_set_freq(motor_left,3200);
+    step_driver_set_freq(motor_right,3200);
+    MOTOR_LEFT_FORWARD(motor_left);
+    MOTOR_RIGHT_FORWARD(motor_right);
 
-//    	nh.advertise(imu_pub);
-//    	nh.advertise(cmd_vel_motor_pub);
-//    	nh.advertise(odom_pub);
-//    	nh.advertise(joint_states_pub);
-//    	nh.advertise(battery_state_pub);
 
     while (1)
     {
-  	  if (nh.connected())
-  	  {
-  		  if(HAL_GetTick() - chatter_last > chatter_interval)
-  		  {
-  			  str_msg.data = hello;
-  			  chatter.publish(&str_msg);
-  			  chatter_last = HAL_GetTick();
-  		  }
-  	  }
-  	  nh.spinOnce();
 
-////    	 uint32_t t = millis();
-////    	updateTime();
-////    	updateVariable(nh.connected());
-////    	updateTFPrefix(nh.connected());
+//    	uint32_t t = millis();
+//    	updateTime();
+//    	updateVariable(nh.connected());
+//    	updateTFPrefix(nh.connected());
 //
+//    	if((t-tTime[CONTROL_MOTOR_TIME_INDEX] >= 1000/CONTROL_MOTOR_SPEED_FREQUENCY))
+//    	{
+//    		updateGoalVelocity();
+//    		if((t-tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX]))
+//    		{
+//    			controlMotor(zero_velocity);
+//    		}
+//    		else
+//    		{
+//    			controlMotor(goal_velocity);
+//    		}
+//    		tTime[CONTROL_MOTOR_TIME_INDEX] = t;
+//    	}
 //
-//    	imu_msg =  getIMU();
-////    	imu_pub.publish(&imu_msg);
-////    	if ((t-tTime[3]) >= (1000 / IMU_PUBLISH_FREQUENCY))
-////    	  {
-////    	    publishImuMsg();
-////
-////    	    tTime[3] = t;
-////    	  }
-//    	HAL_Delay(10);
+//    	if ((t-tTime[CMD_VEL_PUBLISH_TIME_INDEX]) >= (1000 / CMD_VEL_PUBLISH_FREQUENCY))
+//    	{
+//    	    publishCmdVelFromMotorMsg();
+//    	    tTime[CMD_VEL_PUBLISH_TIME_INDEX] = t;
+//    	}
+//
+//    	if ((t-tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX]) >= (1000 / DRIVE_INFORMATION_PUBLISH_FREQUENCY))
+//    	{
+//    	    publishDriveInformation();
+//    	    tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
+//    	}
+//
+//    	if ((t-tTime[IMU_PUBLISH_TIME_INDEX]) >= (1000 / IMU_PUBLISH_FREQUENCY))
+//    	{
+//    	    publishImuMsg();
+//    	    tTime[IMU_PUBLISH_TIME_INDEX] = t;
+//    	}
+//
+//    	getIMU();
+//    	getMotorSpeed(goal_velocity_from_motor);
+//
 //    	nh.spinOnce();
-////    	 waitForSerialLink(nh.connected());
+//
+//    	waitForSerialLink(nh.connected());
     }
 }
 
@@ -200,9 +206,10 @@ void robot_motor_init(void)
 	motor_right_config.pin_dir.gpio_mode = GPIO_OUTPUT;
 	motor_right_config.pin_dir.gpio_reg_pull = GPIO_REG_PULL_NONE;
 	motor_right = step_driver_init(&motor_right_config);
+	step_driver_start(motor_left);
+	step_driver_start(motor_right);
 
-	MOTOR_LEFT_FORWARD(motor_left);
-	MOTOR_RIGHT_FORWARD(motor_right);
+
 }
 
 void SystemClock_Config(void)
@@ -468,8 +475,8 @@ void updateJointStates(void)
     joint_states_vel[LEFT]  = last_velocity[LEFT];
     joint_states_vel[RIGHT] = last_velocity[RIGHT];
 
-    joint_states.position = joint_states_pos;
-    joint_states.velocity = joint_states_vel;
+    joint_states.position = (double *)joint_states_pos;
+    joint_states.velocity = (double *)joint_states_vel;
 }
 
 void updateJoint(void)
@@ -517,8 +524,8 @@ void updateGyroCali(bool isConnected)
 
 void updateGoalVelocity(void)
 {
-    goal_velocity[LINEAR]  = goal_velocity_from_button[LINEAR]  + goal_velocity_from_cmd[LINEAR]  + goal_velocity_from_motor[LINEAR];
-    goal_velocity[ANGULAR] = goal_velocity_from_button[ANGULAR] + goal_velocity_from_cmd[ANGULAR] + goal_velocity_from_motor[ANGULAR];
+    goal_velocity[LINEAR]  = goal_velocity_from_cmd[LINEAR];
+    goal_velocity[ANGULAR] = goal_velocity_from_cmd[ANGULAR];
 }
 
 void updateTFPrefix(bool isConnected)
@@ -782,16 +789,16 @@ sensor_msgs::Imu getIMU(void)
 	  return imu_msg_;
 }
 
-int constrain(int x, int a, int b)
+float constrain(float x, float low_val, float high_val)
 {
-	int value;
-	if(x>a)
+	float value;
+	if(x>high_val)
 	{
-		value = a;
+		value = high_val;
 	}
-	else if(x<b)
+	else if(x<low_val)
 	{
-		value = b;
+		value = low_val;
 	}
 	else
 	{
@@ -851,10 +858,53 @@ void timer_interval_init(void)
 	  {
 	    Error_Handler();
 	  }
+}
+
+void controlMotor(float *goal_vel)
+{
+	float wheel_velocity_cmd[2];
+
+	float lin_vel = goal_vel[LEFT];
+	float ang_vel = goal_vel[RIGHT];
+
+	wheel_velocity_cmd[LEFT]  = lin_vel - (ang_vel*WHEEL_SEPARATION/2);
+	wheel_velocity_cmd[RIGHT] = lin_vel + (ang_vel*WHEEL_SEPARATION/2);
+
+	wheel_velocity_cmd[LEFT] = constrain(wheel_velocity_cmd[LEFT], MIN_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY);
+	wheel_velocity_cmd[RIGHT] = constrain(wheel_velocity_cmd[RIGHT], MIN_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY);
+
+	float freq_motor_left = abs(wheel_velocity_cmd[LEFT])*15433;
+	float freq_motor_right = abs(wheel_velocity_cmd[RIGHT])*15433;
+
+	if(wheel_velocity_cmd[LEFT] < 0)
+	{
+		MOTOR_LEFT_BACKWARD(motor_left);
+		step_driver_set_freq(motor_left, (uint32_t)freq_motor_left);
+	}
+	else
+	{
+		MOTOR_LEFT_FORWARD(motor_left);
+		step_driver_set_freq(motor_left, (uint32_t)freq_motor_left);
+	}
+
+	if(wheel_velocity_cmd[RIGHT] < 0)
+	{
+		MOTOR_RIGHT_BACKWARD(motor_right);
+		step_driver_set_freq(motor_right, (uint32_t)freq_motor_right);
+	}
+	else
+	{
+		MOTOR_RIGHT_FORWARD(motor_right);
+		step_driver_set_freq(motor_right, (uint32_t)freq_motor_right);
+	}
 
 
+}
 
-
+void getMotorSpeed(float *vel)
+{
+	goal_velocity_from_motor[LINEAR] = goal_velocity_from_cmd[LINEAR];
+	goal_velocity_from_motor[ANGULAR] = goal_velocity_from_cmd[ANGULAR];
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
