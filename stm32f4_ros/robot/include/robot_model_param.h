@@ -2,7 +2,6 @@
 #define _ROBOT_MODEL_PARAM_H_
 
 
-
 #define WHEEL_RADIUS		0.033
 #define WHEEL_SEPARATION 	0.173
 #define TURNING_RADIUS 		0.08

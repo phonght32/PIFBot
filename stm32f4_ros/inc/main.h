@@ -1,25 +1,3 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-
-/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
 
@@ -27,40 +5,41 @@
 extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_rcc.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+#include "../components/driver/include/timer.h"
+#include "../components/driver/include/i2c.h"
+#include "../components/driver/include/gpio.h"
+#include "../components/driver/include/uart.h"
+#include "../components/mpu6050/include/mpu6050.h"
+#include "../components/step_driver/include/step_driver.h"
 
-/* USER CODE END ET */
+/* Motor hardware define */
+#define MOTORLEFT_TIMER_NUM			TIMER_NUM_3
+#define MOTORLEFT_TIMER_CHANNEL		TIMER_CHANNEL_2
+#define MOTORLEFT_TIMER_PINSPACK	TIMER_PINS_PACK_1
+#define MOTORLEFT_GPIO_PORT			GPIO_PORT_C
+#define MOTORLEFT_GPIO_NUM			GPIO_NUM_5
 
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
+#define MOTORRIGHT_TIMER_NUM		TIMER_NUM_2
+#define MOTORRIGHT_TIMER_CHANNEL	TIMER_CHANNEL_1
+#define MOTORRIGHT_TIMER_PINSPACK	TIMER_PINS_PACK_2
+#define MOTORRIGHT_GPIO_PORT		GPIO_PORT_A
+#define MOTORRIGHT_GPIO_NUM			GPIO_NUM_3
 
-/* USER CODE END EC */
+/* MPU6050 hardware define */
+#define MPU6050_I2C_NUM			I2C_NUM_1
+#define MPU6050_I2C_PINSPACK	I2C_PINS_PACK_1
 
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-
-/* USER CODE END EM */
-
-/* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
-
-/* USER CODE BEGIN EFP */
-
-/* USER CODE END EFP */
-
-/* Private defines -----------------------------------------------------------*/
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
+/* Control motor macros */
+#define MOTOR_LEFT_FORWARD(_handle_)    step_driver_set_dir(_handle_, 0);
+#define MOTOR_LEFT_BACKWARD(_handle_)   step_driver_set_dir(_handle_, 1);
+#define MOTOR_RIGHT_FORWARD(_handle_)   step_driver_set_dir(_handle_, 1);
+#define MOTOR_RIGHT_BACKWARD(_handle_)  step_driver_set_dir(_handle_, 0);
 
 #ifdef __cplusplus
 }
@@ -68,4 +47,4 @@ void Error_Handler(void);
 
 #endif /* __MAIN_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
