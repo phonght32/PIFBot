@@ -9,8 +9,6 @@ extern "C" {
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_rcc.h"
 
-
-
 #include "../components/driver/include/timer.h"
 #include "../components/driver/include/i2c.h"
 #include "../components/driver/include/gpio.h"
@@ -32,8 +30,8 @@ extern "C" {
 #define MOTORRIGHT_GPIO_NUM			GPIO_NUM_3
 
 /* MPU6050 hardware define */
-#define MPU6050_I2C_NUM			I2C_NUM_1
-#define MPU6050_I2C_PINSPACK	I2C_PINS_PACK_1
+#define MPU6050_I2C_NUM				I2C_NUM_1
+#define MPU6050_I2C_PINSPACK		I2C_PINS_PACK_1
 
 /* Control motor macros */
 #define MOTOR_LEFT_FORWARD(_handle_)    step_driver_set_dir(_handle_, 0);

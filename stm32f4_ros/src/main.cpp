@@ -7,9 +7,9 @@
 
 #include "../robot/include/robot_config.h"
 
-/*************************** ***** Define *********************************** */
-
-
+/****************************** STM32 SYSTEM ******************************** */
+void SystemClock_Config(void);
+void Error_Handler(void);
 
 /******************************** ROSSERIAL ********************************* */
 UART_HandleTypeDef huart4;
@@ -33,10 +33,6 @@ uint32_t tickcount_ms;
 void timer_interval_init(void);
 uint32_t millis(void);
 
-/****************************** STM32 SYSTEM ******************************** */
-void SystemClock_Config(void);
-void Error_Handler(void);
-
 /********************************** ROS ************************************* */
 void ros_setup(void);
 void controlMotor(float *goal_vel);
@@ -45,6 +41,7 @@ sensor_msgs::Imu getIMU(void);
 void getOrientation(float *orientation);
 float constrain(float x, float low_val, float high_val);
 
+/********************************** main ************************************ */
 int main(void)
 {
 	/* STM32 system init */
@@ -114,40 +111,7 @@ int main(void)
     }
 }
 
-void SystemClock_Config(void)
-{
-    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-
-    __HAL_RCC_PWR_CLK_ENABLE();
-    __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-    RCC_OscInitStruct.PLL.PLLM = 8;
-    RCC_OscInitStruct.PLL.PLLN = 336;
-    RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-    RCC_OscInitStruct.PLL.PLLQ = 4;
-    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-    {
-        Error_Handler();
-    }
-
-    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-                                  | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
-    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
-
-    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
-    {
-        Error_Handler();
-    }
-}
-
+/* MPU6050 init function */
 void robot_mpu6050_init(void)
 {
     i2c_config_t i2c_config;
@@ -167,6 +131,7 @@ void robot_mpu6050_init(void)
     mpu6050 = mpu6050_init(&mpu6050_config);
 }
 
+/* Motor init function */
 void robot_motor_init(void)
 {
     step_driver_config_t motor_left_config;
@@ -192,6 +157,7 @@ void robot_motor_init(void)
     step_driver_start(motor_right);
 }
 
+/* ROS init function */
 void ros_setup(void)
 {
     nh.initNode();
@@ -215,7 +181,6 @@ void ros_setup(void)
 
     setup_end = true;
 }
-
 
 void robot_rosserial_init(void)
 {
@@ -278,6 +243,7 @@ void robot_rosserial_init(void)
     HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
 }
 
+/* ROS runtime function */
 void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
 {
     goal_velocity_from_cmd[LINEAR] = cmd_vel_msg.linear.x;
@@ -874,6 +840,41 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if (htim->Instance ==  htim5.Instance)
     {
         tickcount_ms++;
+    }
+}
+
+/***************************** System function ****************************** */
+void SystemClock_Config(void)
+{
+    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+    __HAL_RCC_PWR_CLK_ENABLE();
+    __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLM = 8;
+    RCC_OscInitStruct.PLL.PLLN = 336;
+    RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+    RCC_OscInitStruct.PLL.PLLQ = 4;
+    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+    {
+        Error_Handler();
+    }
+
+    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
+                                  | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
+    {
+        Error_Handler();
     }
 }
 
