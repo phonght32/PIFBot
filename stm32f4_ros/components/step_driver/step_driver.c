@@ -4,7 +4,7 @@
 
 #include "include/step_driver.h"
 
-#define PWM_DUTYCYCLE_DEFAULT	50
+#define PWM_DUTYCYCLE_DEFAULT	30
 
 typedef struct step_driver {
     pwm_handle_t clk_handle;

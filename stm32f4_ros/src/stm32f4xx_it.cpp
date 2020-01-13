@@ -5,7 +5,7 @@ extern DMA_HandleTypeDef hdma_uart4_rx;
 extern DMA_HandleTypeDef hdma_uart4_tx;
 extern UART_HandleTypeDef huart4;
 
-extern TIM_HandleTypeDef htim5;
+extern TIM_HandleTypeDef htim_interval;
 
 void NMI_Handler(void)
 {
@@ -85,5 +85,5 @@ void UART4_IRQHandler(void)
 
 void TIM5_IRQHandler(void)
 {
-  HAL_TIM_IRQHandler(&htim5);
+  HAL_TIM_IRQHandler(&htim_interval);
 }

@@ -19,7 +19,6 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 
-#include <robot_model_param.h>
 
 
 /* Time update index */
@@ -30,12 +29,12 @@
 #define CONTROL_MOTOR_TIMEOUT_TIME_INDEX		6
 
 /* Frequency of publish/subscribe */
-#define CONTROL_MOTOR_SPEED_FREQUENCY          30   //hz
-#define CONTROL_MOTOR_TIMEOUT                  500  //ms
-#define IMU_PUBLISH_FREQUENCY                  200  //hz
-#define CMD_VEL_PUBLISH_FREQUENCY              30   //hz
-#define DRIVE_INFORMATION_PUBLISH_FREQUENCY    30   //hz
-#define DEBUG_LOG_FREQUENCY                    10   //hz
+#define CONTROL_MOTOR_SPEED_FREQUENCY          30   /*!< Hz */
+#define CONTROL_MOTOR_TIMEOUT                  500  /*!< ms */
+#define IMU_PUBLISH_FREQUENCY                  200  /*!< Hz */
+#define CMD_VEL_PUBLISH_FREQUENCY              30   /*!< Hz */
+#define DRIVE_INFORMATION_PUBLISH_FREQUENCY    30   /*!< Hz */
+#define DEBUG_LOG_FREQUENCY                    10   /*!< Hz */
 
 
 /* Linear & Angular velocity index */

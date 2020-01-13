@@ -17,21 +17,11 @@ DMA_HandleTypeDef hdma_uart4_rx;
 DMA_HandleTypeDef hdma_uart4_tx;
 void robot_rosserial_init(void);
 
-/********************************* MOTOR ************************************ */
-step_driver_handle_t motor_left, motor_right;
-void robot_motor_init(void);
 
-/******************************** MPU6050 *********************************** */
+step_driver_handle_t motor_left, motor_right;
 mpu6050_handle_t mpu6050;
 I2C_HandleTypeDef mpu6050_i2c;
-void robot_mpu6050_init(void);
 
-
-/***************************** Timer interval ******************************* */
-TIM_HandleTypeDef htim5;
-uint32_t tickcount_ms;
-void timer_interval_init(void);
-uint32_t millis(void);
 
 /********************************** ROS ************************************* */
 void ros_setup(void);
@@ -39,7 +29,7 @@ void controlMotor(float *goal_vel);
 void getMotorSpeed(float *vel);
 sensor_msgs::Imu getIMU(void);
 void getOrientation(float *orientation);
-float constrain(float x, float low_val, float high_val);
+
 
 /********************************** main ************************************ */
 int main(void)
@@ -50,6 +40,8 @@ int main(void)
 
     /* Motor configuration */
     robot_motor_init();
+
+
 
     /* MPU6050 configuration */
     robot_mpu6050_init();
@@ -63,98 +55,60 @@ int main(void)
     /* Rosserial configuration */
     robot_rosserial_init();
 
+//    MOTOR_SET_SPEED(motor_left, 0.1);
+    step_driver_set_freq(motor_left,3200);
+    MOTOR_START(motor_left);
     while (1)
     {
-        uint32_t t = millis();
-        updateTime();
-        updateVariable(nh.connected());
-        updateTFPrefix(nh.connected());
+//    	MOTOR_START(motor_left);
+//    	HAL_Delay(2000);
+//    	MOTOR_STOP(motor_left);
+//    	HAL_Delay(2000);
 
-        if ((t - tTime[CONTROL_MOTOR_TIME_INDEX] >= 1000 / CONTROL_MOTOR_SPEED_FREQUENCY))
-        {
-            updateGoalVelocity();
-            if ((t - tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX]))
-            {
-                controlMotor(zero_velocity);
-            }
-            else
-            {
-                controlMotor(goal_velocity);
-            }
-            tTime[CONTROL_MOTOR_TIME_INDEX] = t;
-        }
-
-        if ((t - tTime[CMD_VEL_PUBLISH_TIME_INDEX]) >= (1000 / CMD_VEL_PUBLISH_FREQUENCY))
-        {
-            publishCmdVelFromMotorMsg();
-            tTime[CMD_VEL_PUBLISH_TIME_INDEX] = t;
-        }
-
-        if ((t - tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX]) >= (1000 / DRIVE_INFORMATION_PUBLISH_FREQUENCY))
-        {
-            publishDriveInformation();
-            tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
-        }
-
-        if ((t - tTime[IMU_PUBLISH_TIME_INDEX]) >= (1000 / IMU_PUBLISH_FREQUENCY))
-        {
-            publishImuMsg();
-            tTime[IMU_PUBLISH_TIME_INDEX] = t;
-        }
-
-        getIMU();
-        getMotorSpeed(goal_velocity_from_motor);
-
-        nh.spinOnce();
-
-        waitForSerialLink(nh.connected());
+//        uint32_t t = millis();
+//        updateTime();
+//        updateVariable(nh.connected());
+//        updateTFPrefix(nh.connected());
+//
+//        if ((t - tTime[CONTROL_MOTOR_TIME_INDEX] >= 1000 / CONTROL_MOTOR_SPEED_FREQUENCY))
+//        {
+//            updateGoalVelocity();
+//            if ((t - tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX]))
+//            {
+//                controlMotor(zero_velocity);
+//            }
+//            else
+//            {
+//                controlMotor(goal_velocity);
+//            }
+//            tTime[CONTROL_MOTOR_TIME_INDEX] = t;
+//        }
+//
+//        if ((t - tTime[CMD_VEL_PUBLISH_TIME_INDEX]) >= (1000 / CMD_VEL_PUBLISH_FREQUENCY))
+//        {
+//            publishCmdVelFromMotorMsg();
+//            tTime[CMD_VEL_PUBLISH_TIME_INDEX] = t;
+//        }
+//
+//        if ((t - tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX]) >= (1000 / DRIVE_INFORMATION_PUBLISH_FREQUENCY))
+//        {
+//            publishDriveInformation();
+//            tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
+//        }
+//
+//        if ((t - tTime[IMU_PUBLISH_TIME_INDEX]) >= (1000 / IMU_PUBLISH_FREQUENCY))
+//        {
+//            publishImuMsg();
+//            tTime[IMU_PUBLISH_TIME_INDEX] = t;
+//        }
+//
+//        getIMU();
+//        getMotorSpeed(goal_velocity_from_motor);
+//
+//        nh.spinOnce();
+//
+//        waitForSerialLink(nh.connected());
     }
-}
-
-/* MPU6050 init function */
-void robot_mpu6050_init(void)
-{
-    i2c_config_t i2c_config;
-    i2c_config.i2c_num = MPU6050_I2C_NUM;
-    i2c_config.i2c_pins_pack = MPU6050_I2C_PINSPACK;
-    i2c_handle_t i2c_handle = i2c_init(&i2c_config);
-
-    mpu6050_i2c = i2c_get_I2C_HandleTypeDef(i2c_handle);
-    mpu6050_i2c_config(&mpu6050_i2c);
-
-    mpu6050_config_t mpu6050_config;
-    mpu6050_config.afs_sel = MPU6050_AFS_SEL_4G;
-    mpu6050_config.clksel = MPU6050_CLKSEL_INTERNAL_8_MHZ;
-    mpu6050_config.dlpf_cfg =  MPU6050_184ACCEL_188GYRO_BW_HZ;
-    mpu6050_config.fs_sel = MPU6050_FS_SEL_500;
-    mpu6050_config.sleep_mode = MPU6050_DISABLE_SLEEP_MODE;
-    mpu6050 = mpu6050_init(&mpu6050_config);
-}
-
-/* Motor init function */
-void robot_motor_init(void)
-{
-    step_driver_config_t motor_left_config;
-    motor_left_config.pin_clk.timer_num = MOTORLEFT_TIMER_NUM;
-    motor_left_config.pin_clk.timer_channel = MOTORLEFT_TIMER_CHANNEL;
-    motor_left_config.pin_clk.timer_pins_pack = MOTORLEFT_TIMER_PINSPACK;
-    motor_left_config.pin_dir.gpio_port = MOTORLEFT_GPIO_PORT;
-    motor_left_config.pin_dir.gpio_num = MOTORLEFT_GPIO_NUM;
-    motor_left_config.pin_dir.gpio_mode = GPIO_OUTPUT;
-    motor_left_config.pin_dir.gpio_reg_pull = GPIO_REG_PULL_NONE;
-    motor_left = step_driver_init(&motor_left_config);
-
-    step_driver_config_t motor_right_config;
-    motor_right_config.pin_clk.timer_num = MOTORRIGHT_TIMER_NUM;
-    motor_right_config.pin_clk.timer_channel = MOTORRIGHT_TIMER_CHANNEL;
-    motor_right_config.pin_clk.timer_pins_pack = MOTORRIGHT_TIMER_PINSPACK;
-    motor_right_config.pin_dir.gpio_port = MOTORRIGHT_GPIO_PORT;
-    motor_right_config.pin_dir.gpio_num = MOTORRIGHT_GPIO_NUM;
-    motor_right_config.pin_dir.gpio_mode = GPIO_OUTPUT;
-    motor_right_config.pin_dir.gpio_reg_pull = GPIO_REG_PULL_NONE;
-    motor_right = step_driver_init(&motor_right_config);
-    step_driver_start(motor_left);
-    step_driver_start(motor_right);
 }
 
 /* ROS init function */
@@ -666,11 +620,6 @@ void waitForSerialLink(bool isConnected)
     }
 }
 
-uint32_t millis(void)
-{
-    return tickcount_ms;
-}
-
 sensor_msgs::Imu getIMU(void)
 {
     mpu6050_scaled_data_t accel_scale;
@@ -726,23 +675,7 @@ sensor_msgs::Imu getIMU(void)
     return imu_msg_;
 }
 
-float constrain(float x, float low_val, float high_val)
-{
-    float value;
-    if (x > high_val)
-    {
-        value = high_val;
-    }
-    else if (x < low_val)
-    {
-        value = low_val;
-    }
-    else
-    {
-        value = x;
-    }
-    return value;
-}
+
 
 
 void getOrientation(float *orientation)
@@ -755,38 +688,7 @@ void getOrientation(float *orientation)
     orientation[3] = quat.q3;
 }
 
-void timer_interval_init(void)
-{
-    TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-    TIM_MasterConfigTypeDef sMasterConfig = {0};
 
-    /* USER CODE BEGIN TIM5_Init 1 */
-
-    /* USER CODE END TIM5_Init 1 */
-    htim5.Instance = TIM5;
-    htim5.Init.Prescaler = 83;
-    htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim5.Init.Period = 999;
-    htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-    htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-    if (HAL_TIM_Base_Init(&htim5) != HAL_OK)
-    {
-        Error_Handler();
-    }
-    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-    if (HAL_TIM_ConfigClockSource(&htim5, &sClockSourceConfig) != HAL_OK)
-    {
-        Error_Handler();
-    }
-    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-    if (HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig) != HAL_OK)
-    {
-        Error_Handler();
-    }
-
-    HAL_TIM_Base_Start_IT(&htim5);
-}
 
 void controlMotor(float *goal_vel)
 {
@@ -825,8 +727,6 @@ void controlMotor(float *goal_vel)
         MOTOR_RIGHT_FORWARD(motor_right);
         step_driver_set_freq(motor_right, (uint32_t)freq_motor_right);
     }
-
-
 }
 
 void getMotorSpeed(float *vel)
@@ -835,13 +735,7 @@ void getMotorSpeed(float *vel)
     goal_velocity_from_motor[ANGULAR] = goal_velocity_from_cmd[ANGULAR];
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-    if (htim->Instance ==  htim5.Instance)
-    {
-        tickcount_ms++;
-    }
-}
+
 
 /***************************** System function ****************************** */
 void SystemClock_Config(void)
