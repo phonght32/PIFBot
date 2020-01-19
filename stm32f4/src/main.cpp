@@ -13,10 +13,10 @@
 #include "../components/mpu6050/include/mpu6050.h"
 #include "../components/step_driver/include/step_driver.h"
 
-#define TEST_ROSSERIAL
+//#define TEST_ROSSERIAL
 //#define TEST_PWM
 //#define TEST_MPU6050
-//#define TEST_STEP_DRIVER
+#define TEST_STEP_DRIVER
 
 void led_cb( const std_msgs::UInt16& cmd_msg)
 {

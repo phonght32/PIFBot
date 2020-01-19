@@ -27,6 +27,7 @@ I2C_HandleTypeDef mpu6050_i2c;
 void ros_setup(void);
 void controlMotor(float *goal_vel);
 void getMotorSpeed(float *vel);
+void updateIMU(void);
 sensor_msgs::Imu getIMU(void);
 void getOrientation(float *orientation);
 
@@ -41,73 +42,72 @@ int main(void)
     /* Motor configuration */
     robot_motor_init();
 
-
-
     /* MPU6050 configuration */
     robot_mpu6050_init();
 
     /* Init timer counts interval */
     timer_interval_init();
 
-    /* ROS setup */
-    ros_setup();
-
     /* Rosserial configuration */
     robot_rosserial_init();
 
-//    MOTOR_SET_SPEED(motor_left, 0.1);
+    /* ROS setup */
+    ros_setup();
+
+
     step_driver_set_freq(motor_left,3200);
+    MOTOR_LEFT_FORWARD(motor_left);
     MOTOR_START(motor_left);
+
+    step_driver_set_freq(motor_right,3200);
+    MOTOR_RIGHT_FORWARD(motor_right);
+    MOTOR_START(motor_right);
+
     while (1)
     {
-//    	MOTOR_START(motor_left);
-//    	HAL_Delay(2000);
-//    	MOTOR_STOP(motor_left);
-//    	HAL_Delay(2000);
+        uint32_t t = millis();
+        updateTime();
+        updateVariable(nh.connected());
+        updateTFPrefix(nh.connected());
 
-//        uint32_t t = millis();
-//        updateTime();
-//        updateVariable(nh.connected());
-//        updateTFPrefix(nh.connected());
-//
-//        if ((t - tTime[CONTROL_MOTOR_TIME_INDEX] >= 1000 / CONTROL_MOTOR_SPEED_FREQUENCY))
-//        {
-//            updateGoalVelocity();
-//            if ((t - tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX]))
-//            {
-//                controlMotor(zero_velocity);
-//            }
-//            else
-//            {
-//                controlMotor(goal_velocity);
-//            }
-//            tTime[CONTROL_MOTOR_TIME_INDEX] = t;
-//        }
-//
-//        if ((t - tTime[CMD_VEL_PUBLISH_TIME_INDEX]) >= (1000 / CMD_VEL_PUBLISH_FREQUENCY))
-//        {
-//            publishCmdVelFromMotorMsg();
-//            tTime[CMD_VEL_PUBLISH_TIME_INDEX] = t;
-//        }
-//
-//        if ((t - tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX]) >= (1000 / DRIVE_INFORMATION_PUBLISH_FREQUENCY))
-//        {
-//            publishDriveInformation();
-//            tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
-//        }
-//
-//        if ((t - tTime[IMU_PUBLISH_TIME_INDEX]) >= (1000 / IMU_PUBLISH_FREQUENCY))
-//        {
-//            publishImuMsg();
-//            tTime[IMU_PUBLISH_TIME_INDEX] = t;
-//        }
-//
-//        getIMU();
-//        getMotorSpeed(goal_velocity_from_motor);
-//
-//        nh.spinOnce();
-//
-//        waitForSerialLink(nh.connected());
+        if ((t - tTime[CONTROL_MOTOR_TIME_INDEX] >= 1000 / CONTROL_MOTOR_SPEED_FREQUENCY))
+        {
+            updateGoalVelocity();
+            if ((t - tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX]))
+            {
+                controlMotor(zero_velocity);
+            }
+            else
+            {
+                controlMotor(goal_velocity);
+            }
+            tTime[CONTROL_MOTOR_TIME_INDEX] = t;
+        }
+
+        if ((t - tTime[CMD_VEL_PUBLISH_TIME_INDEX]) >= (1000 / CMD_VEL_PUBLISH_FREQUENCY))
+        {
+            publishCmdVelFromMotorMsg();
+            tTime[CMD_VEL_PUBLISH_TIME_INDEX] = t;
+        }
+
+        if ((t - tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX]) >= (1000 / DRIVE_INFORMATION_PUBLISH_FREQUENCY))
+        {
+            publishDriveInformation();
+            tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
+        }
+
+        if ((t - tTime[IMU_PUBLISH_TIME_INDEX]) >= (1000 / IMU_PUBLISH_FREQUENCY))
+        {
+            publishImuMsg();
+            tTime[IMU_PUBLISH_TIME_INDEX] = t;
+        }
+
+        updateIMU();
+        getMotorSpeed(goal_velocity_from_motor);
+
+        nh.spinOnce();
+
+        waitForSerialLink(nh.connected());
     }
 }
 
@@ -618,6 +618,11 @@ void waitForSerialLink(bool isConnected)
     {
         wait_flag = false;
     }
+}
+
+void updateIMU(void)
+{
+	mpu6050_update_quat();
 }
 
 sensor_msgs::Imu getIMU(void)

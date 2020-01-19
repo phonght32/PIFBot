@@ -2,6 +2,7 @@
 #include "stm32f4xx_hal_rcc.h"
 #include "stm32f4xx_hal_i2c.h"
 
+#include "stdlib.h"
 #include "string.h"
 
 #include "include/mpu6050.h"
@@ -167,7 +168,7 @@ static float gyro_x_bias = 0.0;
 static float gyro_y_bias = 0.0;
 static float gyro_z_bias = 0.0;
 
-extern volatile float q0, q1, q2, q3;
+volatile float q0, q1, q2, q3;
 
 I2C_HandleTypeDef mpu6050_i2c_handle;
 
@@ -369,19 +370,25 @@ int mpu6050_get_gyro_cali(mpu6050_cali_data_t *cali_data)
 	mpu6050_get_gyro_scale(&scale_data);
 
 	cali_data->x_axis = scale_data.x_axis - gyro_x_bias;
-	cali_data->y_axis = scale_data.y_axis - gyro_x_bias;
-	cali_data->z_axis = scale_data.z_axis - gyro_x_bias;
+	cali_data->y_axis = scale_data.y_axis - gyro_y_bias;
+	cali_data->z_axis = scale_data.z_axis - gyro_z_bias;
 
 	return 0;
 }
 
-int mpu6050_get_quat(mpu6050_quat_data_t *quat)
+int mpu6050_update_quat(void)
 {
 	mpu6050_cali_data_t accel_cali, gyro_cali;
 	mpu6050_get_accel_cali(&accel_cali);
 	mpu6050_get_gyro_cali(&gyro_cali);
 
 	MadgwickAHRSupdateIMU(gyro_cali.x_axis, gyro_cali.y_axis, gyro_cali.z_axis, accel_cali.x_axis, accel_cali.y_axis, accel_cali.z_axis);
+
+	return 0;
+}
+
+int mpu6050_get_quat(mpu6050_quat_data_t *quat)
+{
 	quat->q0 = q0;
 	quat->q1 = q1;
 	quat->q2 = q2;

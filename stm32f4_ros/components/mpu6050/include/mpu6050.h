@@ -89,6 +89,7 @@ int mpu6050_get_accel_cali(mpu6050_cali_data_t *cali_data);
 int mpu6050_get_gyro_raw(mpu6050_raw_data_t *raw_data);
 int mpu6050_get_gyro_scale(mpu6050_scaled_data_t *scale_data);
 int mpu6050_get_gyro_cali(mpu6050_cali_data_t *cali_data);
+int mpu6050_update_quat(void);
 int mpu6050_get_quat(mpu6050_quat_data_t *quat);
 
 #ifdef __cplusplus

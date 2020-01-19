@@ -57,10 +57,10 @@ extern "C" {
 #define MPU6050_I2C_PINSPACK		I2C_PINS_PACK_1
 
 /* Control motor macros */
-#define MOTOR_LEFT_FORWARD(_handle_)    step_driver_set_dir(_handle_, 0)
-#define MOTOR_LEFT_BACKWARD(_handle_)   step_driver_set_dir(_handle_, 1)
-#define MOTOR_RIGHT_FORWARD(_handle_)   step_driver_set_dir(_handle_, 1)
-#define MOTOR_RIGHT_BACKWARD(_handle_)  step_driver_set_dir(_handle_, 0)
+#define MOTOR_LEFT_FORWARD(_handle_)    step_driver_set_dir(_handle_, 1)
+#define MOTOR_LEFT_BACKWARD(_handle_)   step_driver_set_dir(_handle_, 0)
+#define MOTOR_RIGHT_FORWARD(_handle_)   step_driver_set_dir(_handle_, 0)
+#define MOTOR_RIGHT_BACKWARD(_handle_)  step_driver_set_dir(_handle_, 1)
 
 #define MOTOR_SET_SPEED(_handle_,speed) step_driver_set_freq(_handle_, (uint32_t)(speed*VEL2FREQ))
 
