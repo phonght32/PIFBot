@@ -843,9 +843,6 @@ ignition-msgs1_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/ignition-msgs1
 //The directory containing a CMake configuration file for ignition-transport4.
 ignition-transport4_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/ignition-transport4
 
-//The directory containing a CMake configuration file for interactive_markers.
-interactive_markers_DIR:PATH=/opt/ros/melodic/share/interactive_markers/cmake
-
 //The directory containing a CMake configuration file for jsoncpp.
 jsoncpp_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/jsoncpp
 
@@ -1005,80 +1002,8 @@ topic_tools_DIR:PATH=/opt/ros/melodic/share/topic_tools/cmake
 //The directory containing a CMake configuration file for trajectory_msgs.
 trajectory_msgs_DIR:PATH=/opt/ros/melodic/share/trajectory_msgs/cmake
 
-//Value Computed by CMake
-turtlebot3_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3/turtlebot3
-
-//Value Computed by CMake
-turtlebot3_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3/turtlebot3
-
-//Value Computed by CMake
-turtlebot3_bringup_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3/turtlebot3_bringup
-
-//Value Computed by CMake
-turtlebot3_bringup_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3/turtlebot3_bringup
-
-//Value Computed by CMake
-turtlebot3_description_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3/turtlebot3_description
-
-//Value Computed by CMake
-turtlebot3_description_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3/turtlebot3_description
-
-//Value Computed by CMake
-turtlebot3_example_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3/turtlebot3_example
-
-//Value Computed by CMake
-turtlebot3_example_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3/turtlebot3_example
-
-//Value Computed by CMake
-turtlebot3_fake_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3_simulations/turtlebot3_fake
-
-//Value Computed by CMake
-turtlebot3_fake_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3_simulations/turtlebot3_fake
-
-//Value Computed by CMake
-turtlebot3_gazebo_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3_simulations/turtlebot3_gazebo
-
-//Value Computed by CMake
-turtlebot3_gazebo_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3_simulations/turtlebot3_gazebo
-
-//Value Computed by CMake
-turtlebot3_msgs_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3_msgs
-
-//The directory containing a CMake configuration file for turtlebot3_msgs.
-turtlebot3_msgs_DIR:PATH=/home/phong/Documents/thesis/ros/devel/share/turtlebot3_msgs/cmake
-
-//Value Computed by CMake
-turtlebot3_msgs_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3_msgs
-
-//Value Computed by CMake
-turtlebot3_navigation_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3/turtlebot3_navigation
-
-//Value Computed by CMake
-turtlebot3_navigation_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3/turtlebot3_navigation
-
-//Value Computed by CMake
-turtlebot3_simulations_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3_simulations/turtlebot3_simulations
-
-//Value Computed by CMake
-turtlebot3_simulations_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3_simulations/turtlebot3_simulations
-
-//Value Computed by CMake
-turtlebot3_slam_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3/turtlebot3_slam
-
-//Value Computed by CMake
-turtlebot3_slam_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3/turtlebot3_slam
-
-//Value Computed by CMake
-turtlebot3_teleop_BINARY_DIR:STATIC=/home/phong/Documents/thesis/ros/build/turtlebot3/turtlebot3_teleop
-
-//Value Computed by CMake
-turtlebot3_teleop_SOURCE_DIR:STATIC=/home/phong/Documents/thesis/ros/src/turtlebot3/turtlebot3_teleop
-
 //The directory containing a CMake configuration file for urdf.
 urdf_DIR:PATH=/opt/ros/melodic/share/urdf/cmake
-
-//The directory containing a CMake configuration file for visualization_msgs.
-visualization_msgs_DIR:PATH=/opt/ros/melodic/share/visualization_msgs/cmake
 
 //The directory containing a CMake configuration file for xacro.
 xacro_DIR:PATH=/opt/ros/melodic/share/xacro/cmake

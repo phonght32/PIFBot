@@ -1,8 +1,0 @@
-prefix=/home/phong/Documents/thesis/ros/devel
-
-Name: turtlebot3_slam
-Description: Description of turtlebot3_slam
-Version: 1.2.1
-Cflags: -I/home/phong/Documents/thesis/ros/src/turtlebot3/turtlebot3_slam/include
-Libs: -L/home/phong/Documents/thesis/ros/devel/lib 
-Requires: roscpp sensor_msgs

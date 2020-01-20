@@ -1,8 +1,0 @@
-prefix=/home/phong/Documents/thesis/ros/devel
-
-Name: turtlebot3_gazebo
-Description: Description of turtlebot3_gazebo
-Version: 1.2.0
-Cflags: -I/home/phong/Documents/thesis/ros/src/turtlebot3_simulations/turtlebot3_gazebo/include
-Libs: -L/home/phong/Documents/thesis/ros/devel/lib 
-Requires: roscpp std_msgs sensor_msgs geometry_msgs nav_msgs tf gazebo_ros
