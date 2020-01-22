@@ -1,8 +1,0 @@
-prefix=/home/phong/Documents/thesis/ros/devel
-
-Name: robot_gazebo
-Description: Description of robot_gazebo
-Version: 0.0.0
-Cflags: -I/home/phong/Documents/thesis/ros/src/robot_simulatioins/robot_gazebo/include
-Libs: -L/home/phong/Documents/thesis/ros/devel/lib 
-Requires: roscpp std_msgs sensor_msgs geometry_msgs nav_msgs tf gazebo_ros

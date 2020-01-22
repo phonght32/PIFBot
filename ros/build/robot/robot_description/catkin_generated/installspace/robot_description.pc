@@ -1,8 +1,0 @@
-prefix=/home/phong/Documents/thesis/ros/install
-
-Name: robot_description
-Description: Description of robot_description
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/phong/Documents/thesis/ros/install/lib 
-Requires: urdf xacro

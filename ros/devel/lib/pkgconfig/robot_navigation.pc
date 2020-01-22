@@ -1,8 +1,0 @@
-prefix=/home/phong/Documents/thesis/ros/devel
-
-Name: robot_navigation
-Description: Description of robot_navigation
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/phong/Documents/thesis/ros/devel/lib 
-Requires: 

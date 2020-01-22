@@ -1,8 +1,0 @@
-prefix=/home/phong/Documents/thesis/ros/devel
-
-Name: robot_msgs
-Description: Description of robot_msgs
-Version: 0.0.0
-Cflags: -I/home/phong/Documents/thesis/ros/devel/include
-Libs: -L/home/phong/Documents/thesis/ros/devel/lib 
-Requires: roscpp std_msgs message_runtime

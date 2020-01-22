@@ -1,2 +1,0 @@
-hls_lfcd_lds_driver:robot/robot_bringup:robot/robot_description:robot/robot_navigation:robot/robot_slam:robot/robot_teleop:robot_msgs:robot_simulatioins/robot_gazebo:rplidar_ros
--DCATKIN_DEVEL_PREFIX=/home/phong/Documents/thesis/ros/devel -DCMAKE_INSTALL_PREFIX=/home/phong/Documents/thesis/ros/install -G Unix Makefiles

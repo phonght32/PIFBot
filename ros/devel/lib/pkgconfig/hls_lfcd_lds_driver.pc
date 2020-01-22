@@ -1,8 +1,0 @@
-prefix=/home/phong/Documents/thesis/ros/devel
-
-Name: hls_lfcd_lds_driver
-Description: Description of hls_lfcd_lds_driver
-Version: 1.1.0
-Cflags: -I/home/phong/Documents/thesis/ros/src/hls_lfcd_lds_driver/include -I/usr/include
-Libs: -L/home/phong/Documents/thesis/ros/devel/lib 
-Requires: roscpp std_msgs sensor_msgs
