@@ -54,13 +54,13 @@ int main(void)
     /* ROS setup */
     ros_setup();
 
+//
+//    step_driver_set_freq(motor_left,3200);
+//    MOTOR_LEFT_FORWARD(motor_left);
+//    step_driver_set_freq(motor_right,3200);
+//    MOTOR_RIGHT_FORWARD(motor_right);
 
-    step_driver_set_freq(motor_left,3200);
-    MOTOR_LEFT_FORWARD(motor_left);
     MOTOR_START(motor_left);
-
-    step_driver_set_freq(motor_right,3200);
-    MOTOR_RIGHT_FORWARD(motor_right);
     MOTOR_START(motor_right);
 
     while (1)
@@ -705,32 +705,36 @@ void controlMotor(float *goal_vel)
     wheel_velocity_cmd[LEFT]  = lin_vel - (ang_vel * WHEEL_SEPARATION / 2);
     wheel_velocity_cmd[RIGHT] = lin_vel + (ang_vel * WHEEL_SEPARATION / 2);
 
-    wheel_velocity_cmd[LEFT] = constrain(wheel_velocity_cmd[LEFT], MIN_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY);
+    wheel_velocity_cmd[LEFT]  = constrain(wheel_velocity_cmd[LEFT], MIN_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY);
     wheel_velocity_cmd[RIGHT] = constrain(wheel_velocity_cmd[RIGHT], MIN_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY);
 
-    float freq_motor_left = abs(wheel_velocity_cmd[LEFT]) * 15433;
-    float freq_motor_right = abs(wheel_velocity_cmd[RIGHT]) * 15433;
+//    float freq_motor_left = abs(wheel_velocity_cmd[LEFT]) * 15433;
+//    float freq_motor_right = abs(wheel_velocity_cmd[RIGHT]) * 15433;
 
     if (wheel_velocity_cmd[LEFT] < 0)
     {
         MOTOR_LEFT_BACKWARD(motor_left);
-        step_driver_set_freq(motor_left, (uint32_t)freq_motor_left);
+        MOTOR_SET_SPEED(motor_left,wheel_velocity_cmd[LEFT]);
+//        step_driver_set_freq(motor_left, (uint32_t)freq_motor_left);
     }
     else
     {
         MOTOR_LEFT_FORWARD(motor_left);
-        step_driver_set_freq(motor_left, (uint32_t)freq_motor_left);
+        MOTOR_SET_SPEED(motor_left,wheel_velocity_cmd[LEFT]);
+//        step_driver_set_freq(motor_left, (uint32_t)freq_motor_left);
     }
 
     if (wheel_velocity_cmd[RIGHT] < 0)
     {
         MOTOR_RIGHT_BACKWARD(motor_right);
-        step_driver_set_freq(motor_right, (uint32_t)freq_motor_right);
+        MOTOR_SET_SPEED(motor_right,wheel_velocity_cmd[RIGHT]);
+//        step_driver_set_freq(motor_right, (uint32_t)freq_motor_right);
     }
     else
     {
         MOTOR_RIGHT_FORWARD(motor_right);
-        step_driver_set_freq(motor_right, (uint32_t)freq_motor_right);
+        MOTOR_SET_SPEED(motor_right,wheel_velocity_cmd[RIGHT]);
+//        step_driver_set_freq(motor_right, (uint32_t)freq_motor_right);
     }
 }
 

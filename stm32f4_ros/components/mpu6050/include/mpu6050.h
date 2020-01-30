@@ -23,9 +23,9 @@ typedef struct {
 } mpu6050_raw_data_t;
 
 typedef struct {
-    int16_t x_axis;
-    int16_t y_axis;
-    int16_t z_axis;
+    float x_axis;
+    float y_axis;
+    float z_axis;
 } mpu6050_scaled_data_t;
 
 typedef struct {
@@ -33,6 +33,12 @@ typedef struct {
     int16_t y_axis;
     int16_t z_axis;
 } mpu6050_cali_data_t;
+
+typedef struct {
+	int16_t x_axis;
+	int16_t y_axis;
+	int16_t z_axis;
+} mpu6050_bias_data_t;
 
 typedef enum {
     MPU6050_CLKSEL_INTERNAL_8_MHZ = 0,
@@ -83,14 +89,22 @@ typedef struct {
 
 int mpu6050_i2c_config(I2C_HandleTypeDef *i2c_handle);
 mpu6050_handle_t mpu6050_init(mpu6050_config_t *config);
+
 int mpu6050_get_accel_raw(mpu6050_raw_data_t *raw_data);
 int mpu6050_get_accel_scale(mpu6050_scaled_data_t *scale_data);
 int mpu6050_get_accel_cali(mpu6050_cali_data_t *cali_data);
 int mpu6050_get_gyro_raw(mpu6050_raw_data_t *raw_data);
 int mpu6050_get_gyro_scale(mpu6050_scaled_data_t *scale_data);
 int mpu6050_get_gyro_cali(mpu6050_cali_data_t *cali_data);
+
 int mpu6050_update_quat(void);
 int mpu6050_get_quat(mpu6050_quat_data_t *quat);
+
+void mpu6050_set_accel_bias(mpu6050_bias_data_t accel_bias);
+void mpu6050_set_gyro_bias(mpu6050_bias_data_t gyro_bias);
+void mpu6050_get_accel_bias(mpu6050_bias_data_t *accel_bias);
+void mpu6050_get_gyro_bias(mpu6050_bias_data_t *gyro_bias);
+int mpu6050_auto_calib(void);
 
 #ifdef __cplusplus
 }
