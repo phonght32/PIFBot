@@ -29,6 +29,7 @@ add_message_files(
   FILES
   SensorState.msg
   Sound.msg
+  VersionInfo.msg
 )
 
 ## Generate services in the 'srv' folder

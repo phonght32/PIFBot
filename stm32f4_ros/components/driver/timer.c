@@ -763,16 +763,25 @@ int pwm_stop(pwm_handle_t handle)
 
 int pwm_set_freq(pwm_handle_t handle, uint32_t freq_hz)
 {
-	uint32_t conduct = (uint32_t) (APBx_CLOCK_MAPPING[handle->timer_num]/freq_hz);
-	uint16_t timer_prescaler = conduct / TIMER_MAX_RELOAD + 1;
-	uint16_t timer_period = (uint16_t)(conduct /(timer_prescaler+1)) -1;
-	uint32_t timer_compare_value = handle->pwm_duty_percent*timer_period/100;
+	if(!freq_hz)
+	{
+		HAL_TIM_PWM_Stop(&handle->hal_handle, TIM_CHANNEL_x_MAPPING[handle->timer_channel]);
+	}
+	else
+	{
+		HAL_TIM_PWM_Start(&handle->hal_handle, TIM_CHANNEL_x_MAPPING[handle->timer_channel]);
+		uint32_t conduct = (uint32_t) (APBx_CLOCK_MAPPING[handle->timer_num]/freq_hz);
+		uint16_t timer_prescaler = conduct / TIMER_MAX_RELOAD + 1;
+		uint16_t timer_period = (uint16_t)(conduct /(timer_prescaler+1)) -1;
+		uint32_t timer_compare_value = handle->pwm_duty_percent*timer_period/100;
 
-	__HAL_TIM_SET_AUTORELOAD(&handle->hal_handle,timer_period);
-	__HAL_TIM_SET_PRESCALER(&handle->hal_handle,timer_prescaler);
-	__HAL_TIM_SET_COMPARE(&handle->hal_handle,TIM_CHANNEL_x_MAPPING[handle->timer_channel], timer_compare_value);
+		__HAL_TIM_SET_AUTORELOAD(&handle->hal_handle,timer_period);
+		__HAL_TIM_SET_PRESCALER(&handle->hal_handle,timer_prescaler);
+		__HAL_TIM_SET_COMPARE(&handle->hal_handle,TIM_CHANNEL_x_MAPPING[handle->timer_channel], timer_compare_value);
+
+		handle->pwm_freq_hz = freq_hz;
+	}
 	
-	handle->pwm_freq_hz = freq_hz;
 	return 0;
 }
 

@@ -55,9 +55,9 @@ int main(void)
     ros_setup();
 
 //
-//    step_driver_set_freq(motor_left,3200);
+//    step_driver_set_freq(motor_left,0);
 //    MOTOR_LEFT_FORWARD(motor_left);
-//    step_driver_set_freq(motor_right,3200);
+//    step_driver_set_freq(motor_right,0);
 //    MOTOR_RIGHT_FORWARD(motor_right);
 
     MOTOR_START(motor_left);
@@ -106,7 +106,7 @@ int main(void)
         getMotorSpeed(goal_velocity_from_motor);
 
         nh.spinOnce();
-
+//        HAL_Delay(10);
         waitForSerialLink(nh.connected());
     }
 }
