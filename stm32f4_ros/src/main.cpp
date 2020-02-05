@@ -65,6 +65,21 @@ int main(void)
 
     while (1)
     {
+//    	for (int i=0;i<20;i++)
+//    	{
+//    				MOTOR_SET_SPEED(motor_left,0.01*i);
+//    				MOTOR_SET_SPEED(motor_right,0.01*i);
+//    				HAL_Delay(1000);
+//
+//    	}
+
+//    	MOTOR_LEFT_BACKWARD(motor_left);
+//		MOTOR_SET_SPEED(motor_left,0.2);
+//
+//    	MOTOR_RIGHT_BACKWARD(motor_right);
+//		MOTOR_SET_SPEED(motor_right,0.2);
+
+
         uint32_t t = millis();
         updateTime();
         updateVariable(nh.connected());
@@ -75,7 +90,7 @@ int main(void)
             updateGoalVelocity();
             if ((t - tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX]))
             {
-                controlMotor(zero_velocity);
+//                controlMotor(zero_velocity);
             }
             else
             {
@@ -106,7 +121,7 @@ int main(void)
         getMotorSpeed(goal_velocity_from_motor);
 
         nh.spinOnce();
-//        HAL_Delay(10);
+
         waitForSerialLink(nh.connected());
     }
 }
@@ -152,7 +167,7 @@ void robot_rosserial_init(void)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     huart4.Instance = UART4;
-    huart4.Init.BaudRate = 57600;
+    huart4.Init.BaudRate = 38400;
     huart4.Init.WordLength = UART_WORDLENGTH_8B;
     huart4.Init.StopBits = UART_STOPBITS_1;
     huart4.Init.Parity = UART_PARITY_NONE;
@@ -708,13 +723,10 @@ void controlMotor(float *goal_vel)
     wheel_velocity_cmd[LEFT]  = constrain(wheel_velocity_cmd[LEFT], MIN_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY);
     wheel_velocity_cmd[RIGHT] = constrain(wheel_velocity_cmd[RIGHT], MIN_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY);
 
-//    float freq_motor_left = abs(wheel_velocity_cmd[LEFT]) * 15433;
-//    float freq_motor_right = abs(wheel_velocity_cmd[RIGHT]) * 15433;
-
     if (wheel_velocity_cmd[LEFT] < 0)
     {
         MOTOR_LEFT_BACKWARD(motor_left);
-        MOTOR_SET_SPEED(motor_left,wheel_velocity_cmd[LEFT]);
+        MOTOR_SET_SPEED(motor_left,-wheel_velocity_cmd[LEFT]);
 //        step_driver_set_freq(motor_left, (uint32_t)freq_motor_left);
     }
     else
@@ -727,7 +739,7 @@ void controlMotor(float *goal_vel)
     if (wheel_velocity_cmd[RIGHT] < 0)
     {
         MOTOR_RIGHT_BACKWARD(motor_right);
-        MOTOR_SET_SPEED(motor_right,wheel_velocity_cmd[RIGHT]);
+        MOTOR_SET_SPEED(motor_right,-wheel_velocity_cmd[RIGHT]);
 //        step_driver_set_freq(motor_right, (uint32_t)freq_motor_right);
     }
     else

@@ -16,6 +16,13 @@ void robot_motor_init(void)
     motor_left_config.pin_dir.gpio_reg_pull = GPIO_REG_PULL_NONE;
     motor_left = step_driver_init(&motor_left_config);
 
+//    gpio_config_t config;
+//    config.gpio_num = GPIO_NUM_5;
+//    config.gpio_port = GPIO_PORT_A;
+//    config.gpio_mode = GPIO_INPUT;
+//    config.gpio_reg_pull = GPIO_REG_PULL_DOWN;
+//    gpio_init(&config);
+
     step_driver_config_t motor_right_config;
     motor_right_config.pin_clk.timer_num = MOTORRIGHT_TIMER_NUM;
     motor_right_config.pin_clk.timer_channel = MOTORRIGHT_TIMER_CHANNEL;
@@ -44,4 +51,5 @@ void robot_mpu6050_init(void)
     mpu6050_config.fs_sel = MPU6050_FS_SEL_500;
     mpu6050_config.sleep_mode = MPU6050_DISABLE_SLEEP_MODE;
     mpu6050 = mpu6050_init(&mpu6050_config);
+    mpu6050_auto_calib();
 }

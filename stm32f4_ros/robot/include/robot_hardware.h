@@ -40,27 +40,27 @@ extern "C" {
 #define STEP_DIV					16
 
 /* Motor hardware define */
-#define MOTORLEFT_TIMER_NUM			TIMER_NUM_3
-#define MOTORLEFT_TIMER_CHANNEL		TIMER_CHANNEL_2
-#define MOTORLEFT_TIMER_PINSPACK	TIMER_PINS_PACK_1
-#define MOTORLEFT_GPIO_PORT			GPIO_PORT_C
-#define MOTORLEFT_GPIO_NUM			GPIO_NUM_5
+#define MOTORLEFT_TIMER_NUM			TIMER_NUM_4
+#define MOTORLEFT_TIMER_CHANNEL		TIMER_CHANNEL_1
+#define MOTORLEFT_TIMER_PINSPACK	TIMER_PINS_PACK_2
+#define MOTORLEFT_GPIO_PORT			GPIO_PORT_A
+#define MOTORLEFT_GPIO_NUM			GPIO_NUM_3
 
-#define MOTORRIGHT_TIMER_NUM		TIMER_NUM_2
-#define MOTORRIGHT_TIMER_CHANNEL	TIMER_CHANNEL_1
-#define MOTORRIGHT_TIMER_PINSPACK	TIMER_PINS_PACK_2
-#define MOTORRIGHT_GPIO_PORT		GPIO_PORT_A
-#define MOTORRIGHT_GPIO_NUM			GPIO_NUM_3
+#define MOTORRIGHT_TIMER_NUM		TIMER_NUM_3
+#define MOTORRIGHT_TIMER_CHANNEL	TIMER_CHANNEL_2
+#define MOTORRIGHT_TIMER_PINSPACK	TIMER_PINS_PACK_1
+#define MOTORRIGHT_GPIO_PORT		GPIO_PORT_C
+#define MOTORRIGHT_GPIO_NUM			GPIO_NUM_5
 
 /* MPU6050 hardware define */
 #define MPU6050_I2C_NUM				I2C_NUM_1
 #define MPU6050_I2C_PINSPACK		I2C_PINS_PACK_1
 
 /* Control motor macros */
-#define MOTOR_LEFT_FORWARD(_handle_)    step_driver_set_dir(_handle_, 1)
-#define MOTOR_LEFT_BACKWARD(_handle_)   step_driver_set_dir(_handle_, 0)
-#define MOTOR_RIGHT_FORWARD(_handle_)   step_driver_set_dir(_handle_, 0)
-#define MOTOR_RIGHT_BACKWARD(_handle_)  step_driver_set_dir(_handle_, 1)
+#define MOTOR_LEFT_FORWARD(_handle_)    step_driver_set_dir(_handle_, 0)
+#define MOTOR_LEFT_BACKWARD(_handle_)   step_driver_set_dir(_handle_, 1)
+#define MOTOR_RIGHT_FORWARD(_handle_)   step_driver_set_dir(_handle_, 1)
+#define MOTOR_RIGHT_BACKWARD(_handle_)  step_driver_set_dir(_handle_, 0)
 
 #define MOTOR_SET_SPEED(_handle_,speed) step_driver_set_freq(_handle_, (uint32_t)(speed*VEL2FREQ))
 
