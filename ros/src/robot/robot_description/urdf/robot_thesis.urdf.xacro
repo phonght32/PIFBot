@@ -138,13 +138,13 @@
   </joint>
 
   <link name="base_scan">
-    <visual>
+    <!-- <visual>
       <origin xyz="0 0 0.0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://turtlebot3_description/meshes/sensors/lds.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://robot_description/meshes/stl/robot_lidar.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="dark"/>
-    </visual>
+    </visual> -->
 
     <collision>
       <origin xyz="0.015 0 -0.0065" rpy="0 0 0"/>
