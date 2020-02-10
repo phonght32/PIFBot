@@ -10,7 +10,7 @@ extern "C" {
 #include "../components/driver/include/gpio.h"
 #include "../components/driver/include/uart.h"
 #include "../../components/imu/include/mpu6050.h"
-#include "../../components/motor/include/step_driver.h"
+#include "../../components/motor/include/step_motor.h"
 
 
 /* Model parameters */

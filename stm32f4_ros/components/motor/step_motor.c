@@ -1,4 +1,4 @@
-#include "../motor/include/step_driver.h"
+#include "include/step_motor.h"
 
 #include "stm32f4xx_hal.h"
 
