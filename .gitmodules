@@ -1,6 +1,3 @@
-[submodule "stm32f4-library"]
-	path = stm32f4-library
-	url = git@github.com:thanhphong98/stm32f4-library.git
 [submodule "rplidar_ros"]
 	path = ros/src/rplidar_ros
 	url = https://github.com/Slamtec/rplidar_ros.git
