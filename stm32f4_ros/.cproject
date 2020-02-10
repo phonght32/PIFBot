@@ -208,9 +208,6 @@
 					<sourceEntries>
 						<entry excluding="Src/stm32f4xx_hal_timebase_rtc_wakeup_template.c|Src/stm32f4xx_hal_timebase_rtc_alarm_template.c|Src/stm32f4xx_hal_timebase_tim_template.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="HAL_Driver"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Utilities"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="components/driver"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="components/imu"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="components/motor"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="robot"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="ros_lib"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
