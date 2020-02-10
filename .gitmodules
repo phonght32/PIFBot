@@ -1,7 +1,11 @@
 [submodule "rplidar_ros"]
 	path = ros/src/rplidar_ros
 	url = https://github.com/Slamtec/rplidar_ros.git
+
 [submodule "ros_lib"]
 	path = stm32f4/ros_lib
 	url = https://gitlab.com/ivliev123/ros_lib.git
 
+[submodule "stm32f4_ros/stm32f4_library"]
+	path = stm32f4_ros/stm32f4_library
+	url = https://github.com/thanhphong98/stm32f4_library.git

@@ -7,6 +7,7 @@
 
 #include "../robot/include/robot_config.h"
 #include "../stm32f4_library/imu/include/mpu6050.h"
+#include "../stm32f4_library/motor/include/step_motor.h"
 
 /****************************** STM32 SYSTEM ******************************** */
 void SystemClock_Config(void);
