@@ -1,10 +1,5 @@
 #include "include/step_motor.h"
 
-#include "stm32f4xx_hal.h"
-
-#include "stdlib.h"
-
-
 #define PWM_DUTYCYCLE_DEFAULT	30
 
 typedef struct step_motor {

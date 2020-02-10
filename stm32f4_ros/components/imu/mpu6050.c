@@ -1,13 +1,4 @@
-#include "../imu/include/mpu6050.h"
-
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_rcc.h"
-#include "stm32f4xx_hal_i2c.h"
-
-#include "stdlib.h"
-#include "string.h"
-
-#include "../imu/include/MadgwickAHRS.h"
+#include "include/mpu6050.h"
 
 /* SELF TEST REGISTERS */
 #define MPU6050_SELF_TEST_X         0x0D

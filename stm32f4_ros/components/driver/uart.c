@@ -1,11 +1,4 @@
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_rcc.h"
-#include "stm32f4xx_hal_uart.h"
-
-#include "stdlib.h"
-
 #include "include/uart.h"
-
 
 #define UART_WORDLENGTH_DEFAULT 		UART_WORDLENGTH_8B
 #define UART_STOPBITS_DEFAULT 			UART_STOPBITS_1

@@ -5,11 +5,13 @@
 extern "C" {
 #endif
 
+#include "stdlib.h"
 #include "stdint.h"
 #include "stdbool.h"
 
 #include "../../driver/include/timer.h"
 #include "../../driver/include/gpio.h"
+
 
 typedef struct step_motor *step_motor_handle_t;
 

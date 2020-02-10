@@ -1,9 +1,3 @@
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_rcc.h"
-#include "stm32f4xx_hal_i2c.h"
-
-#include "stdlib.h"
-
 #include "include/i2c.h"
 
 #define I2C_DUTYCYCLE_DEFAULT 			I2C_DUTYCYCLE_2

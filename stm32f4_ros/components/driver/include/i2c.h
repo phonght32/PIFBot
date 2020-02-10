@@ -5,9 +5,11 @@
 extern "C" {
 #endif
 
+#include "stdlib.h"
 #include "stdint.h"
 
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_rcc.h"
 #include "stm32f4xx_hal_i2c.h"
 
 /* Table below shows all possible pins for each i2c

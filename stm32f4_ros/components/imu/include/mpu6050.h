@@ -6,9 +6,13 @@ extern "C" {
 #endif
 
 #include "stdint.h"
+#include "stdlib.h"
+#include "string.h"
 
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_i2c.h"
+
+#include "MadgwickAHRS.h"
 
 typedef struct mpu6050 *mpu6050_handle_t;
 

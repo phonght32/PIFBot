@@ -195,10 +195,10 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Utilities/Components/lsm303dlhc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/core&quot;"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/driver/include"/>
-									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/mpu6050/include"/>
-									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/step_driver/include"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/robot/include"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/ros_lib"/>
+									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/imu/include"/>
+									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/step_motor/include"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.790468759" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1431855379" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -208,6 +208,9 @@
 					<sourceEntries>
 						<entry excluding="Src/stm32f4xx_hal_timebase_rtc_wakeup_template.c|Src/stm32f4xx_hal_timebase_rtc_alarm_template.c|Src/stm32f4xx_hal_timebase_tim_template.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="HAL_Driver"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Utilities"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="components/driver"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="components/imu"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="components/motor"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="robot"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="ros_lib"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>

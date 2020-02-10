@@ -6,6 +6,7 @@
 #include "string.h"
 
 #include "../robot/include/robot_config.h"
+#include "../components/imu/include/mpu6050.h"
 
 /****************************** STM32 SYSTEM ******************************** */
 void SystemClock_Config(void);

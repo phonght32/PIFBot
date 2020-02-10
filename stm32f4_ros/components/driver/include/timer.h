@@ -6,7 +6,11 @@ extern "C" {
 #endif
 
 #include "stdint.h"
+#include "stdlib.h"
 
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_rcc.h"
+#include "stm32f4xx_hal_tim.h"
 
 /*
  * Table below shows all possible pins for each timer and channel.

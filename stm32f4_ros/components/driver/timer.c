@@ -1,9 +1,3 @@
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_rcc.h"
-#include "stm32f4xx_hal_tim.h"
-
-#include "stdlib.h"
-
 #include "include/timer.h"
 
 #define SYSTEM_CLOCK					168000000

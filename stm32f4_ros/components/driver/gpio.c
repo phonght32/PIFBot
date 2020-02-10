@@ -1,9 +1,3 @@
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_rcc.h"
-#include "stm32f4xx_hal_gpio.h"
-
-#include "stdlib.h"
-
 #include "include/gpio.h"
 
 #define GPIO_SPEED_FREQ_DEFAULT  GPIO_SPEED_FREQ_VERY_HIGH

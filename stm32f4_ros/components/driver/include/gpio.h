@@ -7,6 +7,11 @@ extern "C" {
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "stdlib.h"
+
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_rcc.h"
+#include "stm32f4xx_hal_gpio.h"
 
 typedef struct gpio *gpio_handle_t;
 
