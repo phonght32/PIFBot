@@ -1,8 +1,9 @@
+#include "../motor/include/step_driver.h"
+
 #include "stm32f4xx_hal.h"
 
 #include "stdlib.h"
 
-#include "include/step_driver.h"
 
 #define PWM_DUTYCYCLE_DEFAULT	30
 

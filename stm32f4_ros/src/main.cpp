@@ -55,10 +55,10 @@ int main(void)
     ros_setup();
 
 //
-//    step_driver_set_freq(motor_left,0);
-//    MOTOR_LEFT_FORWARD(motor_left);
-//    step_driver_set_freq(motor_right,0);
-//    MOTOR_RIGHT_FORWARD(motor_right);
+    step_driver_set_freq(motor_left,3200);
+    MOTOR_LEFT_FORWARD(motor_left);
+    step_driver_set_freq(motor_right,3200);
+    MOTOR_RIGHT_FORWARD(motor_right);
 
     MOTOR_START(motor_left);
     MOTOR_START(motor_right);
