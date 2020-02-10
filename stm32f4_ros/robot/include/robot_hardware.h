@@ -57,15 +57,15 @@ extern "C" {
 #define MPU6050_I2C_PINSPACK		I2C_PINS_PACK_1
 
 /* Control motor macros */
-#define MOTOR_LEFT_FORWARD(_handle_)    step_driver_set_dir(_handle_, 0)
-#define MOTOR_LEFT_BACKWARD(_handle_)   step_driver_set_dir(_handle_, 1)
-#define MOTOR_RIGHT_FORWARD(_handle_)   step_driver_set_dir(_handle_, 1)
-#define MOTOR_RIGHT_BACKWARD(_handle_)  step_driver_set_dir(_handle_, 0)
+#define MOTOR_LEFT_FORWARD(_handle_)    step_motor_set_dir(_handle_, 0)
+#define MOTOR_LEFT_BACKWARD(_handle_)   step_motor_set_dir(_handle_, 1)
+#define MOTOR_RIGHT_FORWARD(_handle_)   step_motor_set_dir(_handle_, 1)
+#define MOTOR_RIGHT_BACKWARD(_handle_)  step_motor_set_dir(_handle_, 0)
 
-#define MOTOR_SET_SPEED(_handle_,speed) step_driver_set_freq(_handle_, (uint32_t)(speed*VEL2FREQ))
+#define MOTOR_SET_SPEED(_handle_,speed) step_motor_set_freq(_handle_, (uint32_t)(speed*VEL2FREQ))
 
-#define MOTOR_START(_handle_)			step_driver_start(_handle_)
-#define MOTOR_STOP(_handle_)			step_driver_stop(_handle_)
+#define MOTOR_START(_handle_)			step_motor_start(_handle_)
+#define MOTOR_STOP(_handle_)			step_motor_stop(_handle_)
 
 
 void robot_motor_init(void);

@@ -1,12 +1,12 @@
 #include "include/robot_hardware.h"
 
-extern step_driver_handle_t motor_left, motor_right;
+extern step_motor_handle_t motor_left, motor_right;
 extern mpu6050_handle_t mpu6050;
 extern I2C_HandleTypeDef mpu6050_i2c;
 
 void robot_motor_init(void)
 {
-    step_driver_config_t motor_left_config;
+    step_motor_config_t motor_left_config;
     motor_left_config.pin_clk.timer_num = MOTORLEFT_TIMER_NUM;
     motor_left_config.pin_clk.timer_channel = MOTORLEFT_TIMER_CHANNEL;
     motor_left_config.pin_clk.timer_pins_pack = MOTORLEFT_TIMER_PINSPACK;
@@ -14,16 +14,9 @@ void robot_motor_init(void)
     motor_left_config.pin_dir.gpio_num = MOTORLEFT_GPIO_NUM;
     motor_left_config.pin_dir.gpio_mode = GPIO_OUTPUT;
     motor_left_config.pin_dir.gpio_reg_pull = GPIO_REG_PULL_NONE;
-    motor_left = step_driver_init(&motor_left_config);
+    motor_left = step_motor_init(&motor_left_config);
 
-//    gpio_config_t config;
-//    config.gpio_num = GPIO_NUM_5;
-//    config.gpio_port = GPIO_PORT_A;
-//    config.gpio_mode = GPIO_INPUT;
-//    config.gpio_reg_pull = GPIO_REG_PULL_DOWN;
-//    gpio_init(&config);
-
-    step_driver_config_t motor_right_config;
+    step_motor_config_t motor_right_config;
     motor_right_config.pin_clk.timer_num = MOTORRIGHT_TIMER_NUM;
     motor_right_config.pin_clk.timer_channel = MOTORRIGHT_TIMER_CHANNEL;
     motor_right_config.pin_clk.timer_pins_pack = MOTORRIGHT_TIMER_PINSPACK;
@@ -31,7 +24,7 @@ void robot_motor_init(void)
     motor_right_config.pin_dir.gpio_num = MOTORRIGHT_GPIO_NUM;
     motor_right_config.pin_dir.gpio_mode = GPIO_OUTPUT;
     motor_right_config.pin_dir.gpio_reg_pull = GPIO_REG_PULL_NONE;
-    motor_right = step_driver_init(&motor_right_config);
+    motor_right = step_motor_init(&motor_right_config);
 }
 
 void robot_mpu6050_init(void)

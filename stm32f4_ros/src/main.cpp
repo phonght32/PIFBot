@@ -18,7 +18,7 @@ DMA_HandleTypeDef hdma_uart4_tx;
 void robot_rosserial_init(void);
 
 
-step_driver_handle_t motor_left, motor_right;
+step_motor_handle_t motor_left, motor_right;
 mpu6050_handle_t mpu6050;
 I2C_HandleTypeDef mpu6050_i2c;
 
@@ -55,9 +55,9 @@ int main(void)
     ros_setup();
 
 //
-    step_driver_set_freq(motor_left,3200);
+    step_motor_set_freq(motor_left,3200);
     MOTOR_LEFT_FORWARD(motor_left);
-    step_driver_set_freq(motor_right,3200);
+    step_motor_set_freq(motor_right,3200);
     MOTOR_RIGHT_FORWARD(motor_right);
 
     MOTOR_START(motor_left);
