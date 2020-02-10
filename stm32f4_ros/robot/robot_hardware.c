@@ -1,5 +1,5 @@
 #include "include/robot_hardware.h"
-#include "../components/driver/include/i2c.h"
+#include "../stm32f4_library/driver/include/i2c.h"
 
 extern step_motor_handle_t motor_left, motor_right;
 extern mpu6050_handle_t mpu6050;

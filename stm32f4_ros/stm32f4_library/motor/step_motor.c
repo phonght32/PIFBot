@@ -1,4 +1,4 @@
-#include "include/step_motor.h"
+#include "../../stm32f4_library/motor/include/step_motor.h"
 
 #define PWM_DUTYCYCLE_DEFAULT	30
 

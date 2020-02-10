@@ -1,4 +1,4 @@
-#include "include/timer.h"
+#include "../../stm32f4_library/driver/include/timer.h"
 
 #define SYSTEM_CLOCK					168000000
 #define APB1_CLOCK						(SYSTEM_CLOCK/2)

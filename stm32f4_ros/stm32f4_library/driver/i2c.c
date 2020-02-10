@@ -1,4 +1,4 @@
-#include "include/i2c.h"
+#include "../../stm32f4_library/driver/include/i2c.h"
 
 #define I2C_DUTYCYCLE_DEFAULT 			I2C_DUTYCYCLE_2
 #define I2C_CLOCKSPEED_DEFAULT			100000

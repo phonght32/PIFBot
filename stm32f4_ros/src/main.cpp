@@ -1,12 +1,12 @@
 /******************************** Include *********************************** */
-#include "main.h"
-
 #include "stdio.h"
 #include "math.h"
 #include "string.h"
 
+#include "main.h"
+
 #include "../robot/include/robot_config.h"
-#include "../components/imu/include/mpu6050.h"
+#include "../stm32f4_library/imu/include/mpu6050.h"
 
 /****************************** STM32 SYSTEM ******************************** */
 void SystemClock_Config(void);

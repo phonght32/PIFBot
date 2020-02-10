@@ -5,12 +5,12 @@
 extern "C" {
 #endif
 
-#include "../components/driver/include/timer.h"
-#include "../components/driver/include/i2c.h"
-#include "../components/driver/include/gpio.h"
-#include "../components/driver/include/uart.h"
-#include "../../components/imu/include/mpu6050.h"
-#include "../../components/motor/include/step_motor.h"
+#include "../../stm32f4_library/driver/include/timer.h"
+#include "../../stm32f4_library/driver/include/i2c.h"
+#include "../../stm32f4_library/driver/include/gpio.h"
+#include "../../stm32f4_library/driver/include/uart.h"
+#include "../../stm32f4_library/imu/include/mpu6050.h"
+#include "../../stm32f4_library/motor/include/step_motor.h"
 
 
 /* Model parameters */

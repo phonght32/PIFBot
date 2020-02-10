@@ -12,7 +12,7 @@ extern "C" {
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_i2c.h"
 
-#include "MadgwickAHRS.h"
+#include "../../../stm32f4_library/imu/include/MadgwickAHRS.h"
 
 typedef struct mpu6050 *mpu6050_handle_t;
 

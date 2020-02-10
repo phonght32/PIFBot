@@ -1,4 +1,4 @@
-#include "include/mpu6050.h"
+#include "../../stm32f4_library/imu/include/mpu6050.h"
 
 /* SELF TEST REGISTERS */
 #define MPU6050_SELF_TEST_X         0x0D
