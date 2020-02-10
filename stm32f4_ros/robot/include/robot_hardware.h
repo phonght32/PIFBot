@@ -9,7 +9,7 @@ extern "C" {
 #include "../components/driver/include/i2c.h"
 #include "../components/driver/include/gpio.h"
 #include "../components/driver/include/uart.h"
-#include "../components/mpu6050/include/mpu6050.h"
+#include "../../components/imu/include/mpu6050.h"
 #include "../../components/motor/include/step_driver.h"
 
 

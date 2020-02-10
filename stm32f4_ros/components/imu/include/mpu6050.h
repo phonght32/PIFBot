@@ -7,6 +7,9 @@ extern "C" {
 
 #include "stdint.h"
 
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_i2c.h"
+
 typedef struct mpu6050 *mpu6050_handle_t;
 
 typedef struct {
