@@ -5,3 +5,8 @@
 [submodule "stm32f4_ros/stm32f4_library"]
 	path = stm32f4_ros/stm32f4_library
 	url = https://github.com/thanhphong98/stm32f4_library.git
+
+[submodule "kicad/mainboard_v2_0/kicad-library"]
+	path = kicad/mainboard_v2_0/kicad-library
+	url = git@github.com:thanhphong98/kicad-library.git
+	branch = feature/thesis
