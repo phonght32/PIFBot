@@ -13,8 +13,8 @@
 #include "../components/mpu6050/include/mpu6050.h"
 #include "../components/step_driver/include/step_driver.h"
 
-#define TEST_ROSSERIAL
-//#define TEST_PWM
+//#define TEST_ROSSERIAL
+#define TEST_PWM
 //#define TEST_MPU6050
 //#define TEST_STEP_DRIVER
 
@@ -64,7 +64,7 @@ int main(void)
     pwm1_config.timer_pins_pack = TIMER_PINS_PACK_2;
     pwm_handle_t pwm1_handle = pwm_init(&pwm1_config);
 
-    pwm_set_freq(pwm1_handle, 1);
+    pwm_set_freq(pwm1_handle, 3200);
     pwm_set_duty(pwm1_handle, 50);
 
     pwm_config_t pwm2_config;
@@ -73,7 +73,7 @@ int main(void)
     pwm2_config.timer_pins_pack = TIMER_PINS_PACK_2;
     pwm_handle_t pwm2_handle = pwm_init(&pwm2_config);
 
-    pwm_set_freq(pwm2_handle, 1);
+    pwm_set_freq(pwm2_handle, 3200);
     pwm_set_duty(pwm2_handle, 50);
 #endif
 

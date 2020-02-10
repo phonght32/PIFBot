@@ -10,7 +10,15 @@ extern "C" {
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_i2c.h"
 
-
+/* Table below shows all possible pins for each i2c
+ *
+ *  I2Cx | Pins pack 1 | Pins pack 2 | Pins pack 3 |  APB  |
+ *       |  SCL   SDA  |  SCL   SDA  |  SCL    SDA |       |
+ *----------------------------------------------------------
+ *  I2C1 |  PB6   PB7  |  PB8   PB9  |  PB6    PB9 |   1   |
+ *  I2C2 |  PB10  PB11 |  PF1   PF0  |  PH4    PH5 |   1   |
+ *  I2C3 |  PA8   PC9  |  PH7   PH8  |  -      -   |   1   |
+ */
 
 typedef struct i2c *i2c_handle_t;
 
