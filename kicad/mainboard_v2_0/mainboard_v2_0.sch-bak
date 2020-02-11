@@ -1013,9 +1013,9 @@ Text GLabel 4275 2775 1    50   Input ~ 0
 LED_ST1
 Text GLabel 4600 2775 1    50   Input ~ 0
 LED_ST2
-Text GLabel 3700 3925 2    50   Input ~ 0
+Text GLabel 3375 4300 2    50   Input ~ 0
 LED_ST1
-Text GLabel 3700 4025 2    50   Input ~ 0
+Text GLabel 3375 4400 2    50   Input ~ 0
 LED_ST2
 $Comp
 L Device:R_Small R?
@@ -1074,31 +1074,31 @@ $EndComp
 $Comp
 L Connector_Generic:Conn_01x06 J?
 U 1 1 5E70A527
-P 6200 2100
-F 0 "J?" H 6118 1575 50  0000 C CNN
-F 1 "Conn_01x06" H 6118 1666 50  0000 C CNN
-F 2 "" H 6200 2100 50  0001 C CNN
-F 3 "~" H 6200 2100 50  0001 C CNN
-	1    6200 2100
+P 7000 2550
+F 0 "J?" H 6918 2025 50  0000 C CNN
+F 1 "Conn_01x06" H 6918 2116 50  0000 C CNN
+F 2 "" H 7000 2550 50  0001 C CNN
+F 3 "~" H 7000 2550 50  0001 C CNN
+	1    7000 2550
 	-1   0    0    1   
 $EndComp
 $Comp
 L power:GND #PWR?
 U 1 1 5E71CC0A
-P 6400 2300
-F 0 "#PWR?" H 6400 2050 50  0001 C CNN
-F 1 "GND" V 6405 2172 50  0000 R CNN
-F 2 "" H 6400 2300 50  0001 C CNN
-F 3 "" H 6400 2300 50  0001 C CNN
-	1    6400 2300
+P 7200 2750
+F 0 "#PWR?" H 7200 2500 50  0001 C CNN
+F 1 "GND" V 7205 2622 50  0000 R CNN
+F 2 "" H 7200 2750 50  0001 C CNN
+F 3 "" H 7200 2750 50  0001 C CNN
+	1    7200 2750
 	0    -1   -1   0   
 $EndComp
-Text GLabel 6400 2100 2    50   Input ~ 0
+Text GLabel 7200 2550 2    50   Input ~ 0
 UART_ROS_TX
-Text GLabel 6400 2200 2    50   Input ~ 0
+Text GLabel 7200 2650 2    50   Input ~ 0
 UART_ROS_RX
-Text GLabel 3650 3700 2    50   Input ~ 0
+Text GLabel 3325 4075 2    50   Input ~ 0
 UART_ROS_TX
-Text GLabel 3650 3800 2    50   Input ~ 0
+Text GLabel 3325 4175 2    50   Input ~ 0
 UART_ROS_RX
 $EndSCHEMATC
