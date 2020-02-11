@@ -12,6 +12,7 @@ extern "C" {
 #include "../../stm32f4_library/imu/include/mpu6050.h"
 #include "../../stm32f4_library/motor/include/step_motor.h"
 
+#define PI							3.14159265359
 
 /* Model parameters */
 #define WHEEL_RADIUS				0.033		/*!< meters */
@@ -19,25 +20,23 @@ extern "C" {
 #define TURNING_RADIUS 				0.08		/*!< rad	*/
 #define ROBOT_RADIUS 				0.1			/*!< rad 	*/
 
-#define MAX_LINEAR_VELOCITY 		(WHEEL_RADIUS * 2 * 3.14159265359 * 60 / 60)
+#define MAX_LINEAR_VELOCITY 		(WHEEL_RADIUS * 2 * PI * 60 / 60)
 #define MAX_ANGULAR_VELOCITY 		(MAX_LINEAR_VELOCITY / TURNING_RADIUS)
 
 #define MIN_LINEAR_VELOCITY			-MAX_LINEAR_VELOCITY
 #define MIN_ANGULAR_VELOCITY		-MAX_ANGULAR_VELOCITY
 
 
+/* Step driver parameters */
+#define STEP_DIV					4
+#define NUM_PULSE_PER_ROUND			200
+
 /* 						    2*pi*WHELL_RADIUS
  *	velocity (m/s) = ------------------------------
  *					  NUM_PULSE_PER_ROUND * STEP_DIV
  *
- *	NUM_PULSE_PER_ROUND: 200
- *	STEP_DIV           : 16
- *	WHEEL_RADIUS	   : 0.033
  */
-#define VEL2FREQ					15433
-
-/* Step driver parameters */
-#define STEP_DIV					16
+#define VEL2FREQ					((NUM_PULSE_PER_ROUND*STEP_DIV)/(2*PI*WHEEL_RADIUS))
 
 /* Motor hardware define */
 #define MOTORLEFT_TIMER_NUM			TIMER_NUM_4
@@ -66,7 +65,6 @@ extern "C" {
 
 #define MOTOR_START(_handle_)			step_motor_start(_handle_)
 #define MOTOR_STOP(_handle_)			step_motor_stop(_handle_)
-
 
 void robot_motor_init(void);
 void robot_mpu6050_init(void);

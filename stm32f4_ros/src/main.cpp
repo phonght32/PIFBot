@@ -56,32 +56,8 @@ int main(void)
     /* ROS setup */
     ros_setup();
 
-//
-    step_motor_set_freq(motor_left,3200);
-    MOTOR_LEFT_FORWARD(motor_left);
-    step_motor_set_freq(motor_right,3200);
-    MOTOR_RIGHT_FORWARD(motor_right);
-
-    MOTOR_START(motor_left);
-    MOTOR_START(motor_right);
-
     while (1)
     {
-//    	for (int i=0;i<20;i++)
-//    	{
-//    				MOTOR_SET_SPEED(motor_left,0.01*i);
-//    				MOTOR_SET_SPEED(motor_right,0.01*i);
-//    				HAL_Delay(1000);
-//
-//    	}
-
-//    	MOTOR_LEFT_BACKWARD(motor_left);
-//		MOTOR_SET_SPEED(motor_left,0.2);
-//
-//    	MOTOR_RIGHT_BACKWARD(motor_right);
-//		MOTOR_SET_SPEED(motor_right,0.2);
-
-
         uint32_t t = millis();
         updateTime();
         updateVariable(nh.connected());
@@ -729,26 +705,22 @@ void controlMotor(float *goal_vel)
     {
         MOTOR_LEFT_BACKWARD(motor_left);
         MOTOR_SET_SPEED(motor_left,-wheel_velocity_cmd[LEFT]);
-//        step_driver_set_freq(motor_left, (uint32_t)freq_motor_left);
     }
     else
     {
         MOTOR_LEFT_FORWARD(motor_left);
         MOTOR_SET_SPEED(motor_left,wheel_velocity_cmd[LEFT]);
-//        step_driver_set_freq(motor_left, (uint32_t)freq_motor_left);
     }
 
     if (wheel_velocity_cmd[RIGHT] < 0)
     {
         MOTOR_RIGHT_BACKWARD(motor_right);
         MOTOR_SET_SPEED(motor_right,-wheel_velocity_cmd[RIGHT]);
-//        step_driver_set_freq(motor_right, (uint32_t)freq_motor_right);
     }
     else
     {
         MOTOR_RIGHT_FORWARD(motor_right);
         MOTOR_SET_SPEED(motor_right,wheel_velocity_cmd[RIGHT]);
-//        step_driver_set_freq(motor_right, (uint32_t)freq_motor_right);
     }
 }
 
