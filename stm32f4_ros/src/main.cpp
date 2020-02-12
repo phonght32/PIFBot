@@ -7,12 +7,12 @@
 
 #include "../robot/include/robot_config.h"
 
-void ros_setup(void);
-void controlMotor(float *goal_vel);
-void getMotorSpeed(float *vel);
-void updateIMU(void);
-sensor_msgs::Imu getIMU(void);
-void getOrientation(float *orientation);
+void ros_setup(void);						/*<! ROS setup function */
+void controlMotor(float *goal_vel);			/*<! Control motor speed and direction function */
+void getMotorSpeed(float *vel);				/*<! Get motor speed function */
+void updateIMU(void);						/*<! Update quaternion function */
+sensor_msgs::Imu getIMU(void);				/*<! Get quaternion function */
+void getOrientation(float *orientation);	/*<! Get orientation function */
 
 
 /********************************** main ************************************ */
@@ -111,12 +111,15 @@ void ros_setup(void)
 
 void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
 {
+	/* Get goal velocity */
     goal_velocity_from_cmd[LINEAR] = cmd_vel_msg.linear.x;
     goal_velocity_from_cmd[ANGULAR] = cmd_vel_msg.angular.z;
 
+    /* Constrain velocity */
     goal_velocity_from_cmd[LINEAR]  = constrain(goal_velocity_from_cmd[LINEAR],  MIN_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY);
     goal_velocity_from_cmd[ANGULAR] = constrain(goal_velocity_from_cmd[ANGULAR], MIN_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
 
+    /* Update time */
     tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX] = millis();
 }
 
@@ -137,19 +140,23 @@ void resetCallback(const std_msgs::Empty &reset_msg)
 
 void publishCmdVelFromMotorMsg(void)
 {
+	/* Get motor velocity */
     cmd_vel_motor_msg.linear.x = goal_velocity_from_motor[LINEAR];
     cmd_vel_motor_msg.angular.z = goal_velocity_from_motor[ANGULAR];
 
+    /* Publish veloctiy to "cmd_vel_motor" topic */
     cmd_vel_motor_pub.publish(&cmd_vel_motor_msg);
 }
 
 void publishImuMsg(void)
 {
+	/* Get IMU data (accelerometer, gyroscope, quaternion and variance ) */
     imu_msg = getIMU();
 
     imu_msg.header.stamp = rosNow();
     imu_msg.header.frame_id = imu_frame_id;
 
+    /* Publish IMU messages */
     imu_pub.publish(&imu_msg);
 }
 
