@@ -6,26 +6,7 @@
 #include "main.h"
 
 #include "../robot/include/robot_config.h"
-#include "../stm32f4_library/imu/include/mpu6050.h"
-#include "../stm32f4_library/motor/include/step_motor.h"
 
-/****************************** STM32 SYSTEM ******************************** */
-void SystemClock_Config(void);
-void Error_Handler(void);
-
-/******************************** ROSSERIAL ********************************* */
-UART_HandleTypeDef huart4;
-DMA_HandleTypeDef hdma_uart4_rx;
-DMA_HandleTypeDef hdma_uart4_tx;
-void robot_rosserial_init(void);
-
-
-step_motor_handle_t motor_left, motor_right;
-mpu6050_handle_t mpu6050;
-I2C_HandleTypeDef mpu6050_i2c;
-
-
-/********************************** ROS ************************************* */
 void ros_setup(void);
 void controlMotor(float *goal_vel);
 void getMotorSpeed(float *vel);
@@ -37,15 +18,15 @@ void getOrientation(float *orientation);
 /********************************** main ************************************ */
 int main(void)
 {
-	/* STM32 system init */
+    /* STM32 system init */
     HAL_Init();
     SystemClock_Config();
 
     /* Motor configuration */
     robot_motor_init();
 
-    /* MPU6050 configuration */
-    robot_mpu6050_init();
+    /* IMU configuration */
+    robot_imu_init();
 
     /* Init timer counts interval */
     timer_interval_init();
@@ -58,17 +39,18 @@ int main(void)
 
     while (1)
     {
-        uint32_t t = millis();
-        updateTime();
-        updateVariable(nh.connected());
-        updateTFPrefix(nh.connected());
+        uint32_t t = millis();              /*<! Update time counter */
+        updateTime();                       /*<! Update ROS time */
+        updateVariable(nh.connected());     /*<! Update variable */
+        updateTFPrefix(nh.connected());     /*<! Update TF */
 
+        /* Control motor*/
         if ((t - tTime[CONTROL_MOTOR_TIME_INDEX] >= 1000 / CONTROL_MOTOR_SPEED_FREQUENCY))
         {
             updateGoalVelocity();
             if ((t - tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX]))
             {
-//                controlMotor(zero_velocity);
+                //controlMotor(zero_velocity);
             }
             else
             {
@@ -77,120 +59,56 @@ int main(void)
             tTime[CONTROL_MOTOR_TIME_INDEX] = t;
         }
 
+        /* Publish motor speed to "cmd_vel_motor" topic */
         if ((t - tTime[CMD_VEL_PUBLISH_TIME_INDEX]) >= (1000 / CMD_VEL_PUBLISH_FREQUENCY))
         {
+            getMotorSpeed(goal_velocity_from_motor);
             publishCmdVelFromMotorMsg();
             tTime[CMD_VEL_PUBLISH_TIME_INDEX] = t;
         }
 
+        /* Publish driver information */
         if ((t - tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX]) >= (1000 / DRIVE_INFORMATION_PUBLISH_FREQUENCY))
         {
             publishDriveInformation();
             tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
         }
 
+        /* Publish IMU to "imu" topic */
         if ((t - tTime[IMU_PUBLISH_TIME_INDEX]) >= (1000 / IMU_PUBLISH_FREQUENCY))
         {
             publishImuMsg();
             tTime[IMU_PUBLISH_TIME_INDEX] = t;
         }
 
-        updateIMU();
-        getMotorSpeed(goal_velocity_from_motor);
+        updateIMU();                        /*<! Update IMU quaternion value consecutively */
 
-        nh.spinOnce();
-
-        waitForSerialLink(nh.connected());
+        nh.spinOnce();                      /*<! Spin NodeHandle to keep synchorus */
+        waitForSerialLink(nh.connected());  /*<! Keep rosserial connection */
     }
 }
 
-/* ROS init function */
 void ros_setup(void)
 {
-    nh.initNode();
+    nh.initNode();                      /*<! Init ROS node handle */
 
-    nh.subscribe(cmd_vel_sub);
-    nh.subscribe(reset_sub);
+    nh.subscribe(cmd_vel_sub);          /*<! Subscribe "cmd_vel" topic to get motor cmd */
+    nh.subscribe(reset_sub);            /*<! Subscribe "reset" topic */
 
-    nh.advertise(imu_pub);
-    nh.advertise(cmd_vel_motor_pub);
-    nh.advertise(odom_pub);
-    nh.advertise(joint_states_pub);
-    nh.advertise(battery_state_pub);
+    nh.advertise(imu_pub);              /*<! Register a publisher to "imu" topic */
+    nh.advertise(cmd_vel_motor_pub);    /*<! Register a publisher to "cmd_vel_motor" topic */
+    nh.advertise(odom_pub);             /*<! Register a publisher to "odom" topic */
+    nh.advertise(joint_states_pub);     /*<! Register a publisher to "joint_states" topic */
+    nh.advertise(battery_state_pub);    /*<! Register a publisher to "battery_state" topic */
 
-    tf_broadcaster.init(nh);
+    tf_broadcaster.init(nh);            /*<! Init TransformBroadcaster */
+    initOdom();                         /*<! Init odometry value */
+    initJointStates();                  /*<! Init joint state */
 
-    initOdom();
-
-    initJointStates();
-
-    prev_update_time = millis();
-
-    setup_end = true;
+    prev_update_time = millis();        /*<! Update time */
+    setup_end = true;                   /*<! Flag for setup completed */
 }
 
-void robot_rosserial_init(void)
-{
-    __HAL_RCC_GPIOH_CLK_ENABLE();
-    __HAL_RCC_UART4_CLK_ENABLE();
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    __HAL_RCC_DMA1_CLK_ENABLE();
-
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF8_UART4;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-    huart4.Instance = UART4;
-    huart4.Init.BaudRate = 38400;
-    huart4.Init.WordLength = UART_WORDLENGTH_8B;
-    huart4.Init.StopBits = UART_STOPBITS_1;
-    huart4.Init.Parity = UART_PARITY_NONE;
-    huart4.Init.Mode = UART_MODE_TX_RX;
-    huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    huart4.Init.OverSampling = UART_OVERSAMPLING_16;
-    HAL_UART_Init(&huart4);
-
-    hdma_uart4_rx.Instance = DMA1_Stream2;
-    hdma_uart4_rx.Init.Channel = DMA_CHANNEL_4;
-    hdma_uart4_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    hdma_uart4_rx.Init.PeriphInc = DMA_PINC_DISABLE;
-    hdma_uart4_rx.Init.MemInc = DMA_MINC_ENABLE;
-    hdma_uart4_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-    hdma_uart4_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-    hdma_uart4_rx.Init.Mode = DMA_NORMAL;
-    hdma_uart4_rx.Init.Priority = DMA_PRIORITY_LOW;
-    hdma_uart4_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-    HAL_DMA_Init(&hdma_uart4_rx);
-    __HAL_LINKDMA(&huart4, hdmarx, hdma_uart4_rx);
-
-    hdma_uart4_tx.Instance = DMA1_Stream4;
-    hdma_uart4_tx.Init.Channel = DMA_CHANNEL_4;
-    hdma_uart4_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
-    hdma_uart4_tx.Init.PeriphInc = DMA_PINC_DISABLE;
-    hdma_uart4_tx.Init.MemInc = DMA_MINC_ENABLE;
-    hdma_uart4_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-    hdma_uart4_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-    hdma_uart4_tx.Init.Mode = DMA_NORMAL;
-    hdma_uart4_tx.Init.Priority = DMA_PRIORITY_LOW;
-    hdma_uart4_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-    HAL_DMA_Init(&hdma_uart4_tx);
-    __HAL_LINKDMA(&huart4, hdmatx, hdma_uart4_tx);
-
-    HAL_NVIC_SetPriority(UART4_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(UART4_IRQn);
-
-    HAL_NVIC_SetPriority(DMA1_Stream2_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(DMA1_Stream2_IRQn);
-
-    HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
-}
-
-/* ROS runtime function */
 void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
 {
     goal_velocity_from_cmd[LINEAR] = cmd_vel_msg.linear.x;
@@ -199,7 +117,7 @@ void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
     goal_velocity_from_cmd[LINEAR]  = constrain(goal_velocity_from_cmd[LINEAR],  MIN_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY);
     goal_velocity_from_cmd[ANGULAR] = constrain(goal_velocity_from_cmd[ANGULAR], MIN_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
 
-    tTime[6] = millis();
+    tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX] = millis();
 }
 
 void resetCallback(const std_msgs::Empty &reset_msg)
@@ -325,12 +243,12 @@ ros::Time rosNow(void)
 
 ros::Time addMicros(ros::Time & t, uint32_t _micros)
 {
-//  uint32_t sec, nsec;
-//
-//  sec  = _micros / 1000 + t.sec;
-//  nsec = _micros % 1000000000 + t.nsec;
-//
-//  return ros::Time(sec, nsec);
+    uint32_t sec, nsec;
+
+    sec  = _micros / 1000 + t.sec;
+    nsec = _micros % 1000000000 + t.nsec;
+
+    return ros::Time(sec, nsec);
 }
 
 void updateOdometry(void)
@@ -392,7 +310,7 @@ void updateGyroCali(bool isConnected)
             sprintf(log_msg, "Start Calibration of Gyro");
             nh.loginfo(log_msg);
 
-//            calibrationGyro();
+            //calibrationGyro();
 
             sprintf(log_msg, "Calibration End");
             nh.loginfo(log_msg);
@@ -503,7 +421,7 @@ void initJointStates(void)
 
 bool calcOdometry(double diff_time)
 {
-    float* orientation;
+    float* orientation = {0};
     double wheel_l, wheel_r;      // rotation value of wheel [rad]
     double delta_s, theta, delta_theta;
     static double last_theta = 0.0;
@@ -615,7 +533,7 @@ void waitForSerialLink(bool isConnected)
 
 void updateIMU(void)
 {
-	mpu6050_update_quat();
+    mpu6050_update_quat();
 }
 
 sensor_msgs::Imu getIMU(void)
@@ -703,24 +621,24 @@ void controlMotor(float *goal_vel)
 
     if (wheel_velocity_cmd[LEFT] < 0)
     {
-        MOTOR_LEFT_BACKWARD(motor_left);
-        MOTOR_SET_SPEED(motor_left,-wheel_velocity_cmd[LEFT]);
+        robot_motor_left_backward();
+        robot_motor_left_set_speed(-wheel_velocity_cmd[LEFT]);
     }
     else
     {
-        MOTOR_LEFT_FORWARD(motor_left);
-        MOTOR_SET_SPEED(motor_left,wheel_velocity_cmd[LEFT]);
+        robot_motor_left_forward();
+        robot_motor_left_set_speed(wheel_velocity_cmd[LEFT]);
     }
 
     if (wheel_velocity_cmd[RIGHT] < 0)
     {
-        MOTOR_RIGHT_BACKWARD(motor_right);
-        MOTOR_SET_SPEED(motor_right,-wheel_velocity_cmd[RIGHT]);
+        robot_motor_right_backward();
+        robot_motor_right_set_speed(-wheel_velocity_cmd[RIGHT]);
     }
     else
     {
-        MOTOR_RIGHT_FORWARD(motor_right);
-        MOTOR_SET_SPEED(motor_right,wheel_velocity_cmd[RIGHT]);
+        robot_motor_right_forward();
+        robot_motor_right_set_speed(wheel_velocity_cmd[RIGHT]);
     }
 }
 
