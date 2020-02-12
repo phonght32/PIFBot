@@ -12,62 +12,64 @@ extern "C" {
 #include "../../stm32f4_library/imu/include/mpu6050.h"
 #include "../../stm32f4_library/motor/include/step_motor.h"
 
-#define PI							3.14159265359
+#define PI                          3.14159265359
 
 /* Model parameters */
-#define WHEEL_RADIUS				0.033		/*!< meters */
-#define WHEEL_SEPARATION 			0.173		/*!< meters */
-#define TURNING_RADIUS 				0.08		/*!< rad	*/
-#define ROBOT_RADIUS 				0.1			/*!< rad 	*/
+#define WHEEL_RADIUS                0.033       /*!< meters */
+#define WHEEL_SEPARATION            0.173       /*!< meters */
+#define TURNING_RADIUS              0.08        /*!< rad    */
+#define ROBOT_RADIUS                0.1         /*!< rad    */
 
-#define MAX_LINEAR_VELOCITY 		(WHEEL_RADIUS * 2 * PI * 60 / 60)
-#define MAX_ANGULAR_VELOCITY 		(MAX_LINEAR_VELOCITY / TURNING_RADIUS)
+#define MAX_LINEAR_VELOCITY         (WHEEL_RADIUS * 2 * PI * 60 / 60)
+#define MAX_ANGULAR_VELOCITY        (MAX_LINEAR_VELOCITY / TURNING_RADIUS)
 
-#define MIN_LINEAR_VELOCITY			-MAX_LINEAR_VELOCITY
-#define MIN_ANGULAR_VELOCITY		-MAX_ANGULAR_VELOCITY
+#define MIN_LINEAR_VELOCITY         -MAX_LINEAR_VELOCITY
+#define MIN_ANGULAR_VELOCITY        -MAX_ANGULAR_VELOCITY
 
 
 /* Step driver parameters */
-#define STEP_DIV					4
-#define NUM_PULSE_PER_ROUND			200
+#define STEP_DIV                    4
+#define NUM_PULSE_PER_ROUND         200
 
-/* 						    2*pi*WHELL_RADIUS
- *	velocity (m/s) = ------------------------------
- *					  NUM_PULSE_PER_ROUND * STEP_DIV
+/* Convert from velocity (m/s) to frequency (Hz) for motor driver
+ *                      2*pi*WHELL_RADIUS
+ *  velocity (m/s) =  ------------------------------
+ *                    NUM_PULSE_PER_ROUND * STEP_DIV
  *
  */
-#define VEL2FREQ					((NUM_PULSE_PER_ROUND*STEP_DIV)/(2*PI*WHEEL_RADIUS))
+#define VEL2FREQ                    ((NUM_PULSE_PER_ROUND*STEP_DIV)/(2*PI*WHEEL_RADIUS))
 
-/* Motor hardware define */
-#define MOTORLEFT_TIMER_NUM			TIMER_NUM_4
-#define MOTORLEFT_TIMER_CHANNEL		TIMER_CHANNEL_1
-#define MOTORLEFT_TIMER_PINSPACK	TIMER_PINS_PACK_2
-#define MOTORLEFT_GPIO_PORT			GPIO_PORT_A
-#define MOTORLEFT_GPIO_NUM			GPIO_NUM_3
+/* Robot hardware define */
+#define MOTORLEFT_TIMER_NUM         TIMER_NUM_4
+#define MOTORLEFT_TIMER_CHANNEL     TIMER_CHANNEL_1
+#define MOTORLEFT_TIMER_PINSPACK    TIMER_PINS_PACK_2
+#define MOTORLEFT_GPIO_PORT         GPIO_PORT_A
+#define MOTORLEFT_GPIO_NUM          GPIO_NUM_3
 
-#define MOTORRIGHT_TIMER_NUM		TIMER_NUM_3
-#define MOTORRIGHT_TIMER_CHANNEL	TIMER_CHANNEL_2
-#define MOTORRIGHT_TIMER_PINSPACK	TIMER_PINS_PACK_1
-#define MOTORRIGHT_GPIO_PORT		GPIO_PORT_C
-#define MOTORRIGHT_GPIO_NUM			GPIO_NUM_5
+#define MOTORRIGHT_TIMER_NUM        TIMER_NUM_3
+#define MOTORRIGHT_TIMER_CHANNEL    TIMER_CHANNEL_2
+#define MOTORRIGHT_TIMER_PINSPACK   TIMER_PINS_PACK_1
+#define MOTORRIGHT_GPIO_PORT        GPIO_PORT_C
+#define MOTORRIGHT_GPIO_NUM         GPIO_NUM_5
 
-/* MPU6050 hardware define */
-#define MPU6050_I2C_NUM				I2C_NUM_1
-#define MPU6050_I2C_PINSPACK		I2C_PINS_PACK_1
+#define MPU6050_I2C_NUM             I2C_NUM_1
+#define MPU6050_I2C_PINSPACK        I2C_PINS_PACK_1
 
-/* Control motor macros */
-#define MOTOR_LEFT_FORWARD(_handle_)    step_motor_set_dir(_handle_, 0)
-#define MOTOR_LEFT_BACKWARD(_handle_)   step_motor_set_dir(_handle_, 1)
-#define MOTOR_RIGHT_FORWARD(_handle_)   step_motor_set_dir(_handle_, 1)
-#define MOTOR_RIGHT_BACKWARD(_handle_)  step_motor_set_dir(_handle_, 0)
+#define ROSSERIAL_BAUDRATE          57600
 
-#define MOTOR_SET_SPEED(_handle_,speed) step_motor_set_freq(_handle_, (uint32_t)(speed*VEL2FREQ))
-
-#define MOTOR_START(_handle_)			step_motor_start(_handle_)
-#define MOTOR_STOP(_handle_)			step_motor_stop(_handle_)
-
+/* Robot control function */
 void robot_motor_init(void);
-void robot_mpu6050_init(void);
+void robot_imu_init(void);
+void robot_rosserial_init(void);
+
+void robot_motor_left_forward(void);
+void robot_motor_left_backward(void);
+void robot_motor_left_set_speed(float speed);
+
+void robot_motor_right_forward(void);
+void robot_motor_right_backward(void);
+void robot_motor_right_set_speed(float speed);
+
 
 #ifdef __cplusplus
 }

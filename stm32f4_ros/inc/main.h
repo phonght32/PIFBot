@@ -11,6 +11,8 @@ extern "C" {
 #include "../robot/include/robot_hardware.h"
 #include "../robot/include/utils.h"
 
+void SystemClock_Config(void);
+void Error_Handler(void);
 
 #ifdef __cplusplus
 }

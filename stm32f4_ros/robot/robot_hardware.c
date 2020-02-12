@@ -1,9 +1,13 @@
 #include "include/robot_hardware.h"
 #include "../stm32f4_library/driver/include/i2c.h"
 
-extern step_motor_handle_t motor_left, motor_right;
-extern mpu6050_handle_t mpu6050;
-extern I2C_HandleTypeDef mpu6050_i2c;
+step_motor_handle_t motor_left, motor_right;
+mpu6050_handle_t mpu6050;
+
+UART_HandleTypeDef huart4;
+DMA_HandleTypeDef hdma_uart4_rx;
+DMA_HandleTypeDef hdma_uart4_tx;
+
 
 void robot_motor_init(void)
 {
@@ -28,14 +32,14 @@ void robot_motor_init(void)
     motor_right = step_motor_init(&motor_right_config);
 }
 
-void robot_mpu6050_init(void)
+void robot_imu_init(void)
 {
     i2c_config_t i2c_config;
     i2c_config.i2c_num = MPU6050_I2C_NUM;
     i2c_config.i2c_pins_pack = MPU6050_I2C_PINSPACK;
     i2c_handle_t i2c_handle = i2c_init(&i2c_config);
 
-    mpu6050_i2c = i2c_get_I2C_HandleTypeDef(i2c_handle);
+    I2C_HandleTypeDef mpu6050_i2c = i2c_get_I2C_HandleTypeDef(i2c_handle);
     mpu6050_i2c_config(&mpu6050_i2c);
 
     mpu6050_config_t mpu6050_config;
@@ -46,4 +50,96 @@ void robot_mpu6050_init(void)
     mpu6050_config.sleep_mode = MPU6050_DISABLE_SLEEP_MODE;
     mpu6050 = mpu6050_init(&mpu6050_config);
     mpu6050_auto_calib();
+}
+
+
+void robot_rosserial_init(void)
+{
+    __HAL_RCC_GPIOH_CLK_ENABLE();
+    __HAL_RCC_UART4_CLK_ENABLE();
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_DMA1_CLK_ENABLE();
+
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF8_UART4;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    huart4.Instance = UART4;
+    huart4.Init.BaudRate = ROSSERIAL_BAUDRATE;
+    huart4.Init.WordLength = UART_WORDLENGTH_8B;
+    huart4.Init.StopBits = UART_STOPBITS_1;
+    huart4.Init.Parity = UART_PARITY_NONE;
+    huart4.Init.Mode = UART_MODE_TX_RX;
+    huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    huart4.Init.OverSampling = UART_OVERSAMPLING_16;
+    HAL_UART_Init(&huart4);
+
+    hdma_uart4_rx.Instance = DMA1_Stream2;
+    hdma_uart4_rx.Init.Channel = DMA_CHANNEL_4;
+    hdma_uart4_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_uart4_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_uart4_rx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_uart4_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_uart4_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_uart4_rx.Init.Mode = DMA_NORMAL;
+    hdma_uart4_rx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_uart4_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    HAL_DMA_Init(&hdma_uart4_rx);
+    __HAL_LINKDMA(&huart4, hdmarx, hdma_uart4_rx);
+
+    hdma_uart4_tx.Instance = DMA1_Stream4;
+    hdma_uart4_tx.Init.Channel = DMA_CHANNEL_4;
+    hdma_uart4_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    hdma_uart4_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_uart4_tx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_uart4_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_uart4_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_uart4_tx.Init.Mode = DMA_NORMAL;
+    hdma_uart4_tx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_uart4_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    HAL_DMA_Init(&hdma_uart4_tx);
+    __HAL_LINKDMA(&huart4, hdmatx, hdma_uart4_tx);
+
+    HAL_NVIC_SetPriority(UART4_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(UART4_IRQn);
+
+    HAL_NVIC_SetPriority(DMA1_Stream2_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Stream2_IRQn);
+
+    HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
+}
+
+void robot_motor_left_forward(void)
+{
+    step_motor_set_dir(motor_left, 0);
+}
+
+void robot_motor_left_backward(void)
+{
+    step_motor_set_dir(motor_left, 1);
+}
+
+void robot_motor_right_forward(void)
+{
+    step_motor_set_dir(motor_right, 1);
+}
+
+void robot_motor_right_backward(void)
+{
+    step_motor_set_dir(motor_right, 0);
+}
+
+void robot_motor_left_set_speed(float speed)
+{
+    step_motor_set_freq(motor_left, (uint32_t)(speed * VEL2FREQ));
+}
+
+void robot_motor_right_set_speed(float speed)
+{
+    step_motor_set_freq(motor_right, (uint32_t)(speed * VEL2FREQ));
 }
