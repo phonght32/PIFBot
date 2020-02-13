@@ -7,15 +7,8 @@
 
 #include "../robot/include/robot_config.h"
 
-void ros_setup(void);						/*<! ROS setup function */
-void controlMotor(float *goal_vel);			/*<! Control motor speed and direction function */
-void getMotorSpeed(float *vel);				/*<! Get motor speed function */
-void updateIMU(void);						/*<! Update quaternion function */
-sensor_msgs::Imu getIMU(void);				/*<! Get quaternion function */
-void getOrientation(float *orientation);	/*<! Get orientation function */
 
-
-/********************************** main ************************************ */
+/********************************** Main ************************************ */
 int main(void)
 {
     /* STM32 system init */
@@ -39,10 +32,10 @@ int main(void)
 
     while (1)
     {
-        uint32_t t = millis();              /*<! Update time counter */
-        updateTime();                       /*<! Update ROS time */
-        updateVariable(nh.connected());     /*<! Update variable */
-        updateTFPrefix(nh.connected());     /*<! Update TF */
+        uint32_t t = millis();              /*!< Update time counter */
+        updateTime();                       /*!< Update ROS time */
+        updateVariable(nh.connected());     /*!< Update variable */
+        updateTFPrefix(nh.connected());     /*!< Update TF */
 
         /* Control motor*/
         if ((t - tTime[CONTROL_MOTOR_TIME_INDEX] >= 1000 / CONTROL_MOTOR_SPEED_FREQUENCY))
@@ -81,32 +74,32 @@ int main(void)
             tTime[IMU_PUBLISH_TIME_INDEX] = t;
         }
 
-        updateIMU();                        /*<! Update IMU quaternion value consecutively */
+        updateIMU();                        /*!< Update IMU quaternion value consecutively */
 
-        nh.spinOnce();                      /*<! Spin NodeHandle to keep synchorus */
-        waitForSerialLink(nh.connected());  /*<! Keep rosserial connection */
+        nh.spinOnce();                      /*!< Spin NodeHandle to keep synchorus */
+        waitForSerialLink(nh.connected());  /*!< Keep rosserial connection */
     }
 }
 
 void ros_setup(void)
 {
-    nh.initNode();                      /*<! Init ROS node handle */
+    nh.initNode();                      /*!< Init ROS node handle */
 
-    nh.subscribe(cmd_vel_sub);          /*<! Subscribe "cmd_vel" topic to get motor cmd */
-    nh.subscribe(reset_sub);            /*<! Subscribe "reset" topic */
+    nh.subscribe(cmd_vel_sub);          /*!< Subscribe "cmd_vel" topic to get motor cmd */
+    nh.subscribe(reset_sub);            /*!< Subscribe "reset" topic */
 
-    nh.advertise(imu_pub);              /*<! Register a publisher to "imu" topic */
-    nh.advertise(cmd_vel_motor_pub);    /*<! Register a publisher to "cmd_vel_motor" topic */
-    nh.advertise(odom_pub);             /*<! Register a publisher to "odom" topic */
-    nh.advertise(joint_states_pub);     /*<! Register a publisher to "joint_states" topic */
-    nh.advertise(battery_state_pub);    /*<! Register a publisher to "battery_state" topic */
+    nh.advertise(imu_pub);              /*!< Register a publisher to "imu" topic */
+    nh.advertise(cmd_vel_motor_pub);    /*!< Register a publisher to "cmd_vel_motor" topic */
+    nh.advertise(odom_pub);             /*!< Register a publisher to "odom" topic */
+    nh.advertise(joint_states_pub);     /*!< Register a publisher to "joint_states" topic */
+    nh.advertise(battery_state_pub);    /*!< Register a publisher to "battery_state" topic */
 
-    tf_broadcaster.init(nh);            /*<! Init TransformBroadcaster */
-    initOdom();                         /*<! Init odometry value */
-    initJointStates();                  /*<! Init joint state */
+    tf_broadcaster.init(nh);            /*!< Init TransformBroadcaster */
+    initOdom();                         /*!< Init odometry value */
+    initJointStates();                  /*!< Init joint state */
 
-    prev_update_time = millis();        /*<! Update time */
-    setup_end = true;                   /*<! Flag for setup completed */
+    prev_update_time = millis();        /*!< Update time */
+    setup_end = true;                   /*!< Flag for setup completed */
 }
 
 void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
@@ -201,6 +194,7 @@ void updateVariable(bool isConnected)
         variable_flag = false;
     }
 }
+
 void updateMotorInfo(int32_t left_tick, int32_t right_tick)
 {
     int32_t current_tick = 0;
@@ -598,9 +592,6 @@ sensor_msgs::Imu getIMU(void)
     return imu_msg_;
 }
 
-
-
-
 void getOrientation(float *orientation)
 {
     mpu6050_quat_data_t quat;
@@ -610,8 +601,6 @@ void getOrientation(float *orientation)
     orientation[2] = quat.q2;
     orientation[3] = quat.q3;
 }
-
-
 
 void controlMotor(float *goal_vel)
 {
@@ -655,9 +644,6 @@ void getMotorSpeed(float *vel)
     goal_velocity_from_motor[ANGULAR] = goal_velocity_from_cmd[ANGULAR];
 }
 
-
-
-/***************************** System function ****************************** */
 void SystemClock_Config(void)
 {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
