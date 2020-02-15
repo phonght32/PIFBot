@@ -7,37 +7,38 @@
 
   <!-- Gmapping -->
   <node pkg="gmapping" type="slam_gmapping" name="robot_slam_gmapping" output="screen">
-    <param name="base_frame" value="$(arg set_base_frame)"/>
-    <param name="odom_frame" value="$(arg set_odom_frame)"/>
-    <param name="map_frame"  value="$(arg set_map_frame)"/>
-    <param name="map_update_interval" value="2.0"/>
-    <param name="maxUrange" value="3.0"/>
-    <param name="sigma" value="0.05"/>
-    <param name="kernelSize" value="1"/>
-    <param name="lstep" value="0.05"/>
-    <param name="astep" value="0.05"/>
-    <param name="iterations" value="5"/>
-    <param name="lsigma" value="0.075"/>
-    <param name="ogain" value="3.0"/>
-    <param name="lskip" value="0"/>
-    <param name="minimumScore" value="50"/>
-    <param name="srr" value="0.1"/>
-    <param name="srt" value="0.2"/>
-    <param name="str" value="0.1"/>
-    <param name="stt" value="0.2"/>
-    <param name="linearUpdate" value="1.0"/>
-    <param name="angularUpdate" value="0.2"/>
-    <param name="temporalUpdate" value="0.5"/>
-    <param name="resampleThreshold" value="0.5"/>
-    <param name="particles" value="100"/>
-    <param name="xmin" value="-10.0"/>
-    <param name="ymin" value="-10.0"/>
-    <param name="xmax" value="10.0"/>
-    <param name="ymax" value="10.0"/>
-    <param name="delta" value="0.05"/>
-    <param name="llsamplerange" value="0.01"/>
-    <param name="llsamplestep" value="0.01"/>
-    <param name="lasamplerange" value="0.005"/>
-    <param name="lasamplestep" value="0.005"/>
+    <param name="base_frame" value="$(arg set_base_frame)"/>    The frame attached to the mobile base
+    <param name="odom_frame" value="$(arg set_odom_frame)"/>    The frame attached to the odometry system
+    <param name="map_frame"  value="$(arg set_map_frame)"/>     The frame attached to the map
+    <param name="map_update_interval" value="2.0"/>             Map update interval (sec)
+    <param name="maxUrange" value="3.0"/>               Max Range of laser sensor to use (meter)
+    <param name="sigma" value="0.05"/>                  Standard deviation of laser-assisted search
+    <param name="kernelSize" value="1"/>                Window size of laser-assisted search
+    <param name="lstep" value="0.05"/>                  Initial search step (translation)
+    <param name="astep" value="0.05"/>                  Initial search step (rotation)
+    <param name="iterations" value="50"/>                Number of scan-matching iterations
+    <param name="lsigma" value="0.075"/>                The sigma of a beam used for likelihood computation             
+    <param name="ogain" value="3.0"/>                   Gain to be used while evaluating the likelihood
+    <param name="lskip" value="0"/>                     Number of beams to skip in each scan
+    <param name="minimumScore" value="50"/>             Min Score considering the results of scan matching
+    <param name="srr" value="0.1"/>                     Odometry error (translation→ translation)
+    <param name="srt" value="0.2"/>                     Odometry error (translation→ rotaion)
+    <param name="str" value="0.1"/>                     Odometry error (rotation → translation)
+    <param name="stt" value="0.2"/>                     Odometry error (rotation → rotation)
+    <param name="linearUpdate" value="1.0"/>            Min travel distance required for processing
+    <param name="angularUpdate" value="0.2"/>           Min rotation angle required for processing
+    <param name="temporalUpdate" value="0.5"/>          If the last scan time exceeds this update time, the
+                                                        scan is performed. Negative values will be ignored and not used.
+    <param name="resampleThreshold" value="0.5"/>       Resampling threshold value
+    <param name="particles" value="100"/>               Number of particles in particle filter
+    <param name="xmin" value="-10.0"/>                  Initial map size (min x)
+    <param name="ymin" value="-10.0"/>                  Initial map size (min y)
+    <param name="xmax" value="10.0"/>                   Initial map size (max x)
+    <param name="ymax" value="10.0"/>                   Initial map size (max y)
+    <param name="delta" value="0.05"/>                  Map Resolution: Distance / Pixel
+    <param name="llsamplerange" value="0.01"/>          Translational sampling range for the likelihood
+    <param name="llsamplestep" value="0.01"/>           Translational sampling step for the likelihood
+    <param name="lasamplerange" value="0.005"/>         Angular sampling range for the likelihood
+    <param name="lasamplestep" value="0.005"/>          Angular sampling step for the likelihood
   </node>
 </launch>
