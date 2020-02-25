@@ -15,6 +15,14 @@ extern "C" {
 #define PI               	3.14159265359
 
 /*
+ * Step motor direction index.
+ */
+#define MOTORLEFT_FORWARD		0
+#define MOTORLEFT_BACKWARD		1
+#define MOTORRIGHT_FORWARD		1
+#define MOTORRIGHT_BACKWARD		0
+
+/*
  * Robot parameters
  */
 #define WHEEL_RADIUS                0.033       /*!< Wheel radius in meter */
@@ -28,42 +36,35 @@ extern "C" {
 #define MIN_LINEAR_VELOCITY         -MAX_LINEAR_VELOCITY					/*!< Min linear velocity */
 #define MIN_ANGULAR_VELOCITY        -MAX_ANGULAR_VELOCITY					/*!< Min angular velocity */
 
-
 /*
  * Step Driver Parameters.
  */
-#define STEP_DIV                    4			/*!< Step driver microstep divider */
+#define MICROSTEP_DIV               4			/*!< Step driver microstep divider */
 #define NUM_PULSE_PER_ROUND         200			/*!< The number of pulse per round of motor */
-
-/*
- *  Convert from velocity (m/s) to frequency (Hz) for motor driver.
- *
- *                      2*pi*WHELL_RADIUS
- *  velocity (m/s) =  ------------------------------
- *                    NUM_PULSE_PER_ROUND * STEP_DIV
- *
- */
-#define VEL2FREQ                    ((NUM_PULSE_PER_ROUND*STEP_DIV)/(2*PI*WHEEL_RADIUS))
 
 /*
  * Robot Hardware.
  */
-#define MOTORLEFT_TIMER_NUM         TIMER_NUM_4
-#define MOTORLEFT_TIMER_CHANNEL     TIMER_CHANNEL_1
-#define MOTORLEFT_TIMER_PINSPACK    TIMER_PINS_PACK_2
-#define MOTORLEFT_GPIO_PORT         GPIO_PORT_A
-#define MOTORLEFT_GPIO_NUM          GPIO_NUM_3
+#define MOTORLEFT_PULSE_TIMER_NUM         	TIMER_NUM_2
+#define MOTORLEFT_PULSE_TIMER_CHANNEL     	TIMER_CHANNEL_1
+#define MOTORLEFT_PULSE_TIMER_PINSPACK    	TIMER_PINS_PACK_2
+#define MOTORLEFT_DIR_GPIO_PORT         	GPIO_PORT_A
+#define MOTORLEFT_DIR_GPIO_NUM          	GPIO_NUM_3
+#define MOTORLEFT_TICK_TIMER_NUM			TIMER_NUM_10
+#define MOTORLEFT_TICK_TIMER_PINSPACK		TIMER_PINS_PACK_1
 
-#define MOTORRIGHT_TIMER_NUM        TIMER_NUM_3
-#define MOTORRIGHT_TIMER_CHANNEL    TIMER_CHANNEL_2
-#define MOTORRIGHT_TIMER_PINSPACK   TIMER_PINS_PACK_1
-#define MOTORRIGHT_GPIO_PORT        GPIO_PORT_C
-#define MOTORRIGHT_GPIO_NUM         GPIO_NUM_5
+#define MOTORRIGHT_PULSE_TIMER_NUM       	TIMER_NUM_3
+#define MOTORRIGHT_PULSE_TIMER_CHANNEL    	TIMER_CHANNEL_2
+#define MOTORRIGHT_PULSE_TIMER_PINSPACK   	TIMER_PINS_PACK_1
+#define MOTORRIGHT_DIR_GPIO_PORT        	GPIO_PORT_C
+#define MOTORRIGHT_DIR_GPIO_NUM         	GPIO_NUM_5
+#define MOTORRIGHT_TICK_TIMER_NUM			TIMER_NUM_11
+#define MOTORRIGHT_TICK_TIMER_PINSPACK		TIMER_PINS_PACK_1
 
-#define MPU6050_I2C_NUM             I2C_NUM_1
-#define MPU6050_I2C_PINSPACK        I2C_PINS_PACK_1
+#define MPU6050_I2C_NUM             		I2C_NUM_1
+#define MPU6050_I2C_PINSPACK        		I2C_PINS_PACK_1
 
-#define ROSSERIAL_BAUDRATE          57600
+#define ROSSERIAL_BAUDRATE          		57600
 
 /*
  * Robot Initial Function.
@@ -78,9 +79,11 @@ void robot_rosserial_init(void);
 void robot_motor_left_forward(void);
 void robot_motor_left_backward(void);
 void robot_motor_left_set_speed(float speed);
+uint32_t robot_motor_left_get_tick(void);
 void robot_motor_right_forward(void);
 void robot_motor_right_backward(void);
 void robot_motor_right_set_speed(float speed);
+uint32_t robot_motor_right_get_tick(void);
 
 
 #ifdef __cplusplus

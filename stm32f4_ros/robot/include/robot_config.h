@@ -18,6 +18,7 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 
+#include "robot_hardware.h"
 
 /* Time update index */
 #define CONTROL_MOTOR_TIME_INDEX                0		/*!< Time index control motor */
@@ -47,8 +48,7 @@
 #define DEG2RAD(x)      (x * 0.01745329252)     /*!< Convert from degree to radian (PI/180) */
 #define RAD2DEG(x)      (x * 57.2957795131)     /*!< convert from radian to degree (180/PI) */
 
-#define TICK2RAD        0.001533981             /*!< 0.087890625[deg] * 3.14159265359 / 180 = 0.001533981f */
-
+#define TICK2RAD        360/(NUM_PULSE_PER_ROUND*MICROSTEP_DIV)*PI/180
 
 /*
  * @brief  	This function called when receive any message from "cmd_vel" topic.

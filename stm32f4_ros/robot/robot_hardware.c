@@ -2,6 +2,17 @@
 #include "../stm32f4_library/driver/include/i2c.h"
 
 /*
+ *  Convert from velocity (m/s) to frequency (Hz) for motor driver.
+ *
+ *                      2*pi*WHELL_RADIUS
+ *  velocity (m/s) =  ------------------------------
+ *                    NUM_PULSE_PER_ROUND * STEP_DIV
+ *
+ */
+#define VEL2FREQ                    ((NUM_PULSE_PER_ROUND*MICROSTEP_DIV)/(2*PI*WHEEL_RADIUS))
+
+
+/*
  * Motor Handle Structure.
  */
 step_motor_handle_t motor_left, motor_right;
@@ -23,24 +34,36 @@ void robot_motor_init(void)
 {
 	/* Configure motor left driver */
     step_motor_config_t motor_left_config;
-    motor_left_config.pin_clk.timer_num = MOTORLEFT_TIMER_NUM;
-    motor_left_config.pin_clk.timer_channel = MOTORLEFT_TIMER_CHANNEL;
-    motor_left_config.pin_clk.timer_pins_pack = MOTORLEFT_TIMER_PINSPACK;
-    motor_left_config.pin_dir.gpio_port = MOTORLEFT_GPIO_PORT;
-    motor_left_config.pin_dir.gpio_num = MOTORLEFT_GPIO_NUM;
-    motor_left_config.pin_dir.gpio_mode = GPIO_OUTPUT;
-    motor_left_config.pin_dir.gpio_reg_pull = GPIO_REG_PULL_NONE;
+    motor_left_config.pin_clk.timer_num 		= MOTORLEFT_PULSE_TIMER_NUM;
+    motor_left_config.pin_clk.timer_channel 	= MOTORLEFT_PULSE_TIMER_CHANNEL;
+    motor_left_config.pin_clk.timer_pins_pack 	= MOTORLEFT_PULSE_TIMER_PINSPACK;
+    motor_left_config.pin_dir.gpio_port 		= MOTORLEFT_DIR_GPIO_PORT;
+    motor_left_config.pin_dir.gpio_num 			= MOTORLEFT_DIR_GPIO_NUM;
+    motor_left_config.pin_dir.gpio_mode			= GPIO_OUTPUT;
+    motor_left_config.pin_dir.gpio_reg_pull 	= GPIO_REG_PULL_NONE;
+    motor_left_config.resolver.timer_num 		= MOTORLEFT_TICK_TIMER_NUM;
+    motor_left_config.resolver.timer_pins_pack 	= MOTORLEFT_TICK_TIMER_PINSPACK;
+    motor_left_config.resolver.counter_mode 	= TIMER_COUNTER_UP;
+    motor_left_config.resolver.max_reload 		= NUM_PULSE_PER_ROUND*MICROSTEP_DIV;
+    motor_left_config.num_pulse_per_round 		= NUM_PULSE_PER_ROUND;
+    motor_left_config.microstep_div 			= MICROSTEP_DIV;
     motor_left = step_motor_init(&motor_left_config);
 
     /* Configure motor right driver */
     step_motor_config_t motor_right_config;
-    motor_right_config.pin_clk.timer_num = MOTORRIGHT_TIMER_NUM;
-    motor_right_config.pin_clk.timer_channel = MOTORRIGHT_TIMER_CHANNEL;
-    motor_right_config.pin_clk.timer_pins_pack = MOTORRIGHT_TIMER_PINSPACK;
-    motor_right_config.pin_dir.gpio_port = MOTORRIGHT_GPIO_PORT;
-    motor_right_config.pin_dir.gpio_num = MOTORRIGHT_GPIO_NUM;
-    motor_right_config.pin_dir.gpio_mode = GPIO_OUTPUT;
-    motor_right_config.pin_dir.gpio_reg_pull = GPIO_REG_PULL_NONE;
+    motor_right_config.pin_clk.timer_num 		= MOTORRIGHT_PULSE_TIMER_NUM;
+    motor_right_config.pin_clk.timer_channel 	= MOTORRIGHT_PULSE_TIMER_CHANNEL;
+    motor_right_config.pin_clk.timer_pins_pack 	= MOTORRIGHT_PULSE_TIMER_PINSPACK;
+    motor_right_config.pin_dir.gpio_port 		= MOTORRIGHT_DIR_GPIO_PORT;
+    motor_right_config.pin_dir.gpio_num 		= MOTORRIGHT_DIR_GPIO_NUM;
+    motor_right_config.pin_dir.gpio_mode 		= GPIO_OUTPUT;
+    motor_right_config.pin_dir.gpio_reg_pull 	= GPIO_REG_PULL_NONE;
+    motor_right_config.resolver.timer_num 		= MOTORRIGHT_TICK_TIMER_NUM;
+    motor_right_config.resolver.timer_pins_pack = MOTORRIGHT_TICK_TIMER_PINSPACK;
+    motor_right_config.resolver.max_reload 		= NUM_PULSE_PER_ROUND*MICROSTEP_DIV;
+    motor_right_config.resolver.counter_mode 	= TIMER_COUNTER_UP;
+    motor_right_config.num_pulse_per_round 		= NUM_PULSE_PER_ROUND;
+    motor_right_config.microstep_div 			= MICROSTEP_DIV;
     motor_right = step_motor_init(&motor_right_config);
 }
 
@@ -133,22 +156,22 @@ void robot_rosserial_init(void)
 
 void robot_motor_left_forward(void)
 {
-    step_motor_set_dir(motor_left, 0);
+    step_motor_set_dir(motor_left, MOTORLEFT_FORWARD);
 }
 
 void robot_motor_left_backward(void)
 {
-    step_motor_set_dir(motor_left, 1);
+    step_motor_set_dir(motor_left, MOTORLEFT_BACKWARD);
 }
 
 void robot_motor_right_forward(void)
 {
-    step_motor_set_dir(motor_right, 1);
+    step_motor_set_dir(motor_right, MOTORRIGHT_FORWARD);
 }
 
 void robot_motor_right_backward(void)
 {
-    step_motor_set_dir(motor_right, 0);
+    step_motor_set_dir(motor_right, MOTORRIGHT_BACKWARD);
 }
 
 void robot_motor_left_set_speed(float speed)
@@ -159,4 +182,32 @@ void robot_motor_left_set_speed(float speed)
 void robot_motor_right_set_speed(float speed)
 {
     step_motor_set_freq(motor_right, (uint32_t)(speed * VEL2FREQ));
+}
+
+uint32_t robot_motor_left_get_tick(void)
+{
+	uint32_t resolver_tick;
+	resolver_tick =  step_motor_get_tick(motor_left);
+	if(MOTORLEFT_FORWARD)
+	{
+		return resolver_tick;
+	}
+	else
+	{
+		return NUM_PULSE_PER_ROUND*MICROSTEP_DIV-resolver_tick;
+	}
+}
+
+uint32_t robot_motor_right_get_tick(void)
+{
+	uint32_t resolver_tick;
+	resolver_tick =  step_motor_get_tick(motor_right);
+	if(MOTORRIGHT_FORWARD)
+	{
+		return resolver_tick;
+	}
+	else
+	{
+		return NUM_PULSE_PER_ROUND*MICROSTEP_DIV-resolver_tick;
+	}
 }
