@@ -18,13 +18,15 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 
-#include "robot_hardware.h"
+#include "robot_hardware.h"		/*!< Robot hardware information */
+#include "utils.h"				/*!< Robot utilities function */
 
 /* Time update index */
 #define CONTROL_MOTOR_TIME_INDEX                0		/*!< Time index control motor */
 #define CMD_VEL_PUBLISH_TIME_INDEX              1		/*!< Time index publish velocity */
 #define DRIVE_INFORMATION_PUBLISH_TIME_INDEX    2		/*!< Time index publish drive information */
 #define IMU_PUBLISH_TIME_INDEX                  3		/*!< Time index publish IMU information */
+#define LOG_PUBLISH_TIME_INDEX					5
 #define CONTROL_MOTOR_TIMEOUT_TIME_INDEX        6		/*!< Time index control motor timeout */
 
 /* Frequency of publish/subscribe */

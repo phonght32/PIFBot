@@ -74,7 +74,7 @@ void robot_imu_init(void);
 void robot_rosserial_init(void);
 
 /*
- * Robot Control Function.
+ * Robot Control Motor Function.
  */
 void robot_motor_left_forward(void);
 void robot_motor_left_backward(void);
