@@ -79,6 +79,11 @@
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/mpu6050/include"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/step_driver/include"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/robot/include"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/ros_lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/stm32f4_library/driver/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/stm32f4_library/imu/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/stm32f4_library/motor/include}&quot;"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.1941678484" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.904613337" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -130,6 +135,11 @@
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/mpu6050/include"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/components/step_driver/include"/>
 									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/robot/include"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/ros_lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/stm32f4_library/driver/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/stm32f4_library/imu/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/stm32f4_library/motor/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.228951886" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32"/>
@@ -194,11 +204,12 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Utilities/Components/ampire640480&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Utilities/Components/lsm303dlhc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/core&quot;"/>
-									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/robot/include"/>
-									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/ros_lib"/>
-									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/stm32f4_library/driver/include"/>
-									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/stm32f4_library/step_motor/include"/>
-									<listOptionValue builtIn="false" value="/home/phong/Documents/thesis/stm32f4_ros/stm32f4_library/imu/include"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/robot/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/ros_lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/stm32f4_library/driver/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/stm32f4_library/imu/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32f4_ros/stm32f4_library/motor/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.790468759" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1431855379" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>

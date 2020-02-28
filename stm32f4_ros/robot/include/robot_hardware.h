@@ -1,3 +1,22 @@
+/*
+ * @File description:
+ * 		Step motor left:
+ * 			- PA5: pulse
+ * 			- PA3: direction
+ * 			- PE7: tick
+ * 		Step motor right:
+ * 			- PA7: pulse
+ * 			- PC5: direction
+ * 			- PE0: tick
+ * 		MPU6050:
+ * 			- PB8: SCL
+ * 			- PB9: SDA
+ * 		UART ROS:
+ * 			- PA0: TXD
+ * 			- PA1: RXD
+ */
+
+
 #ifndef _ROBOT_HARDWARE_H_
 #define _ROBOT_HARDWARE_H_
 
@@ -11,6 +30,7 @@ extern "C" {
 #include "../../stm32f4_library/driver/include/uart.h"
 #include "../../stm32f4_library/imu/include/mpu6050.h"
 #include "../../stm32f4_library/motor/include/step_motor.h"
+#include "../../stm32f4_library/motor/include/encoder.h"
 
 #define PI               	3.14159265359
 
@@ -50,15 +70,15 @@ extern "C" {
 #define MOTORLEFT_PULSE_TIMER_PINSPACK    	TIMER_PINS_PACK_2
 #define MOTORLEFT_DIR_GPIO_PORT         	GPIO_PORT_A
 #define MOTORLEFT_DIR_GPIO_NUM          	GPIO_NUM_3
-#define MOTORLEFT_TICK_TIMER_NUM			TIMER_NUM_10
-#define MOTORLEFT_TICK_TIMER_PINSPACK		TIMER_PINS_PACK_1
+#define MOTORLEFT_TICK_TIMER_NUM			TIMER_NUM_1
+#define MOTORLEFT_TICK_TIMER_PINSPACK		TIMER_PINS_PACK_2
 
 #define MOTORRIGHT_PULSE_TIMER_NUM       	TIMER_NUM_3
 #define MOTORRIGHT_PULSE_TIMER_CHANNEL    	TIMER_CHANNEL_2
 #define MOTORRIGHT_PULSE_TIMER_PINSPACK   	TIMER_PINS_PACK_1
 #define MOTORRIGHT_DIR_GPIO_PORT        	GPIO_PORT_C
 #define MOTORRIGHT_DIR_GPIO_NUM         	GPIO_NUM_5
-#define MOTORRIGHT_TICK_TIMER_NUM			TIMER_NUM_11
+#define MOTORRIGHT_TICK_TIMER_NUM			TIMER_NUM_4
 #define MOTORRIGHT_TICK_TIMER_PINSPACK		TIMER_PINS_PACK_1
 
 #define MPU6050_I2C_NUM             		I2C_NUM_1
@@ -72,6 +92,7 @@ extern "C" {
 void robot_motor_init(void);
 void robot_imu_init(void);
 void robot_rosserial_init(void);
+void robot_encoder_init(void);
 
 /*
  * Robot Control Motor Function.
@@ -79,11 +100,22 @@ void robot_rosserial_init(void);
 void robot_motor_left_forward(void);
 void robot_motor_left_backward(void);
 void robot_motor_left_set_speed(float speed);
-uint32_t robot_motor_left_get_tick(void);
 void robot_motor_right_forward(void);
 void robot_motor_right_backward(void);
 void robot_motor_right_set_speed(float speed);
-uint32_t robot_motor_right_get_tick(void);
+
+void robot_motor_left_start(void);
+void robot_motor_left_stop(void);
+void robot_motor_right_start(void);
+void robot_motor_right_stop(void);
+
+uint32_t robot_encoder_left_get_tick(void);
+uint32_t robot_encoder_right_get_tick(void);
+void robot_encoder_left_reset(void);
+void robot_encoder_right_reset(void);
+
+bool robot_motor_left_get_dir(void);
+bool robot_motor_right_get_dir(void);
 
 
 #ifdef __cplusplus

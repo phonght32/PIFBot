@@ -50,7 +50,7 @@
 #define DEG2RAD(x)      (x * 0.01745329252)     /*!< Convert from degree to radian (PI/180) */
 #define RAD2DEG(x)      (x * 57.2957795131)     /*!< convert from radian to degree (180/PI) */
 
-#define TICK2RAD        360/(NUM_PULSE_PER_ROUND*MICROSTEP_DIV)*PI/180
+#define TICK2RAD        360.0/(NUM_PULSE_PER_ROUND*MICROSTEP_DIV)*PI/180
 
 /*
  * @brief  	This function called when receive any message from "cmd_vel" topic.

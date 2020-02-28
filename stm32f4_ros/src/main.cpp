@@ -7,21 +7,23 @@
 
 #include "../robot/include/robot_config.h"
 
-
 /********************************** Main ************************************ */
 int main(void)
 {
-    /* STM32 system init */
+    /* Initialize STM32 system */
     HAL_Init();
     SystemClock_Config();
 
     /* Motor configuration */
     robot_motor_init();
 
+    /* Encoder configuration */
+    robot_encoder_init();
+
     /* IMU configuration */
     robot_imu_init();
 
-    /* Init timer counts interval */
+    /* Initialize timer counts interval */
     timer_interval_init();
 
     /* Rosserial configuration */
@@ -41,9 +43,9 @@ int main(void)
         if ((t - tTime[CONTROL_MOTOR_TIME_INDEX] >= 1000 / CONTROL_MOTOR_SPEED_FREQUENCY))
         {
             updateGoalVelocity();
-            if ((t - tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX]))
+            if ((t - tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX]) > CONTROL_MOTOR_TIMEOUT)
             {
-                //controlMotor(zero_velocity);
+                controlMotor(zero_velocity);
             }
             else
             {
@@ -63,6 +65,13 @@ int main(void)
         /* Publish driver information */
         if ((t - tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX]) >= (1000 / DRIVE_INFORMATION_PUBLISH_FREQUENCY))
         {
+        	/* Update motor tick */
+        	int32_t left_tick, right_tick;
+        	left_tick = (int32_t)robot_encoder_left_get_tick();
+        	right_tick = (int32_t)robot_encoder_right_get_tick();
+        	updateMotorInfo(left_tick, right_tick);
+
+        	/* Publish Odom, TF and JointState, */
             publishDriveInformation();
             tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
         }
@@ -73,6 +82,8 @@ int main(void)
             publishImuMsg();
             tTime[IMU_PUBLISH_TIME_INDEX] = t;
         }
+
+        sendLogMsg();						/*!< Send log message */
 
         updateIMU();                        /*!< Update IMU quaternion value consecutively */
 
@@ -88,11 +99,11 @@ void ros_setup(void)
     nh.subscribe(cmd_vel_sub);          /*!< Subscribe "cmd_vel" topic to get motor cmd */
     nh.subscribe(reset_sub);            /*!< Subscribe "reset" topic */
 
-    nh.advertise(imu_pub);              /*!< Register a publisher to "imu" topic */
-    nh.advertise(cmd_vel_motor_pub);    /*!< Register a publisher to "cmd_vel_motor" topic */
-    nh.advertise(odom_pub);             /*!< Register a publisher to "odom" topic */
-    nh.advertise(joint_states_pub);     /*!< Register a publisher to "joint_states" topic */
-    nh.advertise(battery_state_pub);    /*!< Register a publisher to "battery_state" topic */
+    nh.advertise(imu_pub);              /*!< Register the publisher to "imu" topic */
+    nh.advertise(cmd_vel_motor_pub);    /*!< Register the publisher to "cmd_vel_motor" topic */
+    nh.advertise(odom_pub);             /*!< Register the publisher to "odom" topic */
+    nh.advertise(joint_states_pub);     /*!< Register the publisher to "joint_states" topic */
+    nh.advertise(battery_state_pub);    /*!< Register the publisher to "battery_state" topic */
 
     tf_broadcaster.init(nh);            /*!< Init TransformBroadcaster */
     initOdom();                         /*!< Init odometry value */
@@ -155,21 +166,26 @@ void publishImuMsg(void)
 
 void publishDriveInformation(void)
 {
+	/* Update time */
     unsigned long time_now = millis();
     unsigned long step_time = time_now - prev_update_time;
     prev_update_time = time_now;
     ros::Time stamp_now = rosNow();
 
+    /* Calculate odometry */
     calcOdometry((double)(step_time * 0.001));
 
+    /* Publish odometry message */
     updateOdometry();
     odom.header.stamp = stamp_now;
     odom_pub.publish(&odom);
 
+    /* Publish TF message */
     updateTF(odom_tf);
     odom_tf.header.stamp = stamp_now;
     tf_broadcaster.sendTransform(odom_tf);
 
+    /* Publish jointStates message */
     updateJointStates();
     joint_states.header.stamp = stamp_now;
     joint_states_pub.publish(&joint_states);
@@ -197,38 +213,47 @@ void updateVariable(bool isConnected)
 
 void updateMotorInfo(int32_t left_tick, int32_t right_tick)
 {
-    int32_t current_tick = 0;
-    static int32_t last_tick[WHEEL_NUM] = {0, 0};
-
+    /* Clear all tick value if encoder hasn't initialized */
     if (init_encoder)
     {
         for (int index = 0; index < WHEEL_NUM; index++)
         {
             last_diff_tick[index] = 0;
-            last_tick[index]      = 0;
             last_rad[index]       = 0.0;
-
             last_velocity[index]  = 0.0;
         }
-
-        last_tick[LEFT] = left_tick;
-        last_tick[RIGHT] = right_tick;
 
         init_encoder = false;
         return;
     }
 
-    current_tick = left_tick;
+    bool motor_left_dir, motor_right_dir;
+    motor_left_dir = robot_motor_left_get_dir();
+    motor_right_dir = robot_motor_right_get_dir();
 
-    last_diff_tick[LEFT] = current_tick - last_tick[LEFT];
-    last_tick[LEFT]      = current_tick;
+    if(motor_left_dir == MOTORLEFT_FORWARD)
+    {
+    	last_diff_tick[LEFT] = left_tick;
+    }
+    else
+    {
+    	last_diff_tick[LEFT] = -left_tick;
+    }
+
+    if(motor_right_dir == MOTORRIGHT_FORWARD)
+    {
+    	last_diff_tick[RIGHT] = right_tick;
+    }
+    else
+    {
+    	last_diff_tick[RIGHT] = -right_tick;
+    }
+    /* Calculate delta tick and update rotation */
     last_rad[LEFT]       += TICK2RAD * (double)last_diff_tick[LEFT];
-
-    current_tick = right_tick;
-
-    last_diff_tick[RIGHT] = current_tick - last_tick[RIGHT];
-    last_tick[RIGHT]      = current_tick;
     last_rad[RIGHT]       += TICK2RAD * (double)last_diff_tick[RIGHT];
+
+    robot_encoder_left_reset();
+    robot_encoder_right_reset();
 }
 
 void updateTime(void)
@@ -482,12 +507,6 @@ void sendLogMsg(void)
     static bool log_flag = false;
     char log_msg[100];
 
-//    String name             = NAME;
-//    String firmware_version = FIRMWARE_VER;
-//    String bringup_log      = "This core(v" + firmware_version + ") is compatible with TB3 " + name;
-//
-//    const char* init_log_data = bringup_log.c_str();
-
     if (nh.connected())
     {
         if (log_flag == false)
@@ -495,11 +514,8 @@ void sendLogMsg(void)
             sprintf(log_msg, "--------------------------");
             nh.loginfo(log_msg);
 
-            sprintf(log_msg, "Connected to OpenCR board!");
+            sprintf(log_msg, "Connected to openLIMO board!");
             nh.loginfo(log_msg);
-
-//        sprintf(log_msg, init_log_data);
-//        nh.loginfo(log_msg);
 
             sprintf(log_msg, "--------------------------");
             nh.loginfo(log_msg);
@@ -635,6 +651,15 @@ void controlMotor(float *goal_vel)
     {
         robot_motor_right_forward();
         robot_motor_right_set_speed(wheel_velocity_cmd[RIGHT]);
+    }
+
+    if(wheel_velocity_cmd[LEFT])
+    {
+    	robot_motor_left_start();
+    }
+    if(wheel_velocity_cmd[RIGHT])
+    {
+    	robot_motor_right_start();
     }
 }
 

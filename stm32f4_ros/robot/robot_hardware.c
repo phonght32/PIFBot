@@ -18,6 +18,11 @@
 step_motor_handle_t motor_left, motor_right;
 
 /*
+ * Encoder Handle Structure.
+ */
+encoder_handle_t enc_left, enc_right;
+
+/*
  * IMU Handle Structure.
  */
 mpu6050_handle_t mpu6050;
@@ -41,12 +46,8 @@ void robot_motor_init(void)
     motor_left_config.pin_dir.gpio_num 			= MOTORLEFT_DIR_GPIO_NUM;
     motor_left_config.pin_dir.gpio_mode			= GPIO_OUTPUT;
     motor_left_config.pin_dir.gpio_reg_pull 	= GPIO_REG_PULL_NONE;
-    motor_left_config.resolver.timer_num 		= MOTORLEFT_TICK_TIMER_NUM;
-    motor_left_config.resolver.timer_pins_pack 	= MOTORLEFT_TICK_TIMER_PINSPACK;
-    motor_left_config.resolver.counter_mode 	= TIMER_COUNTER_UP;
-    motor_left_config.resolver.max_reload 		= NUM_PULSE_PER_ROUND*MICROSTEP_DIV;
     motor_left_config.num_pulse_per_round 		= NUM_PULSE_PER_ROUND;
-    motor_left_config.microstep_div 			= MICROSTEP_DIV;
+    motor_left_config.microstep_div 			= MICROSTEP_DIV_4;
     motor_left = step_motor_init(&motor_left_config);
 
     /* Configure motor right driver */
@@ -58,12 +59,8 @@ void robot_motor_init(void)
     motor_right_config.pin_dir.gpio_num 		= MOTORRIGHT_DIR_GPIO_NUM;
     motor_right_config.pin_dir.gpio_mode 		= GPIO_OUTPUT;
     motor_right_config.pin_dir.gpio_reg_pull 	= GPIO_REG_PULL_NONE;
-    motor_right_config.resolver.timer_num 		= MOTORRIGHT_TICK_TIMER_NUM;
-    motor_right_config.resolver.timer_pins_pack = MOTORRIGHT_TICK_TIMER_PINSPACK;
-    motor_right_config.resolver.max_reload 		= NUM_PULSE_PER_ROUND*MICROSTEP_DIV;
-    motor_right_config.resolver.counter_mode 	= TIMER_COUNTER_UP;
     motor_right_config.num_pulse_per_round 		= NUM_PULSE_PER_ROUND;
-    motor_right_config.microstep_div 			= MICROSTEP_DIV;
+    motor_right_config.microstep_div 			= MICROSTEP_DIV_4;
     motor_right = step_motor_init(&motor_right_config);
 }
 
@@ -154,6 +151,25 @@ void robot_rosserial_init(void)
     HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
 }
 
+void robot_encoder_init(void)
+{
+	/* Initialize left encoder */
+	encoder_config_t enc_left_config;
+	enc_left_config.timer_num = MOTORLEFT_TICK_TIMER_NUM;
+	enc_left_config.timer_pins_pack = MOTORLEFT_TICK_TIMER_PINSPACK;
+	enc_left_config.max_reload = 65535;
+	enc_left_config.counter_mode = TIMER_COUNTER_UP;
+	enc_left = encoder_init(&enc_left_config);
+
+	/* Initialize right encoder */
+	encoder_config_t enc_right_config;
+	enc_right_config.timer_num = MOTORRIGHT_TICK_TIMER_NUM;
+	enc_right_config.timer_pins_pack = MOTORRIGHT_TICK_TIMER_PINSPACK;
+	enc_right_config.max_reload = 65535;
+	enc_right_config.counter_mode = TIMER_COUNTER_UP;
+	enc_right = encoder_init(&enc_right_config);
+}
+
 void robot_motor_left_forward(void)
 {
     step_motor_set_dir(motor_left, MOTORLEFT_FORWARD);
@@ -184,30 +200,56 @@ void robot_motor_right_set_speed(float speed)
     step_motor_set_freq(motor_right, (uint32_t)(speed * VEL2FREQ));
 }
 
-uint32_t robot_motor_left_get_tick(void)
+uint32_t robot_encoder_left_get_tick(void)
 {
 	uint32_t resolver_tick;
-	resolver_tick =  step_motor_get_tick(motor_left);
-	if(MOTORLEFT_FORWARD)
-	{
-		return resolver_tick;
-	}
-	else
-	{
-		return NUM_PULSE_PER_ROUND*MICROSTEP_DIV-resolver_tick;
-	}
+	resolver_tick =  encoder_get_value(enc_left);
+	return resolver_tick;
 }
 
-uint32_t robot_motor_right_get_tick(void)
+uint32_t robot_encoder_right_get_tick(void)
 {
 	uint32_t resolver_tick;
-	resolver_tick =  step_motor_get_tick(motor_right);
-	if(MOTORRIGHT_FORWARD)
-	{
-		return resolver_tick;
-	}
-	else
-	{
-		return NUM_PULSE_PER_ROUND*MICROSTEP_DIV-resolver_tick;
-	}
+	resolver_tick =  encoder_get_value(enc_right);
+	return resolver_tick;
+}
+
+void robot_motor_left_start(void)
+{
+	step_motor_start(motor_left);
+}
+
+void robot_motor_left_stop(void)
+{
+	step_motor_stop(motor_left);
+}
+
+void robot_motor_right_start(void)
+{
+	step_motor_start(motor_right);
+}
+
+void robot_motor_right_stop(void)
+{
+	step_motor_stop(motor_right);
+}
+
+void robot_encoder_left_reset(void)
+{
+	ext_counter_set_value(enc_left, 0);
+}
+
+void robot_encoder_right_reset(void)
+{
+	ext_counter_set_value(enc_right, 0);
+}
+
+bool robot_motor_left_get_dir(void)
+{
+	return step_motor_get_dir(motor_left);
+}
+
+bool robot_motor_right_get_dir(void)
+{
+	return step_motor_get_dir(motor_right);
 }

@@ -8,9 +8,6 @@ extern "C" {
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_rcc.h"
 
-#include "../robot/include/robot_hardware.h"
-#include "../robot/include/utils.h"
-
 void SystemClock_Config(void);
 void Error_Handler(void);
 
