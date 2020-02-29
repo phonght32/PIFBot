@@ -9,7 +9,7 @@
  *                    NUM_PULSE_PER_ROUND * STEP_DIV
  *
  */
-#define VEL2FREQ                    ((NUM_PULSE_PER_ROUND*MICROSTEP_DIV)/(2*PI*WHEEL_RADIUS))
+#define VEL2FREQ    	((NUM_PULSE_PER_ROUND*MICROSTEP_DIV)/(2*PI*WHEEL_RADIUS))
 
 
 /*
@@ -157,7 +157,7 @@ void robot_encoder_init(void)
 	encoder_config_t enc_left_config;
 	enc_left_config.timer_num = MOTORLEFT_TICK_TIMER_NUM;
 	enc_left_config.timer_pins_pack = MOTORLEFT_TICK_TIMER_PINSPACK;
-	enc_left_config.max_reload = 65535;
+	enc_left_config.max_reload = 800;
 	enc_left_config.counter_mode = TIMER_COUNTER_UP;
 	enc_left = encoder_init(&enc_left_config);
 
@@ -165,29 +165,36 @@ void robot_encoder_init(void)
 	encoder_config_t enc_right_config;
 	enc_right_config.timer_num = MOTORRIGHT_TICK_TIMER_NUM;
 	enc_right_config.timer_pins_pack = MOTORRIGHT_TICK_TIMER_PINSPACK;
-	enc_right_config.max_reload = 65535;
+	enc_right_config.max_reload = 800;
 	enc_right_config.counter_mode = TIMER_COUNTER_UP;
 	enc_right = encoder_init(&enc_right_config);
+
+	encoder_start(enc_left);
+	encoder_start(enc_right);
 }
 
 void robot_motor_left_forward(void)
 {
     step_motor_set_dir(motor_left, MOTORLEFT_FORWARD);
+    encoder_set_mode(enc_left, TIMER_COUNTER_UP);
 }
 
 void robot_motor_left_backward(void)
 {
     step_motor_set_dir(motor_left, MOTORLEFT_BACKWARD);
+    encoder_set_mode(enc_left, TIMER_COUNTER_DOWN);
 }
 
 void robot_motor_right_forward(void)
 {
     step_motor_set_dir(motor_right, MOTORRIGHT_FORWARD);
+    encoder_set_mode(enc_right, TIMER_COUNTER_UP);
 }
 
 void robot_motor_right_backward(void)
 {
     step_motor_set_dir(motor_right, MOTORRIGHT_BACKWARD);
+    encoder_set_mode(enc_right, TIMER_COUNTER_DOWN);
 }
 
 void robot_motor_left_set_speed(float speed)
