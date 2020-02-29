@@ -213,47 +213,38 @@ void updateVariable(bool isConnected)
 
 void updateMotorInfo(int32_t left_tick, int32_t right_tick)
 {
-    /* Clear all tick value if encoder hasn't initialized */
-    if (init_encoder)
-    {
-        for (int index = 0; index < WHEEL_NUM; index++)
-        {
-            last_diff_tick[index] = 0;
-            last_rad[index]       = 0.0;
-            last_velocity[index]  = 0.0;
-        }
+	int32_t current_tick = 0;
+	  static int32_t last_tick[WHEEL_NUM] = {0, 0};
 
-        init_encoder = false;
-        return;
-    }
+	  if (init_encoder)
+	  {
+	    for (int index = 0; index < WHEEL_NUM; index++)
+	    {
+	      last_diff_tick[index] = 0;
+	      last_tick[index]      = 0;
+	      last_rad[index]       = 0.0;
 
-    bool motor_left_dir, motor_right_dir;
-    motor_left_dir = robot_motor_left_get_dir();
-    motor_right_dir = robot_motor_right_get_dir();
+	      last_velocity[index]  = 0.0;
+	    }
 
-    if(motor_left_dir == MOTORLEFT_FORWARD)
-    {
-    	last_diff_tick[LEFT] = left_tick;
-    }
-    else
-    {
-    	last_diff_tick[LEFT] = -left_tick;
-    }
+	    last_tick[LEFT] = left_tick;
+	    last_tick[RIGHT] = right_tick;
 
-    if(motor_right_dir == MOTORRIGHT_FORWARD)
-    {
-    	last_diff_tick[RIGHT] = right_tick;
-    }
-    else
-    {
-    	last_diff_tick[RIGHT] = -right_tick;
-    }
-    /* Calculate delta tick and update rotation */
-    last_rad[LEFT]       += TICK2RAD * (double)last_diff_tick[LEFT];
-    last_rad[RIGHT]       += TICK2RAD * (double)last_diff_tick[RIGHT];
+	    init_encoder = false;
+	    return;
+	  }
 
-    robot_encoder_left_reset();
-    robot_encoder_right_reset();
+	  current_tick = left_tick;
+
+	  last_diff_tick[LEFT] = current_tick - last_tick[LEFT];
+	  last_tick[LEFT]      = current_tick;
+	  last_rad[LEFT]       += TICK2RAD * (double)last_diff_tick[LEFT];
+
+	  current_tick = right_tick;
+
+	  last_diff_tick[RIGHT] = current_tick - last_tick[RIGHT];
+	  last_tick[RIGHT]      = current_tick;
+	  last_rad[RIGHT]       += TICK2RAD * (double)last_diff_tick[RIGHT];
 }
 
 void updateTime(void)
@@ -505,7 +496,7 @@ bool calcOdometry(double diff_time)
 void sendLogMsg(void)
 {
     static bool log_flag = false;
-    char log_msg[100];
+
 
     if (nh.connected())
     {
@@ -514,7 +505,7 @@ void sendLogMsg(void)
             sprintf(log_msg, "--------------------------");
             nh.loginfo(log_msg);
 
-            sprintf(log_msg, "Connected to openLIMO board!");
+            sprintf(log_msg, "Connected to limo-board v1.0");
             nh.loginfo(log_msg);
 
             sprintf(log_msg, "--------------------------");
@@ -657,9 +648,17 @@ void controlMotor(float *goal_vel)
     {
     	robot_motor_left_start();
     }
+    else
+    {
+    	robot_motor_left_stop();
+    }
     if(wheel_velocity_cmd[RIGHT])
     {
     	robot_motor_right_start();
+    }
+    else
+    {
+    	robot_motor_right_stop();
     }
 }
 
