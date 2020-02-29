@@ -251,6 +251,10 @@ sensor_msgs::Imu getIMU(void);
  */
 void getOrientation(float *orientation);
 
+/*
+ * Log message buffer.
+ */
+char log_msg[100];
 
 /*
  * ROS NodeHandle.
