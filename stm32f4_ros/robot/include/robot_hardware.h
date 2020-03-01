@@ -46,7 +46,7 @@ extern "C" {
  * Robot parameters
  */
 #define WHEEL_RADIUS                0.033       /*!< Wheel radius in meter */
-#define WHEEL_SEPARATION            0.173       /*!< Wheel separate distance in meter */
+#define WHEEL_SEPARATION            0.165       /*!< Wheel separate distance in meter */
 #define TURNING_RADIUS              0.08        /*!< Turning radius in degree */
 #define ROBOT_RADIUS                0.1         /*!< Robot radius in meter    */
 
@@ -84,7 +84,7 @@ extern "C" {
 #define MPU6050_I2C_NUM             		I2C_NUM_1
 #define MPU6050_I2C_PINSPACK        		I2C_PINS_PACK_1
 
-#define ROSSERIAL_BAUDRATE          		57600
+#define ROSSERIAL_BAUDRATE          		115200
 
 /*
  * Robot Initial Function.
