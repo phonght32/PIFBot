@@ -79,10 +79,10 @@ void robot_imu_init(void)
 
     /* Configure IMU parameters */
     mpu6050_config_t mpu6050_config;
-    mpu6050_config.afs_sel = MPU6050_AFS_SEL_4G;
-    mpu6050_config.clksel = MPU6050_CLKSEL_INTERNAL_8_MHZ;
-    mpu6050_config.dlpf_cfg =  MPU6050_184ACCEL_188GYRO_BW_HZ;
-    mpu6050_config.fs_sel = MPU6050_FS_SEL_500;
+    mpu6050_config.afs_sel = MPU6050_AFS_SEL_8G;
+    mpu6050_config.clksel = MPU6050_CLKSEL_Z_GYRO_REF;
+//    mpu6050_config.dlpf_cfg =  MPU6050_184ACCEL_188GYRO_BW_HZ;
+    mpu6050_config.fs_sel = MPU6050_FS_SEL_1000;
     mpu6050_config.sleep_mode = MPU6050_DISABLE_SLEEP_MODE;
     mpu6050 = mpu6050_init(&mpu6050_config);
 
@@ -158,7 +158,7 @@ void robot_encoder_init(void)
 	encoder_config_t enc_left_config;
 	enc_left_config.timer_num = MOTORLEFT_TICK_TIMER_NUM;
 	enc_left_config.timer_pins_pack = MOTORLEFT_TICK_TIMER_PINSPACK;
-	enc_left_config.max_reload = 800;
+	enc_left_config.max_reload = 60000;
 	enc_left_config.counter_mode = TIMER_COUNTER_UP;
 	enc_left = encoder_init(&enc_left_config);
 
@@ -166,7 +166,7 @@ void robot_encoder_init(void)
 	encoder_config_t enc_right_config;
 	enc_right_config.timer_num = MOTORRIGHT_TICK_TIMER_NUM;
 	enc_right_config.timer_pins_pack = MOTORRIGHT_TICK_TIMER_PINSPACK;
-	enc_right_config.max_reload = 800;
+	enc_right_config.max_reload = 60000;
 	enc_right_config.counter_mode = TIMER_COUNTER_UP;
 	enc_right = encoder_init(&enc_right_config);
 
