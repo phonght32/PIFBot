@@ -7,6 +7,12 @@
 
 #include "../robot/include/robot_config.h"
 
+//I2C_HandleTypeDef hi2c_mpu6050;
+mpu6050_quat_data_t quat_data;
+char mpu6050_uart_buf[100];
+
+uint64_t time_tick = 0;
+uint16_t num_bytes;
 /********************************** Main ************************************ */
 int main(void)
 {
@@ -16,12 +22,11 @@ int main(void)
 
     /* Motor configuration */
     robot_motor_init();
-
-    /* Encoder configuration */
     robot_encoder_init();
 
     /* IMU configuration */
     robot_imu_init();
+    initIMUCovariance();
 
     /* Initialize timer counts interval */
     timer_interval_init();
@@ -65,13 +70,13 @@ int main(void)
         /* Publish driver information */
         if ((t - tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX]) >= (1000 / DRIVE_INFORMATION_PUBLISH_FREQUENCY))
         {
-        	/* Update motor tick */
-        	int32_t left_tick, right_tick;
-        	left_tick = (int32_t)robot_encoder_left_get_tick();
-        	right_tick = (int32_t)robot_encoder_right_get_tick();
-        	updateMotorInfo(left_tick, right_tick);
+            /* Update motor tick */
+            int32_t left_tick, right_tick;
+            left_tick = (int32_t)robot_encoder_left_get_tick();
+            right_tick = (int32_t)robot_encoder_right_get_tick();
+            updateMotorInfo(left_tick, right_tick);
 
-        	/* Publish Odom, TF and JointState, */
+            /* Publish Odom, TF and JointState, */
             publishDriveInformation();
             tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
         }
@@ -79,16 +84,16 @@ int main(void)
         /* Publish IMU to "imu" topic */
         if ((t - tTime[IMU_PUBLISH_TIME_INDEX]) >= (1000 / IMU_PUBLISH_FREQUENCY))
         {
+        	updateIMU();
             publishImuMsg();
             tTime[IMU_PUBLISH_TIME_INDEX] = t;
         }
 
-        sendLogMsg();						/*!< Send log message */
-
-        updateIMU();                        /*!< Update IMU quaternion value consecutively */
+        sendLogMsg();                       /*!< Send log message */
+//        updateIMU();                        /*!< Update IMU quaternion value consecutively */
 
         nh.spinOnce();                      /*!< Spin NodeHandle to keep synchorus */
-        waitForSerialLink(nh.connected());  /*!< Keep rosserial connection */
+//        waitForSerialLink(nh.connected());  /*!< Keep rosserial connection */
     }
 }
 
@@ -115,7 +120,7 @@ void ros_setup(void)
 
 void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
 {
-	/* Get goal velocity */
+    /* Get goal velocity */
     goal_velocity_from_cmd[LINEAR] = cmd_vel_msg.linear.x;
     goal_velocity_from_cmd[ANGULAR] = cmd_vel_msg.angular.z;
 
@@ -144,7 +149,7 @@ void resetCallback(const std_msgs::Empty &reset_msg)
 
 void publishCmdVelFromMotorMsg(void)
 {
-	/* Get motor velocity */
+    /* Get motor velocity */
     cmd_vel_motor_msg.linear.x = goal_velocity_from_motor[LINEAR];
     cmd_vel_motor_msg.angular.z = goal_velocity_from_motor[ANGULAR];
 
@@ -154,7 +159,7 @@ void publishCmdVelFromMotorMsg(void)
 
 void publishImuMsg(void)
 {
-	/* Get IMU data (accelerometer, gyroscope, quaternion and variance ) */
+    /* Get IMU data (accelerometer, gyroscope, quaternion and variance ) */
     imu_msg = getIMU();
 
     imu_msg.header.stamp = rosNow();
@@ -166,14 +171,14 @@ void publishImuMsg(void)
 
 void publishDriveInformation(void)
 {
-	/* Update time */
+    /* Update time */
     unsigned long time_now = millis();
     unsigned long step_time = time_now - prev_update_time;
     prev_update_time = time_now;
     ros::Time stamp_now = rosNow();
 
     /* Calculate odometry */
-    calcOdometry((double)(step_time * 0.001));
+    calcOdometry((float)(step_time * 0.001f));
 
     /* Publish odometry message */
     updateOdometry();
@@ -213,38 +218,38 @@ void updateVariable(bool isConnected)
 
 void updateMotorInfo(int32_t left_tick, int32_t right_tick)
 {
-	int32_t current_tick = 0;
-	  static int32_t last_tick[WHEEL_NUM] = {0, 0};
+    int32_t current_tick = 0;
+    static int32_t last_tick[WHEEL_NUM] = {0, 0};
 
-	  if (init_encoder)
-	  {
-	    for (int index = 0; index < WHEEL_NUM; index++)
-	    {
-	      last_diff_tick[index] = 0;
-	      last_tick[index]      = 0;
-	      last_rad[index]       = 0.0;
+    if (init_encoder)
+    {
+        for (int index = 0; index < WHEEL_NUM; index++)
+        {
+            last_diff_tick[index] = 0;
+            last_tick[index]      = 0;
+            last_rad[index]       = 0.0f;
 
-	      last_velocity[index]  = 0.0;
-	    }
+            last_velocity[index]  = 0.0f;
+        }
 
-	    last_tick[LEFT] = left_tick;
-	    last_tick[RIGHT] = right_tick;
+        last_tick[LEFT] = left_tick;
+        last_tick[RIGHT] = right_tick;
 
-	    init_encoder = false;
-	    return;
-	  }
+        init_encoder = false;
+        return;
+    }
 
-	  current_tick = left_tick;
+    current_tick = left_tick;
 
-	  last_diff_tick[LEFT] = current_tick - last_tick[LEFT];
-	  last_tick[LEFT]      = current_tick;
-	  last_rad[LEFT]       += TICK2RAD * (double)last_diff_tick[LEFT];
+    last_diff_tick[LEFT] = current_tick - last_tick[LEFT];
+    last_tick[LEFT]      = current_tick;
+    last_rad[LEFT]       += TICK2RAD * (float)last_diff_tick[LEFT];
 
-	  current_tick = right_tick;
+    current_tick = right_tick;
 
-	  last_diff_tick[RIGHT] = current_tick - last_tick[RIGHT];
-	  last_tick[RIGHT]      = current_tick;
-	  last_rad[RIGHT]       += TICK2RAD * (double)last_diff_tick[RIGHT];
+    last_diff_tick[RIGHT] = current_tick - last_tick[RIGHT];
+    last_tick[RIGHT]      = current_tick;
+    last_rad[RIGHT]       += TICK2RAD * (float)last_diff_tick[RIGHT];
 }
 
 void updateTime(void)
@@ -436,55 +441,43 @@ void initJointStates(void)
     joint_states.effort_length   = WHEEL_NUM;
 }
 
-bool calcOdometry(double diff_time)
+bool calcOdometry(float diff_time)
 {
-    float orientation[4];
-    double wheel_l, wheel_r;      // rotation value of wheel [rad]
-    double delta_s, theta, delta_theta;
-    static double last_theta = 0.0;
-    double v, w;                  // v = translational velocity [m/s], w = rotational velocity [rad/s]
-    double step_time;
+    float wheel_l, wheel_r;      // rotation value of wheel [rad]
+    float delta_s, theta, delta_theta;
+    static float last_theta = 0.0f;
+    float v, w;                  // v = translational velocity [m/s], w = rotational velocity [rad/s]
+    float step_time;
 
-    wheel_l = wheel_r = 0.0;
-    delta_s = delta_theta = theta = 0.0;
-    v = w = 0.0;
-    step_time = 0.0;
+    wheel_l = wheel_r = 0.0f;
+    delta_s = delta_theta = theta = 0.0f;
+    v = w = 0.0f;
+    step_time = 0.0f;
 
     step_time = diff_time;
 
     if (step_time == 0)
         return false;
 
-    wheel_l = TICK2RAD * (double)last_diff_tick[LEFT];
-    wheel_r = TICK2RAD * (double)last_diff_tick[RIGHT];
+    wheel_l = TICK2RAD * (float)last_diff_tick[LEFT];
+    wheel_r = TICK2RAD * (float)last_diff_tick[RIGHT];
 
     if (isnan(wheel_l))
-        wheel_l = 0.0;
+        wheel_l = 0.0f;
 
     if (isnan(wheel_r))
-        wheel_r = 0.0;
+        wheel_r = 0.0f;
 
-    delta_s     = WHEEL_RADIUS * (wheel_r + wheel_l) / 2.0;
-    // theta = WHEEL_RADIUS * (wheel_r - wheel_l) / WHEEL_SEPARATION;
-//    getOrientation(orientation);
+    delta_s     = WHEEL_RADIUS * (wheel_r + wheel_l) / 2.0f;
+//     theta = WHEEL_RADIUS * (wheel_r - wheel_l) / WHEEL_SEPARATION;
 
-    mpu6050_quat_data_t quat;
-    mpu6050_get_quat(&quat);
-    orientation[0] = quat.q0;
-    orientation[1] = quat.q1;
-    orientation[2] = quat.q2;
-    orientation[3] = quat.q3;
+    mpu6050_get_quat(&quat_data);
+    theta = atan2f(quat_data.q0 * quat_data.q3 + quat_data.q1 * quat_data.q2, 0.5f - quat_data.q2 * quat_data.q2 - quat_data.q3 * quat_data.q3);
 
-    theta       = atan2f(orientation[1] * orientation[2] + orientation[0] * orientation[3],
-                         0.5f - orientation[2] * orientation[2] - orientation[3] * orientation[3]);
-
-    double theta_out = theta*180.0/3.14;
-    sprintf(log_msg, (char*)"theta: %1.4f", theta_out);
+    sprintf(log_msg, (char*)"theta: %1.4f", 180.0 / 3.14 * theta);
     nh.loginfo(log_msg);
 
     delta_theta = theta - last_theta;
-
-
 
     // compute odometric pose
     odom_pose[0] += delta_s * cos(odom_pose[2] + (delta_theta / 2.0));
@@ -572,45 +565,77 @@ sensor_msgs::Imu getIMU(void)
     imu_msg_.angular_velocity.x = gyro_scale.x_axis;
     imu_msg_.angular_velocity.y = gyro_scale.y_axis;
     imu_msg_.angular_velocity.z = gyro_scale.z_axis;
-    imu_msg_.angular_velocity_covariance[1] = 0;
-    imu_msg_.angular_velocity_covariance[2] = 0;
-    imu_msg_.angular_velocity_covariance[3] = 0;
-    imu_msg_.angular_velocity_covariance[4] = 0.02;
-    imu_msg_.angular_velocity_covariance[5] = 0;
-    imu_msg_.angular_velocity_covariance[6] = 0;
-    imu_msg_.angular_velocity_covariance[7] = 0;
-    imu_msg_.angular_velocity_covariance[8] = 0.02;
+//    imu_msg_.angular_velocity_covariance[1] = 0;
+//    imu_msg_.angular_velocity_covariance[2] = 0;
+//    imu_msg_.angular_velocity_covariance[3] = 0;
+//    imu_msg_.angular_velocity_covariance[4] = 0.02;
+//    imu_msg_.angular_velocity_covariance[5] = 0;
+//    imu_msg_.angular_velocity_covariance[6] = 0;
+//    imu_msg_.angular_velocity_covariance[7] = 0;
+//    imu_msg_.angular_velocity_covariance[8] = 0.02;
 
     imu_msg_.linear_acceleration.x = accel_scale.x_axis;
     imu_msg_.linear_acceleration.y = accel_scale.y_axis;
     imu_msg_.linear_acceleration.z = accel_scale.z_axis;
-
-    imu_msg_.linear_acceleration_covariance[0] = 0.04;
-    imu_msg_.linear_acceleration_covariance[1] = 0;
-    imu_msg_.linear_acceleration_covariance[2] = 0;
-    imu_msg_.linear_acceleration_covariance[3] = 0;
-    imu_msg_.linear_acceleration_covariance[4] = 0.04;
-    imu_msg_.linear_acceleration_covariance[5] = 0;
-    imu_msg_.linear_acceleration_covariance[6] = 0;
-    imu_msg_.linear_acceleration_covariance[7] = 0;
-    imu_msg_.linear_acceleration_covariance[8] = 0.04;
+//
+//    imu_msg_.linear_acceleration_covariance[0] = 0.04;
+//    imu_msg_.linear_acceleration_covariance[1] = 0;
+//    imu_msg_.linear_acceleration_covariance[2] = 0;
+//    imu_msg_.linear_acceleration_covariance[3] = 0;
+//    imu_msg_.linear_acceleration_covariance[4] = 0.04;
+//    imu_msg_.linear_acceleration_covariance[5] = 0;
+//    imu_msg_.linear_acceleration_covariance[6] = 0;
+//    imu_msg_.linear_acceleration_covariance[7] = 0;
+//    imu_msg_.linear_acceleration_covariance[8] = 0.04;
 
     imu_msg_.orientation.w = quat.q0;
     imu_msg_.orientation.x = quat.q1;
     imu_msg_.orientation.y = quat.q2;
     imu_msg_.orientation.z = quat.q3;
 
-    imu_msg_.orientation_covariance[0] = 0.0025;
-    imu_msg_.orientation_covariance[1] = 0;
-    imu_msg_.orientation_covariance[2] = 0;
-    imu_msg_.orientation_covariance[3] = 0;
-    imu_msg_.orientation_covariance[4] = 0.0025;
-    imu_msg_.orientation_covariance[5] = 0;
-    imu_msg_.orientation_covariance[6] = 0;
-    imu_msg_.orientation_covariance[7] = 0;
-    imu_msg_.orientation_covariance[8] = 0.0025;
+//    imu_msg_.orientation_covariance[0] = 0.0025;
+//    imu_msg_.orientation_covariance[1] = 0;
+//    imu_msg_.orientation_covariance[2] = 0;
+//    imu_msg_.orientation_covariance[3] = 0;
+//    imu_msg_.orientation_covariance[4] = 0.0025;
+//    imu_msg_.orientation_covariance[5] = 0;
+//    imu_msg_.orientation_covariance[6] = 0;
+//    imu_msg_.orientation_covariance[7] = 0;
+//    imu_msg_.orientation_covariance[8] = 0.0025;
 
     return imu_msg_;
+}
+
+void initIMUCovariance(void)
+{
+    imu_msg.angular_velocity_covariance[1] = 0;
+    imu_msg.angular_velocity_covariance[2] = 0;
+    imu_msg.angular_velocity_covariance[3] = 0;
+    imu_msg.angular_velocity_covariance[4] = 0.02;
+    imu_msg.angular_velocity_covariance[5] = 0;
+    imu_msg.angular_velocity_covariance[6] = 0;
+    imu_msg.angular_velocity_covariance[7] = 0;
+    imu_msg.angular_velocity_covariance[8] = 0.02;
+
+    imu_msg.linear_acceleration_covariance[0] = 0.04;
+    imu_msg.linear_acceleration_covariance[1] = 0;
+    imu_msg.linear_acceleration_covariance[2] = 0;
+    imu_msg.linear_acceleration_covariance[3] = 0;
+    imu_msg.linear_acceleration_covariance[4] = 0.04;
+    imu_msg.linear_acceleration_covariance[5] = 0;
+    imu_msg.linear_acceleration_covariance[6] = 0;
+    imu_msg.linear_acceleration_covariance[7] = 0;
+    imu_msg.linear_acceleration_covariance[8] = 0.04;
+
+    imu_msg.orientation_covariance[0] = 0.0025;
+    imu_msg.orientation_covariance[1] = 0;
+    imu_msg.orientation_covariance[2] = 0;
+    imu_msg.orientation_covariance[3] = 0;
+    imu_msg.orientation_covariance[4] = 0.0025;
+    imu_msg.orientation_covariance[5] = 0;
+    imu_msg.orientation_covariance[6] = 0;
+    imu_msg.orientation_covariance[7] = 0;
+    imu_msg.orientation_covariance[8] = 0.0025;
 }
 
 void getOrientation(float *orientation)
@@ -658,21 +683,21 @@ void controlMotor(float *goal_vel)
         robot_motor_right_set_speed(wheel_velocity_cmd[RIGHT]);
     }
 
-    if(wheel_velocity_cmd[LEFT])
+    if (wheel_velocity_cmd[LEFT])
     {
-    	robot_motor_left_start();
+        robot_motor_left_start();
     }
     else
     {
-    	robot_motor_left_stop();
+        robot_motor_left_stop();
     }
-    if(wheel_velocity_cmd[RIGHT])
+    if (wheel_velocity_cmd[RIGHT])
     {
-    	robot_motor_right_start();
+        robot_motor_right_start();
     }
     else
     {
-    	robot_motor_right_stop();
+        robot_motor_right_stop();
     }
 }
 
