@@ -438,7 +438,7 @@ void initJointStates(void)
 
 bool calcOdometry(double diff_time)
 {
-    float* orientation = {0};
+    float orientation[4];
     double wheel_l, wheel_r;      // rotation value of wheel [rad]
     double delta_s, theta, delta_theta;
     static double last_theta = 0.0;
@@ -466,11 +466,25 @@ bool calcOdometry(double diff_time)
 
     delta_s     = WHEEL_RADIUS * (wheel_r + wheel_l) / 2.0;
     // theta = WHEEL_RADIUS * (wheel_r - wheel_l) / WHEEL_SEPARATION;
-    getOrientation(orientation);
+//    getOrientation(orientation);
+
+    mpu6050_quat_data_t quat;
+    mpu6050_get_quat(&quat);
+    orientation[0] = quat.q0;
+    orientation[1] = quat.q1;
+    orientation[2] = quat.q2;
+    orientation[3] = quat.q3;
+
     theta       = atan2f(orientation[1] * orientation[2] + orientation[0] * orientation[3],
                          0.5f - orientation[2] * orientation[2] - orientation[3] * orientation[3]);
 
+    double theta_out = theta*180.0/3.14;
+    sprintf(log_msg, (char*)"theta: %1.4f", theta_out);
+    nh.loginfo(log_msg);
+
     delta_theta = theta - last_theta;
+
+
 
     // compute odometric pose
     odom_pose[0] += delta_s * cos(odom_pose[2] + (delta_theta / 2.0));

@@ -26,6 +26,7 @@ encoder_handle_t enc_left, enc_right;
  * IMU Handle Structure.
  */
 mpu6050_handle_t mpu6050;
+I2C_HandleTypeDef mpu6050_i2c;
 
 /*
  * UART Rosserial Handle Structure.
@@ -73,7 +74,7 @@ void robot_imu_init(void)
     i2c_handle_t i2c_handle = i2c_init(&i2c_config);
 
     /* Configure I2C for IMU */
-    I2C_HandleTypeDef mpu6050_i2c = i2c_get_I2C_HandleTypeDef(i2c_handle);
+    mpu6050_i2c = i2c_get_I2C_HandleTypeDef(i2c_handle);
     mpu6050_i2c_config(&mpu6050_i2c);
 
     /* Configure IMU parameters */
