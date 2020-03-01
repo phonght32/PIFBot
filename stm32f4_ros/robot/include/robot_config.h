@@ -193,7 +193,7 @@ void initJointStates(void);
  * @param   diff_time
  * @return  None.
  */
-bool calcOdometry(double diff_time);
+bool calcOdometry(float diff_time);
 
 /*
  * @brief   Send Log messages.
@@ -250,6 +250,13 @@ sensor_msgs::Imu getIMU(void);
  * @return	None.
  */
 void getOrientation(float *orientation);
+
+/*
+ * @brieft 	Initialize IMU covariance.
+ * @param	None.
+ * @return	None.
+ */
+void initIMUCovariance(void);
 
 /*
  * Log message buffer.
@@ -316,12 +323,12 @@ static uint32_t tTime[10];
  */
 bool init_encoder = true;
 int32_t last_diff_tick[WHEEL_NUM] = {0, 0};
-double last_rad[WHEEL_NUM] = {0.0, 0.0};
+float last_rad[WHEEL_NUM] = {0.0, 0.0};
 
 /*
  * Update Joint State.
  */
-double  last_velocity[WHEEL_NUM]  = {0.0, 0.0};
+float  last_velocity[WHEEL_NUM]  = {0.0, 0.0};
 
 /*
  * Declaration for controllers.
@@ -336,7 +343,7 @@ float goal_velocity_from_motor[WHEEL_NUM] = {0.0, 0.0}; /*!< Velocity read from 
  */
 unsigned long prev_update_time;
 float odom_pose[3];
-double odom_vel[3];
+float odom_vel[3];
 
 /*
  * Decalration for battery.
