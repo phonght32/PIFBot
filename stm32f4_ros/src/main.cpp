@@ -37,6 +37,8 @@ int main(void)
     /* ROS setup */
     ros_setup();
 
+
+
     while (1)
     {
         uint32_t t = millis();              /*!< Update time counter */
@@ -84,7 +86,7 @@ int main(void)
         /* Publish IMU to "imu" topic */
         if ((t - tTime[IMU_PUBLISH_TIME_INDEX]) >= (1000 / IMU_PUBLISH_FREQUENCY))
         {
-        	updateIMU();
+            updateIMU();
             publishImuMsg();
             tTime[IMU_PUBLISH_TIME_INDEX] = t;
         }
@@ -474,8 +476,8 @@ bool calcOdometry(float diff_time)
     mpu6050_get_quat(&quat_data);
     theta = atan2f(quat_data.q0 * quat_data.q3 + quat_data.q1 * quat_data.q2, 0.5f - quat_data.q2 * quat_data.q2 - quat_data.q3 * quat_data.q3);
 
-    sprintf(log_msg, (char*)"theta: %1.4f", 180.0 / 3.14 * theta);
-    nh.loginfo(log_msg);
+//    sprintf(log_msg, (char*)"theta: %1.4f", 180.0 / 3.14 * theta);
+//    nh.loginfo(log_msg);
 
     delta_theta = theta - last_theta;
 
