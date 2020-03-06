@@ -18,8 +18,7 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 
-#include "robot_hardware.h"		/*!< Robot hardware information */
-#include "utils.h"				/*!< Robot utilities function */
+
 
 /* Time update index */
 #define CONTROL_MOTOR_TIME_INDEX                0		/*!< Time index control motor */
@@ -231,25 +230,11 @@ void controlMotor(float *goal_vel);
 void getMotorSpeed(float *vel);
 
 /*
- * @brief	Update quaternion components to support calculate robot's yaw.
- * @param	None.
- * @return	None.
- */
-void updateIMU(void);
-
-/*
  * @brief	Get quaternion components.
  * @param	None.
  * @return	IMU message type sensor_msg::Imu.
  */
 sensor_msgs::Imu getIMU(void);
-
-/*
- * @brief	Get robot orientation.
- * @param	orientation Pointer data.
- * @return	None.
- */
-void getOrientation(float *orientation);
 
 /*
  * @brieft 	Initialize IMU covariance.

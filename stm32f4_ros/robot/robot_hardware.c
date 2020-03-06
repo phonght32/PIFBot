@@ -261,3 +261,36 @@ bool robot_motor_right_get_dir(void)
 {
 	return step_motor_get_dir(motor_right);
 }
+
+void robot_imu_update_quat(void)
+{
+	mpu6050_update_quat();
+}
+
+void robot_imu_get_quat(float *quat)
+{
+	mpu6050_quat_data_t quat_data;
+	mpu6050_get_quat(&quat_data);
+	quat[0] = quat_data.q0;
+	quat[1] = quat_data.q1;
+	quat[2] = quat_data.q2;
+	quat[3] = quat_data.q3;
+}
+
+void robot_imu_get_accel(float *accel)
+{
+	mpu6050_scaled_data_t accel_data;
+	mpu6050_get_accel_scale(&accel_data);
+	accel[0] = accel_data.x_axis;
+	accel[1] = accel_data.y_axis;
+	accel[2] = accel_data.z_axis;
+}
+
+void robot_imu_get_gyro(float *gyro)
+{
+	mpu6050_scaled_data_t gyro_data;
+	mpu6050_get_gyro_scale(&gyro_data);
+	gyro[0] = gyro_data.x_axis;
+	gyro[1] = gyro_data.y_axis;
+	gyro[2] = gyro_data.z_axis;
+}

@@ -32,6 +32,8 @@ extern "C" {
 #include "../../stm32f4_library/motor/include/step_motor.h"
 #include "../../stm32f4_library/motor/include/encoder.h"
 
+
+
 #define PI               	3.14159265359
 
 /*
@@ -109,13 +111,22 @@ void robot_motor_left_stop(void);
 void robot_motor_right_start(void);
 void robot_motor_right_stop(void);
 
+void robot_control_motor(float *goal_vel);
+
+bool robot_motor_left_get_dir(void);
+bool robot_motor_right_get_dir(void);
+
 uint32_t robot_encoder_left_get_tick(void);
 uint32_t robot_encoder_right_get_tick(void);
 void robot_encoder_left_reset(void);
 void robot_encoder_right_reset(void);
 
-bool robot_motor_left_get_dir(void);
-bool robot_motor_right_get_dir(void);
+void robot_imu_update_quat(void);
+void robot_imu_get_quat(float *quat);
+void robot_imu_get_accel(float *accel);
+void robot_imu_get_gyro(float *gyro);
+
+
 
 #ifdef __cplusplus
 }
