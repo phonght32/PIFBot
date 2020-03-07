@@ -87,7 +87,7 @@ void robot_imu_init(void)
     mpu6050 = mpu6050_init(&mpu6050_config);
 
     /* Auto calibrate IMU bias value */
-    mpu6050_auto_calib();
+    mpu6050_auto_calib(mpu6050);
 }
 
 
@@ -279,7 +279,7 @@ void robot_imu_get_quat(float *quat)
 
 void robot_imu_get_accel(float *accel)
 {
-	mpu6050_scaled_data_t accel_data;
+	mpu6050_scale_data_t accel_data;
 	mpu6050_get_accel_scale(&accel_data);
 	accel[0] = accel_data.x_axis;
 	accel[1] = accel_data.y_axis;
@@ -288,7 +288,7 @@ void robot_imu_get_accel(float *accel)
 
 void robot_imu_get_gyro(float *gyro)
 {
-	mpu6050_scaled_data_t gyro_data;
+	mpu6050_scale_data_t gyro_data;
 	mpu6050_get_gyro_scale(&gyro_data);
 	gyro[0] = gyro_data.x_axis;
 	gyro[1] = gyro_data.y_axis;
