@@ -45,10 +45,6 @@
 #define LINEAR          0						/*!< Linear velocity index */
 #define ANGULAR         1						/*!< Angular velocity index */
 
-/* Convert constant */
-#define DEG2RAD(x)      (x * 0.01745329252)     /*!< Convert from degree to radian (PI/180) */
-#define RAD2DEG(x)      (x * 57.2957795131)     /*!< convert from radian to degree (180/PI) */
-
 #define TICK2RAD        360.0/(NUM_PULSE_PER_ROUND*MICROSTEP_DIV)*PI/180
 
 /*

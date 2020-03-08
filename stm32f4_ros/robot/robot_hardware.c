@@ -9,7 +9,7 @@
  *                    NUM_PULSE_PER_ROUND * STEP_DIV
  *
  */
-#define VEL2FREQ    	((NUM_PULSE_PER_ROUND*MICROSTEP_DIV)/(2*PI*WHEEL_RADIUS))
+#define VEL2FREQ        ((NUM_PULSE_PER_ROUND*MICROSTEP_DIV)/(2*PI*WHEEL_RADIUS))
 
 
 /*
@@ -38,36 +38,36 @@ DMA_HandleTypeDef hdma_uart4_tx;
 
 void robot_motor_init(void)
 {
-	/* Configure motor left driver */
+    /* Configure motor left driver */
     step_motor_config_t motor_left_config;
-    motor_left_config.pin_clk.timer_num 		= MOTORLEFT_PULSE_TIMER_NUM;
-    motor_left_config.pin_clk.timer_channel 	= MOTORLEFT_PULSE_TIMER_CHANNEL;
-    motor_left_config.pin_clk.timer_pins_pack 	= MOTORLEFT_PULSE_TIMER_PINSPACK;
-    motor_left_config.pin_dir.gpio_port 		= MOTORLEFT_DIR_GPIO_PORT;
-    motor_left_config.pin_dir.gpio_num 			= MOTORLEFT_DIR_GPIO_NUM;
-    motor_left_config.pin_dir.gpio_mode			= GPIO_OUTPUT;
-    motor_left_config.pin_dir.gpio_reg_pull 	= GPIO_REG_PULL_NONE;
-    motor_left_config.num_pulse_per_round 		= NUM_PULSE_PER_ROUND;
-    motor_left_config.microstep_div 			= MICROSTEP_DIV_4;
+    motor_left_config.pin_clk.timer_num         = MOTORLEFT_PULSE_TIMER_NUM;
+    motor_left_config.pin_clk.timer_channel     = MOTORLEFT_PULSE_TIMER_CHANNEL;
+    motor_left_config.pin_clk.timer_pins_pack   = MOTORLEFT_PULSE_TIMER_PINSPACK;
+    motor_left_config.pin_dir.gpio_port         = MOTORLEFT_DIR_GPIO_PORT;
+    motor_left_config.pin_dir.gpio_num          = MOTORLEFT_DIR_GPIO_NUM;
+    motor_left_config.pin_dir.gpio_mode         = GPIO_OUTPUT;
+    motor_left_config.pin_dir.gpio_reg_pull     = GPIO_REG_PULL_NONE;
+    motor_left_config.num_pulse_per_round       = NUM_PULSE_PER_ROUND;
+    motor_left_config.microstep_div             = MICROSTEP_DIV_4;
     motor_left = step_motor_init(&motor_left_config);
 
     /* Configure motor right driver */
     step_motor_config_t motor_right_config;
-    motor_right_config.pin_clk.timer_num 		= MOTORRIGHT_PULSE_TIMER_NUM;
-    motor_right_config.pin_clk.timer_channel 	= MOTORRIGHT_PULSE_TIMER_CHANNEL;
-    motor_right_config.pin_clk.timer_pins_pack 	= MOTORRIGHT_PULSE_TIMER_PINSPACK;
-    motor_right_config.pin_dir.gpio_port 		= MOTORRIGHT_DIR_GPIO_PORT;
-    motor_right_config.pin_dir.gpio_num 		= MOTORRIGHT_DIR_GPIO_NUM;
-    motor_right_config.pin_dir.gpio_mode 		= GPIO_OUTPUT;
-    motor_right_config.pin_dir.gpio_reg_pull 	= GPIO_REG_PULL_NONE;
-    motor_right_config.num_pulse_per_round 		= NUM_PULSE_PER_ROUND;
-    motor_right_config.microstep_div 			= MICROSTEP_DIV_4;
+    motor_right_config.pin_clk.timer_num        = MOTORRIGHT_PULSE_TIMER_NUM;
+    motor_right_config.pin_clk.timer_channel    = MOTORRIGHT_PULSE_TIMER_CHANNEL;
+    motor_right_config.pin_clk.timer_pins_pack  = MOTORRIGHT_PULSE_TIMER_PINSPACK;
+    motor_right_config.pin_dir.gpio_port        = MOTORRIGHT_DIR_GPIO_PORT;
+    motor_right_config.pin_dir.gpio_num         = MOTORRIGHT_DIR_GPIO_NUM;
+    motor_right_config.pin_dir.gpio_mode        = GPIO_OUTPUT;
+    motor_right_config.pin_dir.gpio_reg_pull    = GPIO_REG_PULL_NONE;
+    motor_right_config.num_pulse_per_round      = NUM_PULSE_PER_ROUND;
+    motor_right_config.microstep_div            = MICROSTEP_DIV_4;
     motor_right = step_motor_init(&motor_right_config);
 }
 
 void robot_imu_init(void)
 {
-	/* Configure I2C */
+    /* Configure I2C */
     i2c_config_t i2c_config;
     i2c_config.i2c_num = MPU6050_I2C_NUM;
     i2c_config.i2c_pins_pack = MPU6050_I2C_PINSPACK;
@@ -154,24 +154,24 @@ void robot_rosserial_init(void)
 
 void robot_encoder_init(void)
 {
-	/* Initialize left encoder */
-	encoder_config_t enc_left_config;
-	enc_left_config.timer_num = MOTORLEFT_TICK_TIMER_NUM;
-	enc_left_config.timer_pins_pack = MOTORLEFT_TICK_TIMER_PINSPACK;
-	enc_left_config.max_reload = 60000;
-	enc_left_config.counter_mode = TIMER_COUNTER_UP;
-	enc_left = encoder_init(&enc_left_config);
+    /* Initialize left encoder */
+    encoder_config_t enc_left_config;
+    enc_left_config.timer_num = MOTORLEFT_TICK_TIMER_NUM;
+    enc_left_config.timer_pins_pack = MOTORLEFT_TICK_TIMER_PINSPACK;
+    enc_left_config.max_reload = 60000;
+    enc_left_config.counter_mode = TIMER_COUNTER_UP;
+    enc_left = encoder_init(&enc_left_config);
 
-	/* Initialize right encoder */
-	encoder_config_t enc_right_config;
-	enc_right_config.timer_num = MOTORRIGHT_TICK_TIMER_NUM;
-	enc_right_config.timer_pins_pack = MOTORRIGHT_TICK_TIMER_PINSPACK;
-	enc_right_config.max_reload = 60000;
-	enc_right_config.counter_mode = TIMER_COUNTER_UP;
-	enc_right = encoder_init(&enc_right_config);
+    /* Initialize right encoder */
+    encoder_config_t enc_right_config;
+    enc_right_config.timer_num = MOTORRIGHT_TICK_TIMER_NUM;
+    enc_right_config.timer_pins_pack = MOTORRIGHT_TICK_TIMER_PINSPACK;
+    enc_right_config.max_reload = 60000;
+    enc_right_config.counter_mode = TIMER_COUNTER_UP;
+    enc_right = encoder_init(&enc_right_config);
 
-	encoder_start(enc_left);
-	encoder_start(enc_right);
+    encoder_start(enc_left);
+    encoder_start(enc_right);
 }
 
 void robot_motor_left_forward(void)
@@ -210,87 +210,95 @@ void robot_motor_right_set_speed(float speed)
 
 uint32_t robot_encoder_left_get_tick(void)
 {
-	uint32_t resolver_tick;
-	resolver_tick =  encoder_get_value(enc_left);
-	return resolver_tick;
+    uint32_t resolver_tick;
+    resolver_tick =  encoder_get_value(enc_left);
+    return resolver_tick;
 }
 
 uint32_t robot_encoder_right_get_tick(void)
 {
-	uint32_t resolver_tick;
-	resolver_tick =  encoder_get_value(enc_right);
-	return resolver_tick;
+    uint32_t resolver_tick;
+    resolver_tick =  encoder_get_value(enc_right);
+    return resolver_tick;
 }
 
 void robot_motor_left_start(void)
 {
-	step_motor_start(motor_left);
+    step_motor_start(motor_left);
 }
 
 void robot_motor_left_stop(void)
 {
-	step_motor_stop(motor_left);
+    step_motor_stop(motor_left);
 }
 
 void robot_motor_right_start(void)
 {
-	step_motor_start(motor_right);
+    step_motor_start(motor_right);
 }
 
 void robot_motor_right_stop(void)
 {
-	step_motor_stop(motor_right);
+    step_motor_stop(motor_right);
 }
 
 void robot_encoder_left_reset(void)
 {
-	ext_counter_set_value(enc_left, 0);
+    ext_counter_set_value(enc_left, 0);
 }
 
 void robot_encoder_right_reset(void)
 {
-	ext_counter_set_value(enc_right, 0);
+    ext_counter_set_value(enc_right, 0);
 }
 
 bool robot_motor_left_get_dir(void)
 {
-	return step_motor_get_dir(motor_left);
+    return step_motor_get_dir(motor_left);
 }
 
 bool robot_motor_right_get_dir(void)
 {
-	return step_motor_get_dir(motor_right);
+    return step_motor_get_dir(motor_right);
 }
 
 void robot_imu_update_quat(void)
 {
-	mpu6050_update_quat();
+    imu_scale_data_t accel_scale, gyro_scale;
+    mpu6050_get_accel_scale(&accel_scale);
+    mpu6050_get_gyro_scale(&gyro_scale);
+    madwick_ahrs_update_imu(DEG2RAD(gyro_scale.x_axis),
+                            DEG2RAD(gyro_scale.y_axis),
+                            DEG2RAD(gyro_scale.z_axis),
+                            accel_scale.x_axis,
+                            accel_scale.y_axis,
+                            accel_scale.z_axis);
 }
 
 void robot_imu_get_quat(float *quat)
 {
-	mpu6050_quat_data_t quat_data;
-	mpu6050_get_quat(&quat_data);
-	quat[0] = quat_data.q0;
-	quat[1] = quat_data.q1;
-	quat[2] = quat_data.q2;
-	quat[3] = quat_data.q3;
+    imu_quat_data_t quat_data;
+    madwick_ahrs_get_quaternion(&quat_data);
+    quat[0] = quat_data.q0;
+    quat[1] = quat_data.q1;
+    quat[2] = quat_data.q2;
+    quat[3] = quat_data.q3;
 }
 
 void robot_imu_get_accel(float *accel)
 {
-	mpu6050_scale_data_t accel_data;
-	mpu6050_get_accel_scale(&accel_data);
-	accel[0] = accel_data.x_axis;
-	accel[1] = accel_data.y_axis;
-	accel[2] = accel_data.z_axis;
+    imu_scale_data_t accel_data;
+    mpu6050_get_accel_scale(&accel_data);
+    accel[0] = accel_data.x_axis;
+    accel[1] = accel_data.y_axis;
+    accel[2] = accel_data.z_axis;
 }
 
 void robot_imu_get_gyro(float *gyro)
 {
-	mpu6050_scale_data_t gyro_data;
-	mpu6050_get_gyro_scale(&gyro_data);
-	gyro[0] = gyro_data.x_axis;
-	gyro[1] = gyro_data.y_axis;
-	gyro[2] = gyro_data.z_axis;
+    imu_scale_data_t gyro_data;
+    mpu6050_get_gyro_scale(&gyro_data);
+    gyro[0] = gyro_data.x_axis;
+    gyro[1] = gyro_data.y_axis;
+    gyro[2] = gyro_data.z_axis;
 }

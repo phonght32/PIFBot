@@ -31,10 +31,14 @@ extern "C" {
 #include "../../stm32f4_library/imu/include/mpu6050.h"
 #include "../../stm32f4_library/motor/include/step_motor.h"
 #include "../../stm32f4_library/motor/include/encoder.h"
+#include "../../stm32f4_library/imu_filter/include/imu_filter.h"
 
 
 
 #define PI               	3.14159265359
+/* Convert constant */
+#define DEG2RAD(x)      (x * PI / 180.0f)     /*!< Convert from degree to radian (PI/180) */
+#define RAD2DEG(x)      (x * 180.0f / PI)     /*!< convert from radian to degree (180/PI) */
 
 /*
  * Step motor direction index.
