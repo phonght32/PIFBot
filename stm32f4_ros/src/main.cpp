@@ -6,13 +6,9 @@
 #include "main.h"
 
 #include "../robot/include/robot_config.h"
+#include "../robot/include/robot_hardware.h"		/*!< Robot hardware information */
+#include "../robot/include/utils.h"					/*!< Robot utilities function */
 
-//I2C_HandleTypeDef hi2c_mpu6050;
-mpu6050_quat_data_t quat_data;
-char mpu6050_uart_buf[100];
-
-uint64_t time_tick = 0;
-uint16_t num_bytes;
 /********************************** Main ************************************ */
 int main(void)
 {
@@ -36,8 +32,6 @@ int main(void)
 
     /* ROS setup */
     ros_setup();
-
-
 
     while (1)
     {
@@ -86,7 +80,7 @@ int main(void)
         /* Publish IMU to "imu" topic */
         if ((t - tTime[IMU_PUBLISH_TIME_INDEX]) >= (1000 / IMU_PUBLISH_FREQUENCY))
         {
-            updateIMU();
+            robot_imu_update_quat();
             publishImuMsg();
             tTime[IMU_PUBLISH_TIME_INDEX] = t;
         }
@@ -394,7 +388,6 @@ void updateTFPrefix(bool isConnected)
             sprintf(log_msg, "Setup TF on IMU [%s]", imu_frame_id);
             nh.loginfo(log_msg);
 
-
             sprintf(log_msg, "Setup TF on JointState [%s]", joint_state_header_frame_id);
             nh.loginfo(log_msg);
 
@@ -473,12 +466,9 @@ bool calcOdometry(float diff_time)
     delta_s     = WHEEL_RADIUS * (wheel_r + wheel_l) / 2.0f;
 //     theta = WHEEL_RADIUS * (wheel_r - wheel_l) / WHEEL_SEPARATION;
 
-    mpu6050_get_quat(&quat_data);
-    theta = atan2f(quat_data.q0 * quat_data.q3 + quat_data.q1 * quat_data.q2, 0.5f - quat_data.q2 * quat_data.q2 - quat_data.q3 * quat_data.q3);
-
-//    sprintf(log_msg, (char*)"theta: %1.4f", 180.0 / 3.14 * theta);
-//    nh.loginfo(log_msg);
-
+    float quat_data[4];
+    robot_imu_get_quat(quat_data);
+    theta = atan2f(quat_data[0] * quat_data[3] + quat_data[1] * quat_data[2], 0.5f - quat_data[2] * quat_data[2] - quat_data[3] * quat_data[3]);
     delta_theta = theta - last_theta;
 
     // compute odometric pose
@@ -505,7 +495,6 @@ bool calcOdometry(float diff_time)
 void sendLogMsg(void)
 {
     static bool log_flag = false;
-
 
     if (nh.connected())
     {
@@ -548,62 +537,27 @@ void waitForSerialLink(bool isConnected)
     }
 }
 
-void updateIMU(void)
-{
-    mpu6050_update_quat();
-}
-
 sensor_msgs::Imu getIMU(void)
 {
-    mpu6050_scaled_data_t accel_scale;
-    mpu6050_scaled_data_t gyro_scale;
-    mpu6050_quat_data_t quat;
-    mpu6050_get_accel_scale(&accel_scale);
-    mpu6050_get_gyro_scale(&gyro_scale);
-    mpu6050_get_quat(&quat);
+    float accel[3], gyro[3], quaternion[4];
+    robot_imu_get_accel(accel);
+    robot_imu_get_gyro(gyro);
+    robot_imu_get_quat(quaternion);
 
     sensor_msgs::Imu imu_msg_;
 
-    imu_msg_.angular_velocity.x = gyro_scale.x_axis;
-    imu_msg_.angular_velocity.y = gyro_scale.y_axis;
-    imu_msg_.angular_velocity.z = gyro_scale.z_axis;
-//    imu_msg_.angular_velocity_covariance[1] = 0;
-//    imu_msg_.angular_velocity_covariance[2] = 0;
-//    imu_msg_.angular_velocity_covariance[3] = 0;
-//    imu_msg_.angular_velocity_covariance[4] = 0.02;
-//    imu_msg_.angular_velocity_covariance[5] = 0;
-//    imu_msg_.angular_velocity_covariance[6] = 0;
-//    imu_msg_.angular_velocity_covariance[7] = 0;
-//    imu_msg_.angular_velocity_covariance[8] = 0.02;
+    imu_msg_.angular_velocity.x = gyro[0];
+    imu_msg_.angular_velocity.y = gyro[1];
+    imu_msg_.angular_velocity.z = gyro[2];
 
-    imu_msg_.linear_acceleration.x = accel_scale.x_axis;
-    imu_msg_.linear_acceleration.y = accel_scale.y_axis;
-    imu_msg_.linear_acceleration.z = accel_scale.z_axis;
-//
-//    imu_msg_.linear_acceleration_covariance[0] = 0.04;
-//    imu_msg_.linear_acceleration_covariance[1] = 0;
-//    imu_msg_.linear_acceleration_covariance[2] = 0;
-//    imu_msg_.linear_acceleration_covariance[3] = 0;
-//    imu_msg_.linear_acceleration_covariance[4] = 0.04;
-//    imu_msg_.linear_acceleration_covariance[5] = 0;
-//    imu_msg_.linear_acceleration_covariance[6] = 0;
-//    imu_msg_.linear_acceleration_covariance[7] = 0;
-//    imu_msg_.linear_acceleration_covariance[8] = 0.04;
+    imu_msg_.linear_acceleration.x = accel[0];
+    imu_msg_.linear_acceleration.y = accel[1];
+    imu_msg_.linear_acceleration.z = accel[2];
 
-    imu_msg_.orientation.w = quat.q0;
-    imu_msg_.orientation.x = quat.q1;
-    imu_msg_.orientation.y = quat.q2;
-    imu_msg_.orientation.z = quat.q3;
-
-//    imu_msg_.orientation_covariance[0] = 0.0025;
-//    imu_msg_.orientation_covariance[1] = 0;
-//    imu_msg_.orientation_covariance[2] = 0;
-//    imu_msg_.orientation_covariance[3] = 0;
-//    imu_msg_.orientation_covariance[4] = 0.0025;
-//    imu_msg_.orientation_covariance[5] = 0;
-//    imu_msg_.orientation_covariance[6] = 0;
-//    imu_msg_.orientation_covariance[7] = 0;
-//    imu_msg_.orientation_covariance[8] = 0.0025;
+    imu_msg_.orientation.w = quaternion[0];
+    imu_msg_.orientation.x = quaternion[1];
+    imu_msg_.orientation.y = quaternion[2];
+    imu_msg_.orientation.z = quaternion[3];
 
     return imu_msg_;
 }
@@ -638,16 +592,6 @@ void initIMUCovariance(void)
     imu_msg.orientation_covariance[6] = 0;
     imu_msg.orientation_covariance[7] = 0;
     imu_msg.orientation_covariance[8] = 0.0025;
-}
-
-void getOrientation(float *orientation)
-{
-    mpu6050_quat_data_t quat;
-    mpu6050_get_quat(&quat);
-    orientation[0] = quat.q0;
-    orientation[1] = quat.q1;
-    orientation[2] = quat.q2;
-    orientation[3] = quat.q3;
 }
 
 void controlMotor(float *goal_vel)

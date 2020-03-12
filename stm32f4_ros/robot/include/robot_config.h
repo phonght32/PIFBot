@@ -18,8 +18,7 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 
-#include "robot_hardware.h"		/*!< Robot hardware information */
-#include "utils.h"				/*!< Robot utilities function */
+
 
 /* Time update index */
 #define CONTROL_MOTOR_TIME_INDEX                0		/*!< Time index control motor */
@@ -45,10 +44,6 @@
 
 #define LINEAR          0						/*!< Linear velocity index */
 #define ANGULAR         1						/*!< Angular velocity index */
-
-/* Convert constant */
-#define DEG2RAD(x)      (x * 0.01745329252)     /*!< Convert from degree to radian (PI/180) */
-#define RAD2DEG(x)      (x * 57.2957795131)     /*!< convert from radian to degree (180/PI) */
 
 #define TICK2RAD        360.0/(NUM_PULSE_PER_ROUND*MICROSTEP_DIV)*PI/180
 
@@ -231,25 +226,11 @@ void controlMotor(float *goal_vel);
 void getMotorSpeed(float *vel);
 
 /*
- * @brief	Update quaternion components to support calculate robot's yaw.
- * @param	None.
- * @return	None.
- */
-void updateIMU(void);
-
-/*
  * @brief	Get quaternion components.
  * @param	None.
  * @return	IMU message type sensor_msg::Imu.
  */
 sensor_msgs::Imu getIMU(void);
-
-/*
- * @brief	Get robot orientation.
- * @param	orientation Pointer data.
- * @return	None.
- */
-void getOrientation(float *orientation);
 
 /*
  * @brieft 	Initialize IMU covariance.
