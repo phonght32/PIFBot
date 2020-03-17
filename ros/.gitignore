@@ -1,0 +1,9 @@
+.catkin_tools/*
+logs/*
+build/*
+devel/*
+
+src/.catkin_tools/*
+src/build/*
+src/devel/*
+src/logs/*
