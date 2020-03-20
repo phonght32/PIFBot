@@ -26,9 +26,6 @@
 [submodule "ros/src/viso2"]
 	path = ros/src/viso2
 	url = https://github.com/thanhphong98/viso2.git
-[submodule "ros/src/lidar-camera"]
-	path = ros/src/lidar-camera
-	url = https://github.com/sumejko92/lidar-camera.git
 [submodule "ros/src/camera_lidar_calibration_v2"]
 	path = ros/src/camera_lidar_calibration_v2
 	url = https://github.com/TurtleZhong/camera_lidar_calibration_v2
