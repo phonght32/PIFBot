@@ -29,3 +29,12 @@
 [submodule "ros/src/usb_cam"]
 	path = ros/src/usb_cam
 	url = https://github.com/thanhphong98/usb_cam.git
+[submodule "ros/src/camera_lidar_calibration_v2"]
+	path = ros/src/camera_lidar_calibration_v2
+	url = https://github.com/thanhphong98/camera_lidar_calibration_v2.git
+[submodule "ros/src/lidar-camera"]
+	path = ros/src/lidar-camera
+	url = https://github.com/thanhphong98/lidar-camera.git
+[submodule "ros/src/laserscan_to_pointcloud"]
+	path = ros/src/laserscan_to_pointcloud
+	url = https://github.com/thanhphong98/laserscan_to_pointcloud.git
