@@ -1,12 +1,34 @@
 [submodule "rplidar_ros"]
 	path = ros/src/rplidar_ros
 	url = https://github.com/Slamtec/rplidar_ros.git
-
 [submodule "stm32f4_ros/stm32f4_library"]
 	path = stm32f4_ros/stm32f4_library
 	url = https://github.com/thanhphong98/stm32f4_library.git
-
 [submodule "kicad/mainboard_v2_0/kicad-library"]
 	path = kicad/mainboard_v2_0/kicad-library
 	url = git@github.com:thanhphong98/kicad-library.git
 	branch = feature/thesis
+[submodule "ros/src/feature_tracking"]
+	path = ros/src/feature_tracking
+	url = https://github.com/thanhphong98/feature_tracking.git
+[submodule "ros/src/limo"]
+	path = ros/src/limo
+	url = https://github.com/thanhphong98/limo.git
+[submodule "ros/src/mono_lidar_depth"]
+	path = ros/src/mono_lidar_depth
+	url = https://github.com/thanhphong98/mono_lidar_depth.git
+[submodule "ros/src/mrt_cmake_modules"]
+	path = ros/src/mrt_cmake_modules
+	url = https://github.com/thanhphong98/mrt_cmake_modules.git
+[submodule "ros/src/rosinterface_handler"]
+	path = ros/src/rosinterface_handler
+	url = https://github.com/thanhphong98/rosinterface_handler.git
+[submodule "ros/src/viso2"]
+	path = ros/src/viso2
+	url = https://github.com/thanhphong98/viso2.git
+[submodule "ros/src/lidar-camera"]
+	path = ros/src/lidar-camera
+	url = https://github.com/thanhphong98/lidar-camera.git
+[submodule "ros/src/laserscan_to_pointcloud"]
+	path = ros/src/laserscan_to_pointcloud
+	url = https://github.com/thanhphong98/laserscan_to_pointcloud.git
