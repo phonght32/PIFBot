@@ -1,0 +1,23 @@
+<launch>
+  <arg name="open_rviz" default="true"/>
+  
+  <!--must be set before launchfile starts-->
+  <rosparam param="use_sim_time" subst_value="True"> true </rosparam>
+
+  <include file="$(find robot_bringup)/launch/robot_remote.launch"/>
+
+  <include file="$(find laserscan_to_pointcloud)/launch/laserscan_to_pointcloud_assembler.launch"/>
+
+  <!--feature matching-->
+  <include file="$(find robot_limo)/launch/feature_matching.launch">
+      <arg name="camera_name" value="left"/>
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+      args="-d $(find robot_limo)/rviz/robot_limo.rviz"/>
+  </group>
+
+
+</launch>
