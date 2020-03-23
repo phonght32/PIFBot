@@ -26,3 +26,6 @@
 [submodule "ros/src/lds_pkg/rplidar_ros"]
 	path = ros/src/lds_pkg/rplidar_ros
 	url = https://github.com/thanhphong98/rplidar_ros.git
+[submodule "ros/src/lds_pkg/laserscan_to_pointcloud"]
+	path = ros/src/lds_pkg/laserscan_to_pointcloud
+	url = https://github.com/thanhphong98/laserscan_to_pointcloud.git
