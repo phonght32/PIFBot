@@ -7,7 +7,8 @@
 
   <!--gamma correction-->
   <node pkg="nodelet" type="nodelet" name="gamma_correction_nodelet_$(arg camera_name)" args="load image_preproc_ros_tool/GammaCorrectionNodelet $(arg nodelet_manager_name)" output="log">
-    <remap from="src/image" to="/sensor/camera/grayscale/$(arg camera_name)/image_rect" />
+    <remap from="src/image" to="/sensor/camera/color/$(arg camera_name)/image_rect" />
+    #<remap from="src/image" to="/sensor/camera/grayscale/$(arg camera_name)/image_rect" />
     <remap from="tgt/image" to="/sensor/camera/grayscale/$(arg camera_name)/image_rect_g" />
     <param name="gamma" value="1.2" />
     <param name="auto_gamma" value="true" />
