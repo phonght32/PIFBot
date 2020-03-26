@@ -133,7 +133,40 @@
     </sensor>
   </gazebo>
 
-   <gazebo reference="camera_rgb_frame">
+   <gazebo reference="camera_gray_link">
+    <sensor type="camera" name="Pi Camera">
+      <always_on>true</always_on>
+      <visualize>$(arg camera_visual)</visualize>
+      <camera>
+          <horizontal_fov>1.085595</horizontal_fov>
+          <image>
+              <width>640</width>
+              <height>480</height>
+              <format>L8</format>
+          </image>
+          <clip>
+              <near>0.03</near>
+              <far>100</far>
+          </clip>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>30.0</updateRate>
+        <cameraName>sensor/camera/grayscale/left</cameraName>
+        <frameName>camera_gray_link</frameName>
+        <imageTopicName>image_rect_g</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="camera_rgb_link">
     <sensor type="camera" name="Pi Camera">
       <always_on>true</always_on>
       <visualize>$(arg camera_visual)</visualize>
@@ -152,10 +185,10 @@
       <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
         <alwaysOn>true</alwaysOn>
         <updateRate>30.0</updateRate>
-        <cameraName>src</cameraName>
-        <frameName>camera_rgb_optical_frame</frameName>
-        <imageTopicName>image</imageTopicName>
-        <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+        <cameraName>sensor/camera/color/left</cameraName>
+        <frameName>camera_rgb_link</frameName>
+        <imageTopicName>image_rect</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
         <hackBaseline>0.07</hackBaseline>
         <distortionK1>0.0</distortionK1>
         <distortionK2>0.0</distortionK2>
