@@ -13,7 +13,7 @@
 
   <link name="base_link">
     <visual>
-      <origin xyz="0 0 0.0525" rpy="0 0 -1.5707"/>
+      <origin xyz="-0.032 0 0.0525" rpy="0 0 -1.5707"/>
       <geometry>
         <mesh filename="package://robot_description/meshes/stl/robot_base.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -21,9 +21,9 @@
     </visual>
 
     <collision>
-      <origin xyz="0      0      0.0925" rpy="0 0 0"/>
+      <origin xyz="-0.032 0 0.070" rpy="0 0 0"/>
       <geometry>
-        <box size=".2 .2 .14"/>
+        <box size="0.20 0.20 0.143"/>
       </geometry>
     </collision>
 
@@ -55,7 +55,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <cylinder length=".026" radius=".0325"/>
+        <cylinder length="0.018" radius="0.033"/>
       </geometry>
     </collision>
 
@@ -87,7 +87,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <cylinder length=".026" radius=".0325"/>
+        <cylinder length="0.018" radius="0.033"/>
       </geometry>
     </collision>
 
@@ -162,33 +162,6 @@
     </inertial>
   </link>
 
-  <joint name="camera_joint" type="fixed">
-    <origin xyz="0.073 -0.011 0.084" rpy="0 0 0"/>
-    <parent link="base_link"/>
-    <child link="camera_link"/>
-  </joint>
-
-  <link name="camera_link">
-    <collision>
-      <origin xyz="0.005 0.011 0.013" rpy="0 0 0"/>
-      <geometry>
-        <box size="0.015 0.030 0.027"/>
-      </geometry>
-    </collision>
-  </link>
-
-  <joint name="camera_rgb_joint" type="fixed">
-    <origin xyz="0.003 0.011 0.009" rpy="0 0 0"/>
-    <parent link="camera_link"/>
-    <child link="camera_rgb_frame"/>
-  </joint>
-  <link name="camera_rgb_frame"/>
-
-  <joint name="camera_rgb_optical_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="-1.57 0 -1.57"/>
-    <parent link="camera_rgb_frame"/>
-    <child link="camera_rgb_optical_frame"/>
-  </joint>
-  <link name="camera_rgb_optical_frame"/>
+  
 
 </robot>
