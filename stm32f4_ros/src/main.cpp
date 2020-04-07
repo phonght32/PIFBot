@@ -12,6 +12,7 @@
 /********************************** Main ************************************ */
 int main(void)
 {
+
     /* Initialize STM32 system */
     HAL_Init();
     SystemClock_Config();
