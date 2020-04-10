@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef _ROBOT_CONFIG_H_
-#define _ROBOT_CONFIG_H_
+#ifndef _ROBOT_ROS_CONFIG_H_
+#define _ROBOT_ROS_CONFIG_H_
 
 #include <ros.h>
 #include <ros/time.h>
@@ -356,4 +356,4 @@ uint8_t battery_state = 0;
  */
 bool setup_end        = false;
 
-#endif /* _ROBOT_CONFIG_H_ */
+#endif /* _ROBOT_ROS_CONFIG_H_ */
