@@ -49,10 +49,10 @@ extern "C" {
 #define RAD2DEG(x)      (x * 180.0f / PI)     /*!< convert from radian to degree (180/PI) */
 
 /* Step motor direction index */
-#define MOTORLEFT_FORWARD       0
-#define MOTORLEFT_BACKWARD      1
-#define MOTORRIGHT_FORWARD      1
-#define MOTORRIGHT_BACKWARD     0
+#define MOTORLEFT_DIR_FORWARD       0
+#define MOTORLEFT_DIR_BACKWARD      1
+#define MOTORRIGHT_DIR_FORWARD      1
+#define MOTORRIGHT_DIR_BACKWARD     0
 
 /* Robot parameters */
 #define WHEEL_RADIUS                0.033                                   /*!< Wheel radius in meter */
@@ -102,12 +102,24 @@ extern "C" {
 #define MADGWICK_BETA                   0.1f
 #define MADGWICK_SAMPLE_FREQ            512.0f
 
-/*
- * Robot Initial Function.
- */
+
+
 void robot_motor_init(void);
 void robot_imu_init(void);
 void robot_encoder_init(void);
+
+stm_err_t robot_motor_left_start(void);
+stm_err_t robot_motor_left_stop(void);
+stm_err_t robot_motor_left_forward(void);
+stm_err_t robot_motor_left_backward(void);
+stm_err_t robot_motor_left_set_speed(float speed);
+
+stm_err_t robot_motor_right_start(void);
+stm_err_t robot_motor_right_stop(void);
+stm_err_t robot_motor_right_forward(void);
+stm_err_t robot_motor_right_backward(void);
+stm_err_t robot_motor_right_set_speed(float speed);
+
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,19 @@
 #include "robot_hardware.h"
 
+#define MOTORLEFT_START_ERR_STR         "motor left start error"
+#define MOTORLEFT_STOP_ERR_STR          "motor left stop error"
+#define MOTORLEFT_FORWARD_ERR_STR       "motor left forward error"
+#define MOTORLEFT_BACKWARD_ERR_STR      "motor left backward error"
+#define MOTORLEFT_SET_SPEED_ERR_STR     "motor left set speed error"
+#define MOTORLEFT_GET_DIR_ERR_STR       "motor left get direction error"
+
+#define MOTORRIGHT_START_ERR_STR         "motor right start error"
+#define MOTORRIGHT_STOP_ERR_STR          "motor right stop error"
+#define MOTORRIGHT_FORWARD_ERR_STR       "motor right forward error"
+#define MOTORRIGHT_BACKWARD_ERR_STR      "motor right backward error"
+#define MOTORRIGHT_SET_SPEED_ERR_STR     "motor right set speed error"
+#define MOTORRIGHT_GET_DIR_ERR_STR       "motor right get direction error"
+
 static const char* TAG = "ROBOT HARDWARE";
 #define HARDWARE_CHECK(a, str, ret)  if(!(a)) {                                      \
         STM_LOGE(TAG,"%s:%d (%s):%s", __FILE__, __LINE__, __FUNCTION__, str);        \
@@ -78,3 +92,97 @@ void robot_encoder_init(void)
 
     STM_LOGI(TAG, "Configure resolver success");
 }
+
+stm_err_t robot_motor_left_start(void)
+{
+    int ret = stepmotor_start(motor_left);
+    HARDWARE_CHECK(!ret, MOTORLEFT_START_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+stm_err_t robot_motor_left_stop(void)
+{
+    int ret = stepmotor_stop(motor_left);
+    HARDWARE_CHECK(!ret, MOTORLEFT_STOP_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+stm_err_t robot_motor_left_forward(void)
+{
+    int ret = stepmotor_set_dir(motor_left, MOTORLEFT_DIR_FORWARD);
+    HARDWARE_CHECK(!ret, MOTORLEFT_FORWARD_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+stm_err_t robot_motor_left_backward(void)
+{
+    int ret = stepmotor_set_dir(motor_left, MOTORLEFT_DIR_BACKWARD);
+    HARDWARE_CHECK(!ret, MOTORLEFT_BACKWARD_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+stm_err_t robot_motor_left_set_speed(float speed)
+{
+    int ret = stepmotor_set_pwm_freq(motor_left, (uint32_t)(speed * VEL2FREQ));
+    HARDWARE_CHECK(!ret, MOTORLEFT_SET_SPEED_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+stm_err_t robot_motor_right_start(void)
+{
+    int ret = stepmotor_start(motor_right);
+    HARDWARE_CHECK(!ret, MOTORRIGHT_START_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+stm_err_t robot_motor_right_stop(void)
+{
+    int ret = stepmotor_stop(motor_right);
+    HARDWARE_CHECK(!ret, MOTORRIGHT_STOP_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+stm_err_t robot_motor_right_forward(void)
+{
+    int ret = stepmotor_set_dir(motor_right, MOTORRIGHT_DIR_FORWARD);
+    HARDWARE_CHECK(!ret, MOTORRIGHT_FORWARD_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+stm_err_t robot_motor_right_backward(void)
+{
+    int ret = stepmotor_set_dir(motor_right, MOTORRIGHT_DIR_BACKWARD);
+    HARDWARE_CHECK(!ret, MOTORRIGHT_BACKWARD_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+stm_err_t robot_motor_right_set_speed(float speed)
+{
+    int ret = stepmotor_set_pwm_freq(motor_right, (uint32_t)(speed * VEL2FREQ));
+    HARDWARE_CHECK(!ret, MOTORRIGHT_SET_SPEED_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
