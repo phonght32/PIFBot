@@ -142,6 +142,7 @@ stm_err_t robot_encoder_init(void)
     HARDWARE_CHECK(!ret, RESOLVER_INIT_ERR_STR, STM_FAIL);
 
     STM_LOGD(TAG, "Configure resolver success");
+    return STM_OK;
 }
 
 stm_err_t robot_motor_left_start(void)
