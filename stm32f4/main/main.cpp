@@ -7,6 +7,8 @@
 
 #include "stm_log.h"
 
+#include "robot_hardware.h"
+
 static const char *TAG = "APP_MAIN";
 
 

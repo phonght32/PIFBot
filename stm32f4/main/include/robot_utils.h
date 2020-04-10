@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef _UTILS_H_
-#define _UTILS_H_
+#ifndef _ROBOT_UTILS_H_
+#define _ROBOT_UTILS_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,4 +59,4 @@ float constrain(float x, float low_val, float high_val);
 }
 #endif
 
-#endif /* _UTILS_H_ */
+#endif /* _ROBOT_UTILS_H_ */
