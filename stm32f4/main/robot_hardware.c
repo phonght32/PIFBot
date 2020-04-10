@@ -1,9 +1,9 @@
 #include "robot_hardware.h"
 
 static const char* TAG = "ROBOT HARDWARE";
-#define HARDWARE_CHECK(a, str, ret)  if(!(a)) {                                                     \
+#define HARDWARE_CHECK(a, str, ret)  if(!(a)) {                                      \
         STM_LOGE(TAG,"%s:%d (%s):%s", __FILE__, __LINE__, __FUNCTION__, str);        \
-        return (ret);                                                                               \
+        return (ret);                                                                \
         }
 
 stepmotor_handle_t motor_left, motor_right;
@@ -33,6 +33,12 @@ void robot_motor_init(void)
 
 void robot_imu_init(void)
 {
+    i2c_config_t i2c_cfg;
+    i2c_cfg.i2c_num = MPU9250_I2C_NUM;
+    i2c_cfg.i2c_pins_pack = MPU9250_I2C_PINSPACK;
+    i2c_cfg.clk_speed = 100000;
+    i2c_config(&i2c_cfg);
+
     mpu9250_config_t mpu9250_cfg;
     mpu9250_cfg.afs_sel = MPU9250_AFS_SEL_8G;
     mpu9250_cfg.clksel = MPU9250_CLKSEL_AUTO;
