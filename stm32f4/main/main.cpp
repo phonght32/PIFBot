@@ -8,8 +8,10 @@
 #include "stm_log.h"
 
 #include "robot_hardware.h"
+#include "robot_utils.h"
+#include "robot_config.h"
 
-static const char *TAG = "APP_MAIN";
+// static const char *TAG = "APP_MAIN";
 
 
 static void system_clock_init(void)
