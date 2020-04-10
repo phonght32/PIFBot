@@ -37,6 +37,75 @@ extern "C" {
 #include "stm_err.h"
 #include "stm_log.h"
 
+#include "stepmotor.h"
+#include "software_resolver.h"
+#include "mpu9250.h"
+
+#define PI                  3.14159265359
+
+/* Convert constant */
+#define DEG2RAD(x)      (x * PI / 180.0f)     /*!< Convert from degree to radian (PI/180) */
+#define RAD2DEG(x)      (x * 180.0f / PI)     /*!< convert from radian to degree (180/PI) */
+
+/* Step motor direction index */
+#define MOTORLEFT_FORWARD       0
+#define MOTORLEFT_BACKWARD      1
+#define MOTORRIGHT_FORWARD      1
+#define MOTORRIGHT_BACKWARD     0
+
+/* Robot parameters */
+#define WHEEL_RADIUS                0.033                                   /*!< Wheel radius in meter */
+#define WHEEL_SEPARATION            0.165                                   /*!< Wheel separate distance in meter */
+#define TURNING_RADIUS              0.08                                    /*!< Turning radius in degree */
+#define ROBOT_RADIUS                0.1                                     /*!< Robot radius in meter    */
+#define MAX_LINEAR_VELOCITY         (WHEEL_RADIUS * 2 * PI * 60 / 60)       /*!< Max linear velocity */
+#define MAX_ANGULAR_VELOCITY        (MAX_LINEAR_VELOCITY / TURNING_RADIUS)  /*!< Max angular velocity */
+#define MIN_LINEAR_VELOCITY         -MAX_LINEAR_VELOCITY                    /*!< Min linear velocity */
+#define MIN_ANGULAR_VELOCITY        -MAX_ANGULAR_VELOCITY                   /*!< Min angular velocity */
+
+/* Step driver parameters */
+#define MICROSTEP_DIV               4           /*!< Step driver microstep divider */
+#define NUM_PULSE_PER_ROUND         200         /*!< The number of pulse per round of motor */
+
+/*
+ *  Convert from velocity (m/s) to frequency (Hz) for motor driver.
+ *
+ *                      2*pi*WHELL_RADIUS
+ *  velocity (m/s) =  ------------------------------
+ *                    NUM_PULSE_PER_ROUND * STEP_DIV
+ *
+ */
+#define VEL2FREQ        ((NUM_PULSE_PER_ROUND*MICROSTEP_DIV)/(2*PI*WHEEL_RADIUS))
+
+/* STM32 hardware */
+#define MOTORLEFT_PULSE_TIMER_NUM           TIMER_NUM_1
+#define MOTORLEFT_PULSE_TIMER_CHANNEL       TIMER_CHANNEL_1
+#define MOTORLEFT_PULSE_TIMER_PINSPACK      TIMER_PINS_PACK_2
+#define MOTORLEFT_DIR_GPIO_PORT             GPIO_PORT_A
+#define MOTORLEFT_DIR_GPIO_NUM              GPIO_NUM_3
+#define MOTORLEFT_TICK_TIMER_NUM            TIMER_NUM_2
+#define MOTORLEFT_TICK_TIMER_PINSPACK       TIMER_PINS_PACK_2
+
+#define MOTORRIGHT_PULSE_TIMER_NUM          TIMER_NUM_14
+#define MOTORRIGHT_PULSE_TIMER_CHANNEL      TIMER_CHANNEL_1
+#define MOTORRIGHT_PULSE_TIMER_PINSPACK     TIMER_PINS_PACK_1
+#define MOTORRIGHT_DIR_GPIO_PORT            GPIO_PORT_C
+#define MOTORRIGHT_DIR_GPIO_NUM             GPIO_NUM_5
+#define MOTORRIGHT_TICK_TIMER_NUM           TIMER_NUM_4
+#define MOTORRIGHT_TICK_TIMER_PINSPACK      TIMER_PINS_PACK_1
+
+#define MPU6050_I2C_NUM                     I2C_NUM_1
+#define MPU6050_I2C_PINSPACK                I2C_PINS_PACK_1
+
+#define ROSSERIAL_BAUDRATE                  115200
+
+/*
+ * Robot Initial Function.
+ */
+void robot_motor_init(void);
+void robot_imu_init(void);
+void robot_rosserial_init(void);
+void robot_encoder_init(void);
 
 #ifdef __cplusplus
 }

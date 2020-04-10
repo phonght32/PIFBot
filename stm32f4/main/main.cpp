@@ -50,6 +50,6 @@ int main(void)
     stm_log_level_set("*", STM_LOG_NONE);
     stm_log_level_set("APP_MAIN", STM_LOG_INFO);
 
-    xTaskCreate(example_task, "example_task", TASK_SIZE, NULL, TASK_PRIOR, NULL);
+    xTaskCreate(example_task, "example_task", 512, NULL, 5, NULL);
     vTaskStartScheduler();
 }
