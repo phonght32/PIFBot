@@ -12,12 +12,12 @@
 #define MOTORLEFT_SET_SPEED_ERR_STR     "motor left set speed error"
 #define MOTORLEFT_GET_DIR_ERR_STR       "motor left get direction error"
 
-#define MOTORRIGHT_START_ERR_STR         "motor right start error"
-#define MOTORRIGHT_STOP_ERR_STR          "motor right stop error"
-#define MOTORRIGHT_FORWARD_ERR_STR       "motor right forward error"
-#define MOTORRIGHT_BACKWARD_ERR_STR      "motor right backward error"
-#define MOTORRIGHT_SET_SPEED_ERR_STR     "motor right set speed error"
-#define MOTORRIGHT_GET_DIR_ERR_STR       "motor right get direction error"
+#define MOTORRIGHT_START_ERR_STR        "motor right start error"
+#define MOTORRIGHT_STOP_ERR_STR         "motor right stop error"
+#define MOTORRIGHT_FORWARD_ERR_STR      "motor right forward error"
+#define MOTORRIGHT_BACKWARD_ERR_STR     "motor right backward error"
+#define MOTORRIGHT_SET_SPEED_ERR_STR    "motor right set speed error"
+#define MOTORRIGHT_GET_DIR_ERR_STR      "motor right get direction error"
 
 static const char* TAG = "ROBOT HARDWARE";
 #define HARDWARE_CHECK(a, str, ret)  if(!(a)) {                                      \
@@ -128,6 +128,13 @@ stm_err_t robot_encoder_init(void)
     resolver_right_cfg.max_reload = 800;
     resolver_right_cfg.counter_mode = TIMER_COUNTER_UP;
     resolver_right = software_resolver_config(&resolver_right_cfg);
+
+    int ret;
+
+    ret = software_resolver_start(resolver_left);
+    HARDWARE_CHECK(!ret, RESOLVER_INIT_ERR_STR, STM_FAIL);
+    ret = software_resolver_start(resolver_right);
+    HARDWARE_CHECK(!ret, RESOLVER_INIT_ERR_STR, STM_FAIL);
 
     STM_LOGI(TAG, "Configure resolver success");
 }
