@@ -9,6 +9,7 @@ static const char* TAG = "ROBOT HARDWARE";
 stepmotor_handle_t motor_left, motor_right;
 software_resolver_handle_t resolver_left, resolver_right;
 mpu9250_handle_t mpu9250_handle;
+madgwick_handle_t madgwick_handle;
 
 void robot_motor_init(void)
 {
@@ -51,6 +52,11 @@ void robot_imu_init(void)
 
     mpu9250_auto_calib(mpu9250_handle);
     STM_LOGI(TAG, "Calibrate MPU9250 success.");
+
+    madgwick_config_t madgwick_cfg;
+    madgwick_cfg.beta = 0.1f;
+    madgwick_cfg.sample_freq = 100;
+    madgwick_handle = madgwick_config(&madgwick_cfg);
 }
 
 void robot_encoder_init(void)

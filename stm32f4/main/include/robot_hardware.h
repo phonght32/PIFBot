@@ -40,6 +40,7 @@ extern "C" {
 #include "stepmotor.h"
 #include "software_resolver.h"
 #include "mpu9250.h"
+#include "madgwick.h"
 
 #define PI                  3.14159265359
 
@@ -96,8 +97,6 @@ extern "C" {
 
 #define MPU9250_I2C_NUM                     I2C_NUM_1
 #define MPU9250_I2C_PINSPACK                I2C_PINS_PACK_1
-
-#define ROSSERIAL_BAUDRATE                  115200
 
 /*
  * Robot Initial Function.
