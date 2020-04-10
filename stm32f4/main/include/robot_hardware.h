@@ -78,6 +78,9 @@ extern "C" {
  */
 #define VEL2FREQ        ((NUM_PULSE_PER_ROUND*MICROSTEP_DIV)/(2*PI*WHEEL_RADIUS))
 
+/* Convert motor tick to angular in radian */
+#define TICK2RAD        360.0/(NUM_PULSE_PER_ROUND*MICROSTEP_DIV)*PI/180
+
 /* STM32 hardware */
 #define MOTORLEFT_PULSE_TIMER_NUM           TIMER_NUM_1
 #define MOTORLEFT_PULSE_TIMER_CHANNEL       TIMER_CHANNEL_1

@@ -23,10 +23,6 @@
 #ifndef _ROBOT_CONFIG_H_
 #define _ROBOT_CONFIG_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <ros.h>
 #include <ros/time.h>
 #include <std_msgs/Bool.h>
@@ -44,8 +40,33 @@ extern "C" {
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 
-#ifdef __cplusplus
-}
-#endif
+
+/* Time update index */
+#define CONTROL_MOTOR_TIME_INDEX                0       /*!< Time index control motor */
+#define CMD_VEL_PUBLISH_TIME_INDEX              1       /*!< Time index publish velocity */
+#define DRIVE_INFORMATION_PUBLISH_TIME_INDEX    2       /*!< Time index publish drive information */
+#define IMU_PUBLISH_TIME_INDEX                  3       /*!< Time index publish IMU information */
+#define LOG_PUBLISH_TIME_INDEX                  5
+#define CONTROL_MOTOR_TIMEOUT_TIME_INDEX        6       /*!< Time index control motor timeout */
+
+/* Frequency of publish/subscribe */
+#define CONTROL_MOTOR_SPEED_FREQUENCY          30       /*!< Frequency in Hz to control motor */
+#define CONTROL_MOTOR_TIMEOUT                  500      /*!< Period in ms to check control motor timeout */
+#define IMU_PUBLISH_FREQUENCY                  200      /*!< Frequency in Hz to publish IMU information */
+#define CMD_VEL_PUBLISH_FREQUENCY              30       /*!< Frequency in Hz to publish robot velocity */
+#define DRIVE_INFORMATION_PUBLISH_FREQUENCY    30       /*!< Frequency in Hz to publish drive information */
+#define DEBUG_LOG_FREQUENCY                    10       /*!< Frequency in Hz to send log debug messages */
+
+/* Linear & Angular velocity index */
+#define WHEEL_NUM       2                       /*!< Num wheel */
+
+#define LEFT            0                       /*!< Left wheel index */
+#define RIGHT           1                       /*!< Right wheel index */
+
+#define LINEAR          0                       /*!< Linear velocity index */
+#define ANGULAR         1                       /*!< Angular velocity index */
+
+
+
 
 #endif /* _ROBOT_CONFIG_H_ */
