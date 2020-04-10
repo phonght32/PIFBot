@@ -5,6 +5,11 @@
 #define RESOLVER_INIT_ERR_STR           "resolver init error"
 #define MADGWICK_INIT_ERR_STR           "madgwick filter init error"
 
+#define IMU_UPDATE_QUAT_ERR_STR         "imu update quaternion error"
+#define IMU_GET_QUAT_ERR_STR            "imu get quaternion error"
+#define IMU_GET_ACCEL_ERR_STR           "imu get accelerometer error"
+#define IMU_GET_GYRO_ERR_STR            "imu get gyroscope error"
+
 #define MOTORLEFT_START_ERR_STR         "motor left start error"
 #define MOTORLEFT_STOP_ERR_STR          "motor left stop error"
 #define MOTORLEFT_FORWARD_ERR_STR       "motor left forward error"
@@ -70,7 +75,7 @@ stm_err_t robot_motor_init(void)
     ret = stepmotor_start(motor_right);
     HARDWARE_CHECK(!ret, MOTOR_INIT_ERR_STR, STM_FAIL);
 
-    STM_LOGI(TAG, "Configure motor success.");
+    STM_LOGD(TAG, "Configure motor success.");
     return STM_OK;
 }
 
@@ -97,7 +102,7 @@ stm_err_t robot_imu_init(void)
 
     mpu9250_auto_calib(mpu9250_handle);
 
-    STM_LOGI(TAG, "Configure IMU success.");
+    STM_LOGD(TAG, "Configure IMU success.");
     return STM_OK;
 }
 
@@ -109,7 +114,7 @@ stm_err_t robot_madgwick_filter_init(void)
     madgwick_handle = madgwick_config(&madgwick_cfg);
     HARDWARE_CHECK(madgwick_handle, MADGWICK_INIT_ERR_STR, STM_FAIL);
 
-    STM_LOGI(TAG, "Configure Madgwick filter success");
+    STM_LOGD(TAG, "Configure Madgwick filter success");
     return STM_OK;
 }
 
@@ -136,7 +141,7 @@ stm_err_t robot_encoder_init(void)
     ret = software_resolver_start(resolver_right);
     HARDWARE_CHECK(!ret, RESOLVER_INIT_ERR_STR, STM_FAIL);
 
-    STM_LOGI(TAG, "Configure resolver success");
+    STM_LOGD(TAG, "Configure resolver success");
 }
 
 stm_err_t robot_motor_left_start(void)
@@ -215,6 +220,62 @@ stm_err_t robot_motor_right_set_speed(float speed)
 {
     int ret = stepmotor_set_pwm_freq(motor_right, (uint32_t)(speed * VEL2FREQ));
     HARDWARE_CHECK(!ret, MOTORRIGHT_SET_SPEED_ERR_STR, STM_FAIL);
+
+    return STM_OK;
+}
+
+stm_err_t robot_imu_update_quat(void)
+{
+    int ret;
+    imu_scale_data_t accel_scale, gyro_scale;
+
+    ret = mpu9250_get_accel_scale(mpu9250_handle, &accel_scale);
+    HARDWARE_CHECK(!ret, IMU_UPDATE_QUAT_ERR_STR, STM_FAIL);
+
+    ret = mpu9250_get_gyro_scale(mpu9250_handle, &gyro_scale);
+    HARDWARE_CHECK(!ret, IMU_UPDATE_QUAT_ERR_STR, STM_FAIL);
+
+    madgwick_update_6dof(madgwick_handle,
+                         DEG2RAD(gyro_scale.x_axis),
+                         DEG2RAD(gyro_scale.y_axis),
+                         DEG2RAD(gyro_scale.z_axis),
+                         accel_scale.x_axis,
+                         accel_scale.y_axis,
+                         accel_scale.z_axis);
+
+    return STM_OK;
+}
+
+stm_err_t robot_imu_get_quat(float *quat)
+{
+    imu_quat_data_t quat_data;
+    madgwick_get_quaternion(madgwick_handle, &quat_data);
+
+    return STM_OK;
+}
+
+stm_err_t robot_imu_get_accel(float *accel)
+{
+    imu_scale_data_t accel_data;
+    int ret = mpu9250_get_accel_scale(mpu9250_handle, &accel_data);
+    HARDWARE_CHECK(!ret, IMU_GET_ACCEL_ERR_STR, STM_FAIL);
+
+    accel[0] = accel_data.x_axis;
+    accel[1] = accel_data.y_axis;
+    accel[2] = accel_data.z_axis;
+
+    return STM_OK;
+}
+
+stm_err_t robot_imu_get_gyro(float *gyro)
+{
+    imu_scale_data_t gyro_data;
+    int ret = mpu9250_get_gyro_scale(mpu9250_handle, &gyro_data);
+    HARDWARE_CHECK(!ret, IMU_GET_GYRO_ERR_STR, STM_FAIL);
+
+    gyro[0] = gyro_data.x_axis;
+    gyro[1] = gyro_data.y_axis;
+    gyro[2] = gyro_data.z_axis;
 
     return STM_OK;
 }

@@ -95,15 +95,14 @@ extern "C" {
 #define MOTORRIGHT_TICK_TIMER_NUM           TIMER_NUM_4
 #define MOTORRIGHT_TICK_TIMER_PINSPACK      TIMER_PINS_PACK_1
 
-#define IMU_I2C_NUM                     I2C_NUM_1
-#define IMU_I2C_PINSPACK                I2C_PINS_PACK_1
-#define IMU_CLOCK_SPEED                 100000
+#define IMU_I2C_NUM                         I2C_NUM_1
+#define IMU_I2C_PINSPACK                    I2C_PINS_PACK_1
+#define IMU_CLOCK_SPEED                     100000
 
-#define MADGWICK_BETA                   0.1f
-#define MADGWICK_SAMPLE_FREQ            512.0f
+#define MADGWICK_BETA                       0.1f
+#define MADGWICK_SAMPLE_FREQ                512.0f
 
-#define STEP_DRIVER_PWM_DUTYCYCLE       20
-
+#define STEP_DRIVER_PWM_DUTYCYCLE           20
 
 
 stm_err_t robot_motor_init(void);
@@ -122,6 +121,11 @@ stm_err_t robot_motor_right_stop(void);
 stm_err_t robot_motor_right_forward(void);
 stm_err_t robot_motor_right_backward(void);
 stm_err_t robot_motor_right_set_speed(float speed);
+
+stm_err_t robot_imu_update_quat(void);
+stm_err_t robot_imu_get_quat(float *quat);
+stm_err_t robot_imu_get_accel(float *accel);
+stm_err_t robot_imu_get_gyro(float *gyro);
 
 
 #ifdef __cplusplus
