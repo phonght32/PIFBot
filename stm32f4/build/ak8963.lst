@@ -1,0 +1,2094 @@
+ARM GAS  /tmp/ccz3xvdE.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"ak8963.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text._ak8963_write_reg,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu fpv4-sp-d16
+  24              	_ak8963_write_reg:
+  25              	.LFB138:
+  26              		.file 1 "/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c"
+   1:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #include "include/ak8963.h"
+   2:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+   3:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** /*
+   4:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****  * AK8963 Register Map.
+   5:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****  */
+   6:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_WHO_AM_I         0x00
+   7:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_INFO             0x01
+   8:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_ST1              0x02
+   9:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_XOUT_L           0x03
+  10:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_XOUT_H           0x04
+  11:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_YOUT_L           0x05
+  12:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_YOUT_H           0x06
+  13:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_ZOUT_L           0x07
+  14:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_ZOUT_H           0x08
+  15:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_ST2              0x09
+  16:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_CNTL             0x0A
+  17:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_RSV              0x0B
+  18:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_ASTC             0x0C
+  19:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_TS1              0x0D
+  20:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_TS2              0x0E
+  21:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_I2CDIS           0x0F
+  22:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_ASAX             0x10
+  23:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_ASAY             0x11
+  24:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_ASAZ             0x12
+  25:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_ADDR             (0x0C<<1)
+  26:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  27:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define TIMEOUT_MS_DEFAULT          100         /*!< Default MPU9250 I2C communiation timeout */
+  28:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define BUFFER_CALIB_DEFAULT        1000        /*!< Default the number of sample data when calibra
+  29:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  30:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define PI                          3.14
+  31:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define DEG2RAD                     3.14/180    /*!< Convert from degree to radian  */
+  32:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ARM GAS  /tmp/ccz3xvdE.s 			page 2
+
+
+  33:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_INIT_ERR_STR        "ak8963 init error"
+  34:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_MALLOC_ERR_STR      "ak8963 malloc error"
+  35:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_TRANS_ERR_STR       "ak8963 write registers error"
+  36:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_REC_ERR_STR         "ak8963 read registers error"
+  37:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_GET_DATA_ERR_STR    "ak8963 get data error"
+  38:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  39:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** static const char* AK8963_TAG = "AK8963";
+  40:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define AK8963_CHECK(a, str, ret)  if(!(a)) {                                               \
+  41:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         STM_LOGE(AK8963_TAG,"%s:%d (%s):%s", __FILE__, __LINE__, __FUNCTION__, str);        \
+  42:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         return (ret);                                                                       \
+  43:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         }
+  44:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  45:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** /* Mutex define */
+  46:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define mutex_lock(x)       while (xSemaphoreTake(x, portMAX_DELAY) != pdPASS)
+  47:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define mutex_unlock(x)     xSemaphoreGive(x)
+  48:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define mutex_create()      xSemaphoreCreateMutex()
+  49:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** #define mutex_destroy(x)    vQueueDelete(x)
+  50:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  51:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** typedef struct ak8963 {
+  52:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ak8963_mode_t           opr_mode;               /*!< AK8963 operatkion mode */
+  53:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ak8963_mfs_sel_t        mfs_sel;                /*!< AK8963 magnetometer full scale range */
+  54:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     imu_bias_data_t         mag_bias;               /*!< AK8963 magnetometer bias data */
+  55:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     imu_mag_sens_adj_t      mag_sens_adj;           /*!< AK8963 magnetometer sensitive adjust data 
+  56:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     imu_mag_scale_t         mag_scale;              /*!< AK8963 magnetometer scale */
+  57:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     float                   mag_scaling_factor;     /*!< AK8963 magnetometer scaling factor */
+  58:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     i2c_num_t               i2c_num;                /*!< AK8963 I2C num */
+  59:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     SemaphoreHandle_t       lock;                   /*!< AK8963 mutex */
+  60:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** } ak8963_t;
+  61:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  62:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** static stm_err_t _ak8963_write_reg(i2c_num_t i2c_num, uint8_t reg_addr, uint8_t data)
+  63:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** {
+  27              		.loc 1 63 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 00B5     		push	{lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 4
+  35              		.cfi_offset 14, -4
+  36 0002 89B0     		sub	sp, sp, #36
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_offset 40
+  64:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     uint8_t buf_send[2];
+  65:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     buf_send[0] = reg_addr;
+  39              		.loc 1 65 0
+  40 0004 8DF81C10 		strb	r1, [sp, #28]
+  66:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     buf_send[1] = data;
+  41              		.loc 1 66 0
+  42 0008 8DF81D20 		strb	r2, [sp, #29]
+  67:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  68:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     int ret = i2c_write_bytes(i2c_num, AK8963_ADDR, buf_send, 2, TIMEOUT_MS_DEFAULT);
+  43              		.loc 1 68 0
+  44 000c 6423     		movs	r3, #100
+  45 000e 0093     		str	r3, [sp]
+  46 0010 0223     		movs	r3, #2
+  47 0012 07AA     		add	r2, sp, #28
+ARM GAS  /tmp/ccz3xvdE.s 			page 3
+
+
+  48              	.LVL1:
+  49 0014 1821     		movs	r1, #24
+  50              	.LVL2:
+  51 0016 FFF7FEFF 		bl	i2c_write_bytes
+  52              	.LVL3:
+  69:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_TRANS_ERR_STR, STM_FAIL);
+  53              		.loc 1 69 0
+  54 001a 18B9     		cbnz	r0, .L5
+  70:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  71:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     return STM_OK;
+  55              		.loc 1 71 0
+  56 001c 0020     		movs	r0, #0
+  57              	.LVL4:
+  58              	.L1:
+  72:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** }
+  59              		.loc 1 72 0
+  60 001e 09B0     		add	sp, sp, #36
+  61              	.LCFI2:
+  62              		.cfi_remember_state
+  63              		.cfi_def_cfa_offset 4
+  64              		@ sp needed
+  65 0020 5DF804FB 		ldr	pc, [sp], #4
+  66              	.LVL5:
+  67              	.L5:
+  68              	.LCFI3:
+  69              		.cfi_restore_state
+  69:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_TRANS_ERR_STR, STM_FAIL);
+  70              		.loc 1 69 0 discriminator 4
+  71 0024 FFF7FEFF 		bl	stm_log_timestamp
+  72              	.LVL6:
+  73 0028 0849     		ldr	r1, .L6
+  74 002a 094B     		ldr	r3, .L6+4
+  75 002c 0493     		str	r3, [sp, #16]
+  76 002e 094B     		ldr	r3, .L6+8
+  77 0030 0393     		str	r3, [sp, #12]
+  78 0032 4523     		movs	r3, #69
+  79 0034 0293     		str	r3, [sp, #8]
+  80 0036 084B     		ldr	r3, .L6+12
+  81 0038 0193     		str	r3, [sp, #4]
+  82 003a 0091     		str	r1, [sp]
+  83 003c 0346     		mov	r3, r0
+  84 003e 074A     		ldr	r2, .L6+16
+  85 0040 0120     		movs	r0, #1
+  86 0042 FFF7FEFF 		bl	stm_log_write
+  87              	.LVL7:
+  88 0046 4FF0FF30 		mov	r0, #-1
+  89 004a E8E7     		b	.L1
+  90              	.L7:
+  91              		.align	2
+  92              	.L6:
+  93 004c 28000000 		.word	.LC3
+  94 0050 30000000 		.word	.LC4
+  95 0054 00000000 		.word	.LANCHOR0
+  96 0058 50000000 		.word	.LC5
+  97 005c 00000000 		.word	.LC2
+  98              		.cfi_endproc
+  99              	.LFE138:
+ARM GAS  /tmp/ccz3xvdE.s 			page 4
+
+
+ 101              		.section	.text._ak8963_read_reg,"ax",%progbits
+ 102              		.align	1
+ 103              		.syntax unified
+ 104              		.thumb
+ 105              		.thumb_func
+ 106              		.fpu fpv4-sp-d16
+ 108              	_ak8963_read_reg:
+ 109              	.LFB139:
+  73:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  74:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** static stm_err_t _ak8963_read_reg(i2c_num_t i2c_num, uint8_t start_reg_addr, uint8_t *buf_rec, uint
+  75:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** {
+ 110              		.loc 1 75 0
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 8
+ 113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 114              	.LVL8:
+ 115 0000 70B5     		push	{r4, r5, r6, lr}
+ 116              	.LCFI4:
+ 117              		.cfi_def_cfa_offset 16
+ 118              		.cfi_offset 4, -16
+ 119              		.cfi_offset 5, -12
+ 120              		.cfi_offset 6, -8
+ 121              		.cfi_offset 14, -4
+ 122 0002 88B0     		sub	sp, sp, #32
+ 123              	.LCFI5:
+ 124              		.cfi_def_cfa_offset 48
+ 125 0004 0446     		mov	r4, r0
+ 126 0006 1546     		mov	r5, r2
+ 127 0008 1E46     		mov	r6, r3
+  76:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     uint8_t buffer[1];
+  77:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     buffer[0] = start_reg_addr;
+ 128              		.loc 1 77 0
+ 129 000a 08AA     		add	r2, sp, #32
+ 130              	.LVL9:
+ 131 000c 02F8041D 		strb	r1, [r2, #-4]!
+  78:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     int ret;
+  79:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  80:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ret = i2c_write_bytes(i2c_num, AK8963_ADDR, buffer, 1, TIMEOUT_MS_DEFAULT);
+ 132              		.loc 1 80 0
+ 133 0010 6423     		movs	r3, #100
+ 134              	.LVL10:
+ 135 0012 0093     		str	r3, [sp]
+ 136 0014 0123     		movs	r3, #1
+ 137 0016 1821     		movs	r1, #24
+ 138              	.LVL11:
+ 139 0018 FFF7FEFF 		bl	i2c_write_bytes
+ 140              	.LVL12:
+  81:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_REC_ERR_STR, STM_FAIL);
+ 141              		.loc 1 81 0
+ 142 001c 58B9     		cbnz	r0, .L13
+  82:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  83:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ret = i2c_read_bytes(i2c_num, AK8963_ADDR, buf_rec, num_bytes, TIMEOUT_MS_DEFAULT);
+ 143              		.loc 1 83 0
+ 144 001e 6423     		movs	r3, #100
+ 145 0020 0093     		str	r3, [sp]
+ 146 0022 3346     		mov	r3, r6
+ 147 0024 2A46     		mov	r2, r5
+ARM GAS  /tmp/ccz3xvdE.s 			page 5
+
+
+ 148 0026 1821     		movs	r1, #24
+ 149 0028 2046     		mov	r0, r4
+ 150              	.LVL13:
+ 151 002a FFF7FEFF 		bl	i2c_read_bytes
+ 152              	.LVL14:
+  84:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_REC_ERR_STR, STM_FAIL);
+ 153              		.loc 1 84 0
+ 154 002e B0B9     		cbnz	r0, .L14
+  85:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  86:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     return STM_OK;
+ 155              		.loc 1 86 0
+ 156 0030 0020     		movs	r0, #0
+ 157              	.LVL15:
+ 158              	.L8:
+  87:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** }
+ 159              		.loc 1 87 0
+ 160 0032 08B0     		add	sp, sp, #32
+ 161              	.LCFI6:
+ 162              		.cfi_remember_state
+ 163              		.cfi_def_cfa_offset 16
+ 164              		@ sp needed
+ 165 0034 70BD     		pop	{r4, r5, r6, pc}
+ 166              	.LVL16:
+ 167              	.L13:
+ 168              	.LCFI7:
+ 169              		.cfi_restore_state
+  81:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 170              		.loc 1 81 0 discriminator 4
+ 171 0036 FFF7FEFF 		bl	stm_log_timestamp
+ 172              	.LVL17:
+ 173 003a 1349     		ldr	r1, .L15
+ 174 003c 134B     		ldr	r3, .L15+4
+ 175 003e 0493     		str	r3, [sp, #16]
+ 176 0040 134B     		ldr	r3, .L15+8
+ 177 0042 0393     		str	r3, [sp, #12]
+ 178 0044 5123     		movs	r3, #81
+ 179 0046 0293     		str	r3, [sp, #8]
+ 180 0048 124B     		ldr	r3, .L15+12
+ 181 004a 0193     		str	r3, [sp, #4]
+ 182 004c 0091     		str	r1, [sp]
+ 183 004e 0346     		mov	r3, r0
+ 184 0050 114A     		ldr	r2, .L15+16
+ 185 0052 0120     		movs	r0, #1
+ 186 0054 FFF7FEFF 		bl	stm_log_write
+ 187              	.LVL18:
+ 188 0058 4FF0FF30 		mov	r0, #-1
+ 189 005c E9E7     		b	.L8
+ 190              	.LVL19:
+ 191              	.L14:
+  84:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 192              		.loc 1 84 0 discriminator 4
+ 193 005e FFF7FEFF 		bl	stm_log_timestamp
+ 194              	.LVL20:
+ 195 0062 0949     		ldr	r1, .L15
+ 196 0064 094B     		ldr	r3, .L15+4
+ 197 0066 0493     		str	r3, [sp, #16]
+ 198 0068 094B     		ldr	r3, .L15+8
+ARM GAS  /tmp/ccz3xvdE.s 			page 6
+
+
+ 199 006a 0393     		str	r3, [sp, #12]
+ 200 006c 5423     		movs	r3, #84
+ 201 006e 0293     		str	r3, [sp, #8]
+ 202 0070 084B     		ldr	r3, .L15+12
+ 203 0072 0193     		str	r3, [sp, #4]
+ 204 0074 0091     		str	r1, [sp]
+ 205 0076 0346     		mov	r3, r0
+ 206 0078 074A     		ldr	r2, .L15+16
+ 207 007a 0120     		movs	r0, #1
+ 208 007c FFF7FEFF 		bl	stm_log_write
+ 209              	.LVL21:
+ 210 0080 4FF0FF30 		mov	r0, #-1
+ 211 0084 D5E7     		b	.L8
+ 212              	.L16:
+ 213 0086 00BF     		.align	2
+ 214              	.L15:
+ 215 0088 28000000 		.word	.LC3
+ 216 008c 00000000 		.word	.LC6
+ 217 0090 00000000 		.word	.LANCHOR1
+ 218 0094 50000000 		.word	.LC5
+ 219 0098 00000000 		.word	.LC2
+ 220              		.cfi_endproc
+ 221              	.LFE139:
+ 223              		.section	.text.ak8963_config,"ax",%progbits
+ 224              		.align	1
+ 225              		.global	ak8963_config
+ 226              		.syntax unified
+ 227              		.thumb
+ 228              		.thumb_func
+ 229              		.fpu fpv4-sp-d16
+ 231              	ak8963_config:
+ 232              	.LFB140:
+  88:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  89:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** ak8963_handle_t ak8963_config(ak8963_config_t *config)
+  90:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** {
+ 233              		.loc 1 90 0
+ 234              		.cfi_startproc
+ 235              		@ args = 0, pretend = 0, frame = 8
+ 236              		@ frame_needed = 0, uses_anonymous_args = 0
+ 237              	.LVL22:
+ 238 0000 70B5     		push	{r4, r5, r6, lr}
+ 239              	.LCFI8:
+ 240              		.cfi_def_cfa_offset 16
+ 241              		.cfi_offset 4, -16
+ 242              		.cfi_offset 5, -12
+ 243              		.cfi_offset 6, -8
+ 244              		.cfi_offset 14, -4
+ 245 0002 88B0     		sub	sp, sp, #32
+ 246              	.LCFI9:
+ 247              		.cfi_def_cfa_offset 48
+  91:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Check if init structure is empty */
+  92:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(config, AK8963_INIT_ERR_STR, NULL);
+ 248              		.loc 1 92 0
+ 249 0004 0028     		cmp	r0, #0
+ 250 0006 00F09280 		beq	.L31
+ 251 000a 0446     		mov	r4, r0
+  93:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(config->i2c_num < I2C_NUM_MAX, AK8963_INIT_ERR_STR, NULL);
+ARM GAS  /tmp/ccz3xvdE.s 			page 7
+
+
+ 252              		.loc 1 93 0
+ 253 000c 067A     		ldrb	r6, [r0, #8]	@ zero_extendqisi2
+ 254 000e 022E     		cmp	r6, #2
+ 255 0010 00F2A080 		bhi	.L32
+  94:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+  95:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Allocate memory for handle structure */
+  96:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ak8963_handle_t handle;
+  97:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle = calloc(1, sizeof(ak8963_t));
+ 256              		.loc 1 97 0
+ 257 0014 2C21     		movs	r1, #44
+ 258 0016 0120     		movs	r0, #1
+ 259              	.LVL23:
+ 260 0018 FFF7FEFF 		bl	calloc
+ 261              	.LVL24:
+  98:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(handle, AK8963_INIT_ERR_STR, NULL);
+ 262              		.loc 1 98 0
+ 263 001c 0546     		mov	r5, r0
+ 264 001e 0028     		cmp	r0, #0
+ 265 0020 00F0AB80 		beq	.L33
+ 266              	.LVL25:
+  99:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 100:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     int ret;
+ 101:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     uint8_t buffer = 0;
+ 102:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 103:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Power down AK8963 magnetic sensor */
+ 104:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ret = _ak8963_write_reg(config->i2c_num, AK8963_CNTL, 0x00);
+ 267              		.loc 1 104 0
+ 268 0024 0022     		movs	r2, #0
+ 269 0026 0A21     		movs	r1, #10
+ 270 0028 3046     		mov	r0, r6
+ 271              	.LVL26:
+ 272 002a FFF7FEFF 		bl	_ak8963_write_reg
+ 273              	.LVL27:
+ 105:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_INIT_ERR_STR, NULL);
+ 274              		.loc 1 105 0
+ 275 002e 0028     		cmp	r0, #0
+ 276 0030 40F0B580 		bne	.L34
+ 106:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     HAL_Delay(10);
+ 277              		.loc 1 106 0
+ 278 0034 0A20     		movs	r0, #10
+ 279              	.LVL28:
+ 280 0036 FFF7FEFF 		bl	HAL_Delay
+ 281              	.LVL29:
+ 107:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 108:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Set fuse ROM access mode */
+ 109:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ret = _ak8963_write_reg(config->i2c_num, AK8963_CNTL, 0x0F);
+ 282              		.loc 1 109 0
+ 283 003a 0F22     		movs	r2, #15
+ 284 003c 0A21     		movs	r1, #10
+ 285 003e 207A     		ldrb	r0, [r4, #8]	@ zero_extendqisi2
+ 286 0040 FFF7FEFF 		bl	_ak8963_write_reg
+ 287              	.LVL30:
+ 110:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_INIT_ERR_STR, NULL);
+ 288              		.loc 1 110 0
+ 289 0044 0028     		cmp	r0, #0
+ 290 0046 40F0BD80 		bne	.L35
+ 111:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     HAL_Delay(10);
+ARM GAS  /tmp/ccz3xvdE.s 			page 8
+
+
+ 291              		.loc 1 111 0
+ 292 004a 0A20     		movs	r0, #10
+ 293              	.LVL31:
+ 294 004c FFF7FEFF 		bl	HAL_Delay
+ 295              	.LVL32:
+ 112:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 113:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Read magnetic sensitivity adjustment */
+ 114:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     uint8_t mag_raw_data[3];
+ 115:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ret = _ak8963_read_reg(config->i2c_num, AK8963_ASAX, mag_raw_data, 3);
+ 296              		.loc 1 115 0
+ 297 0050 0323     		movs	r3, #3
+ 298 0052 07AA     		add	r2, sp, #28
+ 299 0054 1021     		movs	r1, #16
+ 300 0056 207A     		ldrb	r0, [r4, #8]	@ zero_extendqisi2
+ 301 0058 FFF7FEFF 		bl	_ak8963_read_reg
+ 302              	.LVL33:
+ 116:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_INIT_ERR_STR, NULL);
+ 303              		.loc 1 116 0
+ 304 005c 0028     		cmp	r0, #0
+ 305 005e 40F0C480 		bne	.L36
+ 117:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 118:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_sens_adj.x_axis = (float)(mag_raw_data[0] - 128) / 256.0f + 1.0f;
+ 306              		.loc 1 118 0
+ 307 0062 9DF81C30 		ldrb	r3, [sp, #28]	@ zero_extendqisi2
+ 308 0066 803B     		subs	r3, r3, #128
+ 309 0068 07EE103A 		vmov	s14, r3	@ int
+ 310 006c B8EEC77A 		vcvt.f32.s32	s14, s14
+ 311 0070 9FED7D6A 		vldr.32	s12, .L39
+ 312 0074 27EE067A 		vmul.f32	s14, s14, s12
+ 313 0078 F7EE006A 		vmov.f32	s13, #1.0e+0
+ 314 007c 37EE267A 		vadd.f32	s14, s14, s13
+ 315 0080 85ED027A 		vstr.32	s14, [r5, #8]
+ 119:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_sens_adj.y_axis = (float)(mag_raw_data[1] - 128) / 256.0f + 1.0f;
+ 316              		.loc 1 119 0
+ 317 0084 9DF81D30 		ldrb	r3, [sp, #29]	@ zero_extendqisi2
+ 318 0088 803B     		subs	r3, r3, #128
+ 319 008a 07EE103A 		vmov	s14, r3	@ int
+ 320 008e B8EEC77A 		vcvt.f32.s32	s14, s14
+ 321 0092 27EE067A 		vmul.f32	s14, s14, s12
+ 322 0096 37EE267A 		vadd.f32	s14, s14, s13
+ 323 009a 85ED037A 		vstr.32	s14, [r5, #12]
+ 120:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_sens_adj.z_axis = (float)(mag_raw_data[2] - 128) / 256.0f + 1.0f;
+ 324              		.loc 1 120 0
+ 325 009e 9DF81E30 		ldrb	r3, [sp, #30]	@ zero_extendqisi2
+ 326 00a2 803B     		subs	r3, r3, #128
+ 327 00a4 07EE903A 		vmov	s15, r3	@ int
+ 328 00a8 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 329 00ac 67EE867A 		vmul.f32	s15, s15, s12
+ 330 00b0 77EEA67A 		vadd.f32	s15, s15, s13
+ 331 00b4 C5ED047A 		vstr.32	s15, [r5, #16]
+ 121:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 122:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Power down AK8963 magnetic sensor */
+ 123:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ret = _ak8963_write_reg(config->i2c_num, AK8963_CNTL, 0x00);
+ 332              		.loc 1 123 0
+ 333 00b8 0022     		movs	r2, #0
+ 334 00ba 0A21     		movs	r1, #10
+ 335 00bc 207A     		ldrb	r0, [r4, #8]	@ zero_extendqisi2
+ARM GAS  /tmp/ccz3xvdE.s 			page 9
+
+
+ 336              	.LVL34:
+ 337 00be FFF7FEFF 		bl	_ak8963_write_reg
+ 338              	.LVL35:
+ 124:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_INIT_ERR_STR, NULL);
+ 339              		.loc 1 124 0
+ 340 00c2 0028     		cmp	r0, #0
+ 341 00c4 40F0A480 		bne	.L37
+ 125:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     HAL_Delay(10);
+ 342              		.loc 1 125 0
+ 343 00c8 0A20     		movs	r0, #10
+ 344              	.LVL36:
+ 345 00ca FFF7FEFF 		bl	HAL_Delay
+ 346              	.LVL37:
+ 126:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 127:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Configure magnetic operation mode and range */
+ 128:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     buffer = 0;
+ 129:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     buffer = (config->opr_mode) & 0x0F;
+ 347              		.loc 1 129 0
+ 348 00ce 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 349 00d0 02F00F02 		and	r2, r2, #15
+ 350              	.LVL38:
+ 130:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     buffer |= (config->mfs_sel << 4) & 0x10;
+ 351              		.loc 1 130 0
+ 352 00d4 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 353 00d6 1B01     		lsls	r3, r3, #4
+ 354 00d8 03F01003 		and	r3, r3, #16
+ 355              	.LVL39:
+ 131:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ret = _ak8963_write_reg(config->i2c_num, AK8963_CNTL, buffer);
+ 356              		.loc 1 131 0
+ 357 00dc 1A43     		orrs	r2, r2, r3
+ 358              	.LVL40:
+ 359 00de 0A21     		movs	r1, #10
+ 360 00e0 207A     		ldrb	r0, [r4, #8]	@ zero_extendqisi2
+ 361 00e2 FFF7FEFF 		bl	_ak8963_write_reg
+ 362              	.LVL41:
+ 132:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_INIT_ERR_STR, NULL);
+ 363              		.loc 1 132 0
+ 364 00e6 0028     		cmp	r0, #0
+ 365 00e8 40F0A580 		bne	.L38
+ 133:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     HAL_Delay(10);
+ 366              		.loc 1 133 0
+ 367 00ec 0A20     		movs	r0, #10
+ 368              	.LVL42:
+ 369 00ee FFF7FEFF 		bl	HAL_Delay
+ 370              	.LVL43:
+ 134:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 135:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Update magnetometer scaling factor */
+ 136:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     switch (config->mfs_sel)
+ 371              		.loc 1 136 0
+ 372 00f2 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 373 00f4 002B     		cmp	r3, #0
+ 374 00f6 00F0B180 		beq	.L28
+ 375 00fa 012B     		cmp	r3, #1
+ 376 00fc 00F0B180 		beq	.L29
+ 377              	.L27:
+ 137:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     {
+ 138:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     case AK8963_MFS_14BIT:
+ARM GAS  /tmp/ccz3xvdE.s 			page 10
+
+
+ 139:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         handle->mag_scaling_factor = 10.0f * 4912.0f / 8190.0f;
+ 140:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         break;
+ 141:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 142:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     case AK8963_MFS_16BIT:
+ 143:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         handle->mag_scaling_factor = 10.0f * 4912.0f / 32760.0f;
+ 144:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         break;
+ 145:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 146:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     default:
+ 147:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         break;
+ 148:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     }
+ 149:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 150:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Update handle structure */
+ 151:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->opr_mode = config->opr_mode;
+ 378              		.loc 1 151 0
+ 379 0100 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 380 0102 2B70     		strb	r3, [r5]
+ 152:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mfs_sel = config->mfs_sel;
+ 381              		.loc 1 152 0
+ 382 0104 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 383 0106 6B70     		strb	r3, [r5, #1]
+ 153:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->i2c_num = config->i2c_num;
+ 384              		.loc 1 153 0
+ 385 0108 237A     		ldrb	r3, [r4, #8]	@ zero_extendqisi2
+ 386 010a 85F82430 		strb	r3, [r5, #36]
+ 154:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_bias.x_axis = config->mag_bias.x_axis;
+ 387              		.loc 1 154 0
+ 388 010e B4F90230 		ldrsh	r3, [r4, #2]
+ 389 0112 6B80     		strh	r3, [r5, #2]	@ movhi
+ 155:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_bias.y_axis = config->mag_bias.y_axis;
+ 390              		.loc 1 155 0
+ 391 0114 B4F90430 		ldrsh	r3, [r4, #4]
+ 392 0118 AB80     		strh	r3, [r5, #4]	@ movhi
+ 156:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_bias.z_axis = config->mag_bias.z_axis;
+ 393              		.loc 1 156 0
+ 394 011a B4F90630 		ldrsh	r3, [r4, #6]
+ 395 011e EB80     		strh	r3, [r5, #6]	@ movhi
+ 157:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->lock = mutex_create();
+ 396              		.loc 1 157 0
+ 397 0120 0120     		movs	r0, #1
+ 398 0122 FFF7FEFF 		bl	xQueueCreateMutex
+ 399              	.LVL44:
+ 400 0126 A862     		str	r0, [r5, #40]
+ 401              	.LVL45:
+ 402              	.L17:
+ 158:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     return handle;
+ 159:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** }
+ 403              		.loc 1 159 0
+ 404 0128 2846     		mov	r0, r5
+ 405 012a 08B0     		add	sp, sp, #32
+ 406              	.LCFI10:
+ 407              		.cfi_remember_state
+ 408              		.cfi_def_cfa_offset 16
+ 409              		@ sp needed
+ 410 012c 70BD     		pop	{r4, r5, r6, pc}
+ 411              	.LVL46:
+ 412              	.L31:
+ 413              	.LCFI11:
+ARM GAS  /tmp/ccz3xvdE.s 			page 11
+
+
+ 414              		.cfi_restore_state
+  92:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(config->i2c_num < I2C_NUM_MAX, AK8963_INIT_ERR_STR, NULL);
+ 415              		.loc 1 92 0 discriminator 4
+ 416 012e FFF7FEFF 		bl	stm_log_timestamp
+ 417              	.LVL47:
+ 418 0132 4E49     		ldr	r1, .L39+4
+ 419 0134 4E4B     		ldr	r3, .L39+8
+ 420 0136 0493     		str	r3, [sp, #16]
+ 421 0138 4E4B     		ldr	r3, .L39+12
+ 422 013a 0393     		str	r3, [sp, #12]
+ 423 013c 5C23     		movs	r3, #92
+ 424 013e 0293     		str	r3, [sp, #8]
+ 425 0140 4D4B     		ldr	r3, .L39+16
+ 426 0142 0193     		str	r3, [sp, #4]
+ 427 0144 0091     		str	r1, [sp]
+ 428 0146 0346     		mov	r3, r0
+ 429 0148 4C4A     		ldr	r2, .L39+20
+ 430 014a 0120     		movs	r0, #1
+ 431 014c FFF7FEFF 		bl	stm_log_write
+ 432              	.LVL48:
+ 433 0150 0025     		movs	r5, #0
+ 434 0152 E9E7     		b	.L17
+ 435              	.LVL49:
+ 436              	.L32:
+  93:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 437              		.loc 1 93 0 discriminator 4
+ 438 0154 FFF7FEFF 		bl	stm_log_timestamp
+ 439              	.LVL50:
+ 440 0158 4449     		ldr	r1, .L39+4
+ 441 015a 454B     		ldr	r3, .L39+8
+ 442 015c 0493     		str	r3, [sp, #16]
+ 443 015e 454B     		ldr	r3, .L39+12
+ 444 0160 0393     		str	r3, [sp, #12]
+ 445 0162 5D23     		movs	r3, #93
+ 446 0164 0293     		str	r3, [sp, #8]
+ 447 0166 444B     		ldr	r3, .L39+16
+ 448 0168 0193     		str	r3, [sp, #4]
+ 449 016a 0091     		str	r1, [sp]
+ 450 016c 0346     		mov	r3, r0
+ 451 016e 434A     		ldr	r2, .L39+20
+ 452 0170 0120     		movs	r0, #1
+ 453 0172 FFF7FEFF 		bl	stm_log_write
+ 454              	.LVL51:
+ 455 0176 0025     		movs	r5, #0
+ 456 0178 D6E7     		b	.L17
+ 457              	.LVL52:
+ 458              	.L33:
+  98:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 459              		.loc 1 98 0 discriminator 4
+ 460 017a FFF7FEFF 		bl	stm_log_timestamp
+ 461              	.LVL53:
+ 462 017e 3B49     		ldr	r1, .L39+4
+ 463 0180 3B4B     		ldr	r3, .L39+8
+ 464 0182 0493     		str	r3, [sp, #16]
+ 465 0184 3B4B     		ldr	r3, .L39+12
+ 466 0186 0393     		str	r3, [sp, #12]
+ 467 0188 6223     		movs	r3, #98
+ARM GAS  /tmp/ccz3xvdE.s 			page 12
+
+
+ 468 018a 0293     		str	r3, [sp, #8]
+ 469 018c 3A4B     		ldr	r3, .L39+16
+ 470 018e 0193     		str	r3, [sp, #4]
+ 471 0190 0091     		str	r1, [sp]
+ 472 0192 0346     		mov	r3, r0
+ 473 0194 394A     		ldr	r2, .L39+20
+ 474 0196 0120     		movs	r0, #1
+ 475 0198 FFF7FEFF 		bl	stm_log_write
+ 476              	.LVL54:
+ 477 019c C4E7     		b	.L17
+ 478              	.LVL55:
+ 479              	.L34:
+ 105:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     HAL_Delay(10);
+ 480              		.loc 1 105 0 discriminator 4
+ 481 019e FFF7FEFF 		bl	stm_log_timestamp
+ 482              	.LVL56:
+ 483 01a2 3249     		ldr	r1, .L39+4
+ 484 01a4 324B     		ldr	r3, .L39+8
+ 485 01a6 0493     		str	r3, [sp, #16]
+ 486 01a8 324B     		ldr	r3, .L39+12
+ 487 01aa 0393     		str	r3, [sp, #12]
+ 488 01ac 6923     		movs	r3, #105
+ 489 01ae 0293     		str	r3, [sp, #8]
+ 490 01b0 314B     		ldr	r3, .L39+16
+ 491 01b2 0193     		str	r3, [sp, #4]
+ 492 01b4 0091     		str	r1, [sp]
+ 493 01b6 0346     		mov	r3, r0
+ 494 01b8 304A     		ldr	r2, .L39+20
+ 495 01ba 0120     		movs	r0, #1
+ 496 01bc FFF7FEFF 		bl	stm_log_write
+ 497              	.LVL57:
+ 498 01c0 0025     		movs	r5, #0
+ 499              	.LVL58:
+ 500 01c2 B1E7     		b	.L17
+ 501              	.LVL59:
+ 502              	.L35:
+ 110:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     HAL_Delay(10);
+ 503              		.loc 1 110 0 discriminator 4
+ 504 01c4 FFF7FEFF 		bl	stm_log_timestamp
+ 505              	.LVL60:
+ 506 01c8 2849     		ldr	r1, .L39+4
+ 507 01ca 294B     		ldr	r3, .L39+8
+ 508 01cc 0493     		str	r3, [sp, #16]
+ 509 01ce 294B     		ldr	r3, .L39+12
+ 510 01d0 0393     		str	r3, [sp, #12]
+ 511 01d2 6E23     		movs	r3, #110
+ 512 01d4 0293     		str	r3, [sp, #8]
+ 513 01d6 284B     		ldr	r3, .L39+16
+ 514 01d8 0193     		str	r3, [sp, #4]
+ 515 01da 0091     		str	r1, [sp]
+ 516 01dc 0346     		mov	r3, r0
+ 517 01de 274A     		ldr	r2, .L39+20
+ 518 01e0 0120     		movs	r0, #1
+ 519 01e2 FFF7FEFF 		bl	stm_log_write
+ 520              	.LVL61:
+ 521 01e6 0025     		movs	r5, #0
+ 522              	.LVL62:
+ARM GAS  /tmp/ccz3xvdE.s 			page 13
+
+
+ 523 01e8 9EE7     		b	.L17
+ 524              	.LVL63:
+ 525              	.L36:
+ 116:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 526              		.loc 1 116 0 discriminator 4
+ 527 01ea FFF7FEFF 		bl	stm_log_timestamp
+ 528              	.LVL64:
+ 529 01ee 1F49     		ldr	r1, .L39+4
+ 530 01f0 1F4B     		ldr	r3, .L39+8
+ 531 01f2 0493     		str	r3, [sp, #16]
+ 532 01f4 1F4B     		ldr	r3, .L39+12
+ 533 01f6 0393     		str	r3, [sp, #12]
+ 534 01f8 7423     		movs	r3, #116
+ 535 01fa 0293     		str	r3, [sp, #8]
+ 536 01fc 1E4B     		ldr	r3, .L39+16
+ 537 01fe 0193     		str	r3, [sp, #4]
+ 538 0200 0091     		str	r1, [sp]
+ 539 0202 0346     		mov	r3, r0
+ 540 0204 1D4A     		ldr	r2, .L39+20
+ 541 0206 0120     		movs	r0, #1
+ 542 0208 FFF7FEFF 		bl	stm_log_write
+ 543              	.LVL65:
+ 544 020c 0025     		movs	r5, #0
+ 545              	.LVL66:
+ 546 020e 8BE7     		b	.L17
+ 547              	.LVL67:
+ 548              	.L37:
+ 124:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     HAL_Delay(10);
+ 549              		.loc 1 124 0 discriminator 4
+ 550 0210 FFF7FEFF 		bl	stm_log_timestamp
+ 551              	.LVL68:
+ 552 0214 1549     		ldr	r1, .L39+4
+ 553 0216 164B     		ldr	r3, .L39+8
+ 554 0218 0493     		str	r3, [sp, #16]
+ 555 021a 164B     		ldr	r3, .L39+12
+ 556 021c 0393     		str	r3, [sp, #12]
+ 557 021e 7C23     		movs	r3, #124
+ 558 0220 0293     		str	r3, [sp, #8]
+ 559 0222 154B     		ldr	r3, .L39+16
+ 560 0224 0193     		str	r3, [sp, #4]
+ 561 0226 0091     		str	r1, [sp]
+ 562 0228 0346     		mov	r3, r0
+ 563 022a 144A     		ldr	r2, .L39+20
+ 564 022c 0120     		movs	r0, #1
+ 565 022e FFF7FEFF 		bl	stm_log_write
+ 566              	.LVL69:
+ 567 0232 0025     		movs	r5, #0
+ 568              	.LVL70:
+ 569 0234 78E7     		b	.L17
+ 570              	.LVL71:
+ 571              	.L38:
+ 132:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     HAL_Delay(10);
+ 572              		.loc 1 132 0 discriminator 4
+ 573 0236 FFF7FEFF 		bl	stm_log_timestamp
+ 574              	.LVL72:
+ 575 023a 0C49     		ldr	r1, .L39+4
+ 576 023c 0C4B     		ldr	r3, .L39+8
+ARM GAS  /tmp/ccz3xvdE.s 			page 14
+
+
+ 577 023e 0493     		str	r3, [sp, #16]
+ 578 0240 0C4B     		ldr	r3, .L39+12
+ 579 0242 0393     		str	r3, [sp, #12]
+ 580 0244 8423     		movs	r3, #132
+ 581 0246 0293     		str	r3, [sp, #8]
+ 582 0248 0B4B     		ldr	r3, .L39+16
+ 583 024a 0193     		str	r3, [sp, #4]
+ 584 024c 0091     		str	r1, [sp]
+ 585 024e 0346     		mov	r3, r0
+ 586 0250 0A4A     		ldr	r2, .L39+20
+ 587 0252 0120     		movs	r0, #1
+ 588 0254 FFF7FEFF 		bl	stm_log_write
+ 589              	.LVL73:
+ 590 0258 0025     		movs	r5, #0
+ 591              	.LVL74:
+ 592 025a 65E7     		b	.L17
+ 593              	.LVL75:
+ 594              	.L28:
+ 139:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         break;
+ 595              		.loc 1 139 0
+ 596 025c 084B     		ldr	r3, .L39+24
+ 597 025e 2B62     		str	r3, [r5, #32]	@ float
+ 140:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 598              		.loc 1 140 0
+ 599 0260 4EE7     		b	.L27
+ 600              	.L29:
+ 143:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         break;
+ 601              		.loc 1 143 0
+ 602 0262 084B     		ldr	r3, .L39+28
+ 603 0264 2B62     		str	r3, [r5, #32]	@ float
+ 144:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 604              		.loc 1 144 0
+ 605 0266 4BE7     		b	.L27
+ 606              	.L40:
+ 607              		.align	2
+ 608              	.L39:
+ 609 0268 0000803B 		.word	998244352
+ 610 026c 28000000 		.word	.LC3
+ 611 0270 00000000 		.word	.LC7
+ 612 0274 00000000 		.word	.LANCHOR2
+ 613 0278 50000000 		.word	.LC5
+ 614 027c 00000000 		.word	.LC2
+ 615 0280 FFEBBF40 		.word	1086319615
+ 616 0284 FFEBBF3F 		.word	1069542399
+ 617              		.cfi_endproc
+ 618              	.LFE140:
+ 620              		.section	.text.ak8963_get_mag_raw,"ax",%progbits
+ 621              		.align	1
+ 622              		.global	ak8963_get_mag_raw
+ 623              		.syntax unified
+ 624              		.thumb
+ 625              		.thumb_func
+ 626              		.fpu fpv4-sp-d16
+ 628              	ak8963_get_mag_raw:
+ 629              	.LFB141:
+ 160:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 161:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** stm_err_t ak8963_get_mag_raw(ak8963_handle_t handle, imu_raw_data_t *raw_data)
+ARM GAS  /tmp/ccz3xvdE.s 			page 15
+
+
+ 162:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** {
+ 630              		.loc 1 162 0
+ 631              		.cfi_startproc
+ 632              		@ args = 0, pretend = 0, frame = 8
+ 633              		@ frame_needed = 0, uses_anonymous_args = 0
+ 634              	.LVL76:
+ 635 0000 30B5     		push	{r4, r5, lr}
+ 636              	.LCFI12:
+ 637              		.cfi_def_cfa_offset 12
+ 638              		.cfi_offset 4, -12
+ 639              		.cfi_offset 5, -8
+ 640              		.cfi_offset 14, -4
+ 641 0002 89B0     		sub	sp, sp, #36
+ 642              	.LCFI13:
+ 643              		.cfi_def_cfa_offset 48
+ 644 0004 0446     		mov	r4, r0
+ 645 0006 0D46     		mov	r5, r1
+ 646              	.LVL77:
+ 647              	.L42:
+ 163:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_lock(handle->lock);
+ 648              		.loc 1 163 0 discriminator 1
+ 649 0008 4FF0FF31 		mov	r1, #-1
+ 650 000c A06A     		ldr	r0, [r4, #40]
+ 651 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 652              	.LVL78:
+ 653 0012 0128     		cmp	r0, #1
+ 654 0014 F8D1     		bne	.L42
+ 164:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 165:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     int ret;
+ 166:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     uint8_t mag_raw_data[7];
+ 167:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 168:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Get magnetometer raw data */
+ 169:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ret = _ak8963_read_reg(handle->i2c_num, AK8963_XOUT_L, mag_raw_data, 7);
+ 655              		.loc 1 169 0
+ 656 0016 0723     		movs	r3, #7
+ 657 0018 06AA     		add	r2, sp, #24
+ 658 001a 0321     		movs	r1, #3
+ 659 001c 94F82400 		ldrb	r0, [r4, #36]	@ zero_extendqisi2
+ 660 0020 FFF7FEFF 		bl	_ak8963_read_reg
+ 661              	.LVL79:
+ 170:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_GET_DATA_ERR_STR, STM_FAIL);
+ 662              		.loc 1 170 0
+ 663 0024 10BB     		cbnz	r0, .L47
+ 171:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 172:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Check if data is ready */
+ 173:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!(mag_raw_data[6] & 0x08), AK8963_GET_DATA_ERR_STR, STM_FAIL);
+ 664              		.loc 1 173 0
+ 665 0026 9DF81E30 		ldrb	r3, [sp, #30]	@ zero_extendqisi2
+ 666 002a 13F0080F 		tst	r3, #8
+ 667 002e 31D1     		bne	.L48
+ 174:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 175:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     raw_data->x_axis = (int16_t)((mag_raw_data[1] << 8) + mag_raw_data[0]);
+ 668              		.loc 1 175 0
+ 669 0030 9DF81920 		ldrb	r2, [sp, #25]	@ zero_extendqisi2
+ 670 0034 9DF81830 		ldrb	r3, [sp, #24]	@ zero_extendqisi2
+ 671 0038 03EB0223 		add	r3, r3, r2, lsl #8
+ 672 003c 2B80     		strh	r3, [r5]	@ movhi
+ARM GAS  /tmp/ccz3xvdE.s 			page 16
+
+
+ 176:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     raw_data->y_axis = (int16_t)((mag_raw_data[3] << 8) + mag_raw_data[2]);
+ 673              		.loc 1 176 0
+ 674 003e 9DF81B20 		ldrb	r2, [sp, #27]	@ zero_extendqisi2
+ 675 0042 9DF81A30 		ldrb	r3, [sp, #26]	@ zero_extendqisi2
+ 676 0046 03EB0223 		add	r3, r3, r2, lsl #8
+ 677 004a 6B80     		strh	r3, [r5, #2]	@ movhi
+ 177:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     raw_data->z_axis = (int16_t)((mag_raw_data[5] << 8) + mag_raw_data[4]);
+ 678              		.loc 1 177 0
+ 679 004c 9DF81D20 		ldrb	r2, [sp, #29]	@ zero_extendqisi2
+ 680 0050 9DF81C30 		ldrb	r3, [sp, #28]	@ zero_extendqisi2
+ 681 0054 03EB0223 		add	r3, r3, r2, lsl #8
+ 682 0058 AB80     		strh	r3, [r5, #4]	@ movhi
+ 178:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 179:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_unlock(handle->lock);
+ 683              		.loc 1 179 0
+ 684 005a 0023     		movs	r3, #0
+ 685 005c 1A46     		mov	r2, r3
+ 686 005e 1946     		mov	r1, r3
+ 687 0060 A06A     		ldr	r0, [r4, #40]
+ 688              	.LVL80:
+ 689 0062 FFF7FEFF 		bl	xQueueGenericSend
+ 690              	.LVL81:
+ 180:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     return 0;
+ 691              		.loc 1 180 0
+ 692 0066 0020     		movs	r0, #0
+ 693              	.L41:
+ 181:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** }
+ 694              		.loc 1 181 0
+ 695 0068 09B0     		add	sp, sp, #36
+ 696              	.LCFI14:
+ 697              		.cfi_remember_state
+ 698              		.cfi_def_cfa_offset 12
+ 699              		@ sp needed
+ 700 006a 30BD     		pop	{r4, r5, pc}
+ 701              	.LVL82:
+ 702              	.L47:
+ 703              	.LCFI15:
+ 704              		.cfi_restore_state
+ 170:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 705              		.loc 1 170 0 discriminator 4
+ 706 006c FFF7FEFF 		bl	stm_log_timestamp
+ 707              	.LVL83:
+ 708 0070 1249     		ldr	r1, .L49
+ 709 0072 134B     		ldr	r3, .L49+4
+ 710 0074 0493     		str	r3, [sp, #16]
+ 711 0076 134B     		ldr	r3, .L49+8
+ 712 0078 0393     		str	r3, [sp, #12]
+ 713 007a AA23     		movs	r3, #170
+ 714 007c 0293     		str	r3, [sp, #8]
+ 715 007e 124B     		ldr	r3, .L49+12
+ 716 0080 0193     		str	r3, [sp, #4]
+ 717 0082 0091     		str	r1, [sp]
+ 718 0084 0346     		mov	r3, r0
+ 719 0086 114A     		ldr	r2, .L49+16
+ 720 0088 0120     		movs	r0, #1
+ 721 008a FFF7FEFF 		bl	stm_log_write
+ 722              	.LVL84:
+ARM GAS  /tmp/ccz3xvdE.s 			page 17
+
+
+ 723 008e 4FF0FF30 		mov	r0, #-1
+ 724 0092 E9E7     		b	.L41
+ 725              	.LVL85:
+ 726              	.L48:
+ 173:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 727              		.loc 1 173 0 discriminator 4
+ 728 0094 FFF7FEFF 		bl	stm_log_timestamp
+ 729              	.LVL86:
+ 730 0098 0849     		ldr	r1, .L49
+ 731 009a 094B     		ldr	r3, .L49+4
+ 732 009c 0493     		str	r3, [sp, #16]
+ 733 009e 094B     		ldr	r3, .L49+8
+ 734 00a0 0393     		str	r3, [sp, #12]
+ 735 00a2 AD23     		movs	r3, #173
+ 736 00a4 0293     		str	r3, [sp, #8]
+ 737 00a6 084B     		ldr	r3, .L49+12
+ 738 00a8 0193     		str	r3, [sp, #4]
+ 739 00aa 0091     		str	r1, [sp]
+ 740 00ac 0346     		mov	r3, r0
+ 741 00ae 074A     		ldr	r2, .L49+16
+ 742 00b0 0120     		movs	r0, #1
+ 743 00b2 FFF7FEFF 		bl	stm_log_write
+ 744              	.LVL87:
+ 745 00b6 4FF0FF30 		mov	r0, #-1
+ 746 00ba D5E7     		b	.L41
+ 747              	.L50:
+ 748              		.align	2
+ 749              	.L49:
+ 750 00bc 28000000 		.word	.LC3
+ 751 00c0 00000000 		.word	.LC8
+ 752 00c4 00000000 		.word	.LANCHOR3
+ 753 00c8 50000000 		.word	.LC5
+ 754 00cc 00000000 		.word	.LC2
+ 755              		.cfi_endproc
+ 756              	.LFE141:
+ 758              		.section	.text.ak8963_get_mag_cali,"ax",%progbits
+ 759              		.align	1
+ 760              		.global	ak8963_get_mag_cali
+ 761              		.syntax unified
+ 762              		.thumb
+ 763              		.thumb_func
+ 764              		.fpu fpv4-sp-d16
+ 766              	ak8963_get_mag_cali:
+ 767              	.LFB142:
+ 182:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 183:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** stm_err_t ak8963_get_mag_cali(ak8963_handle_t handle, imu_cali_data_t *cali_data)
+ 184:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** {
+ 768              		.loc 1 184 0
+ 769              		.cfi_startproc
+ 770              		@ args = 0, pretend = 0, frame = 8
+ 771              		@ frame_needed = 0, uses_anonymous_args = 0
+ 772              	.LVL88:
+ 773 0000 30B5     		push	{r4, r5, lr}
+ 774              	.LCFI16:
+ 775              		.cfi_def_cfa_offset 12
+ 776              		.cfi_offset 4, -12
+ 777              		.cfi_offset 5, -8
+ARM GAS  /tmp/ccz3xvdE.s 			page 18
+
+
+ 778              		.cfi_offset 14, -4
+ 779 0002 89B0     		sub	sp, sp, #36
+ 780              	.LCFI17:
+ 781              		.cfi_def_cfa_offset 48
+ 782 0004 0446     		mov	r4, r0
+ 783 0006 0D46     		mov	r5, r1
+ 784              	.LVL89:
+ 785              	.L52:
+ 185:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_lock(handle->lock);
+ 786              		.loc 1 185 0 discriminator 1
+ 787 0008 4FF0FF31 		mov	r1, #-1
+ 788 000c A06A     		ldr	r0, [r4, #40]
+ 789 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 790              	.LVL90:
+ 791 0012 0128     		cmp	r0, #1
+ 792 0014 F8D1     		bne	.L52
+ 186:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 187:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     int ret;
+ 188:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     uint8_t mag_raw_data[7];
+ 189:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 190:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Get magnetometer raw data */
+ 191:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ret = _ak8963_read_reg(handle->i2c_num, AK8963_XOUT_L, mag_raw_data, 7);
+ 793              		.loc 1 191 0
+ 794 0016 0723     		movs	r3, #7
+ 795 0018 06AA     		add	r2, sp, #24
+ 796 001a 0321     		movs	r1, #3
+ 797 001c 94F82400 		ldrb	r0, [r4, #36]	@ zero_extendqisi2
+ 798 0020 FFF7FEFF 		bl	_ak8963_read_reg
+ 799              	.LVL91:
+ 192:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_GET_DATA_ERR_STR, STM_FAIL);
+ 800              		.loc 1 192 0
+ 801 0024 58BB     		cbnz	r0, .L57
+ 193:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 194:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Check if data is ready */
+ 195:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!(mag_raw_data[6] & 0x08), AK8963_GET_DATA_ERR_STR, STM_FAIL);
+ 802              		.loc 1 195 0
+ 803 0026 9DF81E30 		ldrb	r3, [sp, #30]	@ zero_extendqisi2
+ 804 002a 13F0080F 		tst	r3, #8
+ 805 002e 3AD1     		bne	.L58
+ 196:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 197:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     cali_data->x_axis = (int16_t)((mag_raw_data[1] << 8) + mag_raw_data[0]) - handle->mag_bias.x_ax
+ 806              		.loc 1 197 0
+ 807 0030 9DF81920 		ldrb	r2, [sp, #25]	@ zero_extendqisi2
+ 808 0034 9DF81830 		ldrb	r3, [sp, #24]	@ zero_extendqisi2
+ 809 0038 03EB0223 		add	r3, r3, r2, lsl #8
+ 810 003c 9BB2     		uxth	r3, r3
+ 811 003e 6288     		ldrh	r2, [r4, #2]
+ 812 0040 9B1A     		subs	r3, r3, r2
+ 813 0042 2B80     		strh	r3, [r5]	@ movhi
+ 198:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     cali_data->y_axis = (int16_t)((mag_raw_data[3] << 8) + mag_raw_data[2]) - handle->mag_bias.y_ax
+ 814              		.loc 1 198 0
+ 815 0044 9DF81B20 		ldrb	r2, [sp, #27]	@ zero_extendqisi2
+ 816 0048 9DF81A30 		ldrb	r3, [sp, #26]	@ zero_extendqisi2
+ 817 004c 03EB0223 		add	r3, r3, r2, lsl #8
+ 818 0050 9BB2     		uxth	r3, r3
+ 819 0052 A288     		ldrh	r2, [r4, #4]
+ 820 0054 9B1A     		subs	r3, r3, r2
+ARM GAS  /tmp/ccz3xvdE.s 			page 19
+
+
+ 821 0056 6B80     		strh	r3, [r5, #2]	@ movhi
+ 199:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     cali_data->z_axis = (int16_t)((mag_raw_data[5] << 8) + mag_raw_data[4]) - handle->mag_bias.z_ax
+ 822              		.loc 1 199 0
+ 823 0058 9DF81D20 		ldrb	r2, [sp, #29]	@ zero_extendqisi2
+ 824 005c 9DF81C30 		ldrb	r3, [sp, #28]	@ zero_extendqisi2
+ 825 0060 03EB0223 		add	r3, r3, r2, lsl #8
+ 826 0064 9BB2     		uxth	r3, r3
+ 827 0066 E288     		ldrh	r2, [r4, #6]
+ 828 0068 9B1A     		subs	r3, r3, r2
+ 829 006a AB80     		strh	r3, [r5, #4]	@ movhi
+ 200:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 201:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_unlock(handle->lock);
+ 830              		.loc 1 201 0
+ 831 006c 0023     		movs	r3, #0
+ 832 006e 1A46     		mov	r2, r3
+ 833 0070 1946     		mov	r1, r3
+ 834 0072 A06A     		ldr	r0, [r4, #40]
+ 835              	.LVL92:
+ 836 0074 FFF7FEFF 		bl	xQueueGenericSend
+ 837              	.LVL93:
+ 202:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     return 0;
+ 838              		.loc 1 202 0
+ 839 0078 0020     		movs	r0, #0
+ 840              	.L51:
+ 203:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** }
+ 841              		.loc 1 203 0
+ 842 007a 09B0     		add	sp, sp, #36
+ 843              	.LCFI18:
+ 844              		.cfi_remember_state
+ 845              		.cfi_def_cfa_offset 12
+ 846              		@ sp needed
+ 847 007c 30BD     		pop	{r4, r5, pc}
+ 848              	.LVL94:
+ 849              	.L57:
+ 850              	.LCFI19:
+ 851              		.cfi_restore_state
+ 192:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 852              		.loc 1 192 0 discriminator 4
+ 853 007e FFF7FEFF 		bl	stm_log_timestamp
+ 854              	.LVL95:
+ 855 0082 1349     		ldr	r1, .L59
+ 856 0084 134B     		ldr	r3, .L59+4
+ 857 0086 0493     		str	r3, [sp, #16]
+ 858 0088 134B     		ldr	r3, .L59+8
+ 859 008a 0393     		str	r3, [sp, #12]
+ 860 008c C023     		movs	r3, #192
+ 861 008e 0293     		str	r3, [sp, #8]
+ 862 0090 124B     		ldr	r3, .L59+12
+ 863 0092 0193     		str	r3, [sp, #4]
+ 864 0094 0091     		str	r1, [sp]
+ 865 0096 0346     		mov	r3, r0
+ 866 0098 114A     		ldr	r2, .L59+16
+ 867 009a 0120     		movs	r0, #1
+ 868 009c FFF7FEFF 		bl	stm_log_write
+ 869              	.LVL96:
+ 870 00a0 4FF0FF30 		mov	r0, #-1
+ 871 00a4 E9E7     		b	.L51
+ARM GAS  /tmp/ccz3xvdE.s 			page 20
+
+
+ 872              	.LVL97:
+ 873              	.L58:
+ 195:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 874              		.loc 1 195 0 discriminator 4
+ 875 00a6 FFF7FEFF 		bl	stm_log_timestamp
+ 876              	.LVL98:
+ 877 00aa 0949     		ldr	r1, .L59
+ 878 00ac 094B     		ldr	r3, .L59+4
+ 879 00ae 0493     		str	r3, [sp, #16]
+ 880 00b0 094B     		ldr	r3, .L59+8
+ 881 00b2 0393     		str	r3, [sp, #12]
+ 882 00b4 C323     		movs	r3, #195
+ 883 00b6 0293     		str	r3, [sp, #8]
+ 884 00b8 084B     		ldr	r3, .L59+12
+ 885 00ba 0193     		str	r3, [sp, #4]
+ 886 00bc 0091     		str	r1, [sp]
+ 887 00be 0346     		mov	r3, r0
+ 888 00c0 074A     		ldr	r2, .L59+16
+ 889 00c2 0120     		movs	r0, #1
+ 890 00c4 FFF7FEFF 		bl	stm_log_write
+ 891              	.LVL99:
+ 892 00c8 4FF0FF30 		mov	r0, #-1
+ 893 00cc D5E7     		b	.L51
+ 894              	.L60:
+ 895 00ce 00BF     		.align	2
+ 896              	.L59:
+ 897 00d0 28000000 		.word	.LC3
+ 898 00d4 00000000 		.word	.LC8
+ 899 00d8 00000000 		.word	.LANCHOR4
+ 900 00dc 50000000 		.word	.LC5
+ 901 00e0 00000000 		.word	.LC2
+ 902              		.cfi_endproc
+ 903              	.LFE142:
+ 905              		.section	.text.ak8963_get_mag_scale,"ax",%progbits
+ 906              		.align	1
+ 907              		.global	ak8963_get_mag_scale
+ 908              		.syntax unified
+ 909              		.thumb
+ 910              		.thumb_func
+ 911              		.fpu fpv4-sp-d16
+ 913              	ak8963_get_mag_scale:
+ 914              	.LFB143:
+ 204:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 205:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** stm_err_t ak8963_get_mag_scale(ak8963_handle_t handle, imu_scale_data_t *scale_data)
+ 206:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** {
+ 915              		.loc 1 206 0
+ 916              		.cfi_startproc
+ 917              		@ args = 0, pretend = 0, frame = 8
+ 918              		@ frame_needed = 0, uses_anonymous_args = 0
+ 919              	.LVL100:
+ 920 0000 30B5     		push	{r4, r5, lr}
+ 921              	.LCFI20:
+ 922              		.cfi_def_cfa_offset 12
+ 923              		.cfi_offset 4, -12
+ 924              		.cfi_offset 5, -8
+ 925              		.cfi_offset 14, -4
+ 926 0002 89B0     		sub	sp, sp, #36
+ARM GAS  /tmp/ccz3xvdE.s 			page 21
+
+
+ 927              	.LCFI21:
+ 928              		.cfi_def_cfa_offset 48
+ 929 0004 0446     		mov	r4, r0
+ 930 0006 0D46     		mov	r5, r1
+ 931              	.LVL101:
+ 932              	.L62:
+ 207:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_lock(handle->lock);
+ 933              		.loc 1 207 0 discriminator 1
+ 934 0008 4FF0FF31 		mov	r1, #-1
+ 935 000c A06A     		ldr	r0, [r4, #40]
+ 936 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 937              	.LVL102:
+ 938 0012 0128     		cmp	r0, #1
+ 939 0014 F8D1     		bne	.L62
+ 208:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 209:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     int ret;
+ 210:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     uint8_t mag_raw_data[7];
+ 211:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 212:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Get magnetometer raw data */
+ 213:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     ret = _ak8963_read_reg(handle->i2c_num, AK8963_XOUT_L, mag_raw_data, 7);
+ 940              		.loc 1 213 0
+ 941 0016 0723     		movs	r3, #7
+ 942 0018 06AA     		add	r2, sp, #24
+ 943 001a 0321     		movs	r1, #3
+ 944 001c 94F82400 		ldrb	r0, [r4, #36]	@ zero_extendqisi2
+ 945 0020 FFF7FEFF 		bl	_ak8963_read_reg
+ 946              	.LVL103:
+ 214:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!ret, AK8963_GET_DATA_ERR_STR, STM_FAIL);
+ 947              		.loc 1 214 0
+ 948 0024 0028     		cmp	r0, #0
+ 949 0026 61D1     		bne	.L67
+ 215:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 216:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     /* Check if data is ready */
+ 217:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     AK8963_CHECK(!(mag_raw_data[6] & 0x08), AK8963_GET_DATA_ERR_STR, STM_FAIL);
+ 950              		.loc 1 217 0
+ 951 0028 9DF81E30 		ldrb	r3, [sp, #30]	@ zero_extendqisi2
+ 952 002c 13F0080F 		tst	r3, #8
+ 953 0030 70D1     		bne	.L68
+ 218:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 219:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     scale_data->x_axis = ((int16_t)((mag_raw_data[1] << 8) + mag_raw_data[0]) - handle->mag_bias.x_
+ 954              		.loc 1 219 0
+ 955 0032 9DF81920 		ldrb	r2, [sp, #25]	@ zero_extendqisi2
+ 956 0036 9DF81830 		ldrb	r3, [sp, #24]	@ zero_extendqisi2
+ 957 003a 03EB0223 		add	r3, r3, r2, lsl #8
+ 958 003e 1BB2     		sxth	r3, r3
+ 959 0040 B4F90220 		ldrsh	r2, [r4, #2]
+ 960 0044 9B1A     		subs	r3, r3, r2
+ 961 0046 07EE903A 		vmov	s15, r3	@ int
+ 220:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                             handle->mag_scaling_factor * handle->mag_sens_adj.x_axis * handle->mag_
+ 962              		.loc 1 220 0
+ 963 004a 94ED087A 		vldr.32	s14, [r4, #32]
+ 219:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                             handle->mag_scaling_factor * handle->mag_sens_adj.x_axis * handle->mag_
+ 964              		.loc 1 219 0
+ 965 004e F8EEE77A 		vcvt.f32.s32	s15, s15
+ 966 0052 67EE877A 		vmul.f32	s15, s15, s14
+ 967              		.loc 1 220 0
+ 968 0056 94ED027A 		vldr.32	s14, [r4, #8]
+ARM GAS  /tmp/ccz3xvdE.s 			page 22
+
+
+ 969 005a 67EE877A 		vmul.f32	s15, s15, s14
+ 970 005e 94ED057A 		vldr.32	s14, [r4, #20]
+ 971 0062 67EE877A 		vmul.f32	s15, s15, s14
+ 219:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                             handle->mag_scaling_factor * handle->mag_sens_adj.x_axis * handle->mag_
+ 972              		.loc 1 219 0
+ 973 0066 C5ED007A 		vstr.32	s15, [r5]
+ 221:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     scale_data->y_axis = ((int16_t)((mag_raw_data[3] << 8) + mag_raw_data[2]) - handle->mag_bias.y_
+ 974              		.loc 1 221 0
+ 975 006a 9DF81B20 		ldrb	r2, [sp, #27]	@ zero_extendqisi2
+ 976 006e 9DF81A30 		ldrb	r3, [sp, #26]	@ zero_extendqisi2
+ 977 0072 03EB0223 		add	r3, r3, r2, lsl #8
+ 978 0076 1BB2     		sxth	r3, r3
+ 979 0078 B4F90420 		ldrsh	r2, [r4, #4]
+ 980 007c 9B1A     		subs	r3, r3, r2
+ 981 007e 07EE903A 		vmov	s15, r3	@ int
+ 222:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                             handle->mag_scaling_factor * handle->mag_sens_adj.y_axis * handle->mag_
+ 982              		.loc 1 222 0
+ 983 0082 94ED087A 		vldr.32	s14, [r4, #32]
+ 221:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     scale_data->y_axis = ((int16_t)((mag_raw_data[3] << 8) + mag_raw_data[2]) - handle->mag_bias.y_
+ 984              		.loc 1 221 0
+ 985 0086 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 986 008a 67EE877A 		vmul.f32	s15, s15, s14
+ 987              		.loc 1 222 0
+ 988 008e 94ED037A 		vldr.32	s14, [r4, #12]
+ 989 0092 67EE877A 		vmul.f32	s15, s15, s14
+ 990 0096 94ED067A 		vldr.32	s14, [r4, #24]
+ 991 009a 67EE877A 		vmul.f32	s15, s15, s14
+ 221:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     scale_data->y_axis = ((int16_t)((mag_raw_data[3] << 8) + mag_raw_data[2]) - handle->mag_bias.y_
+ 992              		.loc 1 221 0
+ 993 009e C5ED017A 		vstr.32	s15, [r5, #4]
+ 223:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     scale_data->z_axis = ((int16_t)((mag_raw_data[5] << 8) + mag_raw_data[4]) - handle->mag_bias.z_
+ 994              		.loc 1 223 0
+ 995 00a2 9DF81D20 		ldrb	r2, [sp, #29]	@ zero_extendqisi2
+ 996 00a6 9DF81C30 		ldrb	r3, [sp, #28]	@ zero_extendqisi2
+ 997 00aa 03EB0223 		add	r3, r3, r2, lsl #8
+ 998 00ae 1BB2     		sxth	r3, r3
+ 999 00b0 B4F90620 		ldrsh	r2, [r4, #6]
+ 1000 00b4 9B1A     		subs	r3, r3, r2
+ 1001 00b6 07EE903A 		vmov	s15, r3	@ int
+ 224:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                             handle->mag_scaling_factor * handle->mag_sens_adj.z_axis * handle->mag_
+ 1002              		.loc 1 224 0
+ 1003 00ba 94ED087A 		vldr.32	s14, [r4, #32]
+ 223:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     scale_data->z_axis = ((int16_t)((mag_raw_data[5] << 8) + mag_raw_data[4]) - handle->mag_bias.z_
+ 1004              		.loc 1 223 0
+ 1005 00be F8EEE77A 		vcvt.f32.s32	s15, s15
+ 1006 00c2 67EE877A 		vmul.f32	s15, s15, s14
+ 1007              		.loc 1 224 0
+ 1008 00c6 94ED047A 		vldr.32	s14, [r4, #16]
+ 1009 00ca 67EE877A 		vmul.f32	s15, s15, s14
+ 1010 00ce 94ED077A 		vldr.32	s14, [r4, #28]
+ 1011 00d2 67EE877A 		vmul.f32	s15, s15, s14
+ 223:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     scale_data->z_axis = ((int16_t)((mag_raw_data[5] << 8) + mag_raw_data[4]) - handle->mag_bias.z_
+ 1012              		.loc 1 223 0
+ 1013 00d6 C5ED027A 		vstr.32	s15, [r5, #8]
+ 225:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 226:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_unlock(handle->lock);
+ 1014              		.loc 1 226 0
+ARM GAS  /tmp/ccz3xvdE.s 			page 23
+
+
+ 1015 00da 0023     		movs	r3, #0
+ 1016 00dc 1A46     		mov	r2, r3
+ 1017 00de 1946     		mov	r1, r3
+ 1018 00e0 A06A     		ldr	r0, [r4, #40]
+ 1019              	.LVL104:
+ 1020 00e2 FFF7FEFF 		bl	xQueueGenericSend
+ 1021              	.LVL105:
+ 227:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     return 0;
+ 1022              		.loc 1 227 0
+ 1023 00e6 0020     		movs	r0, #0
+ 1024              	.L61:
+ 228:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** }
+ 1025              		.loc 1 228 0
+ 1026 00e8 09B0     		add	sp, sp, #36
+ 1027              	.LCFI22:
+ 1028              		.cfi_remember_state
+ 1029              		.cfi_def_cfa_offset 12
+ 1030              		@ sp needed
+ 1031 00ea 30BD     		pop	{r4, r5, pc}
+ 1032              	.LVL106:
+ 1033              	.L67:
+ 1034              	.LCFI23:
+ 1035              		.cfi_restore_state
+ 214:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 1036              		.loc 1 214 0 discriminator 4
+ 1037 00ec FFF7FEFF 		bl	stm_log_timestamp
+ 1038              	.LVL107:
+ 1039 00f0 1249     		ldr	r1, .L69
+ 1040 00f2 134B     		ldr	r3, .L69+4
+ 1041 00f4 0493     		str	r3, [sp, #16]
+ 1042 00f6 134B     		ldr	r3, .L69+8
+ 1043 00f8 0393     		str	r3, [sp, #12]
+ 1044 00fa D623     		movs	r3, #214
+ 1045 00fc 0293     		str	r3, [sp, #8]
+ 1046 00fe 124B     		ldr	r3, .L69+12
+ 1047 0100 0193     		str	r3, [sp, #4]
+ 1048 0102 0091     		str	r1, [sp]
+ 1049 0104 0346     		mov	r3, r0
+ 1050 0106 114A     		ldr	r2, .L69+16
+ 1051 0108 0120     		movs	r0, #1
+ 1052 010a FFF7FEFF 		bl	stm_log_write
+ 1053              	.LVL108:
+ 1054 010e 4FF0FF30 		mov	r0, #-1
+ 1055 0112 E9E7     		b	.L61
+ 1056              	.LVL109:
+ 1057              	.L68:
+ 217:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 1058              		.loc 1 217 0 discriminator 4
+ 1059 0114 FFF7FEFF 		bl	stm_log_timestamp
+ 1060              	.LVL110:
+ 1061 0118 0849     		ldr	r1, .L69
+ 1062 011a 094B     		ldr	r3, .L69+4
+ 1063 011c 0493     		str	r3, [sp, #16]
+ 1064 011e 094B     		ldr	r3, .L69+8
+ 1065 0120 0393     		str	r3, [sp, #12]
+ 1066 0122 D923     		movs	r3, #217
+ 1067 0124 0293     		str	r3, [sp, #8]
+ARM GAS  /tmp/ccz3xvdE.s 			page 24
+
+
+ 1068 0126 084B     		ldr	r3, .L69+12
+ 1069 0128 0193     		str	r3, [sp, #4]
+ 1070 012a 0091     		str	r1, [sp]
+ 1071 012c 0346     		mov	r3, r0
+ 1072 012e 074A     		ldr	r2, .L69+16
+ 1073 0130 0120     		movs	r0, #1
+ 1074 0132 FFF7FEFF 		bl	stm_log_write
+ 1075              	.LVL111:
+ 1076 0136 4FF0FF30 		mov	r0, #-1
+ 1077 013a D5E7     		b	.L61
+ 1078              	.L70:
+ 1079              		.align	2
+ 1080              	.L69:
+ 1081 013c 28000000 		.word	.LC3
+ 1082 0140 00000000 		.word	.LC8
+ 1083 0144 00000000 		.word	.LANCHOR5
+ 1084 0148 50000000 		.word	.LC5
+ 1085 014c 00000000 		.word	.LC2
+ 1086              		.cfi_endproc
+ 1087              	.LFE143:
+ 1089              		.section	.text.ak8963_set_mag_bias,"ax",%progbits
+ 1090              		.align	1
+ 1091              		.global	ak8963_set_mag_bias
+ 1092              		.syntax unified
+ 1093              		.thumb
+ 1094              		.thumb_func
+ 1095              		.fpu fpv4-sp-d16
+ 1097              	ak8963_set_mag_bias:
+ 1098              	.LFB144:
+ 229:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 230:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** void ak8963_set_mag_bias(ak8963_handle_t handle, imu_bias_data_t mag_bias)
+ 231:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** {
+ 1099              		.loc 1 231 0
+ 1100              		.cfi_startproc
+ 1101              		@ args = 0, pretend = 0, frame = 8
+ 1102              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1103              	.LVL112:
+ 1104 0000 10B5     		push	{r4, lr}
+ 1105              	.LCFI24:
+ 1106              		.cfi_def_cfa_offset 8
+ 1107              		.cfi_offset 4, -8
+ 1108              		.cfi_offset 14, -4
+ 1109 0002 82B0     		sub	sp, sp, #8
+ 1110              	.LCFI25:
+ 1111              		.cfi_def_cfa_offset 16
+ 1112 0004 0446     		mov	r4, r0
+ 1113 0006 02AB     		add	r3, sp, #8
+ 1114 0008 03E90600 		stmdb	r3, {r1, r2}
+ 1115              	.LVL113:
+ 1116              	.L72:
+ 232:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_lock(handle->lock);
+ 1117              		.loc 1 232 0 discriminator 1
+ 1118 000c 4FF0FF31 		mov	r1, #-1
+ 1119 0010 A06A     		ldr	r0, [r4, #40]
+ 1120 0012 FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1121              	.LVL114:
+ 1122 0016 0128     		cmp	r0, #1
+ARM GAS  /tmp/ccz3xvdE.s 			page 25
+
+
+ 1123 0018 F8D1     		bne	.L72
+ 233:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_bias.x_axis = mag_bias.x_axis;
+ 1124              		.loc 1 233 0
+ 1125 001a BDF90030 		ldrsh	r3, [sp]
+ 1126 001e 6380     		strh	r3, [r4, #2]	@ movhi
+ 234:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_bias.y_axis = mag_bias.y_axis;
+ 1127              		.loc 1 234 0
+ 1128 0020 BDF90230 		ldrsh	r3, [sp, #2]
+ 1129 0024 A380     		strh	r3, [r4, #4]	@ movhi
+ 235:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_bias.z_axis = mag_bias.z_axis;
+ 1130              		.loc 1 235 0
+ 1131 0026 BDF90430 		ldrsh	r3, [sp, #4]
+ 1132 002a E380     		strh	r3, [r4, #6]	@ movhi
+ 236:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_unlock(handle->lock);
+ 1133              		.loc 1 236 0
+ 1134 002c 0023     		movs	r3, #0
+ 1135 002e 1A46     		mov	r2, r3
+ 1136 0030 1946     		mov	r1, r3
+ 1137 0032 A06A     		ldr	r0, [r4, #40]
+ 1138 0034 FFF7FEFF 		bl	xQueueGenericSend
+ 1139              	.LVL115:
+ 237:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** }
+ 1140              		.loc 1 237 0
+ 1141 0038 02B0     		add	sp, sp, #8
+ 1142              	.LCFI26:
+ 1143              		.cfi_def_cfa_offset 8
+ 1144              		@ sp needed
+ 1145 003a 10BD     		pop	{r4, pc}
+ 1146              		.cfi_endproc
+ 1147              	.LFE144:
+ 1149              		.section	.text.ak8963_get_mag_bias,"ax",%progbits
+ 1150              		.align	1
+ 1151              		.global	ak8963_get_mag_bias
+ 1152              		.syntax unified
+ 1153              		.thumb
+ 1154              		.thumb_func
+ 1155              		.fpu fpv4-sp-d16
+ 1157              	ak8963_get_mag_bias:
+ 1158              	.LFB145:
+ 238:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 239:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** void ak8963_get_mag_bias(ak8963_handle_t handle, imu_bias_data_t *mag_bias)
+ 240:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** {
+ 1159              		.loc 1 240 0
+ 1160              		.cfi_startproc
+ 1161              		@ args = 0, pretend = 0, frame = 0
+ 1162              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1163              	.LVL116:
+ 1164 0000 38B5     		push	{r3, r4, r5, lr}
+ 1165              	.LCFI27:
+ 1166              		.cfi_def_cfa_offset 16
+ 1167              		.cfi_offset 3, -16
+ 1168              		.cfi_offset 4, -12
+ 1169              		.cfi_offset 5, -8
+ 1170              		.cfi_offset 14, -4
+ 1171 0002 0446     		mov	r4, r0
+ 1172 0004 0D46     		mov	r5, r1
+ 1173              	.LVL117:
+ARM GAS  /tmp/ccz3xvdE.s 			page 26
+
+
+ 1174              	.L75:
+ 241:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_lock(handle->lock);
+ 1175              		.loc 1 241 0 discriminator 1
+ 1176 0006 4FF0FF31 		mov	r1, #-1
+ 1177 000a A06A     		ldr	r0, [r4, #40]
+ 1178 000c FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1179              	.LVL118:
+ 1180 0010 0128     		cmp	r0, #1
+ 1181 0012 F8D1     		bne	.L75
+ 242:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mag_bias->x_axis = handle->mag_bias.x_axis;
+ 1182              		.loc 1 242 0
+ 1183 0014 B4F90230 		ldrsh	r3, [r4, #2]
+ 1184 0018 2B80     		strh	r3, [r5]	@ movhi
+ 243:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mag_bias->y_axis = handle->mag_bias.y_axis;
+ 1185              		.loc 1 243 0
+ 1186 001a B4F90430 		ldrsh	r3, [r4, #4]
+ 1187 001e 6B80     		strh	r3, [r5, #2]	@ movhi
+ 244:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mag_bias->z_axis = handle->mag_bias.z_axis;
+ 1188              		.loc 1 244 0
+ 1189 0020 B4F90630 		ldrsh	r3, [r4, #6]
+ 1190 0024 AB80     		strh	r3, [r5, #4]	@ movhi
+ 245:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_unlock(handle->lock);
+ 1191              		.loc 1 245 0
+ 1192 0026 0023     		movs	r3, #0
+ 1193 0028 1A46     		mov	r2, r3
+ 1194 002a 1946     		mov	r1, r3
+ 1195 002c A06A     		ldr	r0, [r4, #40]
+ 1196 002e FFF7FEFF 		bl	xQueueGenericSend
+ 1197              	.LVL119:
+ 1198 0032 38BD     		pop	{r3, r4, r5, pc}
+ 1199              		.cfi_endproc
+ 1200              	.LFE145:
+ 1202              		.section	.text.ak8963_get_mag_sens_adj,"ax",%progbits
+ 1203              		.align	1
+ 1204              		.global	ak8963_get_mag_sens_adj
+ 1205              		.syntax unified
+ 1206              		.thumb
+ 1207              		.thumb_func
+ 1208              		.fpu fpv4-sp-d16
+ 1210              	ak8963_get_mag_sens_adj:
+ 1211              	.LFB146:
+ 246:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** }
+ 247:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 248:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** void ak8963_get_mag_sens_adj(ak8963_handle_t handle, imu_mag_sens_adj_t *mag_sens_adj)
+ 249:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** {
+ 1212              		.loc 1 249 0
+ 1213              		.cfi_startproc
+ 1214              		@ args = 0, pretend = 0, frame = 0
+ 1215              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1216              	.LVL120:
+ 1217 0000 38B5     		push	{r3, r4, r5, lr}
+ 1218              	.LCFI28:
+ 1219              		.cfi_def_cfa_offset 16
+ 1220              		.cfi_offset 3, -16
+ 1221              		.cfi_offset 4, -12
+ 1222              		.cfi_offset 5, -8
+ 1223              		.cfi_offset 14, -4
+ARM GAS  /tmp/ccz3xvdE.s 			page 27
+
+
+ 1224 0002 0446     		mov	r4, r0
+ 1225 0004 0D46     		mov	r5, r1
+ 1226              	.LVL121:
+ 1227              	.L78:
+ 250:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_lock(handle->lock);
+ 1228              		.loc 1 250 0 discriminator 1
+ 1229 0006 4FF0FF31 		mov	r1, #-1
+ 1230 000a A06A     		ldr	r0, [r4, #40]
+ 1231 000c FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1232              	.LVL122:
+ 1233 0010 0128     		cmp	r0, #1
+ 1234 0012 F8D1     		bne	.L78
+ 251:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mag_sens_adj->x_axis = handle->mag_sens_adj.x_axis;
+ 1235              		.loc 1 251 0
+ 1236 0014 A368     		ldr	r3, [r4, #8]	@ float
+ 1237 0016 2B60     		str	r3, [r5]	@ float
+ 252:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mag_sens_adj->y_axis = handle->mag_sens_adj.y_axis;
+ 1238              		.loc 1 252 0
+ 1239 0018 E368     		ldr	r3, [r4, #12]	@ float
+ 1240 001a 6B60     		str	r3, [r5, #4]	@ float
+ 253:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mag_sens_adj->z_axis = handle->mag_sens_adj.z_axis;
+ 1241              		.loc 1 253 0
+ 1242 001c 2369     		ldr	r3, [r4, #16]	@ float
+ 1243 001e AB60     		str	r3, [r5, #8]	@ float
+ 254:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     mutex_unlock(handle->lock);
+ 1244              		.loc 1 254 0
+ 1245 0020 0023     		movs	r3, #0
+ 1246 0022 1A46     		mov	r2, r3
+ 1247 0024 1946     		mov	r1, r3
+ 1248 0026 A06A     		ldr	r0, [r4, #40]
+ 1249 0028 FFF7FEFF 		bl	xQueueGenericSend
+ 1250              	.LVL123:
+ 1251 002c 38BD     		pop	{r3, r4, r5, pc}
+ 1252              		.cfi_endproc
+ 1253              	.LFE146:
+ 1255              		.section	.text.ak8963_auto_calib,"ax",%progbits
+ 1256              		.align	1
+ 1257              		.global	ak8963_auto_calib
+ 1258              		.syntax unified
+ 1259              		.thumb
+ 1260              		.thumb_func
+ 1261              		.fpu fpv4-sp-d16
+ 1263              	ak8963_auto_calib:
+ 1264              	.LFB147:
+ 255:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** }
+ 256:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 257:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** void ak8963_auto_calib(ak8963_handle_t handle)
+ 258:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** {
+ 1265              		.loc 1 258 0
+ 1266              		.cfi_startproc
+ 1267              		@ args = 0, pretend = 0, frame = 24
+ 1268              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1269              	.LVL124:
+ 1270 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1271              	.LCFI29:
+ 1272              		.cfi_def_cfa_offset 20
+ 1273              		.cfi_offset 4, -20
+ARM GAS  /tmp/ccz3xvdE.s 			page 28
+
+
+ 1274              		.cfi_offset 5, -16
+ 1275              		.cfi_offset 6, -12
+ 1276              		.cfi_offset 7, -8
+ 1277              		.cfi_offset 14, -4
+ 1278 0002 87B0     		sub	sp, sp, #28
+ 1279              	.LCFI30:
+ 1280              		.cfi_def_cfa_offset 48
+ 1281 0004 0546     		mov	r5, r0
+ 259:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     uint32_t i;
+ 260:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     int16_t mag_max[3] = {-32767, -32767, -32767}, mag_min[3] = {32767, 32767, 32767};
+ 1282              		.loc 1 260 0
+ 1283 0006 504B     		ldr	r3, .L98
+ 1284 0008 93E80300 		ldm	r3, {r0, r1}
+ 1285              	.LVL125:
+ 1286 000c 0490     		str	r0, [sp, #16]
+ 1287 000e ADF81410 		strh	r1, [sp, #20]	@ movhi
+ 1288 0012 0833     		adds	r3, r3, #8
+ 1289 0014 93E80300 		ldm	r3, {r0, r1}
+ 1290 0018 0290     		str	r0, [sp, #8]
+ 1291 001a ADF80C10 		strh	r1, [sp, #12]	@ movhi
+ 261:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     uint16_t sample_count;
+ 262:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 263:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     if(handle->mfs_sel == AK8963_MFS_14BIT)
+ 1292              		.loc 1 263 0
+ 1293 001e 6B78     		ldrb	r3, [r5, #1]	@ zero_extendqisi2
+ 1294              	.LVL126:
+ 264:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         sample_count = 50;
+ 265:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     if(handle->mfs_sel == AK8963_MFS_16BIT)
+ 1295              		.loc 1 265 0
+ 1296 0020 012B     		cmp	r3, #1
+ 1297 0022 02D0     		beq	.L93
+ 1298 0024 3226     		movs	r6, #50
+ 1299              	.L81:
+ 1300              	.LVL127:
+ 266:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         sample_count =200;
+ 267:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 268:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     for(i=0; i< sample_count+100; i++)                  /*!< Dismiss 100 first value */
+ 1301              		.loc 1 268 0
+ 1302 0026 0024     		movs	r4, #0
+ 1303 0028 34E0     		b	.L82
+ 1304              	.LVL128:
+ 1305              	.L93:
+ 266:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         sample_count =200;
+ 1306              		.loc 1 266 0
+ 1307 002a C826     		movs	r6, #200
+ 1308 002c FBE7     		b	.L81
+ 1309              	.LVL129:
+ 1310              	.L97:
+ 1311              	.LBB2:
+ 269:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     {
+ 270:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         if (i > 100 && i <= (sample_count + 100))
+ 271:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         {
+ 272:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             imu_raw_data_t mag_raw;
+ 273:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             ak8963_get_mag_raw(handle, &mag_raw);
+ 1312              		.loc 1 273 0
+ 1313 002e 6946     		mov	r1, sp
+ 1314 0030 2846     		mov	r0, r5
+ARM GAS  /tmp/ccz3xvdE.s 			page 29
+
+
+ 1315 0032 FFF7FEFF 		bl	ak8963_get_mag_raw
+ 1316              	.LVL130:
+ 274:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 275:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             if(mag_raw.x_axis > mag_max[0])
+ 1317              		.loc 1 275 0
+ 1318 0036 BDF90030 		ldrsh	r3, [sp]
+ 1319 003a BDF91020 		ldrsh	r2, [sp, #16]
+ 1320 003e 9342     		cmp	r3, r2
+ 1321 0040 01DD     		ble	.L84
+ 276:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                 mag_max[0] = mag_raw.x_axis;
+ 1322              		.loc 1 276 0
+ 1323 0042 ADF81030 		strh	r3, [sp, #16]	@ movhi
+ 1324              	.L84:
+ 277:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             if(mag_raw.x_axis < mag_min[0])
+ 1325              		.loc 1 277 0
+ 1326 0046 BDF90820 		ldrsh	r2, [sp, #8]
+ 1327 004a 9342     		cmp	r3, r2
+ 1328 004c 01DA     		bge	.L85
+ 278:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                 mag_min[0] = mag_raw.x_axis;
+ 1329              		.loc 1 278 0
+ 1330 004e ADF80830 		strh	r3, [sp, #8]	@ movhi
+ 1331              	.L85:
+ 279:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 280:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             if(mag_raw.y_axis > mag_max[1])
+ 1332              		.loc 1 280 0
+ 1333 0052 BDF90230 		ldrsh	r3, [sp, #2]
+ 1334 0056 BDF91220 		ldrsh	r2, [sp, #18]
+ 1335 005a 9342     		cmp	r3, r2
+ 1336 005c 01DD     		ble	.L86
+ 281:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                 mag_max[1] = mag_raw.y_axis;
+ 1337              		.loc 1 281 0
+ 1338 005e ADF81230 		strh	r3, [sp, #18]	@ movhi
+ 1339              	.L86:
+ 282:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             if(mag_raw.y_axis < mag_min[1])
+ 1340              		.loc 1 282 0
+ 1341 0062 BDF90A20 		ldrsh	r2, [sp, #10]
+ 1342 0066 9342     		cmp	r3, r2
+ 1343 0068 01DA     		bge	.L87
+ 283:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                 mag_min[1] = mag_raw.y_axis;
+ 1344              		.loc 1 283 0
+ 1345 006a ADF80A30 		strh	r3, [sp, #10]	@ movhi
+ 1346              	.L87:
+ 284:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 285:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             if(mag_raw.z_axis > mag_max[2])
+ 1347              		.loc 1 285 0
+ 1348 006e BDF90430 		ldrsh	r3, [sp, #4]
+ 1349 0072 BDF91420 		ldrsh	r2, [sp, #20]
+ 1350 0076 9342     		cmp	r3, r2
+ 1351 0078 01DD     		ble	.L88
+ 286:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                 mag_max[2] = mag_raw.z_axis;
+ 1352              		.loc 1 286 0
+ 1353 007a ADF81430 		strh	r3, [sp, #20]	@ movhi
+ 1354              	.L88:
+ 287:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             if(mag_raw.z_axis < mag_min[2])
+ 1355              		.loc 1 287 0
+ 1356 007e BDF90C20 		ldrsh	r2, [sp, #12]
+ 1357 0082 9342     		cmp	r3, r2
+ARM GAS  /tmp/ccz3xvdE.s 			page 30
+
+
+ 1358 0084 0CDA     		bge	.L83
+ 288:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****                 mag_min[2] = mag_raw.z_axis;
+ 1359              		.loc 1 288 0
+ 1360 0086 ADF80C30 		strh	r3, [sp, #12]	@ movhi
+ 1361 008a 09E0     		b	.L83
+ 1362              	.L90:
+ 1363              	.LBE2:
+ 289:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         }
+ 290:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         if(handle->mfs_sel == AK8963_MFS_14BIT)
+ 291:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             HAL_Delay(150);
+ 292:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         if(handle->mfs_sel == AK8963_MFS_16BIT)
+ 1364              		.loc 1 292 0
+ 1365 008c 6B78     		ldrb	r3, [r5, #1]	@ zero_extendqisi2
+ 1366 008e 012B     		cmp	r3, #1
+ 1367 0090 0DD0     		beq	.L95
+ 1368              	.L91:
+ 268:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     {
+ 1369              		.loc 1 268 0 discriminator 2
+ 1370 0092 0134     		adds	r4, r4, #1
+ 1371              	.LVL131:
+ 1372              	.L82:
+ 268:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     {
+ 1373              		.loc 1 268 0 is_stmt 0 discriminator 1
+ 1374 0094 06F16403 		add	r3, r6, #100
+ 1375 0098 9C42     		cmp	r4, r3
+ 1376 009a 0CD2     		bcs	.L96
+ 270:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         {
+ 1377              		.loc 1 270 0 is_stmt 1
+ 1378 009c 642C     		cmp	r4, #100
+ 1379 009e C6D8     		bhi	.L97
+ 1380              	.L83:
+ 290:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             HAL_Delay(150);
+ 1381              		.loc 1 290 0
+ 1382 00a0 6B78     		ldrb	r3, [r5, #1]	@ zero_extendqisi2
+ 1383 00a2 002B     		cmp	r3, #0
+ 1384 00a4 F2D1     		bne	.L90
+ 291:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****         if(handle->mfs_sel == AK8963_MFS_16BIT)
+ 1385              		.loc 1 291 0
+ 1386 00a6 9620     		movs	r0, #150
+ 1387 00a8 FFF7FEFF 		bl	HAL_Delay
+ 1388              	.LVL132:
+ 1389 00ac EEE7     		b	.L90
+ 1390              	.L95:
+ 293:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****             HAL_Delay(15);
+ 1391              		.loc 1 293 0
+ 1392 00ae 0F20     		movs	r0, #15
+ 1393 00b0 FFF7FEFF 		bl	HAL_Delay
+ 1394              	.LVL133:
+ 1395 00b4 EDE7     		b	.L91
+ 1396              	.L96:
+ 294:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     }
+ 295:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 296:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_bias.x_axis = (mag_max[0] + mag_min[0])/2;
+ 1397              		.loc 1 296 0
+ 1398 00b6 BDF91010 		ldrsh	r1, [sp, #16]
+ 1399 00ba BDF90870 		ldrsh	r7, [sp, #8]
+ 1400 00be CB19     		adds	r3, r1, r7
+ARM GAS  /tmp/ccz3xvdE.s 			page 31
+
+
+ 1401 00c0 03EBD373 		add	r3, r3, r3, lsr #31
+ 1402 00c4 5B10     		asrs	r3, r3, #1
+ 1403 00c6 6B80     		strh	r3, [r5, #2]	@ movhi
+ 297:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_bias.y_axis = (mag_max[1] + mag_min[1])/2;
+ 1404              		.loc 1 297 0
+ 1405 00c8 BDF91220 		ldrsh	r2, [sp, #18]
+ 1406 00cc BDF90A60 		ldrsh	r6, [sp, #10]
+ 1407              	.LVL134:
+ 1408 00d0 9319     		adds	r3, r2, r6
+ 1409 00d2 03EBD373 		add	r3, r3, r3, lsr #31
+ 1410 00d6 5B10     		asrs	r3, r3, #1
+ 1411 00d8 AB80     		strh	r3, [r5, #4]	@ movhi
+ 298:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_bias.z_axis = (mag_max[2] + mag_min[2])/2;
+ 1412              		.loc 1 298 0
+ 1413 00da BDF91430 		ldrsh	r3, [sp, #20]
+ 1414 00de BDF90C40 		ldrsh	r4, [sp, #12]
+ 1415              	.LVL135:
+ 1416 00e2 1819     		adds	r0, r3, r4
+ 1417 00e4 00EBD070 		add	r0, r0, r0, lsr #31
+ 1418 00e8 4010     		asrs	r0, r0, #1
+ 1419 00ea E880     		strh	r0, [r5, #6]	@ movhi
+ 299:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 300:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     float scale_temp[3];
+ 301:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 302:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     scale_temp[0] = (mag_max[0] - mag_min[0])/2;
+ 1420              		.loc 1 302 0
+ 1421 00ec C91B     		subs	r1, r1, r7
+ 1422 00ee 01EBD171 		add	r1, r1, r1, lsr #31
+ 1423 00f2 4910     		asrs	r1, r1, #1
+ 1424 00f4 07EE901A 		vmov	s15, r1	@ int
+ 1425 00f8 F8EEE76A 		vcvt.f32.s32	s13, s15
+ 303:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     scale_temp[1] = (mag_max[1] - mag_min[1])/2;
+ 1426              		.loc 1 303 0
+ 1427 00fc 921B     		subs	r2, r2, r6
+ 1428 00fe 02EBD272 		add	r2, r2, r2, lsr #31
+ 1429 0102 5210     		asrs	r2, r2, #1
+ 1430 0104 07EE902A 		vmov	s15, r2	@ int
+ 1431 0108 B8EEE77A 		vcvt.f32.s32	s14, s15
+ 304:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     scale_temp[2] = (mag_max[2] - mag_min[2])/2;
+ 1432              		.loc 1 304 0
+ 1433 010c 1B1B     		subs	r3, r3, r4
+ 1434 010e 03EBD373 		add	r3, r3, r3, lsr #31
+ 1435 0112 5B10     		asrs	r3, r3, #1
+ 1436 0114 07EE903A 		vmov	s15, r3	@ int
+ 1437 0118 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 305:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 306:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     float mag_scale_avg = (scale_temp[0] + scale_temp[1] + scale_temp[2]) / 3.0f;
+ 1438              		.loc 1 306 0
+ 1439 011c 76EE875A 		vadd.f32	s11, s13, s14
+ 1440 0120 77EEA55A 		vadd.f32	s11, s15, s11
+ 1441 0124 B0EE085A 		vmov.f32	s10, #3.0e+0
+ 1442 0128 85EE856A 		vdiv.f32	s12, s11, s10
+ 1443              	.LVL136:
+ 307:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** 
+ 308:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_scale.x_axis = mag_scale_avg/((float)scale_temp[0]);
+ 1444              		.loc 1 308 0
+ 1445 012c C6EE265A 		vdiv.f32	s11, s12, s13
+ARM GAS  /tmp/ccz3xvdE.s 			page 32
+
+
+ 1446 0130 C5ED055A 		vstr.32	s11, [r5, #20]
+ 309:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_scale.y_axis = mag_scale_avg/((float)scale_temp[1]);
+ 1447              		.loc 1 309 0
+ 1448 0134 C6EE076A 		vdiv.f32	s13, s12, s14
+ 1449 0138 C5ED066A 		vstr.32	s13, [r5, #24]
+ 310:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c ****     handle->mag_scale.z_axis = mag_scale_avg/((float)scale_temp[2]);
+ 1450              		.loc 1 310 0
+ 1451 013c 86EE277A 		vdiv.f32	s14, s12, s15
+ 1452 0140 85ED077A 		vstr.32	s14, [r5, #28]
+ 311:/home/phong/Documents/thesis/stm32f4/components/imu/ak8963.c **** }...
+ 1453              		.loc 1 311 0
+ 1454 0144 07B0     		add	sp, sp, #28
+ 1455              	.LCFI31:
+ 1456              		.cfi_def_cfa_offset 20
+ 1457              		@ sp needed
+ 1458 0146 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1459              	.LVL137:
+ 1460              	.L99:
+ 1461              		.align	2
+ 1462              	.L98:
+ 1463 0148 00000000 		.word	.LANCHOR6
+ 1464              		.cfi_endproc
+ 1465              	.LFE147:
+ 1467              		.section	.rodata
+ 1468              		.align	2
+ 1469              		.set	.LANCHOR6,. + 0
+ 1470              	.LC0:
+ 1471 0000 0180     		.short	-32767
+ 1472 0002 0180     		.short	-32767
+ 1473 0004 0180     		.short	-32767
+ 1474 0006 0000     		.space	2
+ 1475              	.LC1:
+ 1476 0008 FF7F     		.short	32767
+ 1477 000a FF7F     		.short	32767
+ 1478 000c FF7F     		.short	32767
+ 1479              		.section	.rodata.__FUNCTION__.12914,"a",%progbits
+ 1480              		.align	2
+ 1481              		.set	.LANCHOR0,. + 0
+ 1484              	__FUNCTION__.12914:
+ 1485 0000 5F616B38 		.ascii	"_ak8963_write_reg\000"
+ 1485      3936335F 
+ 1485      77726974 
+ 1485      655F7265 
+ 1485      6700
+ 1486              		.section	.rodata.__FUNCTION__.12923,"a",%progbits
+ 1487              		.align	2
+ 1488              		.set	.LANCHOR1,. + 0
+ 1491              	__FUNCTION__.12923:
+ 1492 0000 5F616B38 		.ascii	"_ak8963_read_reg\000"
+ 1492      3936335F 
+ 1492      72656164 
+ 1492      5F726567 
+ 1492      00
+ 1493              		.section	.rodata.__FUNCTION__.12927,"a",%progbits
+ 1494              		.align	2
+ 1495              		.set	.LANCHOR2,. + 0
+ 1498              	__FUNCTION__.12927:
+ARM GAS  /tmp/ccz3xvdE.s 			page 33
+
+
+ 1499 0000 616B3839 		.ascii	"ak8963_config\000"
+ 1499      36335F63 
+ 1499      6F6E6669 
+ 1499      6700
+ 1500              		.section	.rodata.__FUNCTION__.12945,"a",%progbits
+ 1501              		.align	2
+ 1502              		.set	.LANCHOR3,. + 0
+ 1505              	__FUNCTION__.12945:
+ 1506 0000 616B3839 		.ascii	"ak8963_get_mag_raw\000"
+ 1506      36335F67 
+ 1506      65745F6D 
+ 1506      61675F72 
+ 1506      617700
+ 1507              		.section	.rodata.__FUNCTION__.12955,"a",%progbits
+ 1508              		.align	2
+ 1509              		.set	.LANCHOR4,. + 0
+ 1512              	__FUNCTION__.12955:
+ 1513 0000 616B3839 		.ascii	"ak8963_get_mag_cali\000"
+ 1513      36335F67 
+ 1513      65745F6D 
+ 1513      61675F63 
+ 1513      616C6900 
+ 1514              		.section	.rodata.__FUNCTION__.12965,"a",%progbits
+ 1515              		.align	2
+ 1516              		.set	.LANCHOR5,. + 0
+ 1519              	__FUNCTION__.12965:
+ 1520 0000 616B3839 		.ascii	"ak8963_get_mag_scale\000"
+ 1520      36335F67 
+ 1520      65745F6D 
+ 1520      61675F73 
+ 1520      63616C65 
+ 1521              		.section	.rodata._ak8963_read_reg.str1.4,"aMS",%progbits,1
+ 1522              		.align	2
+ 1523              	.LC6:
+ 1524 0000 616B3839 		.ascii	"ak8963 read registers error\000"
+ 1524      36332072 
+ 1524      65616420 
+ 1524      72656769 
+ 1524      73746572 
+ 1525              		.section	.rodata._ak8963_write_reg.str1.4,"aMS",%progbits,1
+ 1526              		.align	2
+ 1527              	.LC2:
+ 1528 0000 1B5B303B 		.ascii	"\033[0;31mE (%d) %s: %s:%d (%s):%s\033[0m\015\012\000"
+ 1528      33316D45 
+ 1528      20282564 
+ 1528      29202573 
+ 1528      3A202573 
+ 1529 0026 0000     		.space	2
+ 1530              	.LC3:
+ 1531 0028 414B3839 		.ascii	"AK8963\000"
+ 1531      363300
+ 1532 002f 00       		.space	1
+ 1533              	.LC4:
+ 1534 0030 616B3839 		.ascii	"ak8963 write registers error\000"
+ 1534      36332077 
+ 1534      72697465 
+ 1534      20726567 
+ARM GAS  /tmp/ccz3xvdE.s 			page 34
+
+
+ 1534      69737465 
+ 1535 004d 000000   		.space	3
+ 1536              	.LC5:
+ 1537 0050 2F686F6D 		.ascii	"/home/phong/Documents/thesis/stm32f4/components/imu"
+ 1537      652F7068 
+ 1537      6F6E672F 
+ 1537      446F6375 
+ 1537      6D656E74 
+ 1538 0083 2F616B38 		.ascii	"/ak8963.c\000"
+ 1538      3936332E 
+ 1538      6300
+ 1539              		.section	.rodata.ak8963_config.str1.4,"aMS",%progbits,1
+ 1540              		.align	2
+ 1541              	.LC7:
+ 1542 0000 616B3839 		.ascii	"ak8963 init error\000"
+ 1542      36332069 
+ 1542      6E697420 
+ 1542      6572726F 
+ 1542      7200
+ 1543              		.section	.rodata.ak8963_get_mag_raw.str1.4,"aMS",%progbits,1
+ 1544              		.align	2
+ 1545              	.LC8:
+ 1546 0000 616B3839 		.ascii	"ak8963 get data error\000"
+ 1546      36332067 
+ 1546      65742064 
+ 1546      61746120 
+ 1546      6572726F 
+ 1547              		.text
+ 1548              	.Letext0:
+ 1549              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 1550              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 1551              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/lock.h"
+ 1552              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_types.h"
+ 1553              		.file 6 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 1554              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/reent.h"
+ 1555              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/stdlib.h"
+ 1556              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 1557              		.file 10 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/inc
+ 1558              		.file 11 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ 1559              		.file 12 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/p
+ 1560              		.file 13 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/queue.
+ 1561              		.file 14 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/semphr
+ 1562              		.file 15 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm_common/include/stm_err.h"
+ 1563              		.file 16 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/log/include/stm_log.h"
+ 1564              		.file 17 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/include/driver/i2c.h"
+ 1565              		.file 18 "/home/phong/Documents/thesis/stm32f4/components/imu/include/imu.h"
+ 1566              		.file 19 "/home/phong/Documents/thesis/stm32f4/components/imu/include/ak8963.h"
+ARM GAS  /tmp/ccz3xvdE.s 			page 35
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ak8963.c
+     /tmp/ccz3xvdE.s:18     .text._ak8963_write_reg:0000000000000000 $t
+     /tmp/ccz3xvdE.s:24     .text._ak8963_write_reg:0000000000000000 _ak8963_write_reg
+     /tmp/ccz3xvdE.s:93     .text._ak8963_write_reg:000000000000004c $d
+     /tmp/ccz3xvdE.s:102    .text._ak8963_read_reg:0000000000000000 $t
+     /tmp/ccz3xvdE.s:108    .text._ak8963_read_reg:0000000000000000 _ak8963_read_reg
+     /tmp/ccz3xvdE.s:215    .text._ak8963_read_reg:0000000000000088 $d
+     /tmp/ccz3xvdE.s:224    .text.ak8963_config:0000000000000000 $t
+     /tmp/ccz3xvdE.s:231    .text.ak8963_config:0000000000000000 ak8963_config
+     /tmp/ccz3xvdE.s:609    .text.ak8963_config:0000000000000268 $d
+     /tmp/ccz3xvdE.s:621    .text.ak8963_get_mag_raw:0000000000000000 $t
+     /tmp/ccz3xvdE.s:628    .text.ak8963_get_mag_raw:0000000000000000 ak8963_get_mag_raw
+     /tmp/ccz3xvdE.s:750    .text.ak8963_get_mag_raw:00000000000000bc $d
+     /tmp/ccz3xvdE.s:759    .text.ak8963_get_mag_cali:0000000000000000 $t
+     /tmp/ccz3xvdE.s:766    .text.ak8963_get_mag_cali:0000000000000000 ak8963_get_mag_cali
+     /tmp/ccz3xvdE.s:897    .text.ak8963_get_mag_cali:00000000000000d0 $d
+     /tmp/ccz3xvdE.s:906    .text.ak8963_get_mag_scale:0000000000000000 $t
+     /tmp/ccz3xvdE.s:913    .text.ak8963_get_mag_scale:0000000000000000 ak8963_get_mag_scale
+     /tmp/ccz3xvdE.s:1081   .text.ak8963_get_mag_scale:000000000000013c $d
+     /tmp/ccz3xvdE.s:1090   .text.ak8963_set_mag_bias:0000000000000000 $t
+     /tmp/ccz3xvdE.s:1097   .text.ak8963_set_mag_bias:0000000000000000 ak8963_set_mag_bias
+     /tmp/ccz3xvdE.s:1150   .text.ak8963_get_mag_bias:0000000000000000 $t
+     /tmp/ccz3xvdE.s:1157   .text.ak8963_get_mag_bias:0000000000000000 ak8963_get_mag_bias
+     /tmp/ccz3xvdE.s:1203   .text.ak8963_get_mag_sens_adj:0000000000000000 $t
+     /tmp/ccz3xvdE.s:1210   .text.ak8963_get_mag_sens_adj:0000000000000000 ak8963_get_mag_sens_adj
+     /tmp/ccz3xvdE.s:1256   .text.ak8963_auto_calib:0000000000000000 $t
+     /tmp/ccz3xvdE.s:1263   .text.ak8963_auto_calib:0000000000000000 ak8963_auto_calib
+     /tmp/ccz3xvdE.s:1463   .text.ak8963_auto_calib:0000000000000148 $d
+     /tmp/ccz3xvdE.s:1468   .rodata:0000000000000000 $d
+     /tmp/ccz3xvdE.s:1480   .rodata.__FUNCTION__.12914:0000000000000000 $d
+     /tmp/ccz3xvdE.s:1484   .rodata.__FUNCTION__.12914:0000000000000000 __FUNCTION__.12914
+     /tmp/ccz3xvdE.s:1487   .rodata.__FUNCTION__.12923:0000000000000000 $d
+     /tmp/ccz3xvdE.s:1491   .rodata.__FUNCTION__.12923:0000000000000000 __FUNCTION__.12923
+     /tmp/ccz3xvdE.s:1494   .rodata.__FUNCTION__.12927:0000000000000000 $d
+     /tmp/ccz3xvdE.s:1498   .rodata.__FUNCTION__.12927:0000000000000000 __FUNCTION__.12927
+     /tmp/ccz3xvdE.s:1501   .rodata.__FUNCTION__.12945:0000000000000000 $d
+     /tmp/ccz3xvdE.s:1505   .rodata.__FUNCTION__.12945:0000000000000000 __FUNCTION__.12945
+     /tmp/ccz3xvdE.s:1508   .rodata.__FUNCTION__.12955:0000000000000000 $d
+     /tmp/ccz3xvdE.s:1512   .rodata.__FUNCTION__.12955:0000000000000000 __FUNCTION__.12955
+     /tmp/ccz3xvdE.s:1515   .rodata.__FUNCTION__.12965:0000000000000000 $d
+     /tmp/ccz3xvdE.s:1519   .rodata.__FUNCTION__.12965:0000000000000000 __FUNCTION__.12965
+     /tmp/ccz3xvdE.s:1522   .rodata._ak8963_read_reg.str1.4:0000000000000000 $d
+     /tmp/ccz3xvdE.s:1526   .rodata._ak8963_write_reg.str1.4:0000000000000000 $d
+     /tmp/ccz3xvdE.s:1540   .rodata.ak8963_config.str1.4:0000000000000000 $d
+     /tmp/ccz3xvdE.s:1544   .rodata.ak8963_get_mag_raw.str1.4:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+i2c_write_bytes
+stm_log_timestamp
+stm_log_write
+i2c_read_bytes
+calloc
+HAL_Delay
+xQueueCreateMutex
+xQueueSemaphoreTake
+ARM GAS  /tmp/ccz3xvdE.s 			page 36
+
+
+xQueueGenericSend

@@ -1,0 +1,205 @@
+ARM GAS  /tmp/ccZSl5eq.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal_msp_template.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_MspInit,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_MspInit
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	HAL_MspInit:
+  26              	.LFB130:
+  27              		.file 1 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_ha
+   1:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /**
+   2:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   ******************************************************************************
+   3:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @file    stm32f4xx_hal_msp_template.c
+   4:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @author  MCD Application Team
+   5:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @brief   This file contains the HAL System and Peripheral (PPP) MSP initialization
+   6:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   *          and de-initialization functions.
+   7:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   *          It should be copied to the application folder and renamed into 'stm32f4xx_hal_msp.c'. 
+   8:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   ******************************************************************************
+   9:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @attention
+  10:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   *
+  11:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  12:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * All rights reserved.</center></h2>
+  13:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   *
+  14:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  15:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * the "License"; You may not use this file except in compliance with the
+  16:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * License. You may obtain a copy of the License at:
+  17:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  18:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   *
+  19:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   ******************************************************************************
+  20:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   */ 
+  21:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  22:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /* Includes ------------------------------------------------------------------*/
+  23:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** #include "stm32f4xx_hal.h"
+  24:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  25:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  26:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @{
+  27:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   */
+  28:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  29:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /** @defgroup HAL_MSP HAL MSP
+  30:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @brief HAL MSP module.
+  31:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @{
+ARM GAS  /tmp/ccZSl5eq.s 			page 2
+
+
+  32:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   */
+  33:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  34:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /* Private typedef -----------------------------------------------------------*/
+  35:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /* Private define ------------------------------------------------------------*/
+  36:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /* Private macro -------------------------------------------------------------*/
+  37:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /* Private variables ---------------------------------------------------------*/
+  38:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /* Private function prototypes -----------------------------------------------*/
+  39:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /* Private functions ---------------------------------------------------------*/
+  40:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  41:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /** @defgroup HAL_MSP_Private_Functions HAL MSP Private Functions
+  42:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @{
+  43:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   */
+  44:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  45:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /**
+  46:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @brief  Initializes the Global MSP.
+  47:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @note   This function is called from HAL_Init() function to perform system
+  48:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   *         level initialization (GPIOs, clock, DMA, interrupt).
+  49:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @retval None
+  50:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   */
+  51:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** void HAL_MspInit(void)
+  52:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** {
+  28              		.loc 1 52 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33 0000 7047     		bx	lr
+  34              		.cfi_endproc
+  35              	.LFE130:
+  37              		.section	.text.HAL_MspDeInit,"ax",%progbits
+  38              		.align	1
+  39              		.global	HAL_MspDeInit
+  40              		.syntax unified
+  41              		.thumb
+  42              		.thumb_func
+  43              		.fpu fpv4-sp-d16
+  45              	HAL_MspDeInit:
+  46              	.LFB131:
+  53:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  54:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** }
+  55:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  56:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /**
+  57:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @brief  DeInitializes the Global MSP.
+  58:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @note   This functiona is called from HAL_DeInit() function to perform system
+  59:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   *         level de-initialization (GPIOs, clock, DMA, interrupt).
+  60:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @retval None
+  61:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   */
+  62:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** void HAL_MspDeInit(void)
+  63:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** {
+  47              		.loc 1 63 0
+  48              		.cfi_startproc
+  49              		@ args = 0, pretend = 0, frame = 0
+  50              		@ frame_needed = 0, uses_anonymous_args = 0
+  51              		@ link register save eliminated.
+  52 0000 7047     		bx	lr
+  53              		.cfi_endproc
+  54              	.LFE131:
+ARM GAS  /tmp/ccZSl5eq.s 			page 3
+
+
+  56              		.section	.text.HAL_PPP_MspInit,"ax",%progbits
+  57              		.align	1
+  58              		.global	HAL_PPP_MspInit
+  59              		.syntax unified
+  60              		.thumb
+  61              		.thumb_func
+  62              		.fpu fpv4-sp-d16
+  64              	HAL_PPP_MspInit:
+  65              	.LFB132:
+  64:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  65:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** }
+  66:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  67:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /**
+  68:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @brief  Initializes the PPP MSP.
+  69:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @note   This functiona is called from HAL_PPP_Init() function to perform 
+  70:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   *         peripheral(PPP) system level initialization (GPIOs, clock, DMA, interrupt)
+  71:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @retval None
+  72:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   */
+  73:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** void HAL_PPP_MspInit(void)
+  74:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** {
+  66              		.loc 1 74 0
+  67              		.cfi_startproc
+  68              		@ args = 0, pretend = 0, frame = 0
+  69              		@ frame_needed = 0, uses_anonymous_args = 0
+  70              		@ link register save eliminated.
+  71 0000 7047     		bx	lr
+  72              		.cfi_endproc
+  73              	.LFE132:
+  75              		.section	.text.HAL_PPP_MspDeInit,"ax",%progbits
+  76              		.align	1
+  77              		.global	HAL_PPP_MspDeInit
+  78              		.syntax unified
+  79              		.thumb
+  80              		.thumb_func
+  81              		.fpu fpv4-sp-d16
+  83              	HAL_PPP_MspDeInit:
+  84              	.LFB133:
+  75:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  76:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** }
+  77:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** 
+  78:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** /**
+  79:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @brief  DeInitializes the PPP MSP.
+  80:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @note   This functiona is called from HAL_PPP_DeInit() function to perform 
+  81:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   *         peripheral(PPP) system level de-initialization (GPIOs, clock, DMA, interrupt)
+  82:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   * @retval None
+  83:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c ****   */
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** void HAL_PPP_MspDeInit(void)
+  85:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_msp_template.c **** {
+  85              		.loc 1 85 0
+  86              		.cfi_startproc
+  87              		@ args = 0, pretend = 0, frame = 0
+  88              		@ frame_needed = 0, uses_anonymous_args = 0
+  89              		@ link register save eliminated.
+  90 0000 7047     		bx	lr
+  91              		.cfi_endproc
+  92              	.LFE133:
+  94              		.text
+ARM GAS  /tmp/ccZSl5eq.s 			page 4
+
+
+  95              	.Letext0:
+  96              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+  97              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+  98              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+  99              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 100              		.file 6 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ARM GAS  /tmp/ccZSl5eq.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal_msp_template.c
+     /tmp/ccZSl5eq.s:18     .text.HAL_MspInit:0000000000000000 $t
+     /tmp/ccZSl5eq.s:25     .text.HAL_MspInit:0000000000000000 HAL_MspInit
+     /tmp/ccZSl5eq.s:38     .text.HAL_MspDeInit:0000000000000000 $t
+     /tmp/ccZSl5eq.s:45     .text.HAL_MspDeInit:0000000000000000 HAL_MspDeInit
+     /tmp/ccZSl5eq.s:57     .text.HAL_PPP_MspInit:0000000000000000 $t
+     /tmp/ccZSl5eq.s:64     .text.HAL_PPP_MspInit:0000000000000000 HAL_PPP_MspInit
+     /tmp/ccZSl5eq.s:76     .text.HAL_PPP_MspDeInit:0000000000000000 $t
+     /tmp/ccZSl5eq.s:83     .text.HAL_PPP_MspDeInit:0000000000000000 HAL_PPP_MspDeInit
+                     .debug_frame:0000000000000010 $d
+
+NO UNDEFINED SYMBOLS

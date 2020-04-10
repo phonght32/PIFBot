@@ -1,0 +1,276 @@
+ARM GAS  /tmp/ccm4cIYQ.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_it.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.NMI_Handler,"ax",%progbits
+  18              		.align	1
+  19              		.global	NMI_Handler
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	NMI_Handler:
+  26              	.LFB135:
+  27              		.file 1 "/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c"
+   1:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** #include "stm32f4xx_hal.h"
+   2:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** #include "stm32f4xx_it.h"
+   3:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+   4:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** #include "freertos/FreeRTOS.h"
+   5:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** #include "freertos/task.h"
+   6:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+   7:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+   8:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** extern DMA_HandleTypeDef hdma_uart4_rx;
+   9:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** extern DMA_HandleTypeDef hdma_uart4_tx;
+  10:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** extern UART_HandleTypeDef huart4;
+  11:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  12:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** void NMI_Handler(void)
+  13:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** {
+  28              		.loc 1 13 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33 0000 7047     		bx	lr
+  34              		.cfi_endproc
+  35              	.LFE135:
+  37              		.section	.text.HardFault_Handler,"ax",%progbits
+  38              		.align	1
+  39              		.global	HardFault_Handler
+  40              		.syntax unified
+  41              		.thumb
+  42              		.thumb_func
+  43              		.fpu fpv4-sp-d16
+  45              	HardFault_Handler:
+  46              	.LFB136:
+  14:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+ARM GAS  /tmp/ccm4cIYQ.s 			page 2
+
+
+  15:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** }
+  16:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  17:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** void HardFault_Handler(void)
+  18:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** {
+  47              		.loc 1 18 0
+  48              		.cfi_startproc
+  49              		@ Volatile: function does not return.
+  50              		@ args = 0, pretend = 0, frame = 0
+  51              		@ frame_needed = 0, uses_anonymous_args = 0
+  52              		@ link register save eliminated.
+  53              	.L3:
+  54 0000 FEE7     		b	.L3
+  55              		.cfi_endproc
+  56              	.LFE136:
+  58              		.section	.text.MemManage_Handler,"ax",%progbits
+  59              		.align	1
+  60              		.global	MemManage_Handler
+  61              		.syntax unified
+  62              		.thumb
+  63              		.thumb_func
+  64              		.fpu fpv4-sp-d16
+  66              	MemManage_Handler:
+  67              	.LFB137:
+  19:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     while (1)
+  20:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     {
+  21:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  22:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     }
+  23:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** }
+  24:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  25:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** void MemManage_Handler(void)
+  26:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** {
+  68              		.loc 1 26 0
+  69              		.cfi_startproc
+  70              		@ Volatile: function does not return.
+  71              		@ args = 0, pretend = 0, frame = 0
+  72              		@ frame_needed = 0, uses_anonymous_args = 0
+  73              		@ link register save eliminated.
+  74              	.L5:
+  75 0000 FEE7     		b	.L5
+  76              		.cfi_endproc
+  77              	.LFE137:
+  79              		.section	.text.BusFault_Handler,"ax",%progbits
+  80              		.align	1
+  81              		.global	BusFault_Handler
+  82              		.syntax unified
+  83              		.thumb
+  84              		.thumb_func
+  85              		.fpu fpv4-sp-d16
+  87              	BusFault_Handler:
+  88              	.LFB138:
+  27:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     while (1)
+  28:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     {
+  29:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  30:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     }
+  31:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** }
+  32:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  33:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** void BusFault_Handler(void)
+ARM GAS  /tmp/ccm4cIYQ.s 			page 3
+
+
+  34:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** {
+  89              		.loc 1 34 0
+  90              		.cfi_startproc
+  91              		@ Volatile: function does not return.
+  92              		@ args = 0, pretend = 0, frame = 0
+  93              		@ frame_needed = 0, uses_anonymous_args = 0
+  94              		@ link register save eliminated.
+  95              	.L7:
+  96 0000 FEE7     		b	.L7
+  97              		.cfi_endproc
+  98              	.LFE138:
+ 100              		.section	.text.UsageFault_Handler,"ax",%progbits
+ 101              		.align	1
+ 102              		.global	UsageFault_Handler
+ 103              		.syntax unified
+ 104              		.thumb
+ 105              		.thumb_func
+ 106              		.fpu fpv4-sp-d16
+ 108              	UsageFault_Handler:
+ 109              	.LFB139:
+  35:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     while (1)
+  36:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     {
+  37:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  38:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     }
+  39:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** }
+  40:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  41:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** void UsageFault_Handler(void)
+  42:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** {
+ 110              		.loc 1 42 0
+ 111              		.cfi_startproc
+ 112              		@ Volatile: function does not return.
+ 113              		@ args = 0, pretend = 0, frame = 0
+ 114              		@ frame_needed = 0, uses_anonymous_args = 0
+ 115              		@ link register save eliminated.
+ 116              	.L9:
+ 117 0000 FEE7     		b	.L9
+ 118              		.cfi_endproc
+ 119              	.LFE139:
+ 121              		.section	.text.DebugMon_Handler,"ax",%progbits
+ 122              		.align	1
+ 123              		.global	DebugMon_Handler
+ 124              		.syntax unified
+ 125              		.thumb
+ 126              		.thumb_func
+ 127              		.fpu fpv4-sp-d16
+ 129              	DebugMon_Handler:
+ 130              	.LFB140:
+  43:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     while (1)
+  44:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     {
+  45:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  46:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     }
+  47:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** }
+  48:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  49:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** void DebugMon_Handler(void)
+  50:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** {
+ 131              		.loc 1 50 0
+ 132              		.cfi_startproc
+ARM GAS  /tmp/ccm4cIYQ.s 			page 4
+
+
+ 133              		@ args = 0, pretend = 0, frame = 0
+ 134              		@ frame_needed = 0, uses_anonymous_args = 0
+ 135              		@ link register save eliminated.
+ 136 0000 7047     		bx	lr
+ 137              		.cfi_endproc
+ 138              	.LFE140:
+ 140              		.section	.text.SysTick_Handler,"ax",%progbits
+ 141              		.align	1
+ 142              		.global	SysTick_Handler
+ 143              		.syntax unified
+ 144              		.thumb
+ 145              		.thumb_func
+ 146              		.fpu fpv4-sp-d16
+ 148              	SysTick_Handler:
+ 149              	.LFB141:
+  51:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  52:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** }
+  53:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** 
+  54:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** void SysTick_Handler(void)
+  55:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** {
+ 150              		.loc 1 55 0
+ 151              		.cfi_startproc
+ 152              		@ args = 0, pretend = 0, frame = 0
+ 153              		@ frame_needed = 0, uses_anonymous_args = 0
+ 154              		.loc 1 55 0
+ 155 0000 08B5     		push	{r3, lr}
+ 156              	.LCFI0:
+ 157              		.cfi_def_cfa_offset 8
+ 158              		.cfi_offset 3, -8
+ 159              		.cfi_offset 14, -4
+  56:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     HAL_IncTick();
+ 160              		.loc 1 56 0
+ 161 0002 FFF7FEFF 		bl	HAL_IncTick
+ 162              	.LVL0:
+  57:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** #if (INCLUDE_xTaskGetSchedulerState == 1 )
+  58:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+ 163              		.loc 1 58 0
+ 164 0006 FFF7FEFF 		bl	xTaskGetSchedulerState
+ 165              	.LVL1:
+ 166 000a 0128     		cmp	r0, #1
+ 167 000c 01D0     		beq	.L11
+  59:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****     {
+  60:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c **** #endif /* INCLUDE_xTaskGetSchedulerState */
+  61:/home/phong/Documents/thesis/stm32f4/main/stm32f4xx_it.c ****         xPortSysTickHandler();
+ 168              		.loc 1 61 0
+ 169 000e FFF7FEFF 		bl	xPortSysTickHandler
+ 170              	.LVL2:
+ 171              	.L11:
+ 172 0012 08BD     		pop	{r3, pc}
+ 173              		.cfi_endproc
+ 174              	.LFE141:
+ 176              		.text
+ 177              	.Letext0:
+ 178              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 179              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 180              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 181              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ARM GAS  /tmp/ccm4cIYQ.s 			page 5
+
+
+ 182              		.file 6 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 183              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 184              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 185              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 186              		.file 10 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ 187              		.file 11 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/p
+ 188              		.file 12 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/task.h
+ 189              		.file 13 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/FreeRT
+ARM GAS  /tmp/ccm4cIYQ.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_it.c
+     /tmp/ccm4cIYQ.s:18     .text.NMI_Handler:0000000000000000 $t
+     /tmp/ccm4cIYQ.s:25     .text.NMI_Handler:0000000000000000 NMI_Handler
+     /tmp/ccm4cIYQ.s:38     .text.HardFault_Handler:0000000000000000 $t
+     /tmp/ccm4cIYQ.s:45     .text.HardFault_Handler:0000000000000000 HardFault_Handler
+     /tmp/ccm4cIYQ.s:59     .text.MemManage_Handler:0000000000000000 $t
+     /tmp/ccm4cIYQ.s:66     .text.MemManage_Handler:0000000000000000 MemManage_Handler
+     /tmp/ccm4cIYQ.s:80     .text.BusFault_Handler:0000000000000000 $t
+     /tmp/ccm4cIYQ.s:87     .text.BusFault_Handler:0000000000000000 BusFault_Handler
+     /tmp/ccm4cIYQ.s:101    .text.UsageFault_Handler:0000000000000000 $t
+     /tmp/ccm4cIYQ.s:108    .text.UsageFault_Handler:0000000000000000 UsageFault_Handler
+     /tmp/ccm4cIYQ.s:122    .text.DebugMon_Handler:0000000000000000 $t
+     /tmp/ccm4cIYQ.s:129    .text.DebugMon_Handler:0000000000000000 DebugMon_Handler
+     /tmp/ccm4cIYQ.s:141    .text.SysTick_Handler:0000000000000000 $t
+     /tmp/ccm4cIYQ.s:148    .text.SysTick_Handler:0000000000000000 SysTick_Handler
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_IncTick
+xTaskGetSchedulerState
+xPortSysTickHandler

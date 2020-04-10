@@ -1,0 +1,895 @@
+ARM GAS  /tmp/ccl0612t.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"gpio.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.gpio_config,"ax",%progbits
+  18              		.align	1
+  19              		.global	gpio_config
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	gpio_config:
+  26              	.LFB133:
+  27              		.file 1 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c"
+   1:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** #include "driver/gpio.h"
+   2:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+   3:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** #define GPIO_SPEED_FREQ_DEFAULT     GPIO_SPEED_FREQ_VERY_HIGH   /*!< GPIO speed frequency default *
+   4:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** #define GPIO_LEVEL_DEFAULT          0                           /*!< GPIO level default */
+   5:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+   6:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** #define GPIO_INIT_ERR_STR           "gpio init error"
+   7:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** #define GPIO_SET_LEVEL_ERR_STR      "gpio set level error"
+   8:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** #define GPIO_TOGGLE_LEVEL_ERR_STR   "gpio toggle level error"
+   9:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+  10:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** static const char* GPIO_TAG = "DRIVER GPIO";
+  11:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** #define GPIO_CHECK(a, str, ret)  if(!(a)) {                                             \
+  12:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         STM_LOGE(GPIO_TAG,"%s:%d (%s):%s", __FILE__, __LINE__, __FUNCTION__, str);      \
+  13:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         return (ret);                                                                  \
+  14:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         }
+  15:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+  16:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** /*
+  17:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****  * GPIO Port Mapping Table.
+  18:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****  */
+  19:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** static GPIO_TypeDef *GPIOx_MAPPING[GPIO_PORT_MAX] = {
+  20:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOA,          /*!< HAL GPIO Port A define */
+  21:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOB,          /*!< HAL GPIO Port B define */
+  22:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOC,          /*!< HAL GPIO Port C define */
+  23:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOD,          /*!< HAL GPIO Port D define */
+  24:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOE,          /*!< HAL GPIO Port E define */
+  25:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOF,          /*!< HAL GPIO Port F define */
+  26:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOG,          /*!< HAL GPIO Port G define */
+  27:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOH,          /*!< HAL GPIO Port H define */
+  28:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOI           /*!< HAL GPIO Port I define */
+  29:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** };
+  30:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+  31:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** /*
+ARM GAS  /tmp/ccl0612t.s 			page 2
+
+
+  32:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****  * GPIO Pin Mapping Table.
+  33:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****  */
+  34:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** static uint16_t GPIO_PIN_x_MAPPING[GPIO_NUM_MAX] = {
+  35:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_0,     /*!< HAL GPIO Pin 0 define */
+  36:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_1,     /*!< HAL GPIO Pin 1 define */
+  37:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_2,     /*!< HAL GPIO Pin 2 define */
+  38:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_3,     /*!< HAL GPIO Pin 3 define */
+  39:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_4,     /*!< HAL GPIO Pin 4 define */
+  40:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_5,     /*!< HAL GPIO Pin 5 define */
+  41:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_6,     /*!< HAL GPIO Pin 6 define */
+  42:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_7,     /*!< HAL GPIO Pin 7 define */
+  43:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_8,     /*!< HAL GPIO Pin 8 define */
+  44:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_9,     /*!< HAL GPIO Pin 9 define */
+  45:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_10,    /*!< HAL GPIO Pin 10 define */
+  46:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_11,    /*!< HAL GPIO Pin 11 define */
+  47:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_12,    /*!< HAL GPIO Pin 12 define */
+  48:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_13,    /*!< HAL GPIO Pin 13 define */
+  49:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_14,    /*!< HAL GPIO Pin 14 define */
+  50:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_15     /*!< HAL GPIO Pin 15 define */
+  51:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** };
+  52:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+  53:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** /*
+  54:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****  * GPIO Pull Register Mapping Table.
+  55:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****  */
+  56:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** static uint32_t GPIO_REG_PULL_MAPPING[GPIO_REG_PULL_MAX] = {
+  57:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_NOPULL,    /*!< HAL GPIO no pull registor define */
+  58:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PULLUP,    /*!< HAL GPIO pull up registor define */
+  59:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PULLDOWN   /*!< HAL GPIO pull down registor define */
+  60:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** };
+  61:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+  62:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** /*
+  63:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****  * GPIO RCC_APBENR Register Mapping Table.
+  64:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****  */
+  65:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** static uint32_t RCC_AHB1ENR_GPIOxEN_MAPPING[GPIO_PORT_MAX] = {
+  66:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     RCC_AHB1ENR_GPIOAEN,    /*!< HAL GPIO Port A RCC AHBENR Register define */
+  67:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     RCC_AHB1ENR_GPIOBEN,    /*!< HAL GPIO Port B RCC AHBENR Register define */
+  68:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     RCC_AHB1ENR_GPIOCEN,    /*!< HAL GPIO Port C RCC AHBENR Register define */
+  69:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     RCC_AHB1ENR_GPIODEN,    /*!< HAL GPIO Port D RCC AHBENR Register define */
+  70:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     RCC_AHB1ENR_GPIOEEN,    /*!< HAL GPIO Port E RCC AHBENR Register define */
+  71:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     RCC_AHB1ENR_GPIOFEN,    /*!< HAL GPIO Port F RCC AHBENR Register define */
+  72:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     RCC_AHB1ENR_GPIOGEN,    /*!< HAL GPIO Port G RCC AHBENR Register define */
+  73:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     RCC_AHB1ENR_GPIOHEN,    /*!< HAL GPIO Port H RCC AHBENR Register define */
+  74:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     RCC_AHB1ENR_GPIOIEN,    /*!< HAL GPIO Port I RCC AHBENR Register define */
+  75:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** };
+  76:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+  77:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** stm_err_t gpio_config(gpio_config_t *config)
+  78:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** {
+  28              		.loc 1 78 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 24
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 20
+  36              		.cfi_offset 4, -20
+  37              		.cfi_offset 5, -16
+ARM GAS  /tmp/ccl0612t.s 			page 3
+
+
+  38              		.cfi_offset 6, -12
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+  41 0002 8DB0     		sub	sp, sp, #52
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 72
+  79:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     /* Check input parameters */
+  80:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(config, GPIO_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+  44              		.loc 1 80 0
+  45 0004 E8B1     		cbz	r0, .L11
+  46 0006 0446     		mov	r4, r0
+  81:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(config->gpio_port < GPIO_PORT_MAX, GPIO_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+  47              		.loc 1 81 0
+  48 0008 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+  49 000a 082B     		cmp	r3, #8
+  50 000c 2DD8     		bhi	.L12
+  82:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(config->gpio_num < GPIO_NUM_MAX, GPIO_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+  51              		.loc 1 82 0
+  52 000e 4278     		ldrb	r2, [r0, #1]	@ zero_extendqisi2
+  53 0010 0F2A     		cmp	r2, #15
+  54 0012 3FD8     		bhi	.L13
+  83:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(config->mode < GPIO_MODE_MAX, GPIO_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+  55              		.loc 1 83 0
+  56 0014 8178     		ldrb	r1, [r0, #2]	@ zero_extendqisi2
+  57 0016 0129     		cmp	r1, #1
+  58 0018 50D9     		bls	.L6
+  59              		.loc 1 83 0 is_stmt 0 discriminator 4
+  60 001a FFF7FEFF 		bl	stm_log_timestamp
+  61              	.LVL1:
+  62 001e 5349     		ldr	r1, .L17
+  63 0020 534B     		ldr	r3, .L17+4
+  64 0022 0493     		str	r3, [sp, #16]
+  65 0024 534B     		ldr	r3, .L17+8
+  66 0026 0393     		str	r3, [sp, #12]
+  67 0028 5323     		movs	r3, #83
+  68 002a 0293     		str	r3, [sp, #8]
+  69 002c 524B     		ldr	r3, .L17+12
+  70 002e 0193     		str	r3, [sp, #4]
+  71 0030 0091     		str	r1, [sp]
+  72 0032 0346     		mov	r3, r0
+  73 0034 514A     		ldr	r2, .L17+16
+  74 0036 0120     		movs	r0, #1
+  75 0038 FFF7FEFF 		bl	stm_log_write
+  76              	.LVL2:
+  77 003c 4FF48170 		mov	r0, #258
+  78 0040 26E0     		b	.L1
+  79              	.LVL3:
+  80              	.L11:
+  80:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(config->gpio_port < GPIO_PORT_MAX, GPIO_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+  81              		.loc 1 80 0 is_stmt 1 discriminator 4
+  82 0042 FFF7FEFF 		bl	stm_log_timestamp
+  83              	.LVL4:
+  84 0046 4949     		ldr	r1, .L17
+  85 0048 494B     		ldr	r3, .L17+4
+  86 004a 0493     		str	r3, [sp, #16]
+  87 004c 494B     		ldr	r3, .L17+8
+  88 004e 0393     		str	r3, [sp, #12]
+ARM GAS  /tmp/ccl0612t.s 			page 4
+
+
+  89 0050 5023     		movs	r3, #80
+  90 0052 0293     		str	r3, [sp, #8]
+  91 0054 484B     		ldr	r3, .L17+12
+  92 0056 0193     		str	r3, [sp, #4]
+  93 0058 0091     		str	r1, [sp]
+  94 005a 0346     		mov	r3, r0
+  95 005c 474A     		ldr	r2, .L17+16
+  96 005e 0120     		movs	r0, #1
+  97 0060 FFF7FEFF 		bl	stm_log_write
+  98              	.LVL5:
+  99 0064 4FF48170 		mov	r0, #258
+ 100 0068 12E0     		b	.L1
+ 101              	.LVL6:
+ 102              	.L12:
+  81:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(config->gpio_num < GPIO_NUM_MAX, GPIO_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+ 103              		.loc 1 81 0 discriminator 4
+ 104 006a FFF7FEFF 		bl	stm_log_timestamp
+ 105              	.LVL7:
+ 106 006e 3F49     		ldr	r1, .L17
+ 107 0070 3F4B     		ldr	r3, .L17+4
+ 108 0072 0493     		str	r3, [sp, #16]
+ 109 0074 3F4B     		ldr	r3, .L17+8
+ 110 0076 0393     		str	r3, [sp, #12]
+ 111 0078 5123     		movs	r3, #81
+ 112 007a 0293     		str	r3, [sp, #8]
+ 113 007c 3E4B     		ldr	r3, .L17+12
+ 114 007e 0193     		str	r3, [sp, #4]
+ 115 0080 0091     		str	r1, [sp]
+ 116 0082 0346     		mov	r3, r0
+ 117 0084 3D4A     		ldr	r2, .L17+16
+ 118 0086 0120     		movs	r0, #1
+ 119 0088 FFF7FEFF 		bl	stm_log_write
+ 120              	.LVL8:
+ 121 008c 4FF48170 		mov	r0, #258
+ 122              	.LVL9:
+ 123              	.L1:
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(config->pull_mode < GPIO_REG_PULL_MAX, GPIO_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+  85:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+  86:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     /* Mapping GPIO Parameters */
+  87:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     uint32_t RCC_AHB1ENR_GPIOxEN;
+  88:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     uint16_t GPIO_PIN_x;
+  89:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_TypeDef *GPIOx;
+  90:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     uint32_t GPIO_REG_PULL_TYPE;
+  91:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+  92:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     RCC_AHB1ENR_GPIOxEN = RCC_AHB1ENR_GPIOxEN_MAPPING[config->gpio_port];
+  93:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_x = GPIO_PIN_x_MAPPING[config->gpio_num];
+  94:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOx = GPIOx_MAPPING[config->gpio_port];
+  95:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_REG_PULL_TYPE = GPIO_REG_PULL_MAPPING[config->pull_mode];
+  96:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+  97:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     /* Enable GPIO Port clock */
+  98:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     uint32_t tmpreg = 0x00;
+  99:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOxEN);
+ 100:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     tmpreg = READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOxEN);
+ 101:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     UNUSED(tmpreg);
+ 102:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+ 103:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     /* Initialize GPIO function */
+ 104:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_InitTypeDef GPIO_InitStruct = {0};
+ARM GAS  /tmp/ccl0612t.s 			page 5
+
+
+ 105:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     if (config->mode == GPIO_INPUT)        /*!< Input mode configuration */
+ 106:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     {
+ 107:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Pin = GPIO_PIN_x;
+ 108:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 109:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Pull = GPIO_REG_PULL_TYPE;
+ 110:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
+ 111:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     }
+ 112:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     if (config->mode == GPIO_OUTPUT)       /*!< Output mode configuration */
+ 113:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     {
+ 114:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         HAL_GPIO_WritePin(GPIOx, GPIO_PIN_x, GPIO_PIN_RESET);
+ 115:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Pin = GPIO_PIN_x;
+ 116:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 117:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Pull = GPIO_REG_PULL_TYPE;
+ 118:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_DEFAULT;
+ 119:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
+ 120:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+ 121:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         /* Set GPIO default level */
+ 122:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         HAL_GPIO_WritePin(GPIOx_MAPPING[config->gpio_port], GPIO_PIN_x_MAPPING[config->gpio_num], 0
+ 123:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     }
+ 124:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+ 125:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     return STM_OK;
+ 126:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** }
+ 124              		.loc 1 126 0
+ 125 0090 0DB0     		add	sp, sp, #52
+ 126              	.LCFI2:
+ 127              		.cfi_remember_state
+ 128              		.cfi_def_cfa_offset 20
+ 129              		@ sp needed
+ 130 0092 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 131              	.LVL10:
+ 132              	.L13:
+ 133              	.LCFI3:
+ 134              		.cfi_restore_state
+  82:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(config->mode < GPIO_MODE_MAX, GPIO_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+ 135              		.loc 1 82 0 discriminator 4
+ 136 0094 FFF7FEFF 		bl	stm_log_timestamp
+ 137              	.LVL11:
+ 138 0098 3449     		ldr	r1, .L17
+ 139 009a 354B     		ldr	r3, .L17+4
+ 140 009c 0493     		str	r3, [sp, #16]
+ 141 009e 354B     		ldr	r3, .L17+8
+ 142 00a0 0393     		str	r3, [sp, #12]
+ 143 00a2 5223     		movs	r3, #82
+ 144 00a4 0293     		str	r3, [sp, #8]
+ 145 00a6 344B     		ldr	r3, .L17+12
+ 146 00a8 0193     		str	r3, [sp, #4]
+ 147 00aa 0091     		str	r1, [sp]
+ 148 00ac 0346     		mov	r3, r0
+ 149 00ae 334A     		ldr	r2, .L17+16
+ 150 00b0 0120     		movs	r0, #1
+ 151 00b2 FFF7FEFF 		bl	stm_log_write
+ 152              	.LVL12:
+ 153 00b6 4FF48170 		mov	r0, #258
+ 154 00ba E9E7     		b	.L1
+ 155              	.LVL13:
+ 156              	.L6:
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(config->pull_mode < GPIO_REG_PULL_MAX, GPIO_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+ARM GAS  /tmp/ccl0612t.s 			page 6
+
+
+ 157              		.loc 1 84 0
+ 158 00bc C178     		ldrb	r1, [r0, #3]	@ zero_extendqisi2
+ 159 00be 0229     		cmp	r1, #2
+ 160 00c0 1DD8     		bhi	.L14
+  92:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_PIN_x = GPIO_PIN_x_MAPPING[config->gpio_num];
+ 161              		.loc 1 92 0
+ 162 00c2 2F48     		ldr	r0, .L17+20
+ 163              	.LVL14:
+ 164 00c4 50F82300 		ldr	r0, [r0, r3, lsl #2]
+ 165              	.LVL15:
+  93:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIOx = GPIOx_MAPPING[config->gpio_port];
+ 166              		.loc 1 93 0
+ 167 00c8 2E4D     		ldr	r5, .L17+24
+ 168 00ca 35F81250 		ldrh	r5, [r5, r2, lsl #1]
+ 169              	.LVL16:
+  94:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_REG_PULL_TYPE = GPIO_REG_PULL_MAPPING[config->pull_mode];
+ 170              		.loc 1 94 0
+ 171 00ce 2E4A     		ldr	r2, .L17+28
+ 172 00d0 52F82360 		ldr	r6, [r2, r3, lsl #2]
+ 173              	.LVL17:
+  95:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+ 174              		.loc 1 95 0
+ 175 00d4 2D4B     		ldr	r3, .L17+32
+ 176 00d6 53F82170 		ldr	r7, [r3, r1, lsl #2]
+ 177              	.LVL18:
+  99:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     tmpreg = READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOxEN);
+ 178              		.loc 1 99 0
+ 179 00da 2D4B     		ldr	r3, .L17+36
+ 180 00dc 1A6B     		ldr	r2, [r3, #48]
+ 181 00de 0243     		orrs	r2, r2, r0
+ 182 00e0 1A63     		str	r2, [r3, #48]
+ 100:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     UNUSED(tmpreg);
+ 183              		.loc 1 100 0
+ 184 00e2 1B6B     		ldr	r3, [r3, #48]
+ 185              	.LVL19:
+ 104:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     if (config->mode == GPIO_INPUT)        /*!< Input mode configuration */
+ 186              		.loc 1 104 0
+ 187 00e4 0023     		movs	r3, #0
+ 188 00e6 0793     		str	r3, [sp, #28]
+ 189 00e8 0893     		str	r3, [sp, #32]
+ 190 00ea 0993     		str	r3, [sp, #36]
+ 191 00ec 0A93     		str	r3, [sp, #40]
+ 192 00ee 0B93     		str	r3, [sp, #44]
+ 105:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     {
+ 193              		.loc 1 105 0
+ 194 00f0 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 195 00f2 C3B1     		cbz	r3, .L15
+ 196              	.LVL20:
+ 197              	.L8:
+ 112:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     {
+ 198              		.loc 1 112 0
+ 199 00f4 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 200 00f6 012B     		cmp	r3, #1
+ 201 00f8 1CD0     		beq	.L16
+ 125:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** }
+ 202              		.loc 1 125 0
+ 203 00fa 0020     		movs	r0, #0
+ARM GAS  /tmp/ccl0612t.s 			page 7
+
+
+ 204 00fc C8E7     		b	.L1
+ 205              	.LVL21:
+ 206              	.L14:
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+ 207              		.loc 1 84 0 discriminator 4
+ 208 00fe FFF7FEFF 		bl	stm_log_timestamp
+ 209              	.LVL22:
+ 210 0102 1A49     		ldr	r1, .L17
+ 211 0104 1A4B     		ldr	r3, .L17+4
+ 212 0106 0493     		str	r3, [sp, #16]
+ 213 0108 1A4B     		ldr	r3, .L17+8
+ 214 010a 0393     		str	r3, [sp, #12]
+ 215 010c 5423     		movs	r3, #84
+ 216 010e 0293     		str	r3, [sp, #8]
+ 217 0110 194B     		ldr	r3, .L17+12
+ 218 0112 0193     		str	r3, [sp, #4]
+ 219 0114 0091     		str	r1, [sp]
+ 220 0116 0346     		mov	r3, r0
+ 221 0118 184A     		ldr	r2, .L17+16
+ 222 011a 0120     		movs	r0, #1
+ 223 011c FFF7FEFF 		bl	stm_log_write
+ 224              	.LVL23:
+ 225 0120 4FF48170 		mov	r0, #258
+ 226 0124 B4E7     		b	.L1
+ 227              	.LVL24:
+ 228              	.L15:
+ 107:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 229              		.loc 1 107 0
+ 230 0126 0795     		str	r5, [sp, #28]
+ 109:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
+ 231              		.loc 1 109 0
+ 232 0128 0997     		str	r7, [sp, #36]
+ 110:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     }
+ 233              		.loc 1 110 0
+ 234 012a 07A9     		add	r1, sp, #28
+ 235 012c 3046     		mov	r0, r6
+ 236              	.LVL25:
+ 237 012e FFF7FEFF 		bl	HAL_GPIO_Init
+ 238              	.LVL26:
+ 239 0132 DFE7     		b	.L8
+ 240              	.L16:
+ 114:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Pin = GPIO_PIN_x;
+ 241              		.loc 1 114 0
+ 242 0134 0022     		movs	r2, #0
+ 243 0136 2946     		mov	r1, r5
+ 244 0138 3046     		mov	r0, r6
+ 245 013a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 246              	.LVL27:
+ 115:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 247              		.loc 1 115 0
+ 248 013e 0795     		str	r5, [sp, #28]
+ 116:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Pull = GPIO_REG_PULL_TYPE;
+ 249              		.loc 1 116 0
+ 250 0140 0123     		movs	r3, #1
+ 251 0142 0893     		str	r3, [sp, #32]
+ 117:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_DEFAULT;
+ 252              		.loc 1 117 0
+ARM GAS  /tmp/ccl0612t.s 			page 8
+
+
+ 253 0144 0997     		str	r7, [sp, #36]
+ 118:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****         HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
+ 254              		.loc 1 118 0
+ 255 0146 0323     		movs	r3, #3
+ 256 0148 0A93     		str	r3, [sp, #40]
+ 119:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+ 257              		.loc 1 119 0
+ 258 014a 07A9     		add	r1, sp, #28
+ 259 014c 3046     		mov	r0, r6
+ 260 014e FFF7FEFF 		bl	HAL_GPIO_Init
+ 261              	.LVL28:
+ 122:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     }
+ 262              		.loc 1 122 0
+ 263 0152 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 264 0154 6178     		ldrb	r1, [r4, #1]	@ zero_extendqisi2
+ 265 0156 0022     		movs	r2, #0
+ 266 0158 0A4B     		ldr	r3, .L17+24
+ 267 015a 33F81110 		ldrh	r1, [r3, r1, lsl #1]
+ 268 015e 0A4B     		ldr	r3, .L17+28
+ 269 0160 53F82000 		ldr	r0, [r3, r0, lsl #2]
+ 270 0164 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 271              	.LVL29:
+ 125:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** }
+ 272              		.loc 1 125 0
+ 273 0168 0020     		movs	r0, #0
+ 274 016a 91E7     		b	.L1
+ 275              	.L18:
+ 276              		.align	2
+ 277              	.L17:
+ 278 016c 28000000 		.word	.LC1
+ 279 0170 34000000 		.word	.LC2
+ 280 0174 00000000 		.word	.LANCHOR0
+ 281 0178 44000000 		.word	.LC3
+ 282 017c 00000000 		.word	.LC0
+ 283 0180 00000000 		.word	.LANCHOR1
+ 284 0184 00000000 		.word	.LANCHOR2
+ 285 0188 00000000 		.word	.LANCHOR3
+ 286 018c 00000000 		.word	.LANCHOR4
+ 287 0190 00380240 		.word	1073887232
+ 288              		.cfi_endproc
+ 289              	.LFE133:
+ 291              		.section	.text.gpio_set_level,"ax",%progbits
+ 292              		.align	1
+ 293              		.global	gpio_set_level
+ 294              		.syntax unified
+ 295              		.thumb
+ 296              		.thumb_func
+ 297              		.fpu fpv4-sp-d16
+ 299              	gpio_set_level:
+ 300              	.LFB134:
+ 127:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+ 128:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** stm_err_t gpio_set_level(gpio_port_t gpio_port, gpio_num_t gpio_num, bool state)
+ 129:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** {
+ 301              		.loc 1 129 0
+ 302              		.cfi_startproc
+ 303              		@ args = 0, pretend = 0, frame = 0
+ 304              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccl0612t.s 			page 9
+
+
+ 305              	.LVL30:
+ 306 0000 00B5     		push	{lr}
+ 307              	.LCFI4:
+ 308              		.cfi_def_cfa_offset 4
+ 309              		.cfi_offset 14, -4
+ 310 0002 87B0     		sub	sp, sp, #28
+ 311              	.LCFI5:
+ 312              		.cfi_def_cfa_offset 32
+ 130:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(gpio_port < GPIO_PORT_MAX, GPIO_SET_LEVEL_ERR_STR, STM_ERR_INVALID_ARG);
+ 313              		.loc 1 130 0
+ 314 0004 0828     		cmp	r0, #8
+ 315 0006 15D8     		bhi	.L24
+ 131:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(gpio_num < GPIO_NUM_MAX, GPIO_SET_LEVEL_ERR_STR, STM_ERR_INVALID_ARG);
+ 316              		.loc 1 131 0
+ 317 0008 0F29     		cmp	r1, #15
+ 318 000a 29D9     		bls	.L22
+ 319              		.loc 1 131 0 is_stmt 0 discriminator 4
+ 320 000c FFF7FEFF 		bl	stm_log_timestamp
+ 321              	.LVL31:
+ 322 0010 1849     		ldr	r1, .L25
+ 323 0012 194B     		ldr	r3, .L25+4
+ 324 0014 0493     		str	r3, [sp, #16]
+ 325 0016 194B     		ldr	r3, .L25+8
+ 326 0018 0393     		str	r3, [sp, #12]
+ 327 001a 8323     		movs	r3, #131
+ 328 001c 0293     		str	r3, [sp, #8]
+ 329 001e 184B     		ldr	r3, .L25+12
+ 330 0020 0193     		str	r3, [sp, #4]
+ 331 0022 0091     		str	r1, [sp]
+ 332 0024 0346     		mov	r3, r0
+ 333 0026 174A     		ldr	r2, .L25+16
+ 334 0028 0120     		movs	r0, #1
+ 335 002a FFF7FEFF 		bl	stm_log_write
+ 336              	.LVL32:
+ 337 002e 4FF48170 		mov	r0, #258
+ 338 0032 12E0     		b	.L19
+ 339              	.LVL33:
+ 340              	.L24:
+ 130:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(gpio_port < GPIO_PORT_MAX, GPIO_SET_LEVEL_ERR_STR, STM_ERR_INVALID_ARG);
+ 341              		.loc 1 130 0 is_stmt 1 discriminator 4
+ 342 0034 FFF7FEFF 		bl	stm_log_timestamp
+ 343              	.LVL34:
+ 344 0038 0E49     		ldr	r1, .L25
+ 345 003a 0F4B     		ldr	r3, .L25+4
+ 346 003c 0493     		str	r3, [sp, #16]
+ 347 003e 0F4B     		ldr	r3, .L25+8
+ 348 0040 0393     		str	r3, [sp, #12]
+ 349 0042 8223     		movs	r3, #130
+ 350 0044 0293     		str	r3, [sp, #8]
+ 351 0046 0E4B     		ldr	r3, .L25+12
+ 352 0048 0193     		str	r3, [sp, #4]
+ 353 004a 0091     		str	r1, [sp]
+ 354 004c 0346     		mov	r3, r0
+ 355 004e 0D4A     		ldr	r2, .L25+16
+ 356 0050 0120     		movs	r0, #1
+ 357 0052 FFF7FEFF 		bl	stm_log_write
+ 358              	.LVL35:
+ARM GAS  /tmp/ccl0612t.s 			page 10
+
+
+ 359 0056 4FF48170 		mov	r0, #258
+ 360              	.L19:
+ 132:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+ 133:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     HAL_GPIO_WritePin(GPIOx_MAPPING[gpio_port], GPIO_PIN_x_MAPPING[gpio_num], state);
+ 134:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     return STM_OK;
+ 135:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** }
+ 361              		.loc 1 135 0
+ 362 005a 07B0     		add	sp, sp, #28
+ 363              	.LCFI6:
+ 364              		.cfi_remember_state
+ 365              		.cfi_def_cfa_offset 4
+ 366              		@ sp needed
+ 367 005c 5DF804FB 		ldr	pc, [sp], #4
+ 368              	.LVL36:
+ 369              	.L22:
+ 370              	.LCFI7:
+ 371              		.cfi_restore_state
+ 133:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     return STM_OK;
+ 372              		.loc 1 133 0
+ 373 0060 094B     		ldr	r3, .L25+20
+ 374 0062 33F81110 		ldrh	r1, [r3, r1, lsl #1]
+ 375              	.LVL37:
+ 376 0066 094B     		ldr	r3, .L25+24
+ 377 0068 53F82000 		ldr	r0, [r3, r0, lsl #2]
+ 378              	.LVL38:
+ 379 006c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 380              	.LVL39:
+ 134:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** }
+ 381              		.loc 1 134 0
+ 382 0070 0020     		movs	r0, #0
+ 383 0072 F2E7     		b	.L19
+ 384              	.L26:
+ 385              		.align	2
+ 386              	.L25:
+ 387 0074 28000000 		.word	.LC1
+ 388 0078 00000000 		.word	.LC4
+ 389 007c 00000000 		.word	.LANCHOR5
+ 390 0080 44000000 		.word	.LC3
+ 391 0084 00000000 		.word	.LC0
+ 392 0088 00000000 		.word	.LANCHOR2
+ 393 008c 00000000 		.word	.LANCHOR3
+ 394              		.cfi_endproc
+ 395              	.LFE134:
+ 397              		.section	.text.gpio_toggle_level,"ax",%progbits
+ 398              		.align	1
+ 399              		.global	gpio_toggle_level
+ 400              		.syntax unified
+ 401              		.thumb
+ 402              		.thumb_func
+ 403              		.fpu fpv4-sp-d16
+ 405              	gpio_toggle_level:
+ 406              	.LFB135:
+ 136:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+ 137:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** stm_err_t gpio_toggle_level(gpio_port_t gpio_port, gpio_num_t gpio_num)
+ 138:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** {
+ 407              		.loc 1 138 0
+ 408              		.cfi_startproc
+ARM GAS  /tmp/ccl0612t.s 			page 11
+
+
+ 409              		@ args = 0, pretend = 0, frame = 0
+ 410              		@ frame_needed = 0, uses_anonymous_args = 0
+ 411              	.LVL40:
+ 412 0000 00B5     		push	{lr}
+ 413              	.LCFI8:
+ 414              		.cfi_def_cfa_offset 4
+ 415              		.cfi_offset 14, -4
+ 416 0002 87B0     		sub	sp, sp, #28
+ 417              	.LCFI9:
+ 418              		.cfi_def_cfa_offset 32
+ 139:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(gpio_port < GPIO_PORT_MAX, GPIO_TOGGLE_LEVEL_ERR_STR, STM_ERR_INVALID_ARG);
+ 419              		.loc 1 139 0
+ 420 0004 0828     		cmp	r0, #8
+ 421 0006 15D8     		bhi	.L32
+ 140:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(gpio_num < GPIO_NUM_MAX, GPIO_TOGGLE_LEVEL_ERR_STR, STM_ERR_INVALID_ARG);
+ 422              		.loc 1 140 0
+ 423 0008 0F29     		cmp	r1, #15
+ 424 000a 29D9     		bls	.L30
+ 425              		.loc 1 140 0 is_stmt 0 discriminator 4
+ 426 000c FFF7FEFF 		bl	stm_log_timestamp
+ 427              	.LVL41:
+ 428 0010 1849     		ldr	r1, .L33
+ 429 0012 194B     		ldr	r3, .L33+4
+ 430 0014 0493     		str	r3, [sp, #16]
+ 431 0016 194B     		ldr	r3, .L33+8
+ 432 0018 0393     		str	r3, [sp, #12]
+ 433 001a 8C23     		movs	r3, #140
+ 434 001c 0293     		str	r3, [sp, #8]
+ 435 001e 184B     		ldr	r3, .L33+12
+ 436 0020 0193     		str	r3, [sp, #4]
+ 437 0022 0091     		str	r1, [sp]
+ 438 0024 0346     		mov	r3, r0
+ 439 0026 174A     		ldr	r2, .L33+16
+ 440 0028 0120     		movs	r0, #1
+ 441 002a FFF7FEFF 		bl	stm_log_write
+ 442              	.LVL42:
+ 443 002e 4FF48170 		mov	r0, #258
+ 444 0032 12E0     		b	.L27
+ 445              	.LVL43:
+ 446              	.L32:
+ 139:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     GPIO_CHECK(gpio_port < GPIO_PORT_MAX, GPIO_TOGGLE_LEVEL_ERR_STR, STM_ERR_INVALID_ARG);
+ 447              		.loc 1 139 0 is_stmt 1 discriminator 4
+ 448 0034 FFF7FEFF 		bl	stm_log_timestamp
+ 449              	.LVL44:
+ 450 0038 0E49     		ldr	r1, .L33
+ 451 003a 0F4B     		ldr	r3, .L33+4
+ 452 003c 0493     		str	r3, [sp, #16]
+ 453 003e 0F4B     		ldr	r3, .L33+8
+ 454 0040 0393     		str	r3, [sp, #12]
+ 455 0042 8B23     		movs	r3, #139
+ 456 0044 0293     		str	r3, [sp, #8]
+ 457 0046 0E4B     		ldr	r3, .L33+12
+ 458 0048 0193     		str	r3, [sp, #4]
+ 459 004a 0091     		str	r1, [sp]
+ 460 004c 0346     		mov	r3, r0
+ 461 004e 0D4A     		ldr	r2, .L33+16
+ 462 0050 0120     		movs	r0, #1
+ARM GAS  /tmp/ccl0612t.s 			page 12
+
+
+ 463 0052 FFF7FEFF 		bl	stm_log_write
+ 464              	.LVL45:
+ 465 0056 4FF48170 		mov	r0, #258
+ 466              	.L27:
+ 141:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** 
+ 142:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     HAL_GPIO_TogglePin(GPIOx_MAPPING[gpio_port], GPIO_PIN_x_MAPPING[gpio_num]);
+ 143:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     return STM_OK;
+ 144:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** }
+ 467              		.loc 1 144 0
+ 468 005a 07B0     		add	sp, sp, #28
+ 469              	.LCFI10:
+ 470              		.cfi_remember_state
+ 471              		.cfi_def_cfa_offset 4
+ 472              		@ sp needed
+ 473 005c 5DF804FB 		ldr	pc, [sp], #4
+ 474              	.LVL46:
+ 475              	.L30:
+ 476              	.LCFI11:
+ 477              		.cfi_restore_state
+ 142:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c ****     return STM_OK;
+ 478              		.loc 1 142 0
+ 479 0060 094B     		ldr	r3, .L33+20
+ 480 0062 33F81110 		ldrh	r1, [r3, r1, lsl #1]
+ 481              	.LVL47:
+ 482 0066 094B     		ldr	r3, .L33+24
+ 483 0068 53F82000 		ldr	r0, [r3, r0, lsl #2]
+ 484              	.LVL48:
+ 485 006c FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 486              	.LVL49:
+ 143:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/gpio.c **** }
+ 487              		.loc 1 143 0
+ 488 0070 0020     		movs	r0, #0
+ 489 0072 F2E7     		b	.L27
+ 490              	.L34:
+ 491              		.align	2
+ 492              	.L33:
+ 493 0074 28000000 		.word	.LC1
+ 494 0078 00000000 		.word	.LC5
+ 495 007c 00000000 		.word	.LANCHOR6
+ 496 0080 44000000 		.word	.LC3
+ 497 0084 00000000 		.word	.LC0
+ 498 0088 00000000 		.word	.LANCHOR2
+ 499 008c 00000000 		.word	.LANCHOR3
+ 500              		.cfi_endproc
+ 501              	.LFE135:
+ 503              		.section	.rodata.GPIO_PIN_x_MAPPING,"a",%progbits
+ 504              		.align	2
+ 505              		.set	.LANCHOR2,. + 0
+ 508              	GPIO_PIN_x_MAPPING:
+ 509 0000 0100     		.short	1
+ 510 0002 0200     		.short	2
+ 511 0004 0400     		.short	4
+ 512 0006 0800     		.short	8
+ 513 0008 1000     		.short	16
+ 514 000a 2000     		.short	32
+ 515 000c 4000     		.short	64
+ 516 000e 8000     		.short	128
+ARM GAS  /tmp/ccl0612t.s 			page 13
+
+
+ 517 0010 0001     		.short	256
+ 518 0012 0002     		.short	512
+ 519 0014 0004     		.short	1024
+ 520 0016 0008     		.short	2048
+ 521 0018 0010     		.short	4096
+ 522 001a 0020     		.short	8192
+ 523 001c 0040     		.short	16384
+ 524 001e 0080     		.short	-32768
+ 525              		.section	.rodata.GPIO_REG_PULL_MAPPING,"a",%progbits
+ 526              		.align	2
+ 527              		.set	.LANCHOR4,. + 0
+ 530              	GPIO_REG_PULL_MAPPING:
+ 531 0000 00000000 		.word	0
+ 532 0004 01000000 		.word	1
+ 533 0008 02000000 		.word	2
+ 534              		.section	.rodata.GPIOx_MAPPING,"a",%progbits
+ 535              		.align	2
+ 536              		.set	.LANCHOR3,. + 0
+ 539              	GPIOx_MAPPING:
+ 540 0000 00000240 		.word	1073872896
+ 541 0004 00040240 		.word	1073873920
+ 542 0008 00080240 		.word	1073874944
+ 543 000c 000C0240 		.word	1073875968
+ 544 0010 00100240 		.word	1073876992
+ 545 0014 00140240 		.word	1073878016
+ 546 0018 00180240 		.word	1073879040
+ 547 001c 001C0240 		.word	1073880064
+ 548 0020 00200240 		.word	1073881088
+ 549              		.section	.rodata.RCC_AHB1ENR_GPIOxEN_MAPPING,"a",%progbits
+ 550              		.align	2
+ 551              		.set	.LANCHOR1,. + 0
+ 554              	RCC_AHB1ENR_GPIOxEN_MAPPING:
+ 555 0000 01000000 		.word	1
+ 556 0004 02000000 		.word	2
+ 557 0008 04000000 		.word	4
+ 558 000c 08000000 		.word	8
+ 559 0010 10000000 		.word	16
+ 560 0014 20000000 		.word	32
+ 561 0018 40000000 		.word	64
+ 562 001c 80000000 		.word	128
+ 563 0020 00010000 		.word	256
+ 564              		.section	.rodata.__FUNCTION__.12174,"a",%progbits
+ 565              		.align	2
+ 566              		.set	.LANCHOR0,. + 0
+ 569              	__FUNCTION__.12174:
+ 570 0000 6770696F 		.ascii	"gpio_config\000"
+ 570      5F636F6E 
+ 570      66696700 
+ 571              		.section	.rodata.__FUNCTION__.12186,"a",%progbits
+ 572              		.align	2
+ 573              		.set	.LANCHOR5,. + 0
+ 576              	__FUNCTION__.12186:
+ 577 0000 6770696F 		.ascii	"gpio_set_level\000"
+ 577      5F736574 
+ 577      5F6C6576 
+ 577      656C00
+ 578              		.section	.rodata.__FUNCTION__.12191,"a",%progbits
+ARM GAS  /tmp/ccl0612t.s 			page 14
+
+
+ 579              		.align	2
+ 580              		.set	.LANCHOR6,. + 0
+ 583              	__FUNCTION__.12191:
+ 584 0000 6770696F 		.ascii	"gpio_toggle_level\000"
+ 584      5F746F67 
+ 584      676C655F 
+ 584      6C657665 
+ 584      6C00
+ 585              		.section	.rodata.gpio_config.str1.4,"aMS",%progbits,1
+ 586              		.align	2
+ 587              	.LC0:
+ 588 0000 1B5B303B 		.ascii	"\033[0;31mE (%d) %s: %s:%d (%s):%s\033[0m\015\012\000"
+ 588      33316D45 
+ 588      20282564 
+ 588      29202573 
+ 588      3A202573 
+ 589 0026 0000     		.space	2
+ 590              	.LC1:
+ 591 0028 44524956 		.ascii	"DRIVER GPIO\000"
+ 591      45522047 
+ 591      50494F00 
+ 592              	.LC2:
+ 593 0034 6770696F 		.ascii	"gpio init error\000"
+ 593      20696E69 
+ 593      74206572 
+ 593      726F7200 
+ 594              	.LC3:
+ 595 0044 2F686F6D 		.ascii	"/home/phong/Documents/thesis/stm32f4/stm-idf/compon"
+ 595      652F7068 
+ 595      6F6E672F 
+ 595      446F6375 
+ 595      6D656E74 
+ 596 0077 656E7473 		.ascii	"ents/driver/gpio.c\000"
+ 596      2F647269 
+ 596      7665722F 
+ 596      6770696F 
+ 596      2E6300
+ 597              		.section	.rodata.gpio_set_level.str1.4,"aMS",%progbits,1
+ 598              		.align	2
+ 599              	.LC4:
+ 600 0000 6770696F 		.ascii	"gpio set level error\000"
+ 600      20736574 
+ 600      206C6576 
+ 600      656C2065 
+ 600      72726F72 
+ 601              		.section	.rodata.gpio_toggle_level.str1.4,"aMS",%progbits,1
+ 602              		.align	2
+ 603              	.LC5:
+ 604 0000 6770696F 		.ascii	"gpio toggle level error\000"
+ 604      20746F67 
+ 604      676C6520 
+ 604      6C657665 
+ 604      6C206572 
+ 605              		.text
+ 606              	.Letext0:
+ 607              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 608              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ARM GAS  /tmp/ccl0612t.s 			page 15
+
+
+ 609              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/lock.h"
+ 610              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_types.h"
+ 611              		.file 6 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 612              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/reent.h"
+ 613              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/stdlib.h"
+ 614              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 615              		.file 10 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/inc
+ 616              		.file 11 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/inc
+ 617              		.file 12 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ 618              		.file 13 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ 619              		.file 14 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/log/include/stm_log.h"
+ 620              		.file 15 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm_common/include/stm_err.h"
+ 621              		.file 16 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/include/driver/gpio.h"
+ARM GAS  /tmp/ccl0612t.s 			page 16
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 gpio.c
+     /tmp/ccl0612t.s:18     .text.gpio_config:0000000000000000 $t
+     /tmp/ccl0612t.s:25     .text.gpio_config:0000000000000000 gpio_config
+     /tmp/ccl0612t.s:278    .text.gpio_config:000000000000016c $d
+     /tmp/ccl0612t.s:292    .text.gpio_set_level:0000000000000000 $t
+     /tmp/ccl0612t.s:299    .text.gpio_set_level:0000000000000000 gpio_set_level
+     /tmp/ccl0612t.s:387    .text.gpio_set_level:0000000000000074 $d
+     /tmp/ccl0612t.s:398    .text.gpio_toggle_level:0000000000000000 $t
+     /tmp/ccl0612t.s:405    .text.gpio_toggle_level:0000000000000000 gpio_toggle_level
+     /tmp/ccl0612t.s:493    .text.gpio_toggle_level:0000000000000074 $d
+     /tmp/ccl0612t.s:504    .rodata.GPIO_PIN_x_MAPPING:0000000000000000 $d
+     /tmp/ccl0612t.s:508    .rodata.GPIO_PIN_x_MAPPING:0000000000000000 GPIO_PIN_x_MAPPING
+     /tmp/ccl0612t.s:526    .rodata.GPIO_REG_PULL_MAPPING:0000000000000000 $d
+     /tmp/ccl0612t.s:530    .rodata.GPIO_REG_PULL_MAPPING:0000000000000000 GPIO_REG_PULL_MAPPING
+     /tmp/ccl0612t.s:535    .rodata.GPIOx_MAPPING:0000000000000000 $d
+     /tmp/ccl0612t.s:539    .rodata.GPIOx_MAPPING:0000000000000000 GPIOx_MAPPING
+     /tmp/ccl0612t.s:550    .rodata.RCC_AHB1ENR_GPIOxEN_MAPPING:0000000000000000 $d
+     /tmp/ccl0612t.s:554    .rodata.RCC_AHB1ENR_GPIOxEN_MAPPING:0000000000000000 RCC_AHB1ENR_GPIOxEN_MAPPING
+     /tmp/ccl0612t.s:565    .rodata.__FUNCTION__.12174:0000000000000000 $d
+     /tmp/ccl0612t.s:569    .rodata.__FUNCTION__.12174:0000000000000000 __FUNCTION__.12174
+     /tmp/ccl0612t.s:572    .rodata.__FUNCTION__.12186:0000000000000000 $d
+     /tmp/ccl0612t.s:576    .rodata.__FUNCTION__.12186:0000000000000000 __FUNCTION__.12186
+     /tmp/ccl0612t.s:579    .rodata.__FUNCTION__.12191:0000000000000000 $d
+     /tmp/ccl0612t.s:583    .rodata.__FUNCTION__.12191:0000000000000000 __FUNCTION__.12191
+     /tmp/ccl0612t.s:586    .rodata.gpio_config.str1.4:0000000000000000 $d
+     /tmp/ccl0612t.s:598    .rodata.gpio_set_level.str1.4:0000000000000000 $d
+     /tmp/ccl0612t.s:602    .rodata.gpio_toggle_level.str1.4:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+stm_log_timestamp
+stm_log_write
+HAL_GPIO_Init
+HAL_GPIO_WritePin
+HAL_GPIO_TogglePin

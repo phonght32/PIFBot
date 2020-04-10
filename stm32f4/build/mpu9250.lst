@@ -1,0 +1,2779 @@
+ARM GAS  /tmp/cco7neSE.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mpu9250.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text._mpu9250_write_reg,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu fpv4-sp-d16
+  24              	_mpu9250_write_reg:
+  25              	.LFB138:
+  26              		.file 1 "/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c"
+   1:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #include "include/mpu9250.h"
+   2:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+   3:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** /*
+   4:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****  * MPU9250 Register Address.
+   5:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****  */
+   6:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_SELF_TEST_X_GYRO        0x00        /*!< Gyroscope self-test registers */
+   7:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_SELF_TEST_Y_GYRO        0x01
+   8:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_SELF_TEST_Z_GYRO        0x02
+   9:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_SELF_TEST_X_ACCEL       0x0D        /*!< Accelerometer self-test registers */
+  10:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_SELF_TEST_Y_ACCEL       0x0E
+  11:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_SELF_TEST_Z_ACCEL       0x0F
+  12:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_XG_OFFSET_H             0x13        /*!< Gyroscope offset registers */
+  13:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_XG_OFFSET_L             0x14
+  14:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_YG_OFFSET_H             0x14
+  15:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_YG_OFFSET_L             0x16
+  16:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ZG_OFFSET_H             0x17
+  17:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ZG_OFFSET_L             0x18
+  18:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_SMPLRT_DIV              0x19        /*!< Sample rate divider */
+  19:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_CONFIG                  0x1A        /*!< Configuration */
+  20:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_GYRO_CONFIG             0x1B        /*!< Gyroscope configuration */
+  21:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ACCEL_CONFIG            0x1C        /*!< Accelerometer configuration */
+  22:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ACCEL_CONFIG2           0x1D        /*!< Accelerometer configuration 2 */
+  23:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_LP_ACCEL_ODR            0x1E        /*!< Low power accelerometer ODR control */
+  24:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_WOM_THR                 0x1F        /*!< Wake-on motion threshold */
+  25:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_FIFO_EN                 0x23        /*!< FIFO enable */
+  26:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_MST_CTRL            0x24        /*!< I2C master control */
+  27:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV0_ADDR           0x25        /*!< I2C slave 0 control */
+  28:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV0_REG            0x26
+  29:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV0_CTRL           0x27
+  30:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV1_ADDR           0x28        /*!< I2C slave 1 control */
+  31:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV1_REG            0x29
+  32:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV1_CTRL           0x2A
+ARM GAS  /tmp/cco7neSE.s 			page 2
+
+
+  33:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV2_ADDR           0x2B        /*!< I2C slave 2 control */
+  34:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV2_REG            0x2C
+  35:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV2_CTRL           0x2D
+  36:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV3_ADDR           0x2E        /*!< I2C slave 3 control */
+  37:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV3_REG            0x2F
+  38:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV3_CTRL           0x30
+  39:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV4_ADDR           0x31        /*!< I2C slave 4 control */
+  40:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV4_REG            0x32
+  41:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV4_DO             0x33
+  42:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV4_CTRL           0x34
+  43:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV4_DI             0x35
+  44:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_MST_STATUS          0x36        /*!< I2C master status */
+  45:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_INT_PIN_CFG             0x37        /*!< Interrupt pin/bypass enable configuration 
+  46:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_INT_ENABLE              0x38        /*!< Interrupt enable */
+  47:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_INT_STATUS              0x3A        /*!< Interrupt status */
+  48:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ACCEL_XOUT_H            0x3B        /*!< Accelerometer measurements */
+  49:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ACCEL_XOUT_L            0x3C
+  50:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ACCEL_YOUT_H            0x3D
+  51:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ACCEL_YOUT_L            0x3E
+  52:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ACCEL_ZOUT_H            0x3F
+  53:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ACCEL_ZOUT_L            0x40
+  54:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_TEMP_OUT_H              0x41        /*!< Temperature measurements */
+  55:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_TEMP_OUT_L              0x42
+  56:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_GYRO_XOUT_H             0x43        /*!< Gyroscope measurements */
+  57:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_GYRO_XOUT_L             0x44
+  58:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_GYRO_YOUT_H             0x45
+  59:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_GYRO_YOUT_L             0x46
+  60:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_GYRO_ZOUT_H             0x47
+  61:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_GYRO_ZOUT_L             0x48
+  62:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_00        0x49        /*!< External sensor data */
+  63:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_01        0x4A
+  64:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_02        0x4B
+  65:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_03        0x4C
+  66:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_04        0x4D
+  67:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_05        0x4E
+  68:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_06        0x4F
+  69:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_07        0x50
+  70:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_08        0x51
+  71:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_09        0x52
+  72:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_10        0x53
+  73:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_11        0x54
+  74:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_12        0x55
+  75:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_13        0x56
+  76:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_14        0x57
+  77:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_15        0x58
+  78:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_16        0x59
+  79:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_17        0x5A
+  80:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_18        0x5B
+  81:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_19        0x5C
+  82:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_20        0x5D
+  83:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_21        0x5E
+  84:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_22        0x5F
+  85:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_EXT_SENS_DATA_23        0x60
+  86:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV0_DO             0x63        /*!< I2C slave 0 data out */
+  87:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV1_DO             0x64        /*!< I2C slave 1 data out */
+  88:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV2_DO             0x65        /*!< I2C slave 2 data out */
+  89:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_SLV3_DO             0x66        /*!< I2C slave 3 data out */
+ARM GAS  /tmp/cco7neSE.s 			page 3
+
+
+  90:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_I2C_MST_DELAY_CTRL      0x67        /*!< I2C master delay control */
+  91:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_SIGNAL_PATH_RESET       0x68        /*!< Signal path reset */
+  92:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_MOT_DETECT_CTRL         0x69        /*!< Acelerometer interrupt control */
+  93:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_USER_CTRL               0x6A        /*!< User control */
+  94:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_PWR_MGMT_1              0x6B        /*!< Power management 1 */
+  95:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_PWR_MGMT_2              0x6C        /*!< Power management 2 */
+  96:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_FIFO_COUNTH             0x72        /*!< FIFO counter registers */
+  97:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_FIFO_COUNTL             0x73
+  98:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_FIFP_R_W                0x74        /*!< FIFO read write */
+  99:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_WHO_AM_I                0x75        /*!< Who am I */
+ 100:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_XA_OFFSET_H             0x77        /*!< Accelerometer offset registers */
+ 101:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_XA_OFFSET_L             0x78
+ 102:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_YA_OFFSET_H             0x7A
+ 103:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_YA_OFFSET_L             0x7B
+ 104:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ZA_OFFSET_H             0x7D
+ 105:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ZA_OFFSET_L             0x7E
+ 106:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_ADDR                    (0x68<<1)   /*!< MPU9250 Address */
+ 107:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 108:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define TIMEOUT_MS_DEFAULT          100         /*!< Default MPU9250 I2C communiation timeout */
+ 109:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define BUFFER_CALIB_DEFAULT        1000        /*!< Default the number of sample data when calibra
+ 110:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 111:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_INIT_ERR_STR        "mpu9250 init error"
+ 112:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_MALLOC_ERR_STR      "mpu9250 malloc error"
+ 113:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_TRANS_ERR_STR       "mpu9250 write registers error"
+ 114:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_REC_ERR_STR         "mpu9250 read registers error"
+ 115:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_GET_DATA_ERR_STR    "mpu9250 get data error"
+ 116:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 117:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** static const char* MPU9250_TAG = "MPU9250";
+ 118:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define MPU9250_CHECK(a, str, ret)  if(!(a)) {                                             \
+ 119:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         STM_LOGE(MPU9250_TAG,"%s:%d (%s):%s", __FILE__, __LINE__, __FUNCTION__, str);      \
+ 120:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         return (ret);                                                                  \
+ 121:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         }
+ 122:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 123:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** /* Mutex define */
+ 124:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define mutex_lock(x)       while (xSemaphoreTake(x, portMAX_DELAY) != pdPASS)
+ 125:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define mutex_unlock(x)     xSemaphoreGive(x)
+ 126:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define mutex_create()      xSemaphoreCreateMutex()
+ 127:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** #define mutex_destroy(x)    vQueueDelete(x)
+ 128:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 129:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** /*
+ 130:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****  * MPU9250 Typedef.
+ 131:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****  */
+ 132:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** typedef struct mpu9250 {
+ 133:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mpu9250_clksel_t        clksel;                 /*!< MPU9250 clock source */
+ 134:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mpu9250_dlpf_cfg_t      dlpf_cfg;               /*!< MPU9250 digital low pass filter (DLPF) */
+ 135:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mpu9250_sleep_mode_t    sleep_mode;             /*!< MPU9250 sleep mode */
+ 136:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mpu9250_afs_sel_t       afs_sel;                /*!< MPU9250 accelerometer full scale range */
+ 137:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mpu9250_fs_sel_t        fs_sel;                 /*!< MPU9250 gyroscope full scale range */
+ 138:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     float                   accel_scaling_factor;   /*!< MPU9250 accelerometer scaling factor */
+ 139:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     float                   gyro_scaling_factor;    /*!< MPU9250 gyroscope scaling factor */
+ 140:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     imu_bias_data_t         accel_bias;             /*!< MPU9250 acclerometer bias */
+ 141:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     imu_bias_data_t         gyro_bias;              /*!< MPU9250 gyroscope bias */
+ 142:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     SemaphoreHandle_t       lock;                   /*!< MPU9250 mutex */
+ 143:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     i2c_num_t               i2c_num;                /*!< MPU9250 I2C num */
+ 144:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** } mpu9250_t;
+ 145:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 146:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** static stm_err_t _mpu9250_write_reg(i2c_num_t i2c_num, uint8_t reg_addr, uint8_t data)
+ARM GAS  /tmp/cco7neSE.s 			page 4
+
+
+ 147:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+  27              		.loc 1 147 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 00B5     		push	{lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 4
+  35              		.cfi_offset 14, -4
+  36 0002 89B0     		sub	sp, sp, #36
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_offset 40
+ 148:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     uint8_t buf_send[2];
+ 149:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buf_send[0] = reg_addr;
+  39              		.loc 1 149 0
+  40 0004 8DF81C10 		strb	r1, [sp, #28]
+ 150:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buf_send[1] = data;
+  41              		.loc 1 150 0
+  42 0008 8DF81D20 		strb	r2, [sp, #29]
+ 151:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 152:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int ret = i2c_write_bytes(i2c_num, MPU9250_ADDR, buf_send, 2, TIMEOUT_MS_DEFAULT);
+  43              		.loc 1 152 0
+  44 000c 6423     		movs	r3, #100
+  45 000e 0093     		str	r3, [sp]
+  46 0010 0223     		movs	r3, #2
+  47 0012 07AA     		add	r2, sp, #28
+  48              	.LVL1:
+  49 0014 D021     		movs	r1, #208
+  50              	.LVL2:
+  51 0016 FFF7FEFF 		bl	i2c_write_bytes
+  52              	.LVL3:
+ 153:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_TRANS_ERR_STR, STM_FAIL);
+  53              		.loc 1 153 0
+  54 001a 18B9     		cbnz	r0, .L5
+ 154:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 155:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     return STM_OK;
+  55              		.loc 1 155 0
+  56 001c 0020     		movs	r0, #0
+  57              	.LVL4:
+  58              	.L1:
+ 156:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+  59              		.loc 1 156 0
+  60 001e 09B0     		add	sp, sp, #36
+  61              	.LCFI2:
+  62              		.cfi_remember_state
+  63              		.cfi_def_cfa_offset 4
+  64              		@ sp needed
+  65 0020 5DF804FB 		ldr	pc, [sp], #4
+  66              	.LVL5:
+  67              	.L5:
+  68              	.LCFI3:
+  69              		.cfi_restore_state
+ 153:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_TRANS_ERR_STR, STM_FAIL);
+  70              		.loc 1 153 0 discriminator 4
+  71 0024 FFF7FEFF 		bl	stm_log_timestamp
+  72              	.LVL6:
+ARM GAS  /tmp/cco7neSE.s 			page 5
+
+
+  73 0028 0849     		ldr	r1, .L6
+  74 002a 094B     		ldr	r3, .L6+4
+  75 002c 0493     		str	r3, [sp, #16]
+  76 002e 094B     		ldr	r3, .L6+8
+  77 0030 0393     		str	r3, [sp, #12]
+  78 0032 9923     		movs	r3, #153
+  79 0034 0293     		str	r3, [sp, #8]
+  80 0036 084B     		ldr	r3, .L6+12
+  81 0038 0193     		str	r3, [sp, #4]
+  82 003a 0091     		str	r1, [sp]
+  83 003c 0346     		mov	r3, r0
+  84 003e 074A     		ldr	r2, .L6+16
+  85 0040 0120     		movs	r0, #1
+  86 0042 FFF7FEFF 		bl	stm_log_write
+  87              	.LVL7:
+  88 0046 4FF0FF30 		mov	r0, #-1
+  89 004a E8E7     		b	.L1
+  90              	.L7:
+  91              		.align	2
+  92              	.L6:
+  93 004c 28000000 		.word	.LC1
+  94 0050 30000000 		.word	.LC2
+  95 0054 00000000 		.word	.LANCHOR0
+  96 0058 50000000 		.word	.LC3
+  97 005c 00000000 		.word	.LC0
+  98              		.cfi_endproc
+  99              	.LFE138:
+ 101              		.section	.text._mpu9250_read_reg,"ax",%progbits
+ 102              		.align	1
+ 103              		.syntax unified
+ 104              		.thumb
+ 105              		.thumb_func
+ 106              		.fpu fpv4-sp-d16
+ 108              	_mpu9250_read_reg:
+ 109              	.LFB139:
+ 157:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 158:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** static stm_err_t _mpu9250_read_reg(i2c_num_t i2c_num, uint8_t start_reg_addr, uint8_t *buf_rec, uin
+ 159:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 110              		.loc 1 159 0
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 8
+ 113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 114              	.LVL8:
+ 115 0000 70B5     		push	{r4, r5, r6, lr}
+ 116              	.LCFI4:
+ 117              		.cfi_def_cfa_offset 16
+ 118              		.cfi_offset 4, -16
+ 119              		.cfi_offset 5, -12
+ 120              		.cfi_offset 6, -8
+ 121              		.cfi_offset 14, -4
+ 122 0002 88B0     		sub	sp, sp, #32
+ 123              	.LCFI5:
+ 124              		.cfi_def_cfa_offset 48
+ 125 0004 0446     		mov	r4, r0
+ 126 0006 1546     		mov	r5, r2
+ 127 0008 1E46     		mov	r6, r3
+ 160:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     uint8_t buffer[1];
+ARM GAS  /tmp/cco7neSE.s 			page 6
+
+
+ 161:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buffer[0] = start_reg_addr;
+ 128              		.loc 1 161 0
+ 129 000a 08AA     		add	r2, sp, #32
+ 130              	.LVL9:
+ 131 000c 02F8041D 		strb	r1, [r2, #-4]!
+ 162:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int ret;
+ 163:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 164:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = i2c_write_bytes(i2c_num, MPU9250_ADDR, buffer, 1, TIMEOUT_MS_DEFAULT);
+ 132              		.loc 1 164 0
+ 133 0010 6423     		movs	r3, #100
+ 134              	.LVL10:
+ 135 0012 0093     		str	r3, [sp]
+ 136 0014 0123     		movs	r3, #1
+ 137 0016 D021     		movs	r1, #208
+ 138              	.LVL11:
+ 139 0018 FFF7FEFF 		bl	i2c_write_bytes
+ 140              	.LVL12:
+ 165:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_REC_ERR_STR, STM_FAIL);
+ 141              		.loc 1 165 0
+ 142 001c 58B9     		cbnz	r0, .L13
+ 166:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 167:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = i2c_read_bytes(i2c_num, MPU9250_ADDR, buf_rec, num_bytes, TIMEOUT_MS_DEFAULT);
+ 143              		.loc 1 167 0
+ 144 001e 6423     		movs	r3, #100
+ 145 0020 0093     		str	r3, [sp]
+ 146 0022 3346     		mov	r3, r6
+ 147 0024 2A46     		mov	r2, r5
+ 148 0026 D021     		movs	r1, #208
+ 149 0028 2046     		mov	r0, r4
+ 150              	.LVL13:
+ 151 002a FFF7FEFF 		bl	i2c_read_bytes
+ 152              	.LVL14:
+ 168:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_REC_ERR_STR, STM_FAIL);
+ 153              		.loc 1 168 0
+ 154 002e B0B9     		cbnz	r0, .L14
+ 169:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 170:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     return STM_OK;
+ 155              		.loc 1 170 0
+ 156 0030 0020     		movs	r0, #0
+ 157              	.LVL15:
+ 158              	.L8:
+ 171:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 159              		.loc 1 171 0
+ 160 0032 08B0     		add	sp, sp, #32
+ 161              	.LCFI6:
+ 162              		.cfi_remember_state
+ 163              		.cfi_def_cfa_offset 16
+ 164              		@ sp needed
+ 165 0034 70BD     		pop	{r4, r5, r6, pc}
+ 166              	.LVL16:
+ 167              	.L13:
+ 168              	.LCFI7:
+ 169              		.cfi_restore_state
+ 165:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 170              		.loc 1 165 0 discriminator 4
+ 171 0036 FFF7FEFF 		bl	stm_log_timestamp
+ 172              	.LVL17:
+ARM GAS  /tmp/cco7neSE.s 			page 7
+
+
+ 173 003a 1349     		ldr	r1, .L15
+ 174 003c 134B     		ldr	r3, .L15+4
+ 175 003e 0493     		str	r3, [sp, #16]
+ 176 0040 134B     		ldr	r3, .L15+8
+ 177 0042 0393     		str	r3, [sp, #12]
+ 178 0044 A523     		movs	r3, #165
+ 179 0046 0293     		str	r3, [sp, #8]
+ 180 0048 124B     		ldr	r3, .L15+12
+ 181 004a 0193     		str	r3, [sp, #4]
+ 182 004c 0091     		str	r1, [sp]
+ 183 004e 0346     		mov	r3, r0
+ 184 0050 114A     		ldr	r2, .L15+16
+ 185 0052 0120     		movs	r0, #1
+ 186 0054 FFF7FEFF 		bl	stm_log_write
+ 187              	.LVL18:
+ 188 0058 4FF0FF30 		mov	r0, #-1
+ 189 005c E9E7     		b	.L8
+ 190              	.LVL19:
+ 191              	.L14:
+ 168:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 192              		.loc 1 168 0 discriminator 4
+ 193 005e FFF7FEFF 		bl	stm_log_timestamp
+ 194              	.LVL20:
+ 195 0062 0949     		ldr	r1, .L15
+ 196 0064 094B     		ldr	r3, .L15+4
+ 197 0066 0493     		str	r3, [sp, #16]
+ 198 0068 094B     		ldr	r3, .L15+8
+ 199 006a 0393     		str	r3, [sp, #12]
+ 200 006c A823     		movs	r3, #168
+ 201 006e 0293     		str	r3, [sp, #8]
+ 202 0070 084B     		ldr	r3, .L15+12
+ 203 0072 0193     		str	r3, [sp, #4]
+ 204 0074 0091     		str	r1, [sp]
+ 205 0076 0346     		mov	r3, r0
+ 206 0078 074A     		ldr	r2, .L15+16
+ 207 007a 0120     		movs	r0, #1
+ 208 007c FFF7FEFF 		bl	stm_log_write
+ 209              	.LVL21:
+ 210 0080 4FF0FF30 		mov	r0, #-1
+ 211 0084 D5E7     		b	.L8
+ 212              	.L16:
+ 213 0086 00BF     		.align	2
+ 214              	.L15:
+ 215 0088 28000000 		.word	.LC1
+ 216 008c 00000000 		.word	.LC4
+ 217 0090 00000000 		.word	.LANCHOR1
+ 218 0094 50000000 		.word	.LC3
+ 219 0098 00000000 		.word	.LC0
+ 220              		.cfi_endproc
+ 221              	.LFE139:
+ 223              		.section	.text.mpu9250_config,"ax",%progbits
+ 224              		.align	1
+ 225              		.global	mpu9250_config
+ 226              		.syntax unified
+ 227              		.thumb
+ 228              		.thumb_func
+ 229              		.fpu fpv4-sp-d16
+ARM GAS  /tmp/cco7neSE.s 			page 8
+
+
+ 231              	mpu9250_config:
+ 232              	.LFB140:
+ 172:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 173:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** mpu9250_handle_t mpu9250_config(mpu9250_config_t *config)
+ 174:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 233              		.loc 1 174 0
+ 234              		.cfi_startproc
+ 235              		@ args = 0, pretend = 0, frame = 0
+ 236              		@ frame_needed = 0, uses_anonymous_args = 0
+ 237              	.LVL22:
+ 238 0000 70B5     		push	{r4, r5, r6, lr}
+ 239              	.LCFI8:
+ 240              		.cfi_def_cfa_offset 16
+ 241              		.cfi_offset 4, -16
+ 242              		.cfi_offset 5, -12
+ 243              		.cfi_offset 6, -8
+ 244              		.cfi_offset 14, -4
+ 245 0002 86B0     		sub	sp, sp, #24
+ 246              	.LCFI9:
+ 247              		.cfi_def_cfa_offset 40
+ 175:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Check if init structure is empty */
+ 176:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(config, MPU9250_INIT_ERR_STR, NULL);
+ 248              		.loc 1 176 0
+ 249 0004 0028     		cmp	r0, #0
+ 250 0006 66D0     		beq	.L43
+ 251 0008 0446     		mov	r4, r0
+ 177:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(config->i2c_num < I2C_NUM_MAX, MPU9250_INIT_ERR_STR, NULL);
+ 252              		.loc 1 177 0
+ 253 000a 867C     		ldrb	r6, [r0, #18]	@ zero_extendqisi2
+ 254 000c 022E     		cmp	r6, #2
+ 255 000e 75D8     		bhi	.L44
+ 178:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 179:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Allocate memory for handle structure */
+ 180:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mpu9250_handle_t handle;
+ 181:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle = calloc(1, sizeof(mpu9250_t));
+ 256              		.loc 1 181 0
+ 257 0010 2421     		movs	r1, #36
+ 258 0012 0120     		movs	r0, #1
+ 259              	.LVL23:
+ 260 0014 FFF7FEFF 		bl	calloc
+ 261              	.LVL24:
+ 182:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(handle, MPU9250_INIT_ERR_STR, NULL);
+ 262              		.loc 1 182 0
+ 263 0018 0546     		mov	r5, r0
+ 264 001a 0028     		cmp	r0, #0
+ 265 001c 00F08180 		beq	.L45
+ 266              	.LVL25:
+ 183:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 184:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     uint8_t buffer = 0;
+ 185:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int ret;
+ 186:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 187:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Reset mpu9250 */
+ 188:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_write_reg(config->i2c_num, MPU9250_PWR_MGMT_1, 0x80);
+ 267              		.loc 1 188 0
+ 268 0020 8022     		movs	r2, #128
+ 269 0022 6B21     		movs	r1, #107
+ 270 0024 3046     		mov	r0, r6
+ARM GAS  /tmp/cco7neSE.s 			page 9
+
+
+ 271              	.LVL26:
+ 272 0026 FFF7FEFF 		bl	_mpu9250_write_reg
+ 273              	.LVL27:
+ 189:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_INIT_ERR_STR, NULL);
+ 274              		.loc 1 189 0
+ 275 002a 0028     		cmp	r0, #0
+ 276 002c 40F08B80 		bne	.L46
+ 190:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     HAL_Delay(100);
+ 277              		.loc 1 190 0
+ 278 0030 6420     		movs	r0, #100
+ 279              	.LVL28:
+ 280 0032 FFF7FEFF 		bl	HAL_Delay
+ 281              	.LVL29:
+ 191:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 192:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Configure clock source and sleep mode */
+ 193:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buffer = config->clksel & 0x07;
+ 282              		.loc 1 193 0
+ 283 0036 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 284 0038 02F00702 		and	r2, r2, #7
+ 285              	.LVL30:
+ 194:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buffer |= (config->sleep_mode << 6) & 0x40;
+ 286              		.loc 1 194 0
+ 287 003c A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 288 003e 9B01     		lsls	r3, r3, #6
+ 289 0040 03F04003 		and	r3, r3, #64
+ 290              	.LVL31:
+ 195:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_write_reg(config->i2c_num, MPU9250_PWR_MGMT_1, buffer);
+ 291              		.loc 1 195 0
+ 292 0044 1A43     		orrs	r2, r2, r3
+ 293              	.LVL32:
+ 294 0046 6B21     		movs	r1, #107
+ 295 0048 A07C     		ldrb	r0, [r4, #18]	@ zero_extendqisi2
+ 296 004a FFF7FEFF 		bl	_mpu9250_write_reg
+ 297              	.LVL33:
+ 196:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_INIT_ERR_STR, NULL);
+ 298              		.loc 1 196 0
+ 299 004e 0028     		cmp	r0, #0
+ 300 0050 40F08C80 		bne	.L47
+ 197:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     HAL_Delay(100);
+ 301              		.loc 1 197 0
+ 302 0054 6420     		movs	r0, #100
+ 303              	.LVL34:
+ 304 0056 FFF7FEFF 		bl	HAL_Delay
+ 305              	.LVL35:
+ 198:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 199:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Configure digital low pass filter */
+ 200:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buffer = 0;
+ 201:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buffer = config->dlpf_cfg & 0x07;
+ 306              		.loc 1 201 0
+ 307 005a 6278     		ldrb	r2, [r4, #1]	@ zero_extendqisi2
+ 308              	.LVL36:
+ 202:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_write_reg(config->i2c_num, MPU9250_CONFIG, buffer);
+ 309              		.loc 1 202 0
+ 310 005c 02F00702 		and	r2, r2, #7
+ 311              	.LVL37:
+ 312 0060 1A21     		movs	r1, #26
+ 313 0062 A07C     		ldrb	r0, [r4, #18]	@ zero_extendqisi2
+ARM GAS  /tmp/cco7neSE.s 			page 10
+
+
+ 314 0064 FFF7FEFF 		bl	_mpu9250_write_reg
+ 315              	.LVL38:
+ 203:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_INIT_ERR_STR, NULL);
+ 316              		.loc 1 203 0
+ 317 0068 0028     		cmp	r0, #0
+ 318 006a 40F09280 		bne	.L48
+ 319              	.LVL39:
+ 204:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 205:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Configure gyroscope range */
+ 206:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buffer = 0;
+ 207:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buffer = (config->fs_sel << 3) & 0x18;
+ 320              		.loc 1 207 0
+ 321 006e E278     		ldrb	r2, [r4, #3]	@ zero_extendqisi2
+ 322 0070 D200     		lsls	r2, r2, #3
+ 323              	.LVL40:
+ 208:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_write_reg(config->i2c_num, MPU9250_GYRO_CONFIG, buffer);
+ 324              		.loc 1 208 0
+ 325 0072 02F01802 		and	r2, r2, #24
+ 326              	.LVL41:
+ 327 0076 1B21     		movs	r1, #27
+ 328 0078 A07C     		ldrb	r0, [r4, #18]	@ zero_extendqisi2
+ 329              	.LVL42:
+ 330 007a FFF7FEFF 		bl	_mpu9250_write_reg
+ 331              	.LVL43:
+ 209:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_INIT_ERR_STR, NULL);
+ 332              		.loc 1 209 0
+ 333 007e 0028     		cmp	r0, #0
+ 334 0080 40F09A80 		bne	.L49
+ 335              	.LVL44:
+ 210:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 211:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Configure accelerometer range */
+ 212:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buffer = 0;
+ 213:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     buffer = (config->afs_sel << 3) & 0x18;
+ 336              		.loc 1 213 0
+ 337 0084 2279     		ldrb	r2, [r4, #4]	@ zero_extendqisi2
+ 338 0086 D200     		lsls	r2, r2, #3
+ 339              	.LVL45:
+ 214:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_write_reg(config->i2c_num, MPU9250_ACCEL_CONFIG, buffer);
+ 340              		.loc 1 214 0
+ 341 0088 02F01802 		and	r2, r2, #24
+ 342              	.LVL46:
+ 343 008c 1C21     		movs	r1, #28
+ 344 008e A07C     		ldrb	r0, [r4, #18]	@ zero_extendqisi2
+ 345              	.LVL47:
+ 346 0090 FFF7FEFF 		bl	_mpu9250_write_reg
+ 347              	.LVL48:
+ 215:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_INIT_ERR_STR, NULL);
+ 348              		.loc 1 215 0
+ 349 0094 0028     		cmp	r0, #0
+ 350 0096 40F0A280 		bne	.L50
+ 216:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 217:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Configure sample rate divider */
+ 218:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_write_reg(config->i2c_num, MPU9250_SMPLRT_DIV, 0x04);
+ 351              		.loc 1 218 0
+ 352 009a 0422     		movs	r2, #4
+ 353 009c 1921     		movs	r1, #25
+ 354 009e A07C     		ldrb	r0, [r4, #18]	@ zero_extendqisi2
+ARM GAS  /tmp/cco7neSE.s 			page 11
+
+
+ 355              	.LVL49:
+ 356 00a0 FFF7FEFF 		bl	_mpu9250_write_reg
+ 357              	.LVL50:
+ 219:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_INIT_ERR_STR, NULL);
+ 358              		.loc 1 219 0
+ 359 00a4 0646     		mov	r6, r0
+ 360 00a6 0028     		cmp	r0, #0
+ 361 00a8 40F0AC80 		bne	.L51
+ 220:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 221:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Configure interrupt and enable bypass.
+ 222:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****      * Set Interrupt pin active high, push-pull, Clear and read of INT_STATUS,
+ 223:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****      * enable I2C_BYPASS_EN in INT_PIN_CFG register so additional chips can
+ 224:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****      * join the I2C bus and can be controlled by master.
+ 225:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****      */
+ 226:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = (_mpu9250_write_reg(config->i2c_num, MPU9250_INT_PIN_CFG, 0x22) &&
+ 362              		.loc 1 226 0
+ 363 00ac 2222     		movs	r2, #34
+ 364 00ae 3721     		movs	r1, #55
+ 365 00b0 A07C     		ldrb	r0, [r4, #18]	@ zero_extendqisi2
+ 366              	.LVL51:
+ 367 00b2 FFF7FEFF 		bl	_mpu9250_write_reg
+ 368              	.LVL52:
+ 369 00b6 0028     		cmp	r0, #0
+ 370 00b8 40F0B780 		bne	.L52
+ 371              	.LVL53:
+ 372              	.L28:
+ 227:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****            _mpu9250_write_reg(config->i2c_num, MPU9250_INT_ENABLE, 0x01));
+ 228:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_INIT_ERR_STR, NULL);
+ 373              		.loc 1 228 0 discriminator 6
+ 374 00bc 002E     		cmp	r6, #0
+ 375 00be 40F0BE80 		bne	.L53
+ 229:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 230:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Update accelerometer scaling factor */
+ 231:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     switch (config->afs_sel)
+ 376              		.loc 1 231 0
+ 377 00c2 2379     		ldrb	r3, [r4, #4]	@ zero_extendqisi2
+ 378 00c4 032B     		cmp	r3, #3
+ 379 00c6 00F2D080 		bhi	.L30
+ 380 00ca DFE813F0 		tbh	[pc, r3, lsl #1]
+ 381              	.L32:
+ 382 00ce CB00     		.2byte	(.L31-.L32)/2
+ 383 00d0 D500     		.2byte	(.L33-.L32)/2
+ 384 00d2 D900     		.2byte	(.L34-.L32)/2
+ 385 00d4 DD00     		.2byte	(.L35-.L32)/2
+ 386              	.LVL54:
+ 387              		.p2align 1
+ 388              	.L43:
+ 176:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(config->i2c_num < I2C_NUM_MAX, MPU9250_INIT_ERR_STR, NULL);
+ 389              		.loc 1 176 0 discriminator 4
+ 390 00d6 FFF7FEFF 		bl	stm_log_timestamp
+ 391              	.LVL55:
+ 392 00da 8649     		ldr	r1, .L54
+ 393 00dc 864B     		ldr	r3, .L54+4
+ 394 00de 0493     		str	r3, [sp, #16]
+ 395 00e0 864B     		ldr	r3, .L54+8
+ 396 00e2 0393     		str	r3, [sp, #12]
+ 397 00e4 B023     		movs	r3, #176
+ARM GAS  /tmp/cco7neSE.s 			page 12
+
+
+ 398 00e6 0293     		str	r3, [sp, #8]
+ 399 00e8 854B     		ldr	r3, .L54+12
+ 400 00ea 0193     		str	r3, [sp, #4]
+ 401 00ec 0091     		str	r1, [sp]
+ 402 00ee 0346     		mov	r3, r0
+ 403 00f0 844A     		ldr	r2, .L54+16
+ 404 00f2 0120     		movs	r0, #1
+ 405 00f4 FFF7FEFF 		bl	stm_log_write
+ 406              	.LVL56:
+ 407 00f8 0025     		movs	r5, #0
+ 408 00fa EEE0     		b	.L17
+ 409              	.LVL57:
+ 410              	.L44:
+ 177:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 411              		.loc 1 177 0 discriminator 4
+ 412 00fc FFF7FEFF 		bl	stm_log_timestamp
+ 413              	.LVL58:
+ 414 0100 7C49     		ldr	r1, .L54
+ 415 0102 7D4B     		ldr	r3, .L54+4
+ 416 0104 0493     		str	r3, [sp, #16]
+ 417 0106 7D4B     		ldr	r3, .L54+8
+ 418 0108 0393     		str	r3, [sp, #12]
+ 419 010a B123     		movs	r3, #177
+ 420 010c 0293     		str	r3, [sp, #8]
+ 421 010e 7C4B     		ldr	r3, .L54+12
+ 422 0110 0193     		str	r3, [sp, #4]
+ 423 0112 0091     		str	r1, [sp]
+ 424 0114 0346     		mov	r3, r0
+ 425 0116 7B4A     		ldr	r2, .L54+16
+ 426 0118 0120     		movs	r0, #1
+ 427 011a FFF7FEFF 		bl	stm_log_write
+ 428              	.LVL59:
+ 429 011e 0025     		movs	r5, #0
+ 430 0120 DBE0     		b	.L17
+ 431              	.LVL60:
+ 432              	.L45:
+ 182:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 433              		.loc 1 182 0 discriminator 4
+ 434 0122 FFF7FEFF 		bl	stm_log_timestamp
+ 435              	.LVL61:
+ 436 0126 7349     		ldr	r1, .L54
+ 437 0128 734B     		ldr	r3, .L54+4
+ 438 012a 0493     		str	r3, [sp, #16]
+ 439 012c 734B     		ldr	r3, .L54+8
+ 440 012e 0393     		str	r3, [sp, #12]
+ 441 0130 B623     		movs	r3, #182
+ 442 0132 0293     		str	r3, [sp, #8]
+ 443 0134 724B     		ldr	r3, .L54+12
+ 444 0136 0193     		str	r3, [sp, #4]
+ 445 0138 0091     		str	r1, [sp]
+ 446 013a 0346     		mov	r3, r0
+ 447 013c 714A     		ldr	r2, .L54+16
+ 448 013e 0120     		movs	r0, #1
+ 449 0140 FFF7FEFF 		bl	stm_log_write
+ 450              	.LVL62:
+ 451 0144 C9E0     		b	.L17
+ 452              	.LVL63:
+ARM GAS  /tmp/cco7neSE.s 			page 13
+
+
+ 453              	.L46:
+ 189:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     HAL_Delay(100);
+ 454              		.loc 1 189 0 discriminator 4
+ 455 0146 FFF7FEFF 		bl	stm_log_timestamp
+ 456              	.LVL64:
+ 457 014a 6A49     		ldr	r1, .L54
+ 458 014c 6A4B     		ldr	r3, .L54+4
+ 459 014e 0493     		str	r3, [sp, #16]
+ 460 0150 6A4B     		ldr	r3, .L54+8
+ 461 0152 0393     		str	r3, [sp, #12]
+ 462 0154 BD23     		movs	r3, #189
+ 463 0156 0293     		str	r3, [sp, #8]
+ 464 0158 694B     		ldr	r3, .L54+12
+ 465 015a 0193     		str	r3, [sp, #4]
+ 466 015c 0091     		str	r1, [sp]
+ 467 015e 0346     		mov	r3, r0
+ 468 0160 684A     		ldr	r2, .L54+16
+ 469 0162 0120     		movs	r0, #1
+ 470 0164 FFF7FEFF 		bl	stm_log_write
+ 471              	.LVL65:
+ 472 0168 0025     		movs	r5, #0
+ 473              	.LVL66:
+ 474 016a B6E0     		b	.L17
+ 475              	.LVL67:
+ 476              	.L47:
+ 196:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     HAL_Delay(100);
+ 477              		.loc 1 196 0 discriminator 4
+ 478 016c FFF7FEFF 		bl	stm_log_timestamp
+ 479              	.LVL68:
+ 480 0170 6049     		ldr	r1, .L54
+ 481 0172 614B     		ldr	r3, .L54+4
+ 482 0174 0493     		str	r3, [sp, #16]
+ 483 0176 614B     		ldr	r3, .L54+8
+ 484 0178 0393     		str	r3, [sp, #12]
+ 485 017a C423     		movs	r3, #196
+ 486 017c 0293     		str	r3, [sp, #8]
+ 487 017e 604B     		ldr	r3, .L54+12
+ 488 0180 0193     		str	r3, [sp, #4]
+ 489 0182 0091     		str	r1, [sp]
+ 490 0184 0346     		mov	r3, r0
+ 491 0186 5F4A     		ldr	r2, .L54+16
+ 492 0188 0120     		movs	r0, #1
+ 493 018a FFF7FEFF 		bl	stm_log_write
+ 494              	.LVL69:
+ 495 018e 0025     		movs	r5, #0
+ 496              	.LVL70:
+ 497 0190 A3E0     		b	.L17
+ 498              	.LVL71:
+ 499              	.L48:
+ 203:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 500              		.loc 1 203 0 discriminator 4
+ 501 0192 FFF7FEFF 		bl	stm_log_timestamp
+ 502              	.LVL72:
+ 503 0196 5749     		ldr	r1, .L54
+ 504 0198 574B     		ldr	r3, .L54+4
+ 505 019a 0493     		str	r3, [sp, #16]
+ 506 019c 574B     		ldr	r3, .L54+8
+ARM GAS  /tmp/cco7neSE.s 			page 14
+
+
+ 507 019e 0393     		str	r3, [sp, #12]
+ 508 01a0 CB23     		movs	r3, #203
+ 509 01a2 0293     		str	r3, [sp, #8]
+ 510 01a4 564B     		ldr	r3, .L54+12
+ 511 01a6 0193     		str	r3, [sp, #4]
+ 512 01a8 0091     		str	r1, [sp]
+ 513 01aa 0346     		mov	r3, r0
+ 514 01ac 554A     		ldr	r2, .L54+16
+ 515 01ae 0120     		movs	r0, #1
+ 516 01b0 FFF7FEFF 		bl	stm_log_write
+ 517              	.LVL73:
+ 518 01b4 0025     		movs	r5, #0
+ 519              	.LVL74:
+ 520 01b6 90E0     		b	.L17
+ 521              	.LVL75:
+ 522              	.L49:
+ 209:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 523              		.loc 1 209 0 discriminator 4
+ 524 01b8 FFF7FEFF 		bl	stm_log_timestamp
+ 525              	.LVL76:
+ 526 01bc 4D49     		ldr	r1, .L54
+ 527 01be 4E4B     		ldr	r3, .L54+4
+ 528 01c0 0493     		str	r3, [sp, #16]
+ 529 01c2 4E4B     		ldr	r3, .L54+8
+ 530 01c4 0393     		str	r3, [sp, #12]
+ 531 01c6 D123     		movs	r3, #209
+ 532 01c8 0293     		str	r3, [sp, #8]
+ 533 01ca 4D4B     		ldr	r3, .L54+12
+ 534 01cc 0193     		str	r3, [sp, #4]
+ 535 01ce 0091     		str	r1, [sp]
+ 536 01d0 0346     		mov	r3, r0
+ 537 01d2 4C4A     		ldr	r2, .L54+16
+ 538 01d4 0120     		movs	r0, #1
+ 539 01d6 FFF7FEFF 		bl	stm_log_write
+ 540              	.LVL77:
+ 541 01da 0025     		movs	r5, #0
+ 542              	.LVL78:
+ 543 01dc 7DE0     		b	.L17
+ 544              	.LVL79:
+ 545              	.L50:
+ 215:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 546              		.loc 1 215 0 discriminator 4
+ 547 01de FFF7FEFF 		bl	stm_log_timestamp
+ 548              	.LVL80:
+ 549 01e2 4449     		ldr	r1, .L54
+ 550 01e4 444B     		ldr	r3, .L54+4
+ 551 01e6 0493     		str	r3, [sp, #16]
+ 552 01e8 444B     		ldr	r3, .L54+8
+ 553 01ea 0393     		str	r3, [sp, #12]
+ 554 01ec D723     		movs	r3, #215
+ 555 01ee 0293     		str	r3, [sp, #8]
+ 556 01f0 434B     		ldr	r3, .L54+12
+ 557 01f2 0193     		str	r3, [sp, #4]
+ 558 01f4 0091     		str	r1, [sp]
+ 559 01f6 0346     		mov	r3, r0
+ 560 01f8 424A     		ldr	r2, .L54+16
+ 561 01fa 0120     		movs	r0, #1
+ARM GAS  /tmp/cco7neSE.s 			page 15
+
+
+ 562 01fc FFF7FEFF 		bl	stm_log_write
+ 563              	.LVL81:
+ 564 0200 0025     		movs	r5, #0
+ 565              	.LVL82:
+ 566 0202 6AE0     		b	.L17
+ 567              	.LVL83:
+ 568              	.L51:
+ 219:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 569              		.loc 1 219 0 discriminator 4
+ 570 0204 FFF7FEFF 		bl	stm_log_timestamp
+ 571              	.LVL84:
+ 572 0208 3A49     		ldr	r1, .L54
+ 573 020a 3B4B     		ldr	r3, .L54+4
+ 574 020c 0493     		str	r3, [sp, #16]
+ 575 020e 3B4B     		ldr	r3, .L54+8
+ 576 0210 0393     		str	r3, [sp, #12]
+ 577 0212 DB23     		movs	r3, #219
+ 578 0214 0293     		str	r3, [sp, #8]
+ 579 0216 3A4B     		ldr	r3, .L54+12
+ 580 0218 0193     		str	r3, [sp, #4]
+ 581 021a 0091     		str	r1, [sp]
+ 582 021c 0346     		mov	r3, r0
+ 583 021e 394A     		ldr	r2, .L54+16
+ 584 0220 0120     		movs	r0, #1
+ 585 0222 FFF7FEFF 		bl	stm_log_write
+ 586              	.LVL85:
+ 587 0226 0025     		movs	r5, #0
+ 588              	.LVL86:
+ 589 0228 57E0     		b	.L17
+ 590              	.LVL87:
+ 591              	.L52:
+ 227:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_INIT_ERR_STR, NULL);
+ 592              		.loc 1 227 0 discriminator 1
+ 593 022a 0122     		movs	r2, #1
+ 594 022c 3821     		movs	r1, #56
+ 595 022e A07C     		ldrb	r0, [r4, #18]	@ zero_extendqisi2
+ 596 0230 FFF7FEFF 		bl	_mpu9250_write_reg
+ 597              	.LVL88:
+ 226:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****            _mpu9250_write_reg(config->i2c_num, MPU9250_INT_ENABLE, 0x01));
+ 598              		.loc 1 226 0 discriminator 1
+ 599 0234 0028     		cmp	r0, #0
+ 600 0236 3FF441AF 		beq	.L28
+ 226:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****            _mpu9250_write_reg(config->i2c_num, MPU9250_INT_ENABLE, 0x01));
+ 601              		.loc 1 226 0 is_stmt 0
+ 602 023a 0126     		movs	r6, #1
+ 603              	.LVL89:
+ 604 023c 3EE7     		b	.L28
+ 605              	.LVL90:
+ 606              	.L53:
+ 228:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 607              		.loc 1 228 0 is_stmt 1 discriminator 4
+ 608 023e FFF7FEFF 		bl	stm_log_timestamp
+ 609              	.LVL91:
+ 610 0242 2C49     		ldr	r1, .L54
+ 611 0244 2C4B     		ldr	r3, .L54+4
+ 612 0246 0493     		str	r3, [sp, #16]
+ 613 0248 2C4B     		ldr	r3, .L54+8
+ARM GAS  /tmp/cco7neSE.s 			page 16
+
+
+ 614 024a 0393     		str	r3, [sp, #12]
+ 615 024c E423     		movs	r3, #228
+ 616 024e 0293     		str	r3, [sp, #8]
+ 617 0250 2B4B     		ldr	r3, .L54+12
+ 618 0252 0193     		str	r3, [sp, #4]
+ 619 0254 0091     		str	r1, [sp]
+ 620 0256 0346     		mov	r3, r0
+ 621 0258 2A4A     		ldr	r2, .L54+16
+ 622 025a 0120     		movs	r0, #1
+ 623 025c FFF7FEFF 		bl	stm_log_write
+ 624              	.LVL92:
+ 625 0260 0025     		movs	r5, #0
+ 626              	.LVL93:
+ 627 0262 3AE0     		b	.L17
+ 628              	.LVL94:
+ 629              	.L31:
+ 232:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     {
+ 233:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     case MPU9250_AFS_SEL_2G:
+ 234:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         handle->accel_scaling_factor = (2.0f / 32768.0f);
+ 630              		.loc 1 234 0
+ 631 0264 4FF06253 		mov	r3, #947912704
+ 632 0268 AB60     		str	r3, [r5, #8]	@ float
+ 633              	.L30:
+ 235:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 236:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 237:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     case MPU9250_AFS_SEL_4G:
+ 238:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         handle->accel_scaling_factor = (4.0f / 32768.0f);
+ 239:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 240:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 241:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     case MPU9250_AFS_SEL_8G:
+ 242:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         handle->accel_scaling_factor = (8.0f / 32768.0f);
+ 243:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 244:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 245:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     case MPU9250_AFS_SEL_16G:
+ 246:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         handle->accel_scaling_factor = (16.0f / 32768.0f);
+ 247:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 248:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 249:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     default:
+ 250:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 251:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     }
+ 252:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 253:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Update gyroscope scaling factor */
+ 254:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     switch (config->fs_sel)
+ 634              		.loc 1 254 0
+ 635 026a E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
+ 636 026c 032B     		cmp	r3, #3
+ 637 026e 11D8     		bhi	.L36
+ 638 0270 DFE803F0 		tbb	[pc, r3]
+ 639              	.L38:
+ 640 0274 0E       		.byte	(.L37-.L38)/2
+ 641 0275 36       		.byte	(.L39-.L38)/2
+ 642 0276 39       		.byte	(.L40-.L38)/2
+ 643 0277 3C       		.byte	(.L41-.L38)/2
+ 644              		.p2align 1
+ 645              	.L33:
+ 238:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 646              		.loc 1 238 0
+ARM GAS  /tmp/cco7neSE.s 			page 17
+
+
+ 647 0278 4FF06453 		mov	r3, #956301312
+ 648 027c AB60     		str	r3, [r5, #8]	@ float
+ 239:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 649              		.loc 1 239 0
+ 650 027e F4E7     		b	.L30
+ 651              	.L34:
+ 242:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 652              		.loc 1 242 0
+ 653 0280 4FF06653 		mov	r3, #964689920
+ 654 0284 AB60     		str	r3, [r5, #8]	@ float
+ 243:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 655              		.loc 1 243 0
+ 656 0286 F0E7     		b	.L30
+ 657              	.L35:
+ 246:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 658              		.loc 1 246 0
+ 659 0288 4FF06853 		mov	r3, #973078528
+ 660 028c AB60     		str	r3, [r5, #8]	@ float
+ 247:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 661              		.loc 1 247 0
+ 662 028e ECE7     		b	.L30
+ 663              	.L37:
+ 255:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     {
+ 256:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     case MPU9250_FS_SEL_250:
+ 257:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         handle->gyro_scaling_factor = 250.0f / 32768.0f;
+ 664              		.loc 1 257 0
+ 665 0290 1D4B     		ldr	r3, .L54+20
+ 666 0292 EB60     		str	r3, [r5, #12]	@ float
+ 667              	.L36:
+ 258:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 259:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 260:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     case MPU9250_FS_SEL_500:
+ 261:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         handle->gyro_scaling_factor = 500.0f / 32768.0f;
+ 262:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 263:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 264:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     case MPU9250_FS_SEL_1000:
+ 265:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         handle->gyro_scaling_factor = 1000.0f / 32768.0f;
+ 266:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 267:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 268:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     case MPU9250_FS_SEL_2000:
+ 269:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         handle->gyro_scaling_factor = 2000.0f / 32768.0f;
+ 270:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 271:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 272:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     default:
+ 273:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 274:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     }
+ 275:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 276:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Update handle structure */
+ 277:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->accel_bias.x_axis = config->accel_bias.x_axis;
+ 668              		.loc 1 277 0
+ 669 0294 B4F90630 		ldrsh	r3, [r4, #6]
+ 670 0298 2B82     		strh	r3, [r5, #16]	@ movhi
+ 278:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->accel_bias.y_axis = config->accel_bias.y_axis;
+ 671              		.loc 1 278 0
+ 672 029a B4F90830 		ldrsh	r3, [r4, #8]
+ 673 029e 6B82     		strh	r3, [r5, #18]	@ movhi
+ 279:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->accel_bias.z_axis = config->accel_bias.z_axis;
+ARM GAS  /tmp/cco7neSE.s 			page 18
+
+
+ 674              		.loc 1 279 0
+ 675 02a0 B4F90A30 		ldrsh	r3, [r4, #10]
+ 676 02a4 AB82     		strh	r3, [r5, #20]	@ movhi
+ 280:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->gyro_bias.x_axis = config->gyro_bias.x_axis;
+ 677              		.loc 1 280 0
+ 678 02a6 B4F90C30 		ldrsh	r3, [r4, #12]
+ 679 02aa EB82     		strh	r3, [r5, #22]	@ movhi
+ 281:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->gyro_bias.y_axis = config->gyro_bias.y_axis;
+ 680              		.loc 1 281 0
+ 681 02ac B4F90E30 		ldrsh	r3, [r4, #14]
+ 682 02b0 2B83     		strh	r3, [r5, #24]	@ movhi
+ 282:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->gyro_bias.z_axis = config->gyro_bias.z_axis;
+ 683              		.loc 1 282 0
+ 684 02b2 B4F91030 		ldrsh	r3, [r4, #16]
+ 685 02b6 6B83     		strh	r3, [r5, #26]	@ movhi
+ 283:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->afs_sel = config->afs_sel;
+ 686              		.loc 1 283 0
+ 687 02b8 2379     		ldrb	r3, [r4, #4]	@ zero_extendqisi2
+ 688 02ba EB70     		strb	r3, [r5, #3]
+ 284:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->clksel = config->clksel;
+ 689              		.loc 1 284 0
+ 690 02bc 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 691 02be 2B70     		strb	r3, [r5]
+ 285:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->dlpf_cfg = config->dlpf_cfg;
+ 692              		.loc 1 285 0
+ 693 02c0 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 694 02c2 6B70     		strb	r3, [r5, #1]
+ 286:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->fs_sel = config->fs_sel;
+ 695              		.loc 1 286 0
+ 696 02c4 E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
+ 697 02c6 2B71     		strb	r3, [r5, #4]
+ 287:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->sleep_mode = config->sleep_mode;
+ 698              		.loc 1 287 0
+ 699 02c8 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 700 02ca AB70     		strb	r3, [r5, #2]
+ 288:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->lock = mutex_create();
+ 701              		.loc 1 288 0
+ 702 02cc 0120     		movs	r0, #1
+ 703 02ce FFF7FEFF 		bl	xQueueCreateMutex
+ 704              	.LVL95:
+ 705 02d2 E861     		str	r0, [r5, #28]
+ 289:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->i2c_num = config->i2c_num;
+ 706              		.loc 1 289 0
+ 707 02d4 A37C     		ldrb	r3, [r4, #18]	@ zero_extendqisi2
+ 708 02d6 85F82030 		strb	r3, [r5, #32]
+ 709              	.LVL96:
+ 710              	.L17:
+ 290:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 291:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     return handle;
+ 292:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 711              		.loc 1 292 0
+ 712 02da 2846     		mov	r0, r5
+ 713 02dc 06B0     		add	sp, sp, #24
+ 714              	.LCFI10:
+ 715              		.cfi_remember_state
+ 716              		.cfi_def_cfa_offset 16
+ 717              		@ sp needed
+ARM GAS  /tmp/cco7neSE.s 			page 19
+
+
+ 718 02de 70BD     		pop	{r4, r5, r6, pc}
+ 719              	.LVL97:
+ 720              	.L39:
+ 721              	.LCFI11:
+ 722              		.cfi_restore_state
+ 261:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 723              		.loc 1 261 0
+ 724 02e0 0A4B     		ldr	r3, .L54+24
+ 725 02e2 EB60     		str	r3, [r5, #12]	@ float
+ 262:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 726              		.loc 1 262 0
+ 727 02e4 D6E7     		b	.L36
+ 728              	.L40:
+ 265:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 729              		.loc 1 265 0
+ 730 02e6 0A4B     		ldr	r3, .L54+28
+ 731 02e8 EB60     		str	r3, [r5, #12]	@ float
+ 266:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 732              		.loc 1 266 0
+ 733 02ea D3E7     		b	.L36
+ 734              	.L41:
+ 269:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         break;
+ 735              		.loc 1 269 0
+ 736 02ec 094B     		ldr	r3, .L54+32
+ 737 02ee EB60     		str	r3, [r5, #12]	@ float
+ 270:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 738              		.loc 1 270 0
+ 739 02f0 D0E7     		b	.L36
+ 740              	.L55:
+ 741 02f2 00BF     		.align	2
+ 742              	.L54:
+ 743 02f4 28000000 		.word	.LC1
+ 744 02f8 00000000 		.word	.LC5
+ 745 02fc 00000000 		.word	.LANCHOR2
+ 746 0300 50000000 		.word	.LC3
+ 747 0304 00000000 		.word	.LC0
+ 748 0308 0000FA3B 		.word	1006239744
+ 749 030c 00007A3C 		.word	1014628352
+ 750 0310 0000FA3C 		.word	1023016960
+ 751 0314 00007A3D 		.word	1031405568
+ 752              		.cfi_endproc
+ 753              	.LFE140:
+ 755              		.section	.text.mpu9250_get_accel_raw,"ax",%progbits
+ 756              		.align	1
+ 757              		.global	mpu9250_get_accel_raw
+ 758              		.syntax unified
+ 759              		.thumb
+ 760              		.thumb_func
+ 761              		.fpu fpv4-sp-d16
+ 763              	mpu9250_get_accel_raw:
+ 764              	.LFB141:
+ 293:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 294:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** stm_err_t mpu9250_get_accel_raw(mpu9250_handle_t handle, imu_raw_data_t *raw_data)
+ 295:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 765              		.loc 1 295 0
+ 766              		.cfi_startproc
+ 767              		@ args = 0, pretend = 0, frame = 8
+ARM GAS  /tmp/cco7neSE.s 			page 20
+
+
+ 768              		@ frame_needed = 0, uses_anonymous_args = 0
+ 769              	.LVL98:
+ 770 0000 30B5     		push	{r4, r5, lr}
+ 771              	.LCFI12:
+ 772              		.cfi_def_cfa_offset 12
+ 773              		.cfi_offset 4, -12
+ 774              		.cfi_offset 5, -8
+ 775              		.cfi_offset 14, -4
+ 776 0002 89B0     		sub	sp, sp, #36
+ 777              	.LCFI13:
+ 778              		.cfi_def_cfa_offset 48
+ 779 0004 0446     		mov	r4, r0
+ 780 0006 0D46     		mov	r5, r1
+ 781              	.LVL99:
+ 782              	.L57:
+ 296:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_lock(handle->lock);
+ 783              		.loc 1 296 0 discriminator 1
+ 784 0008 4FF0FF31 		mov	r1, #-1
+ 785 000c E069     		ldr	r0, [r4, #28]
+ 786 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 787              	.LVL100:
+ 788 0012 0128     		cmp	r0, #1
+ 789 0014 F8D1     		bne	.L57
+ 297:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int ret;
+ 298:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     uint8_t accel_raw_data[6];
+ 299:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 300:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Read accelerometer raw data */
+ 301:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_read_reg(handle->i2c_num, MPU9250_ACCEL_XOUT_H, accel_raw_data, 6);
+ 790              		.loc 1 301 0
+ 791 0016 0623     		movs	r3, #6
+ 792 0018 06AA     		add	r2, sp, #24
+ 793 001a 3B21     		movs	r1, #59
+ 794 001c 94F82000 		ldrb	r0, [r4, #32]	@ zero_extendqisi2
+ 795 0020 FFF7FEFF 		bl	_mpu9250_read_reg
+ 796              	.LVL101:
+ 302:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_GET_DATA_ERR_STR, STM_FAIL);
+ 797              		.loc 1 302 0
+ 798 0024 E8B9     		cbnz	r0, .L61
+ 303:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 304:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     raw_data->x_axis = (int16_t)((accel_raw_data[0] << 8) + accel_raw_data[1]);
+ 799              		.loc 1 304 0
+ 800 0026 9DF81820 		ldrb	r2, [sp, #24]	@ zero_extendqisi2
+ 801 002a 9DF81930 		ldrb	r3, [sp, #25]	@ zero_extendqisi2
+ 802 002e 03EB0223 		add	r3, r3, r2, lsl #8
+ 803 0032 2B80     		strh	r3, [r5]	@ movhi
+ 305:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     raw_data->y_axis = (int16_t)((accel_raw_data[2] << 8) + accel_raw_data[3]);
+ 804              		.loc 1 305 0
+ 805 0034 9DF81A20 		ldrb	r2, [sp, #26]	@ zero_extendqisi2
+ 806 0038 9DF81B30 		ldrb	r3, [sp, #27]	@ zero_extendqisi2
+ 807 003c 03EB0223 		add	r3, r3, r2, lsl #8
+ 808 0040 6B80     		strh	r3, [r5, #2]	@ movhi
+ 306:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     raw_data->z_axis = (int16_t)((accel_raw_data[4] << 8) + accel_raw_data[5]);
+ 809              		.loc 1 306 0
+ 810 0042 9DF81C20 		ldrb	r2, [sp, #28]	@ zero_extendqisi2
+ 811 0046 9DF81D30 		ldrb	r3, [sp, #29]	@ zero_extendqisi2
+ 812 004a 03EB0223 		add	r3, r3, r2, lsl #8
+ 813 004e AB80     		strh	r3, [r5, #4]	@ movhi
+ARM GAS  /tmp/cco7neSE.s 			page 21
+
+
+ 307:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 308:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_unlock(handle->lock);
+ 814              		.loc 1 308 0
+ 815 0050 0023     		movs	r3, #0
+ 816 0052 1A46     		mov	r2, r3
+ 817 0054 1946     		mov	r1, r3
+ 818 0056 E069     		ldr	r0, [r4, #28]
+ 819              	.LVL102:
+ 820 0058 FFF7FEFF 		bl	xQueueGenericSend
+ 821              	.LVL103:
+ 309:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     return STM_OK;
+ 822              		.loc 1 309 0
+ 823 005c 0020     		movs	r0, #0
+ 824              	.L56:
+ 310:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 825              		.loc 1 310 0
+ 826 005e 09B0     		add	sp, sp, #36
+ 827              	.LCFI14:
+ 828              		.cfi_remember_state
+ 829              		.cfi_def_cfa_offset 12
+ 830              		@ sp needed
+ 831 0060 30BD     		pop	{r4, r5, pc}
+ 832              	.LVL104:
+ 833              	.L61:
+ 834              	.LCFI15:
+ 835              		.cfi_restore_state
+ 302:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 836              		.loc 1 302 0 discriminator 4
+ 837 0062 FFF7FEFF 		bl	stm_log_timestamp
+ 838              	.LVL105:
+ 839 0066 0949     		ldr	r1, .L62
+ 840 0068 094B     		ldr	r3, .L62+4
+ 841 006a 0493     		str	r3, [sp, #16]
+ 842 006c 094B     		ldr	r3, .L62+8
+ 843 006e 0393     		str	r3, [sp, #12]
+ 844 0070 4FF49773 		mov	r3, #302
+ 845 0074 0293     		str	r3, [sp, #8]
+ 846 0076 084B     		ldr	r3, .L62+12
+ 847 0078 0193     		str	r3, [sp, #4]
+ 848 007a 0091     		str	r1, [sp]
+ 849 007c 0346     		mov	r3, r0
+ 850 007e 074A     		ldr	r2, .L62+16
+ 851 0080 0120     		movs	r0, #1
+ 852 0082 FFF7FEFF 		bl	stm_log_write
+ 853              	.LVL106:
+ 854 0086 4FF0FF30 		mov	r0, #-1
+ 855 008a E8E7     		b	.L56
+ 856              	.L63:
+ 857              		.align	2
+ 858              	.L62:
+ 859 008c 28000000 		.word	.LC1
+ 860 0090 00000000 		.word	.LC6
+ 861 0094 00000000 		.word	.LANCHOR3
+ 862 0098 50000000 		.word	.LC3
+ 863 009c 00000000 		.word	.LC0
+ 864              		.cfi_endproc
+ 865              	.LFE141:
+ARM GAS  /tmp/cco7neSE.s 			page 22
+
+
+ 867              		.section	.text.mpu9250_get_accel_cali,"ax",%progbits
+ 868              		.align	1
+ 869              		.global	mpu9250_get_accel_cali
+ 870              		.syntax unified
+ 871              		.thumb
+ 872              		.thumb_func
+ 873              		.fpu fpv4-sp-d16
+ 875              	mpu9250_get_accel_cali:
+ 876              	.LFB142:
+ 311:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 312:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** stm_err_t mpu9250_get_accel_cali(mpu9250_handle_t handle, imu_cali_data_t *cali_data)
+ 313:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 877              		.loc 1 313 0
+ 878              		.cfi_startproc
+ 879              		@ args = 0, pretend = 0, frame = 8
+ 880              		@ frame_needed = 0, uses_anonymous_args = 0
+ 881              	.LVL107:
+ 882 0000 30B5     		push	{r4, r5, lr}
+ 883              	.LCFI16:
+ 884              		.cfi_def_cfa_offset 12
+ 885              		.cfi_offset 4, -12
+ 886              		.cfi_offset 5, -8
+ 887              		.cfi_offset 14, -4
+ 888 0002 89B0     		sub	sp, sp, #36
+ 889              	.LCFI17:
+ 890              		.cfi_def_cfa_offset 48
+ 891 0004 0446     		mov	r4, r0
+ 892 0006 0D46     		mov	r5, r1
+ 893              	.LVL108:
+ 894              	.L65:
+ 314:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_lock(handle->lock);
+ 895              		.loc 1 314 0 discriminator 1
+ 896 0008 4FF0FF31 		mov	r1, #-1
+ 897 000c E069     		ldr	r0, [r4, #28]
+ 898 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 899              	.LVL109:
+ 900 0012 0128     		cmp	r0, #1
+ 901 0014 F8D1     		bne	.L65
+ 315:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int ret;
+ 316:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     uint8_t accel_raw_data[6];
+ 317:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 318:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Read accelerometer raw data */
+ 319:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_read_reg(handle->i2c_num, MPU9250_ACCEL_XOUT_H, accel_raw_data, 6);
+ 902              		.loc 1 319 0
+ 903 0016 0623     		movs	r3, #6
+ 904 0018 06AA     		add	r2, sp, #24
+ 905 001a 3B21     		movs	r1, #59
+ 906 001c 94F82000 		ldrb	r0, [r4, #32]	@ zero_extendqisi2
+ 907 0020 FFF7FEFF 		bl	_mpu9250_read_reg
+ 908              	.LVL110:
+ 320:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_GET_DATA_ERR_STR, STM_FAIL);
+ 909              		.loc 1 320 0
+ 910 0024 30BB     		cbnz	r0, .L69
+ 321:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 322:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     cali_data->x_axis = (int16_t)((accel_raw_data[0] << 8) + accel_raw_data[1]) - handle->accel_bia
+ 911              		.loc 1 322 0
+ 912 0026 9DF81820 		ldrb	r2, [sp, #24]	@ zero_extendqisi2
+ARM GAS  /tmp/cco7neSE.s 			page 23
+
+
+ 913 002a 9DF81930 		ldrb	r3, [sp, #25]	@ zero_extendqisi2
+ 914 002e 03EB0223 		add	r3, r3, r2, lsl #8
+ 915 0032 9BB2     		uxth	r3, r3
+ 916 0034 228A     		ldrh	r2, [r4, #16]
+ 917 0036 9B1A     		subs	r3, r3, r2
+ 918 0038 2B80     		strh	r3, [r5]	@ movhi
+ 323:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     cali_data->y_axis = (int16_t)((accel_raw_data[2] << 8) + accel_raw_data[3]) - handle->accel_bia
+ 919              		.loc 1 323 0
+ 920 003a 9DF81A20 		ldrb	r2, [sp, #26]	@ zero_extendqisi2
+ 921 003e 9DF81B30 		ldrb	r3, [sp, #27]	@ zero_extendqisi2
+ 922 0042 03EB0223 		add	r3, r3, r2, lsl #8
+ 923 0046 9BB2     		uxth	r3, r3
+ 924 0048 628A     		ldrh	r2, [r4, #18]
+ 925 004a 9B1A     		subs	r3, r3, r2
+ 926 004c 6B80     		strh	r3, [r5, #2]	@ movhi
+ 324:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     cali_data->z_axis = (int16_t)((accel_raw_data[4] << 8) + accel_raw_data[5]) - handle->accel_bia
+ 927              		.loc 1 324 0
+ 928 004e 9DF81C20 		ldrb	r2, [sp, #28]	@ zero_extendqisi2
+ 929 0052 9DF81D30 		ldrb	r3, [sp, #29]	@ zero_extendqisi2
+ 930 0056 03EB0223 		add	r3, r3, r2, lsl #8
+ 931 005a 9BB2     		uxth	r3, r3
+ 932 005c A28A     		ldrh	r2, [r4, #20]
+ 933 005e 9B1A     		subs	r3, r3, r2
+ 934 0060 AB80     		strh	r3, [r5, #4]	@ movhi
+ 325:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 326:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_unlock(handle->lock);
+ 935              		.loc 1 326 0
+ 936 0062 0023     		movs	r3, #0
+ 937 0064 1A46     		mov	r2, r3
+ 938 0066 1946     		mov	r1, r3
+ 939 0068 E069     		ldr	r0, [r4, #28]
+ 940              	.LVL111:
+ 941 006a FFF7FEFF 		bl	xQueueGenericSend
+ 942              	.LVL112:
+ 327:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     return STM_OK;
+ 943              		.loc 1 327 0
+ 944 006e 0020     		movs	r0, #0
+ 945              	.L64:
+ 328:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 946              		.loc 1 328 0
+ 947 0070 09B0     		add	sp, sp, #36
+ 948              	.LCFI18:
+ 949              		.cfi_remember_state
+ 950              		.cfi_def_cfa_offset 12
+ 951              		@ sp needed
+ 952 0072 30BD     		pop	{r4, r5, pc}
+ 953              	.LVL113:
+ 954              	.L69:
+ 955              	.LCFI19:
+ 956              		.cfi_restore_state
+ 320:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 957              		.loc 1 320 0 discriminator 4
+ 958 0074 FFF7FEFF 		bl	stm_log_timestamp
+ 959              	.LVL114:
+ 960 0078 0949     		ldr	r1, .L70
+ 961 007a 0A4B     		ldr	r3, .L70+4
+ 962 007c 0493     		str	r3, [sp, #16]
+ARM GAS  /tmp/cco7neSE.s 			page 24
+
+
+ 963 007e 0A4B     		ldr	r3, .L70+8
+ 964 0080 0393     		str	r3, [sp, #12]
+ 965 0082 4FF4A073 		mov	r3, #320
+ 966 0086 0293     		str	r3, [sp, #8]
+ 967 0088 084B     		ldr	r3, .L70+12
+ 968 008a 0193     		str	r3, [sp, #4]
+ 969 008c 0091     		str	r1, [sp]
+ 970 008e 0346     		mov	r3, r0
+ 971 0090 074A     		ldr	r2, .L70+16
+ 972 0092 0120     		movs	r0, #1
+ 973 0094 FFF7FEFF 		bl	stm_log_write
+ 974              	.LVL115:
+ 975 0098 4FF0FF30 		mov	r0, #-1
+ 976 009c E8E7     		b	.L64
+ 977              	.L71:
+ 978 009e 00BF     		.align	2
+ 979              	.L70:
+ 980 00a0 28000000 		.word	.LC1
+ 981 00a4 00000000 		.word	.LC6
+ 982 00a8 00000000 		.word	.LANCHOR4
+ 983 00ac 50000000 		.word	.LC3
+ 984 00b0 00000000 		.word	.LC0
+ 985              		.cfi_endproc
+ 986              	.LFE142:
+ 988              		.section	.text.mpu9250_get_accel_scale,"ax",%progbits
+ 989              		.align	1
+ 990              		.global	mpu9250_get_accel_scale
+ 991              		.syntax unified
+ 992              		.thumb
+ 993              		.thumb_func
+ 994              		.fpu fpv4-sp-d16
+ 996              	mpu9250_get_accel_scale:
+ 997              	.LFB143:
+ 329:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 330:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** stm_err_t mpu9250_get_accel_scale(mpu9250_handle_t handle, imu_scale_data_t *scale_data)
+ 331:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 998              		.loc 1 331 0
+ 999              		.cfi_startproc
+ 1000              		@ args = 0, pretend = 0, frame = 8
+ 1001              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1002              	.LVL116:
+ 1003 0000 30B5     		push	{r4, r5, lr}
+ 1004              	.LCFI20:
+ 1005              		.cfi_def_cfa_offset 12
+ 1006              		.cfi_offset 4, -12
+ 1007              		.cfi_offset 5, -8
+ 1008              		.cfi_offset 14, -4
+ 1009 0002 89B0     		sub	sp, sp, #36
+ 1010              	.LCFI21:
+ 1011              		.cfi_def_cfa_offset 48
+ 1012 0004 0446     		mov	r4, r0
+ 1013 0006 0D46     		mov	r5, r1
+ 1014              	.LVL117:
+ 1015              	.L73:
+ 332:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_lock(handle->lock);
+ 1016              		.loc 1 332 0 discriminator 1
+ 1017 0008 4FF0FF31 		mov	r1, #-1
+ARM GAS  /tmp/cco7neSE.s 			page 25
+
+
+ 1018 000c E069     		ldr	r0, [r4, #28]
+ 1019 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1020              	.LVL118:
+ 1021 0012 0128     		cmp	r0, #1
+ 1022 0014 F8D1     		bne	.L73
+ 333:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int ret;
+ 334:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     uint8_t accel_raw_data[6];
+ 335:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 336:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Read accelerometer raw data */
+ 337:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_read_reg(handle->i2c_num, MPU9250_ACCEL_XOUT_H, accel_raw_data, 6);
+ 1023              		.loc 1 337 0
+ 1024 0016 0623     		movs	r3, #6
+ 1025 0018 06AA     		add	r2, sp, #24
+ 1026 001a 3B21     		movs	r1, #59
+ 1027 001c 94F82000 		ldrb	r0, [r4, #32]	@ zero_extendqisi2
+ 1028 0020 FFF7FEFF 		bl	_mpu9250_read_reg
+ 1029              	.LVL119:
+ 338:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_GET_DATA_ERR_STR, STM_FAIL);
+ 1030              		.loc 1 338 0
+ 1031 0024 0028     		cmp	r0, #0
+ 1032 0026 44D1     		bne	.L77
+ 339:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 340:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     scale_data->x_axis = (float)((int16_t)((accel_raw_data[0] << 8) + accel_raw_data[1]) - handle->
+ 1033              		.loc 1 340 0
+ 1034 0028 9DF81820 		ldrb	r2, [sp, #24]	@ zero_extendqisi2
+ 1035 002c 9DF81930 		ldrb	r3, [sp, #25]	@ zero_extendqisi2
+ 1036 0030 03EB0223 		add	r3, r3, r2, lsl #8
+ 1037 0034 1BB2     		sxth	r3, r3
+ 1038 0036 B4F91020 		ldrsh	r2, [r4, #16]
+ 1039 003a 9B1A     		subs	r3, r3, r2
+ 1040 003c 07EE903A 		vmov	s15, r3	@ int
+ 1041 0040 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 1042 0044 94ED027A 		vldr.32	s14, [r4, #8]
+ 1043 0048 67EE877A 		vmul.f32	s15, s15, s14
+ 1044 004c C5ED007A 		vstr.32	s15, [r5]
+ 341:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     scale_data->y_axis = (float)((int16_t)((accel_raw_data[2] << 8) + accel_raw_data[3]) - handle->
+ 1045              		.loc 1 341 0
+ 1046 0050 9DF81A20 		ldrb	r2, [sp, #26]	@ zero_extendqisi2
+ 1047 0054 9DF81B30 		ldrb	r3, [sp, #27]	@ zero_extendqisi2
+ 1048 0058 03EB0223 		add	r3, r3, r2, lsl #8
+ 1049 005c 1BB2     		sxth	r3, r3
+ 1050 005e B4F91220 		ldrsh	r2, [r4, #18]
+ 1051 0062 9B1A     		subs	r3, r3, r2
+ 1052 0064 07EE903A 		vmov	s15, r3	@ int
+ 1053 0068 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 1054 006c 94ED027A 		vldr.32	s14, [r4, #8]
+ 1055 0070 67EE877A 		vmul.f32	s15, s15, s14
+ 1056 0074 C5ED017A 		vstr.32	s15, [r5, #4]
+ 342:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     scale_data->z_axis = (float)((int16_t)((accel_raw_data[4] << 8) + accel_raw_data[5]) - handle->
+ 1057              		.loc 1 342 0
+ 1058 0078 9DF81C20 		ldrb	r2, [sp, #28]	@ zero_extendqisi2
+ 1059 007c 9DF81D30 		ldrb	r3, [sp, #29]	@ zero_extendqisi2
+ 1060 0080 03EB0223 		add	r3, r3, r2, lsl #8
+ 1061 0084 1BB2     		sxth	r3, r3
+ 1062 0086 B4F91420 		ldrsh	r2, [r4, #20]
+ 1063 008a 9B1A     		subs	r3, r3, r2
+ 1064 008c 07EE903A 		vmov	s15, r3	@ int
+ARM GAS  /tmp/cco7neSE.s 			page 26
+
+
+ 1065 0090 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 1066 0094 94ED027A 		vldr.32	s14, [r4, #8]
+ 1067 0098 67EE877A 		vmul.f32	s15, s15, s14
+ 1068 009c C5ED027A 		vstr.32	s15, [r5, #8]
+ 343:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 344:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_unlock(handle->lock);
+ 1069              		.loc 1 344 0
+ 1070 00a0 0023     		movs	r3, #0
+ 1071 00a2 1A46     		mov	r2, r3
+ 1072 00a4 1946     		mov	r1, r3
+ 1073 00a6 E069     		ldr	r0, [r4, #28]
+ 1074              	.LVL120:
+ 1075 00a8 FFF7FEFF 		bl	xQueueGenericSend
+ 1076              	.LVL121:
+ 345:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     return STM_OK;
+ 1077              		.loc 1 345 0
+ 1078 00ac 0020     		movs	r0, #0
+ 1079              	.L72:
+ 346:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 1080              		.loc 1 346 0
+ 1081 00ae 09B0     		add	sp, sp, #36
+ 1082              	.LCFI22:
+ 1083              		.cfi_remember_state
+ 1084              		.cfi_def_cfa_offset 12
+ 1085              		@ sp needed
+ 1086 00b0 30BD     		pop	{r4, r5, pc}
+ 1087              	.LVL122:
+ 1088              	.L77:
+ 1089              	.LCFI23:
+ 1090              		.cfi_restore_state
+ 338:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 1091              		.loc 1 338 0 discriminator 4
+ 1092 00b2 FFF7FEFF 		bl	stm_log_timestamp
+ 1093              	.LVL123:
+ 1094 00b6 0949     		ldr	r1, .L78
+ 1095 00b8 094B     		ldr	r3, .L78+4
+ 1096 00ba 0493     		str	r3, [sp, #16]
+ 1097 00bc 094B     		ldr	r3, .L78+8
+ 1098 00be 0393     		str	r3, [sp, #12]
+ 1099 00c0 4FF4A973 		mov	r3, #338
+ 1100 00c4 0293     		str	r3, [sp, #8]
+ 1101 00c6 084B     		ldr	r3, .L78+12
+ 1102 00c8 0193     		str	r3, [sp, #4]
+ 1103 00ca 0091     		str	r1, [sp]
+ 1104 00cc 0346     		mov	r3, r0
+ 1105 00ce 074A     		ldr	r2, .L78+16
+ 1106 00d0 0120     		movs	r0, #1
+ 1107 00d2 FFF7FEFF 		bl	stm_log_write
+ 1108              	.LVL124:
+ 1109 00d6 4FF0FF30 		mov	r0, #-1
+ 1110 00da E8E7     		b	.L72
+ 1111              	.L79:
+ 1112              		.align	2
+ 1113              	.L78:
+ 1114 00dc 28000000 		.word	.LC1
+ 1115 00e0 00000000 		.word	.LC6
+ 1116 00e4 00000000 		.word	.LANCHOR5
+ARM GAS  /tmp/cco7neSE.s 			page 27
+
+
+ 1117 00e8 50000000 		.word	.LC3
+ 1118 00ec 00000000 		.word	.LC0
+ 1119              		.cfi_endproc
+ 1120              	.LFE143:
+ 1122              		.section	.text.mpu9250_get_gyro_raw,"ax",%progbits
+ 1123              		.align	1
+ 1124              		.global	mpu9250_get_gyro_raw
+ 1125              		.syntax unified
+ 1126              		.thumb
+ 1127              		.thumb_func
+ 1128              		.fpu fpv4-sp-d16
+ 1130              	mpu9250_get_gyro_raw:
+ 1131              	.LFB144:
+ 347:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 348:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** stm_err_t mpu9250_get_gyro_raw(mpu9250_handle_t handle, imu_raw_data_t *raw_data)
+ 349:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 1132              		.loc 1 349 0
+ 1133              		.cfi_startproc
+ 1134              		@ args = 0, pretend = 0, frame = 8
+ 1135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1136              	.LVL125:
+ 1137 0000 30B5     		push	{r4, r5, lr}
+ 1138              	.LCFI24:
+ 1139              		.cfi_def_cfa_offset 12
+ 1140              		.cfi_offset 4, -12
+ 1141              		.cfi_offset 5, -8
+ 1142              		.cfi_offset 14, -4
+ 1143 0002 89B0     		sub	sp, sp, #36
+ 1144              	.LCFI25:
+ 1145              		.cfi_def_cfa_offset 48
+ 1146 0004 0446     		mov	r4, r0
+ 1147 0006 0D46     		mov	r5, r1
+ 1148              	.LVL126:
+ 1149              	.L81:
+ 350:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_lock(handle->lock);
+ 1150              		.loc 1 350 0 discriminator 1
+ 1151 0008 4FF0FF31 		mov	r1, #-1
+ 1152 000c E069     		ldr	r0, [r4, #28]
+ 1153 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1154              	.LVL127:
+ 1155 0012 0128     		cmp	r0, #1
+ 1156 0014 F8D1     		bne	.L81
+ 351:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int ret;
+ 352:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     uint8_t gyro_raw_data[6];
+ 353:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 354:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Get gyroscope raw data */
+ 355:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_read_reg(handle->i2c_num, MPU9250_GYRO_XOUT_H, gyro_raw_data, 6);
+ 1157              		.loc 1 355 0
+ 1158 0016 0623     		movs	r3, #6
+ 1159 0018 06AA     		add	r2, sp, #24
+ 1160 001a 4321     		movs	r1, #67
+ 1161 001c 94F82000 		ldrb	r0, [r4, #32]	@ zero_extendqisi2
+ 1162 0020 FFF7FEFF 		bl	_mpu9250_read_reg
+ 1163              	.LVL128:
+ 356:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_GET_DATA_ERR_STR, STM_FAIL);
+ 1164              		.loc 1 356 0
+ 1165 0024 E8B9     		cbnz	r0, .L85
+ARM GAS  /tmp/cco7neSE.s 			page 28
+
+
+ 357:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 358:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     raw_data->x_axis = (int16_t)((gyro_raw_data[0] << 8) + gyro_raw_data[1]);
+ 1166              		.loc 1 358 0
+ 1167 0026 9DF81820 		ldrb	r2, [sp, #24]	@ zero_extendqisi2
+ 1168 002a 9DF81930 		ldrb	r3, [sp, #25]	@ zero_extendqisi2
+ 1169 002e 03EB0223 		add	r3, r3, r2, lsl #8
+ 1170 0032 2B80     		strh	r3, [r5]	@ movhi
+ 359:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     raw_data->y_axis = (int16_t)((gyro_raw_data[2] << 8) + gyro_raw_data[3]);
+ 1171              		.loc 1 359 0
+ 1172 0034 9DF81A20 		ldrb	r2, [sp, #26]	@ zero_extendqisi2
+ 1173 0038 9DF81B30 		ldrb	r3, [sp, #27]	@ zero_extendqisi2
+ 1174 003c 03EB0223 		add	r3, r3, r2, lsl #8
+ 1175 0040 6B80     		strh	r3, [r5, #2]	@ movhi
+ 360:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     raw_data->z_axis = (int16_t)((gyro_raw_data[4] << 8) + gyro_raw_data[5]);
+ 1176              		.loc 1 360 0
+ 1177 0042 9DF81C20 		ldrb	r2, [sp, #28]	@ zero_extendqisi2
+ 1178 0046 9DF81D30 		ldrb	r3, [sp, #29]	@ zero_extendqisi2
+ 1179 004a 03EB0223 		add	r3, r3, r2, lsl #8
+ 1180 004e AB80     		strh	r3, [r5, #4]	@ movhi
+ 361:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 362:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_unlock(handle->lock);
+ 1181              		.loc 1 362 0
+ 1182 0050 0023     		movs	r3, #0
+ 1183 0052 1A46     		mov	r2, r3
+ 1184 0054 1946     		mov	r1, r3
+ 1185 0056 E069     		ldr	r0, [r4, #28]
+ 1186              	.LVL129:
+ 1187 0058 FFF7FEFF 		bl	xQueueGenericSend
+ 1188              	.LVL130:
+ 363:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     return STM_OK;
+ 1189              		.loc 1 363 0
+ 1190 005c 0020     		movs	r0, #0
+ 1191              	.L80:
+ 364:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 1192              		.loc 1 364 0
+ 1193 005e 09B0     		add	sp, sp, #36
+ 1194              	.LCFI26:
+ 1195              		.cfi_remember_state
+ 1196              		.cfi_def_cfa_offset 12
+ 1197              		@ sp needed
+ 1198 0060 30BD     		pop	{r4, r5, pc}
+ 1199              	.LVL131:
+ 1200              	.L85:
+ 1201              	.LCFI27:
+ 1202              		.cfi_restore_state
+ 356:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 1203              		.loc 1 356 0 discriminator 4
+ 1204 0062 FFF7FEFF 		bl	stm_log_timestamp
+ 1205              	.LVL132:
+ 1206 0066 0949     		ldr	r1, .L86
+ 1207 0068 094B     		ldr	r3, .L86+4
+ 1208 006a 0493     		str	r3, [sp, #16]
+ 1209 006c 094B     		ldr	r3, .L86+8
+ 1210 006e 0393     		str	r3, [sp, #12]
+ 1211 0070 4FF4B273 		mov	r3, #356
+ 1212 0074 0293     		str	r3, [sp, #8]
+ 1213 0076 084B     		ldr	r3, .L86+12
+ARM GAS  /tmp/cco7neSE.s 			page 29
+
+
+ 1214 0078 0193     		str	r3, [sp, #4]
+ 1215 007a 0091     		str	r1, [sp]
+ 1216 007c 0346     		mov	r3, r0
+ 1217 007e 074A     		ldr	r2, .L86+16
+ 1218 0080 0120     		movs	r0, #1
+ 1219 0082 FFF7FEFF 		bl	stm_log_write
+ 1220              	.LVL133:
+ 1221 0086 4FF0FF30 		mov	r0, #-1
+ 1222 008a E8E7     		b	.L80
+ 1223              	.L87:
+ 1224              		.align	2
+ 1225              	.L86:
+ 1226 008c 28000000 		.word	.LC1
+ 1227 0090 00000000 		.word	.LC6
+ 1228 0094 00000000 		.word	.LANCHOR6
+ 1229 0098 50000000 		.word	.LC3
+ 1230 009c 00000000 		.word	.LC0
+ 1231              		.cfi_endproc
+ 1232              	.LFE144:
+ 1234              		.section	.text.mpu9250_get_gyro_cali,"ax",%progbits
+ 1235              		.align	1
+ 1236              		.global	mpu9250_get_gyro_cali
+ 1237              		.syntax unified
+ 1238              		.thumb
+ 1239              		.thumb_func
+ 1240              		.fpu fpv4-sp-d16
+ 1242              	mpu9250_get_gyro_cali:
+ 1243              	.LFB145:
+ 365:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 366:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** stm_err_t mpu9250_get_gyro_cali(mpu9250_handle_t handle, imu_cali_data_t *cali_data)
+ 367:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 1244              		.loc 1 367 0
+ 1245              		.cfi_startproc
+ 1246              		@ args = 0, pretend = 0, frame = 8
+ 1247              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1248              	.LVL134:
+ 1249 0000 30B5     		push	{r4, r5, lr}
+ 1250              	.LCFI28:
+ 1251              		.cfi_def_cfa_offset 12
+ 1252              		.cfi_offset 4, -12
+ 1253              		.cfi_offset 5, -8
+ 1254              		.cfi_offset 14, -4
+ 1255 0002 89B0     		sub	sp, sp, #36
+ 1256              	.LCFI29:
+ 1257              		.cfi_def_cfa_offset 48
+ 1258 0004 0446     		mov	r4, r0
+ 1259 0006 0D46     		mov	r5, r1
+ 1260              	.LVL135:
+ 1261              	.L89:
+ 368:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_lock(handle->lock);
+ 1262              		.loc 1 368 0 discriminator 1
+ 1263 0008 4FF0FF31 		mov	r1, #-1
+ 1264 000c E069     		ldr	r0, [r4, #28]
+ 1265 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1266              	.LVL136:
+ 1267 0012 0128     		cmp	r0, #1
+ 1268 0014 F8D1     		bne	.L89
+ARM GAS  /tmp/cco7neSE.s 			page 30
+
+
+ 369:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int ret;
+ 370:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     uint8_t gyro_raw_data[6];
+ 371:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 372:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Get gyroscope raw data */
+ 373:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_read_reg(handle->i2c_num, MPU9250_GYRO_XOUT_H, gyro_raw_data, 6);
+ 1269              		.loc 1 373 0
+ 1270 0016 0623     		movs	r3, #6
+ 1271 0018 06AA     		add	r2, sp, #24
+ 1272 001a 4321     		movs	r1, #67
+ 1273 001c 94F82000 		ldrb	r0, [r4, #32]	@ zero_extendqisi2
+ 1274 0020 FFF7FEFF 		bl	_mpu9250_read_reg
+ 1275              	.LVL137:
+ 374:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_GET_DATA_ERR_STR, STM_FAIL);
+ 1276              		.loc 1 374 0
+ 1277 0024 30BB     		cbnz	r0, .L93
+ 375:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 376:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     cali_data->x_axis = (int16_t)((gyro_raw_data[0] << 8) + gyro_raw_data[1]) - handle->gyro_bias.x
+ 1278              		.loc 1 376 0
+ 1279 0026 9DF81820 		ldrb	r2, [sp, #24]	@ zero_extendqisi2
+ 1280 002a 9DF81930 		ldrb	r3, [sp, #25]	@ zero_extendqisi2
+ 1281 002e 03EB0223 		add	r3, r3, r2, lsl #8
+ 1282 0032 9BB2     		uxth	r3, r3
+ 1283 0034 E28A     		ldrh	r2, [r4, #22]
+ 1284 0036 9B1A     		subs	r3, r3, r2
+ 1285 0038 2B80     		strh	r3, [r5]	@ movhi
+ 377:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     cali_data->y_axis = (int16_t)((gyro_raw_data[2] << 8) + gyro_raw_data[3]) - handle->gyro_bias.y
+ 1286              		.loc 1 377 0
+ 1287 003a 9DF81A20 		ldrb	r2, [sp, #26]	@ zero_extendqisi2
+ 1288 003e 9DF81B30 		ldrb	r3, [sp, #27]	@ zero_extendqisi2
+ 1289 0042 03EB0223 		add	r3, r3, r2, lsl #8
+ 1290 0046 9BB2     		uxth	r3, r3
+ 1291 0048 228B     		ldrh	r2, [r4, #24]
+ 1292 004a 9B1A     		subs	r3, r3, r2
+ 1293 004c 6B80     		strh	r3, [r5, #2]	@ movhi
+ 378:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     cali_data->z_axis = (int16_t)((gyro_raw_data[4] << 8) + gyro_raw_data[5]) - handle->gyro_bias.z
+ 1294              		.loc 1 378 0
+ 1295 004e 9DF81C20 		ldrb	r2, [sp, #28]	@ zero_extendqisi2
+ 1296 0052 9DF81D30 		ldrb	r3, [sp, #29]	@ zero_extendqisi2
+ 1297 0056 03EB0223 		add	r3, r3, r2, lsl #8
+ 1298 005a 9BB2     		uxth	r3, r3
+ 1299 005c 628B     		ldrh	r2, [r4, #26]
+ 1300 005e 9B1A     		subs	r3, r3, r2
+ 1301 0060 AB80     		strh	r3, [r5, #4]	@ movhi
+ 379:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 380:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_unlock(handle->lock);
+ 1302              		.loc 1 380 0
+ 1303 0062 0023     		movs	r3, #0
+ 1304 0064 1A46     		mov	r2, r3
+ 1305 0066 1946     		mov	r1, r3
+ 1306 0068 E069     		ldr	r0, [r4, #28]
+ 1307              	.LVL138:
+ 1308 006a FFF7FEFF 		bl	xQueueGenericSend
+ 1309              	.LVL139:
+ 381:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     return STM_OK;
+ 1310              		.loc 1 381 0
+ 1311 006e 0020     		movs	r0, #0
+ 1312              	.L88:
+ARM GAS  /tmp/cco7neSE.s 			page 31
+
+
+ 382:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 1313              		.loc 1 382 0
+ 1314 0070 09B0     		add	sp, sp, #36
+ 1315              	.LCFI30:
+ 1316              		.cfi_remember_state
+ 1317              		.cfi_def_cfa_offset 12
+ 1318              		@ sp needed
+ 1319 0072 30BD     		pop	{r4, r5, pc}
+ 1320              	.LVL140:
+ 1321              	.L93:
+ 1322              	.LCFI31:
+ 1323              		.cfi_restore_state
+ 374:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 1324              		.loc 1 374 0 discriminator 4
+ 1325 0074 FFF7FEFF 		bl	stm_log_timestamp
+ 1326              	.LVL141:
+ 1327 0078 0949     		ldr	r1, .L94
+ 1328 007a 0A4B     		ldr	r3, .L94+4
+ 1329 007c 0493     		str	r3, [sp, #16]
+ 1330 007e 0A4B     		ldr	r3, .L94+8
+ 1331 0080 0393     		str	r3, [sp, #12]
+ 1332 0082 4FF4BB73 		mov	r3, #374
+ 1333 0086 0293     		str	r3, [sp, #8]
+ 1334 0088 084B     		ldr	r3, .L94+12
+ 1335 008a 0193     		str	r3, [sp, #4]
+ 1336 008c 0091     		str	r1, [sp]
+ 1337 008e 0346     		mov	r3, r0
+ 1338 0090 074A     		ldr	r2, .L94+16
+ 1339 0092 0120     		movs	r0, #1
+ 1340 0094 FFF7FEFF 		bl	stm_log_write
+ 1341              	.LVL142:
+ 1342 0098 4FF0FF30 		mov	r0, #-1
+ 1343 009c E8E7     		b	.L88
+ 1344              	.L95:
+ 1345 009e 00BF     		.align	2
+ 1346              	.L94:
+ 1347 00a0 28000000 		.word	.LC1
+ 1348 00a4 00000000 		.word	.LC6
+ 1349 00a8 00000000 		.word	.LANCHOR7
+ 1350 00ac 50000000 		.word	.LC3
+ 1351 00b0 00000000 		.word	.LC0
+ 1352              		.cfi_endproc
+ 1353              	.LFE145:
+ 1355              		.section	.text.mpu9250_get_gyro_scale,"ax",%progbits
+ 1356              		.align	1
+ 1357              		.global	mpu9250_get_gyro_scale
+ 1358              		.syntax unified
+ 1359              		.thumb
+ 1360              		.thumb_func
+ 1361              		.fpu fpv4-sp-d16
+ 1363              	mpu9250_get_gyro_scale:
+ 1364              	.LFB146:
+ 383:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 384:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** stm_err_t mpu9250_get_gyro_scale(mpu9250_handle_t handle, imu_scale_data_t *scale_data)
+ 385:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 1365              		.loc 1 385 0
+ 1366              		.cfi_startproc
+ARM GAS  /tmp/cco7neSE.s 			page 32
+
+
+ 1367              		@ args = 0, pretend = 0, frame = 8
+ 1368              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1369              	.LVL143:
+ 1370 0000 30B5     		push	{r4, r5, lr}
+ 1371              	.LCFI32:
+ 1372              		.cfi_def_cfa_offset 12
+ 1373              		.cfi_offset 4, -12
+ 1374              		.cfi_offset 5, -8
+ 1375              		.cfi_offset 14, -4
+ 1376 0002 89B0     		sub	sp, sp, #36
+ 1377              	.LCFI33:
+ 1378              		.cfi_def_cfa_offset 48
+ 1379 0004 0446     		mov	r4, r0
+ 1380 0006 0D46     		mov	r5, r1
+ 1381              	.LVL144:
+ 1382              	.L97:
+ 386:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_lock(handle->lock);
+ 1383              		.loc 1 386 0 discriminator 1
+ 1384 0008 4FF0FF31 		mov	r1, #-1
+ 1385 000c E069     		ldr	r0, [r4, #28]
+ 1386 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1387              	.LVL145:
+ 1388 0012 0128     		cmp	r0, #1
+ 1389 0014 F8D1     		bne	.L97
+ 387:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int ret;
+ 388:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     uint8_t gyro_raw_data[6];
+ 389:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 390:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     /* Get gyroscope raw data */
+ 391:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     ret = _mpu9250_read_reg(handle->i2c_num, MPU9250_GYRO_XOUT_H, gyro_raw_data, 6);
+ 1390              		.loc 1 391 0
+ 1391 0016 0623     		movs	r3, #6
+ 1392 0018 06AA     		add	r2, sp, #24
+ 1393 001a 4321     		movs	r1, #67
+ 1394 001c 94F82000 		ldrb	r0, [r4, #32]	@ zero_extendqisi2
+ 1395 0020 FFF7FEFF 		bl	_mpu9250_read_reg
+ 1396              	.LVL146:
+ 392:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     MPU9250_CHECK(!ret, MPU9250_GET_DATA_ERR_STR, STM_FAIL);
+ 1397              		.loc 1 392 0
+ 1398 0024 0028     		cmp	r0, #0
+ 1399 0026 44D1     		bne	.L101
+ 393:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 394:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     scale_data->x_axis = (float)((int16_t)((gyro_raw_data[0] << 8) + gyro_raw_data[1]) - handle->gy
+ 1400              		.loc 1 394 0
+ 1401 0028 9DF81820 		ldrb	r2, [sp, #24]	@ zero_extendqisi2
+ 1402 002c 9DF81930 		ldrb	r3, [sp, #25]	@ zero_extendqisi2
+ 1403 0030 03EB0223 		add	r3, r3, r2, lsl #8
+ 1404 0034 1BB2     		sxth	r3, r3
+ 1405 0036 B4F91620 		ldrsh	r2, [r4, #22]
+ 1406 003a 9B1A     		subs	r3, r3, r2
+ 1407 003c 07EE903A 		vmov	s15, r3	@ int
+ 1408 0040 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 1409 0044 94ED037A 		vldr.32	s14, [r4, #12]
+ 1410 0048 67EE877A 		vmul.f32	s15, s15, s14
+ 1411 004c C5ED007A 		vstr.32	s15, [r5]
+ 395:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     scale_data->y_axis = (float)((int16_t)((gyro_raw_data[2] << 8) + gyro_raw_data[3]) - handle->gy
+ 1412              		.loc 1 395 0
+ 1413 0050 9DF81A20 		ldrb	r2, [sp, #26]	@ zero_extendqisi2
+ARM GAS  /tmp/cco7neSE.s 			page 33
+
+
+ 1414 0054 9DF81B30 		ldrb	r3, [sp, #27]	@ zero_extendqisi2
+ 1415 0058 03EB0223 		add	r3, r3, r2, lsl #8
+ 1416 005c 1BB2     		sxth	r3, r3
+ 1417 005e B4F91820 		ldrsh	r2, [r4, #24]
+ 1418 0062 9B1A     		subs	r3, r3, r2
+ 1419 0064 07EE903A 		vmov	s15, r3	@ int
+ 1420 0068 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 1421 006c 94ED037A 		vldr.32	s14, [r4, #12]
+ 1422 0070 67EE877A 		vmul.f32	s15, s15, s14
+ 1423 0074 C5ED017A 		vstr.32	s15, [r5, #4]
+ 396:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     scale_data->z_axis = (float)((int16_t)((gyro_raw_data[4] << 8) + gyro_raw_data[5]) - handle->gy
+ 1424              		.loc 1 396 0
+ 1425 0078 9DF81C20 		ldrb	r2, [sp, #28]	@ zero_extendqisi2
+ 1426 007c 9DF81D30 		ldrb	r3, [sp, #29]	@ zero_extendqisi2
+ 1427 0080 03EB0223 		add	r3, r3, r2, lsl #8
+ 1428 0084 1BB2     		sxth	r3, r3
+ 1429 0086 B4F91A20 		ldrsh	r2, [r4, #26]
+ 1430 008a 9B1A     		subs	r3, r3, r2
+ 1431 008c 07EE903A 		vmov	s15, r3	@ int
+ 1432 0090 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 1433 0094 94ED037A 		vldr.32	s14, [r4, #12]
+ 1434 0098 67EE877A 		vmul.f32	s15, s15, s14
+ 1435 009c C5ED027A 		vstr.32	s15, [r5, #8]
+ 397:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 398:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_unlock(handle->lock);
+ 1436              		.loc 1 398 0
+ 1437 00a0 0023     		movs	r3, #0
+ 1438 00a2 1A46     		mov	r2, r3
+ 1439 00a4 1946     		mov	r1, r3
+ 1440 00a6 E069     		ldr	r0, [r4, #28]
+ 1441              	.LVL147:
+ 1442 00a8 FFF7FEFF 		bl	xQueueGenericSend
+ 1443              	.LVL148:
+ 399:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     return STM_OK;
+ 1444              		.loc 1 399 0
+ 1445 00ac 0020     		movs	r0, #0
+ 1446              	.L96:
+ 400:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 1447              		.loc 1 400 0
+ 1448 00ae 09B0     		add	sp, sp, #36
+ 1449              	.LCFI34:
+ 1450              		.cfi_remember_state
+ 1451              		.cfi_def_cfa_offset 12
+ 1452              		@ sp needed
+ 1453 00b0 30BD     		pop	{r4, r5, pc}
+ 1454              	.LVL149:
+ 1455              	.L101:
+ 1456              	.LCFI35:
+ 1457              		.cfi_restore_state
+ 392:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 1458              		.loc 1 392 0 discriminator 4
+ 1459 00b2 FFF7FEFF 		bl	stm_log_timestamp
+ 1460              	.LVL150:
+ 1461 00b6 0949     		ldr	r1, .L102
+ 1462 00b8 094B     		ldr	r3, .L102+4
+ 1463 00ba 0493     		str	r3, [sp, #16]
+ 1464 00bc 094B     		ldr	r3, .L102+8
+ARM GAS  /tmp/cco7neSE.s 			page 34
+
+
+ 1465 00be 0393     		str	r3, [sp, #12]
+ 1466 00c0 4FF4C473 		mov	r3, #392
+ 1467 00c4 0293     		str	r3, [sp, #8]
+ 1468 00c6 084B     		ldr	r3, .L102+12
+ 1469 00c8 0193     		str	r3, [sp, #4]
+ 1470 00ca 0091     		str	r1, [sp]
+ 1471 00cc 0346     		mov	r3, r0
+ 1472 00ce 074A     		ldr	r2, .L102+16
+ 1473 00d0 0120     		movs	r0, #1
+ 1474 00d2 FFF7FEFF 		bl	stm_log_write
+ 1475              	.LVL151:
+ 1476 00d6 4FF0FF30 		mov	r0, #-1
+ 1477 00da E8E7     		b	.L96
+ 1478              	.L103:
+ 1479              		.align	2
+ 1480              	.L102:
+ 1481 00dc 28000000 		.word	.LC1
+ 1482 00e0 00000000 		.word	.LC6
+ 1483 00e4 00000000 		.word	.LANCHOR8
+ 1484 00e8 50000000 		.word	.LC3
+ 1485 00ec 00000000 		.word	.LC0
+ 1486              		.cfi_endproc
+ 1487              	.LFE146:
+ 1489              		.section	.text.mpu9250_set_accel_bias,"ax",%progbits
+ 1490              		.align	1
+ 1491              		.global	mpu9250_set_accel_bias
+ 1492              		.syntax unified
+ 1493              		.thumb
+ 1494              		.thumb_func
+ 1495              		.fpu fpv4-sp-d16
+ 1497              	mpu9250_set_accel_bias:
+ 1498              	.LFB147:
+ 401:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 402:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** void mpu9250_set_accel_bias(mpu9250_handle_t handle, imu_bias_data_t accel_bias)
+ 403:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 1499              		.loc 1 403 0
+ 1500              		.cfi_startproc
+ 1501              		@ args = 0, pretend = 0, frame = 8
+ 1502              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1503              	.LVL152:
+ 1504 0000 10B5     		push	{r4, lr}
+ 1505              	.LCFI36:
+ 1506              		.cfi_def_cfa_offset 8
+ 1507              		.cfi_offset 4, -8
+ 1508              		.cfi_offset 14, -4
+ 1509 0002 82B0     		sub	sp, sp, #8
+ 1510              	.LCFI37:
+ 1511              		.cfi_def_cfa_offset 16
+ 1512 0004 0446     		mov	r4, r0
+ 1513 0006 02AB     		add	r3, sp, #8
+ 1514 0008 03E90600 		stmdb	r3, {r1, r2}
+ 1515              	.LVL153:
+ 1516              	.L105:
+ 404:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_lock(handle->lock);
+ 1517              		.loc 1 404 0 discriminator 1
+ 1518 000c 4FF0FF31 		mov	r1, #-1
+ 1519 0010 E069     		ldr	r0, [r4, #28]
+ARM GAS  /tmp/cco7neSE.s 			page 35
+
+
+ 1520 0012 FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1521              	.LVL154:
+ 1522 0016 0128     		cmp	r0, #1
+ 1523 0018 F8D1     		bne	.L105
+ 405:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->accel_bias.x_axis = accel_bias.x_axis;
+ 1524              		.loc 1 405 0
+ 1525 001a BDF90030 		ldrsh	r3, [sp]
+ 1526 001e 2382     		strh	r3, [r4, #16]	@ movhi
+ 406:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->accel_bias.y_axis = accel_bias.y_axis;
+ 1527              		.loc 1 406 0
+ 1528 0020 BDF90230 		ldrsh	r3, [sp, #2]
+ 1529 0024 6382     		strh	r3, [r4, #18]	@ movhi
+ 407:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->accel_bias.z_axis = accel_bias.z_axis;
+ 1530              		.loc 1 407 0
+ 1531 0026 BDF90430 		ldrsh	r3, [sp, #4]
+ 1532 002a A382     		strh	r3, [r4, #20]	@ movhi
+ 408:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_unlock(handle->lock);
+ 1533              		.loc 1 408 0
+ 1534 002c 0023     		movs	r3, #0
+ 1535 002e 1A46     		mov	r2, r3
+ 1536 0030 1946     		mov	r1, r3
+ 1537 0032 E069     		ldr	r0, [r4, #28]
+ 1538 0034 FFF7FEFF 		bl	xQueueGenericSend
+ 1539              	.LVL155:
+ 409:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 1540              		.loc 1 409 0
+ 1541 0038 02B0     		add	sp, sp, #8
+ 1542              	.LCFI38:
+ 1543              		.cfi_def_cfa_offset 8
+ 1544              		@ sp needed
+ 1545 003a 10BD     		pop	{r4, pc}
+ 1546              		.cfi_endproc
+ 1547              	.LFE147:
+ 1549              		.section	.text.mpu9250_set_gyro_bias,"ax",%progbits
+ 1550              		.align	1
+ 1551              		.global	mpu9250_set_gyro_bias
+ 1552              		.syntax unified
+ 1553              		.thumb
+ 1554              		.thumb_func
+ 1555              		.fpu fpv4-sp-d16
+ 1557              	mpu9250_set_gyro_bias:
+ 1558              	.LFB148:
+ 410:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 411:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** void mpu9250_set_gyro_bias(mpu9250_handle_t handle, imu_bias_data_t gyro_bias)
+ 412:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 1559              		.loc 1 412 0
+ 1560              		.cfi_startproc
+ 1561              		@ args = 0, pretend = 0, frame = 8
+ 1562              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1563              	.LVL156:
+ 1564 0000 10B5     		push	{r4, lr}
+ 1565              	.LCFI39:
+ 1566              		.cfi_def_cfa_offset 8
+ 1567              		.cfi_offset 4, -8
+ 1568              		.cfi_offset 14, -4
+ 1569 0002 82B0     		sub	sp, sp, #8
+ 1570              	.LCFI40:
+ARM GAS  /tmp/cco7neSE.s 			page 36
+
+
+ 1571              		.cfi_def_cfa_offset 16
+ 1572 0004 0446     		mov	r4, r0
+ 1573 0006 02AB     		add	r3, sp, #8
+ 1574 0008 03E90600 		stmdb	r3, {r1, r2}
+ 1575              	.LVL157:
+ 1576              	.L108:
+ 413:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_lock(handle->lock);
+ 1577              		.loc 1 413 0 discriminator 1
+ 1578 000c 4FF0FF31 		mov	r1, #-1
+ 1579 0010 E069     		ldr	r0, [r4, #28]
+ 1580 0012 FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1581              	.LVL158:
+ 1582 0016 0128     		cmp	r0, #1
+ 1583 0018 F8D1     		bne	.L108
+ 414:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->gyro_bias.x_axis = gyro_bias.x_axis;
+ 1584              		.loc 1 414 0
+ 1585 001a BDF90030 		ldrsh	r3, [sp]
+ 1586 001e E382     		strh	r3, [r4, #22]	@ movhi
+ 415:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->gyro_bias.y_axis = gyro_bias.y_axis;
+ 1587              		.loc 1 415 0
+ 1588 0020 BDF90230 		ldrsh	r3, [sp, #2]
+ 1589 0024 2383     		strh	r3, [r4, #24]	@ movhi
+ 416:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->gyro_bias.z_axis = gyro_bias.z_axis;
+ 1590              		.loc 1 416 0
+ 1591 0026 BDF90430 		ldrsh	r3, [sp, #4]
+ 1592 002a 6383     		strh	r3, [r4, #26]	@ movhi
+ 417:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_unlock(handle->lock);
+ 1593              		.loc 1 417 0
+ 1594 002c 0023     		movs	r3, #0
+ 1595 002e 1A46     		mov	r2, r3
+ 1596 0030 1946     		mov	r1, r3
+ 1597 0032 E069     		ldr	r0, [r4, #28]
+ 1598 0034 FFF7FEFF 		bl	xQueueGenericSend
+ 1599              	.LVL159:
+ 418:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 1600              		.loc 1 418 0
+ 1601 0038 02B0     		add	sp, sp, #8
+ 1602              	.LCFI41:
+ 1603              		.cfi_def_cfa_offset 8
+ 1604              		@ sp needed
+ 1605 003a 10BD     		pop	{r4, pc}
+ 1606              		.cfi_endproc
+ 1607              	.LFE148:
+ 1609              		.section	.text.mpu9250_get_accel_bias,"ax",%progbits
+ 1610              		.align	1
+ 1611              		.global	mpu9250_get_accel_bias
+ 1612              		.syntax unified
+ 1613              		.thumb
+ 1614              		.thumb_func
+ 1615              		.fpu fpv4-sp-d16
+ 1617              	mpu9250_get_accel_bias:
+ 1618              	.LFB149:
+ 419:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 420:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** void mpu9250_get_accel_bias(mpu9250_handle_t handle, imu_bias_data_t *accel_bias)
+ 421:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 1619              		.loc 1 421 0
+ 1620              		.cfi_startproc
+ARM GAS  /tmp/cco7neSE.s 			page 37
+
+
+ 1621              		@ args = 0, pretend = 0, frame = 0
+ 1622              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1623              	.LVL160:
+ 1624 0000 38B5     		push	{r3, r4, r5, lr}
+ 1625              	.LCFI42:
+ 1626              		.cfi_def_cfa_offset 16
+ 1627              		.cfi_offset 3, -16
+ 1628              		.cfi_offset 4, -12
+ 1629              		.cfi_offset 5, -8
+ 1630              		.cfi_offset 14, -4
+ 1631 0002 0446     		mov	r4, r0
+ 1632 0004 0D46     		mov	r5, r1
+ 1633              	.LVL161:
+ 1634              	.L111:
+ 422:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_lock(handle->lock);
+ 1635              		.loc 1 422 0 discriminator 1
+ 1636 0006 4FF0FF31 		mov	r1, #-1
+ 1637 000a E069     		ldr	r0, [r4, #28]
+ 1638 000c FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1639              	.LVL162:
+ 1640 0010 0128     		cmp	r0, #1
+ 1641 0012 F8D1     		bne	.L111
+ 423:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     accel_bias->x_axis = handle->accel_bias.x_axis;
+ 1642              		.loc 1 423 0
+ 1643 0014 B4F91030 		ldrsh	r3, [r4, #16]
+ 1644 0018 2B80     		strh	r3, [r5]	@ movhi
+ 424:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     accel_bias->y_axis = handle->accel_bias.y_axis;
+ 1645              		.loc 1 424 0
+ 1646 001a B4F91230 		ldrsh	r3, [r4, #18]
+ 1647 001e 6B80     		strh	r3, [r5, #2]	@ movhi
+ 425:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     accel_bias->z_axis = handle->accel_bias.z_axis;
+ 1648              		.loc 1 425 0
+ 1649 0020 B4F91430 		ldrsh	r3, [r4, #20]
+ 1650 0024 AB80     		strh	r3, [r5, #4]	@ movhi
+ 426:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_unlock(handle->lock);
+ 1651              		.loc 1 426 0
+ 1652 0026 0023     		movs	r3, #0
+ 1653 0028 1A46     		mov	r2, r3
+ 1654 002a 1946     		mov	r1, r3
+ 1655 002c E069     		ldr	r0, [r4, #28]
+ 1656 002e FFF7FEFF 		bl	xQueueGenericSend
+ 1657              	.LVL163:
+ 1658 0032 38BD     		pop	{r3, r4, r5, pc}
+ 1659              		.cfi_endproc
+ 1660              	.LFE149:
+ 1662              		.section	.text.mpu9250_get_gyro_bias,"ax",%progbits
+ 1663              		.align	1
+ 1664              		.global	mpu9250_get_gyro_bias
+ 1665              		.syntax unified
+ 1666              		.thumb
+ 1667              		.thumb_func
+ 1668              		.fpu fpv4-sp-d16
+ 1670              	mpu9250_get_gyro_bias:
+ 1671              	.LFB150:
+ 427:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 428:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 429:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** void mpu9250_get_gyro_bias(mpu9250_handle_t handle, imu_bias_data_t *gyro_bias)
+ARM GAS  /tmp/cco7neSE.s 			page 38
+
+
+ 430:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 1672              		.loc 1 430 0
+ 1673              		.cfi_startproc
+ 1674              		@ args = 0, pretend = 0, frame = 0
+ 1675              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1676              	.LVL164:
+ 1677 0000 38B5     		push	{r3, r4, r5, lr}
+ 1678              	.LCFI43:
+ 1679              		.cfi_def_cfa_offset 16
+ 1680              		.cfi_offset 3, -16
+ 1681              		.cfi_offset 4, -12
+ 1682              		.cfi_offset 5, -8
+ 1683              		.cfi_offset 14, -4
+ 1684 0002 0446     		mov	r4, r0
+ 1685 0004 0D46     		mov	r5, r1
+ 1686              	.LVL165:
+ 1687              	.L114:
+ 431:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_lock(handle->lock);
+ 1688              		.loc 1 431 0 discriminator 1
+ 1689 0006 4FF0FF31 		mov	r1, #-1
+ 1690 000a E069     		ldr	r0, [r4, #28]
+ 1691 000c FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1692              	.LVL166:
+ 1693 0010 0128     		cmp	r0, #1
+ 1694 0012 F8D1     		bne	.L114
+ 432:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     gyro_bias->x_axis = handle->gyro_bias.x_axis;
+ 1695              		.loc 1 432 0
+ 1696 0014 B4F91630 		ldrsh	r3, [r4, #22]
+ 1697 0018 2B80     		strh	r3, [r5]	@ movhi
+ 433:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     gyro_bias->y_axis = handle->gyro_bias.y_axis;
+ 1698              		.loc 1 433 0
+ 1699 001a B4F91830 		ldrsh	r3, [r4, #24]
+ 1700 001e 6B80     		strh	r3, [r5, #2]	@ movhi
+ 434:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     gyro_bias->z_axis = handle->gyro_bias.z_axis;
+ 1701              		.loc 1 434 0
+ 1702 0020 B4F91A30 		ldrsh	r3, [r4, #26]
+ 1703 0024 AB80     		strh	r3, [r5, #4]	@ movhi
+ 435:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     mutex_unlock(handle->lock);
+ 1704              		.loc 1 435 0
+ 1705 0026 0023     		movs	r3, #0
+ 1706 0028 1A46     		mov	r2, r3
+ 1707 002a 1946     		mov	r1, r3
+ 1708 002c E069     		ldr	r0, [r4, #28]
+ 1709 002e FFF7FEFF 		bl	xQueueGenericSend
+ 1710              	.LVL167:
+ 1711 0032 38BD     		pop	{r3, r4, r5, pc}
+ 1712              		.cfi_endproc
+ 1713              	.LFE150:
+ 1715              		.section	.text.mpu9250_auto_calib,"ax",%progbits
+ 1716              		.align	1
+ 1717              		.global	mpu9250_auto_calib
+ 1718              		.syntax unified
+ 1719              		.thumb
+ 1720              		.thumb_func
+ 1721              		.fpu fpv4-sp-d16
+ 1723              	mpu9250_auto_calib:
+ 1724              	.LFB151:
+ARM GAS  /tmp/cco7neSE.s 			page 39
+
+
+ 436:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 437:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 438:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** void mpu9250_auto_calib(mpu9250_handle_t handle)
+ 439:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** {
+ 1725              		.loc 1 439 0
+ 1726              		.cfi_startproc
+ 1727              		@ args = 0, pretend = 0, frame = 40
+ 1728              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1729              	.LVL168:
+ 1730 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1731              	.LCFI44:
+ 1732              		.cfi_def_cfa_offset 36
+ 1733              		.cfi_offset 4, -36
+ 1734              		.cfi_offset 5, -32
+ 1735              		.cfi_offset 6, -28
+ 1736              		.cfi_offset 7, -24
+ 1737              		.cfi_offset 8, -20
+ 1738              		.cfi_offset 9, -16
+ 1739              		.cfi_offset 10, -12
+ 1740              		.cfi_offset 11, -8
+ 1741              		.cfi_offset 14, -4
+ 1742 0004 2DED028B 		vpush.64	{d8}
+ 1743              	.LCFI45:
+ 1744              		.cfi_def_cfa_offset 44
+ 1745              		.cfi_offset 80, -44
+ 1746              		.cfi_offset 81, -40
+ 1747 0008 8BB0     		sub	sp, sp, #44
+ 1748              	.LCFI46:
+ 1749              		.cfi_def_cfa_offset 88
+ 1750 000a 0546     		mov	r5, r0
+ 1751              	.LVL169:
+ 440:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int buffersize = BUFFER_CALIB_DEFAULT;
+ 441:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     int mean_ax, mean_ay, mean_az, mean_gx, mean_gy, mean_gz;
+ 442:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     long i = 0, buff_ax = 0, buff_ay = 0, buff_az = 0, buff_gx = 0, buff_gy = 0, buff_gz = 0;
+ 1752              		.loc 1 442 0
+ 1753 000c 0026     		movs	r6, #0
+ 1754 000e B346     		mov	fp, r6
+ 1755 0010 B246     		mov	r10, r6
+ 1756 0012 B146     		mov	r9, r6
+ 1757 0014 B046     		mov	r8, r6
+ 1758 0016 3746     		mov	r7, r6
+ 1759 0018 3446     		mov	r4, r6
+ 443:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 444:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     while (i < (buffersize + 101))                  /*!< Dismiss 100 first value */
+ 1760              		.loc 1 444 0
+ 1761 001a 04E0     		b	.L117
+ 1762              	.LVL170:
+ 1763              	.L118:
+ 1764              	.LBB2:
+ 445:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     {
+ 446:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         imu_raw_data_t accel_raw, gyro_raw;
+ 447:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         mpu9250_get_accel_raw(handle, &accel_raw);
+ 448:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         mpu9250_get_gyro_raw(handle, &gyro_raw);
+ 449:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 450:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         if (i > 100 && i <= (buffersize + 100))
+ 451:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         {
+ 452:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_ax += accel_raw.x_axis;
+ARM GAS  /tmp/cco7neSE.s 			page 40
+
+
+ 453:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_ay += accel_raw.y_axis;
+ 454:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_az += accel_raw.z_axis;
+ 455:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_gx += gyro_raw.x_axis;
+ 456:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_gy += gyro_raw.y_axis;
+ 457:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_gz += gyro_raw.z_axis;
+ 458:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         }
+ 459:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         if (i == (buffersize + 100))
+ 1765              		.loc 1 459 0
+ 1766 001c 40F24C43 		movw	r3, #1100
+ 1767 0020 9C42     		cmp	r4, r3
+ 1768 0022 21D0     		beq	.L122
+ 1769              	.L119:
+ 460:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         {
+ 461:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_ax = buff_ax / buffersize;
+ 462:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_ay = buff_ay / buffersize;
+ 463:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_az = buff_az / buffersize;
+ 464:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_gx = buff_gx / buffersize;
+ 465:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_gy = buff_gy / buffersize;
+ 466:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_gz = buff_gz / buffersize;
+ 467:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         }
+ 468:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         i++;
+ 1770              		.loc 1 468 0
+ 1771 0024 0134     		adds	r4, r4, #1
+ 1772              	.LVL171:
+ 1773              	.L117:
+ 1774              	.LBE2:
+ 444:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     {
+ 1775              		.loc 1 444 0
+ 1776 0026 40F24C43 		movw	r3, #1100
+ 1777 002a 9C42     		cmp	r4, r3
+ 1778 002c 47DC     		bgt	.L123
+ 1779              	.LBB3:
+ 447:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         mpu9250_get_gyro_raw(handle, &gyro_raw);
+ 1780              		.loc 1 447 0
+ 1781 002e 06A9     		add	r1, sp, #24
+ 1782 0030 2846     		mov	r0, r5
+ 1783 0032 FFF7FEFF 		bl	mpu9250_get_accel_raw
+ 1784              	.LVL172:
+ 448:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 1785              		.loc 1 448 0
+ 1786 0036 08A9     		add	r1, sp, #32
+ 1787 0038 2846     		mov	r0, r5
+ 1788 003a FFF7FEFF 		bl	mpu9250_get_gyro_raw
+ 1789              	.LVL173:
+ 450:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         {
+ 1790              		.loc 1 450 0
+ 1791 003e 642C     		cmp	r4, #100
+ 1792 0040 ECDD     		ble	.L118
+ 452:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_ay += accel_raw.y_axis;
+ 1793              		.loc 1 452 0
+ 1794 0042 BDF91830 		ldrsh	r3, [sp, #24]
+ 1795 0046 1F44     		add	r7, r7, r3
+ 1796              	.LVL174:
+ 453:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_az += accel_raw.z_axis;
+ 1797              		.loc 1 453 0
+ 1798 0048 BDF91A30 		ldrsh	r3, [sp, #26]
+ 1799 004c 9844     		add	r8, r8, r3
+ARM GAS  /tmp/cco7neSE.s 			page 41
+
+
+ 1800              	.LVL175:
+ 454:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_gx += gyro_raw.x_axis;
+ 1801              		.loc 1 454 0
+ 1802 004e BDF91C30 		ldrsh	r3, [sp, #28]
+ 1803 0052 9944     		add	r9, r9, r3
+ 1804              	.LVL176:
+ 455:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_gy += gyro_raw.y_axis;
+ 1805              		.loc 1 455 0
+ 1806 0054 BDF92030 		ldrsh	r3, [sp, #32]
+ 1807 0058 9A44     		add	r10, r10, r3
+ 1808              	.LVL177:
+ 456:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             buff_gz += gyro_raw.z_axis;
+ 1809              		.loc 1 456 0
+ 1810 005a BDF92230 		ldrsh	r3, [sp, #34]
+ 1811 005e 9B44     		add	fp, fp, r3
+ 1812              	.LVL178:
+ 457:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         }
+ 1813              		.loc 1 457 0
+ 1814 0060 BDF92430 		ldrsh	r3, [sp, #36]
+ 1815 0064 1E44     		add	r6, r6, r3
+ 1816              	.LVL179:
+ 1817 0066 D9E7     		b	.L118
+ 1818              	.L122:
+ 461:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_ay = buff_ay / buffersize;
+ 1819              		.loc 1 461 0
+ 1820 0068 264B     		ldr	r3, .L124
+ 1821 006a 83FB0721 		smull	r2, r1, r3, r7
+ 1822 006e FA17     		asrs	r2, r7, #31
+ 1823 0070 C2EBA112 		rsb	r2, r2, r1, asr #6
+ 1824 0074 0192     		str	r2, [sp, #4]
+ 1825              	.LVL180:
+ 462:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_az = buff_az / buffersize;
+ 1826              		.loc 1 462 0
+ 1827 0076 83FB0821 		smull	r2, r1, r3, r8
+ 1828              	.LVL181:
+ 1829 007a 4FEAE872 		asr	r2, r8, #31
+ 1830 007e C2EBA112 		rsb	r2, r2, r1, asr #6
+ 1831 0082 0292     		str	r2, [sp, #8]
+ 1832              	.LVL182:
+ 463:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_gx = buff_gx / buffersize;
+ 1833              		.loc 1 463 0
+ 1834 0084 83FB0921 		smull	r2, r1, r3, r9
+ 1835              	.LVL183:
+ 1836 0088 4FEAE972 		asr	r2, r9, #31
+ 1837 008c C2EBA112 		rsb	r2, r2, r1, asr #6
+ 1838 0090 08EE102A 		vmov	s16, r2	@ int
+ 1839              	.LVL184:
+ 464:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_gy = buff_gy / buffersize;
+ 1840              		.loc 1 464 0
+ 1841 0094 83FB0A21 		smull	r2, r1, r3, r10
+ 1842              	.LVL185:
+ 1843 0098 4FEAEA72 		asr	r2, r10, #31
+ 1844 009c C2EBA112 		rsb	r2, r2, r1, asr #6
+ 1845 00a0 0392     		str	r2, [sp, #12]
+ 1846              	.LVL186:
+ 465:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****             mean_gz = buff_gz / buffersize;
+ 1847              		.loc 1 465 0
+ARM GAS  /tmp/cco7neSE.s 			page 42
+
+
+ 1848 00a2 83FB0B21 		smull	r2, r1, r3, fp
+ 1849              	.LVL187:
+ 1850 00a6 4FEAEB72 		asr	r2, fp, #31
+ 1851 00aa C2EBA112 		rsb	r2, r2, r1, asr #6
+ 1852 00ae 0492     		str	r2, [sp, #16]
+ 1853              	.LVL188:
+ 466:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****         }
+ 1854              		.loc 1 466 0
+ 1855 00b0 83FB0623 		smull	r2, r3, r3, r6
+ 1856              	.LVL189:
+ 1857 00b4 F217     		asrs	r2, r6, #31
+ 1858 00b6 C2EBA313 		rsb	r3, r2, r3, asr #6
+ 1859 00ba 0593     		str	r3, [sp, #20]
+ 1860              	.LVL190:
+ 1861 00bc B2E7     		b	.L119
+ 1862              	.LVL191:
+ 1863              	.L123:
+ 1864              	.LBE3:
+ 469:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     }
+ 470:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** 
+ 471:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->accel_bias.x_axis = mean_ax;
+ 1865              		.loc 1 471 0
+ 1866 00be BDF80430 		ldrh	r3, [sp, #4]
+ 1867 00c2 2B82     		strh	r3, [r5, #16]	@ movhi
+ 472:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->accel_bias.y_axis = mean_ay;
+ 1868              		.loc 1 472 0
+ 1869 00c4 BDF80830 		ldrh	r3, [sp, #8]
+ 1870 00c8 6B82     		strh	r3, [r5, #18]	@ movhi
+ 473:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->accel_bias.z_axis = mean_az - 1.0f / handle->accel_scaling_factor;
+ 1871              		.loc 1 473 0
+ 1872 00ca D5ED027A 		vldr.32	s15, [r5, #8]
+ 1873 00ce F7EE006A 		vmov.f32	s13, #1.0e+0
+ 1874 00d2 86EEA77A 		vdiv.f32	s14, s13, s15
+ 1875 00d6 F8EEC87A 		vcvt.f32.s32	s15, s16
+ 1876 00da 77EEC77A 		vsub.f32	s15, s15, s14
+ 1877 00de FDEEE77A 		vcvt.s32.f32	s15, s15
+ 1878 00e2 17EE903A 		vmov	r3, s15	@ int
+ 1879 00e6 AB82     		strh	r3, [r5, #20]	@ movhi
+ 474:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->gyro_bias.x_axis = mean_gx;
+ 1880              		.loc 1 474 0
+ 1881 00e8 BDF80C30 		ldrh	r3, [sp, #12]
+ 1882 00ec EB82     		strh	r3, [r5, #22]	@ movhi
+ 475:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->gyro_bias.y_axis = mean_gy;
+ 1883              		.loc 1 475 0
+ 1884 00ee BDF81030 		ldrh	r3, [sp, #16]
+ 1885 00f2 2B83     		strh	r3, [r5, #24]	@ movhi
+ 476:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c ****     handle->gyro_bias.z_axis = mean_gz;
+ 1886              		.loc 1 476 0
+ 1887 00f4 BDF81430 		ldrh	r3, [sp, #20]
+ 1888 00f8 6B83     		strh	r3, [r5, #26]	@ movhi
+ 477:/home/phong/Documents/thesis/stm32f4/components/imu/mpu9250.c **** }
+ 1889              		.loc 1 477 0
+ 1890 00fa 0BB0     		add	sp, sp, #44
+ 1891              	.LCFI47:
+ 1892              		.cfi_def_cfa_offset 44
+ 1893              		@ sp needed
+ 1894 00fc BDEC028B 		vldm	sp!, {d8}
+ARM GAS  /tmp/cco7neSE.s 			page 43
+
+
+ 1895              	.LCFI48:
+ 1896              		.cfi_restore 80
+ 1897              		.cfi_restore 81
+ 1898              		.cfi_def_cfa_offset 36
+ 1899              	.LVL192:
+ 1900 0100 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 1901              	.LVL193:
+ 1902              	.L125:
+ 1903              		.align	2
+ 1904              	.L124:
+ 1905 0104 D34D6210 		.word	274877907
+ 1906              		.cfi_endproc
+ 1907              	.LFE151:
+ 1909              		.section	.rodata.__FUNCTION__.12949,"a",%progbits
+ 1910              		.align	2
+ 1911              		.set	.LANCHOR0,. + 0
+ 1914              	__FUNCTION__.12949:
+ 1915 0000 5F6D7075 		.ascii	"_mpu9250_write_reg\000"
+ 1915      39323530 
+ 1915      5F777269 
+ 1915      74655F72 
+ 1915      656700
+ 1916              		.section	.rodata.__FUNCTION__.12958,"a",%progbits
+ 1917              		.align	2
+ 1918              		.set	.LANCHOR1,. + 0
+ 1921              	__FUNCTION__.12958:
+ 1922 0000 5F6D7075 		.ascii	"_mpu9250_read_reg\000"
+ 1922      39323530 
+ 1922      5F726561 
+ 1922      645F7265 
+ 1922      6700
+ 1923              		.section	.rodata.__FUNCTION__.12962,"a",%progbits
+ 1924              		.align	2
+ 1925              		.set	.LANCHOR2,. + 0
+ 1928              	__FUNCTION__.12962:
+ 1929 0000 6D707539 		.ascii	"mpu9250_config\000"
+ 1929      3235305F 
+ 1929      636F6E66 
+ 1929      696700
+ 1930              		.section	.rodata.__FUNCTION__.12987,"a",%progbits
+ 1931              		.align	2
+ 1932              		.set	.LANCHOR3,. + 0
+ 1935              	__FUNCTION__.12987:
+ 1936 0000 6D707539 		.ascii	"mpu9250_get_accel_raw\000"
+ 1936      3235305F 
+ 1936      6765745F 
+ 1936      61636365 
+ 1936      6C5F7261 
+ 1937              		.section	.rodata.__FUNCTION__.12997,"a",%progbits
+ 1938              		.align	2
+ 1939              		.set	.LANCHOR4,. + 0
+ 1942              	__FUNCTION__.12997:
+ 1943 0000 6D707539 		.ascii	"mpu9250_get_accel_cali\000"
+ 1943      3235305F 
+ 1943      6765745F 
+ 1943      61636365 
+ 1943      6C5F6361 
+ARM GAS  /tmp/cco7neSE.s 			page 44
+
+
+ 1944              		.section	.rodata.__FUNCTION__.13007,"a",%progbits
+ 1945              		.align	2
+ 1946              		.set	.LANCHOR5,. + 0
+ 1949              	__FUNCTION__.13007:
+ 1950 0000 6D707539 		.ascii	"mpu9250_get_accel_scale\000"
+ 1950      3235305F 
+ 1950      6765745F 
+ 1950      61636365 
+ 1950      6C5F7363 
+ 1951              		.section	.rodata.__FUNCTION__.13017,"a",%progbits
+ 1952              		.align	2
+ 1953              		.set	.LANCHOR6,. + 0
+ 1956              	__FUNCTION__.13017:
+ 1957 0000 6D707539 		.ascii	"mpu9250_get_gyro_raw\000"
+ 1957      3235305F 
+ 1957      6765745F 
+ 1957      6779726F 
+ 1957      5F726177 
+ 1958              		.section	.rodata.__FUNCTION__.13027,"a",%progbits
+ 1959              		.align	2
+ 1960              		.set	.LANCHOR7,. + 0
+ 1963              	__FUNCTION__.13027:
+ 1964 0000 6D707539 		.ascii	"mpu9250_get_gyro_cali\000"
+ 1964      3235305F 
+ 1964      6765745F 
+ 1964      6779726F 
+ 1964      5F63616C 
+ 1965              		.section	.rodata.__FUNCTION__.13037,"a",%progbits
+ 1966              		.align	2
+ 1967              		.set	.LANCHOR8,. + 0
+ 1970              	__FUNCTION__.13037:
+ 1971 0000 6D707539 		.ascii	"mpu9250_get_gyro_scale\000"
+ 1971      3235305F 
+ 1971      6765745F 
+ 1971      6779726F 
+ 1971      5F736361 
+ 1972              		.section	.rodata._mpu9250_read_reg.str1.4,"aMS",%progbits,1
+ 1973              		.align	2
+ 1974              	.LC4:
+ 1975 0000 6D707539 		.ascii	"mpu9250 read registers error\000"
+ 1975      32353020 
+ 1975      72656164 
+ 1975      20726567 
+ 1975      69737465 
+ 1976              		.section	.rodata._mpu9250_write_reg.str1.4,"aMS",%progbits,1
+ 1977              		.align	2
+ 1978              	.LC0:
+ 1979 0000 1B5B303B 		.ascii	"\033[0;31mE (%d) %s: %s:%d (%s):%s\033[0m\015\012\000"
+ 1979      33316D45 
+ 1979      20282564 
+ 1979      29202573 
+ 1979      3A202573 
+ 1980 0026 0000     		.space	2
+ 1981              	.LC1:
+ 1982 0028 4D505539 		.ascii	"MPU9250\000"
+ 1982      32353000 
+ 1983              	.LC2:
+ARM GAS  /tmp/cco7neSE.s 			page 45
+
+
+ 1984 0030 6D707539 		.ascii	"mpu9250 write registers error\000"
+ 1984      32353020 
+ 1984      77726974 
+ 1984      65207265 
+ 1984      67697374 
+ 1985 004e 0000     		.space	2
+ 1986              	.LC3:
+ 1987 0050 2F686F6D 		.ascii	"/home/phong/Documents/thesis/stm32f4/components/imu"
+ 1987      652F7068 
+ 1987      6F6E672F 
+ 1987      446F6375 
+ 1987      6D656E74 
+ 1988 0083 2F6D7075 		.ascii	"/mpu9250.c\000"
+ 1988      39323530 
+ 1988      2E6300
+ 1989              		.section	.rodata.mpu9250_config.str1.4,"aMS",%progbits,1
+ 1990              		.align	2
+ 1991              	.LC5:
+ 1992 0000 6D707539 		.ascii	"mpu9250 init error\000"
+ 1992      32353020 
+ 1992      696E6974 
+ 1992      20657272 
+ 1992      6F7200
+ 1993              		.section	.rodata.mpu9250_get_accel_raw.str1.4,"aMS",%progbits,1
+ 1994              		.align	2
+ 1995              	.LC6:
+ 1996 0000 6D707539 		.ascii	"mpu9250 get data error\000"
+ 1996      32353020 
+ 1996      67657420 
+ 1996      64617461 
+ 1996      20657272 
+ 1997              		.text
+ 1998              	.Letext0:
+ 1999              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 2000              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 2001              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/lock.h"
+ 2002              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_types.h"
+ 2003              		.file 6 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 2004              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/reent.h"
+ 2005              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/stdlib.h"
+ 2006              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/FreeRTO
+ 2007              		.file 10 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/p
+ 2008              		.file 11 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/queue.
+ 2009              		.file 12 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/semphr
+ 2010              		.file 13 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 2011              		.file 14 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/inc
+ 2012              		.file 15 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ 2013              		.file 16 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm_common/include/stm_err.h"
+ 2014              		.file 17 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/log/include/stm_log.h"
+ 2015              		.file 18 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/include/driver/i2c.h"
+ 2016              		.file 19 "/home/phong/Documents/thesis/stm32f4/components/imu/include/imu.h"
+ 2017              		.file 20 "/home/phong/Documents/thesis/stm32f4/components/imu/include/mpu9250.h"
+ARM GAS  /tmp/cco7neSE.s 			page 46
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 mpu9250.c
+     /tmp/cco7neSE.s:18     .text._mpu9250_write_reg:0000000000000000 $t
+     /tmp/cco7neSE.s:24     .text._mpu9250_write_reg:0000000000000000 _mpu9250_write_reg
+     /tmp/cco7neSE.s:93     .text._mpu9250_write_reg:000000000000004c $d
+     /tmp/cco7neSE.s:102    .text._mpu9250_read_reg:0000000000000000 $t
+     /tmp/cco7neSE.s:108    .text._mpu9250_read_reg:0000000000000000 _mpu9250_read_reg
+     /tmp/cco7neSE.s:215    .text._mpu9250_read_reg:0000000000000088 $d
+     /tmp/cco7neSE.s:224    .text.mpu9250_config:0000000000000000 $t
+     /tmp/cco7neSE.s:231    .text.mpu9250_config:0000000000000000 mpu9250_config
+     /tmp/cco7neSE.s:382    .text.mpu9250_config:00000000000000ce $d
+     /tmp/cco7neSE.s:387    .text.mpu9250_config:00000000000000d6 $t
+     /tmp/cco7neSE.s:640    .text.mpu9250_config:0000000000000274 $d
+     /tmp/cco7neSE.s:644    .text.mpu9250_config:0000000000000278 $t
+     /tmp/cco7neSE.s:743    .text.mpu9250_config:00000000000002f4 $d
+     /tmp/cco7neSE.s:756    .text.mpu9250_get_accel_raw:0000000000000000 $t
+     /tmp/cco7neSE.s:763    .text.mpu9250_get_accel_raw:0000000000000000 mpu9250_get_accel_raw
+     /tmp/cco7neSE.s:859    .text.mpu9250_get_accel_raw:000000000000008c $d
+     /tmp/cco7neSE.s:868    .text.mpu9250_get_accel_cali:0000000000000000 $t
+     /tmp/cco7neSE.s:875    .text.mpu9250_get_accel_cali:0000000000000000 mpu9250_get_accel_cali
+     /tmp/cco7neSE.s:980    .text.mpu9250_get_accel_cali:00000000000000a0 $d
+     /tmp/cco7neSE.s:989    .text.mpu9250_get_accel_scale:0000000000000000 $t
+     /tmp/cco7neSE.s:996    .text.mpu9250_get_accel_scale:0000000000000000 mpu9250_get_accel_scale
+     /tmp/cco7neSE.s:1114   .text.mpu9250_get_accel_scale:00000000000000dc $d
+     /tmp/cco7neSE.s:1123   .text.mpu9250_get_gyro_raw:0000000000000000 $t
+     /tmp/cco7neSE.s:1130   .text.mpu9250_get_gyro_raw:0000000000000000 mpu9250_get_gyro_raw
+     /tmp/cco7neSE.s:1226   .text.mpu9250_get_gyro_raw:000000000000008c $d
+     /tmp/cco7neSE.s:1235   .text.mpu9250_get_gyro_cali:0000000000000000 $t
+     /tmp/cco7neSE.s:1242   .text.mpu9250_get_gyro_cali:0000000000000000 mpu9250_get_gyro_cali
+     /tmp/cco7neSE.s:1347   .text.mpu9250_get_gyro_cali:00000000000000a0 $d
+     /tmp/cco7neSE.s:1356   .text.mpu9250_get_gyro_scale:0000000000000000 $t
+     /tmp/cco7neSE.s:1363   .text.mpu9250_get_gyro_scale:0000000000000000 mpu9250_get_gyro_scale
+     /tmp/cco7neSE.s:1481   .text.mpu9250_get_gyro_scale:00000000000000dc $d
+     /tmp/cco7neSE.s:1490   .text.mpu9250_set_accel_bias:0000000000000000 $t
+     /tmp/cco7neSE.s:1497   .text.mpu9250_set_accel_bias:0000000000000000 mpu9250_set_accel_bias
+     /tmp/cco7neSE.s:1550   .text.mpu9250_set_gyro_bias:0000000000000000 $t
+     /tmp/cco7neSE.s:1557   .text.mpu9250_set_gyro_bias:0000000000000000 mpu9250_set_gyro_bias
+     /tmp/cco7neSE.s:1610   .text.mpu9250_get_accel_bias:0000000000000000 $t
+     /tmp/cco7neSE.s:1617   .text.mpu9250_get_accel_bias:0000000000000000 mpu9250_get_accel_bias
+     /tmp/cco7neSE.s:1663   .text.mpu9250_get_gyro_bias:0000000000000000 $t
+     /tmp/cco7neSE.s:1670   .text.mpu9250_get_gyro_bias:0000000000000000 mpu9250_get_gyro_bias
+     /tmp/cco7neSE.s:1716   .text.mpu9250_auto_calib:0000000000000000 $t
+     /tmp/cco7neSE.s:1723   .text.mpu9250_auto_calib:0000000000000000 mpu9250_auto_calib
+     /tmp/cco7neSE.s:1905   .text.mpu9250_auto_calib:0000000000000104 $d
+     /tmp/cco7neSE.s:1910   .rodata.__FUNCTION__.12949:0000000000000000 $d
+     /tmp/cco7neSE.s:1914   .rodata.__FUNCTION__.12949:0000000000000000 __FUNCTION__.12949
+     /tmp/cco7neSE.s:1917   .rodata.__FUNCTION__.12958:0000000000000000 $d
+     /tmp/cco7neSE.s:1921   .rodata.__FUNCTION__.12958:0000000000000000 __FUNCTION__.12958
+     /tmp/cco7neSE.s:1924   .rodata.__FUNCTION__.12962:0000000000000000 $d
+     /tmp/cco7neSE.s:1928   .rodata.__FUNCTION__.12962:0000000000000000 __FUNCTION__.12962
+     /tmp/cco7neSE.s:1931   .rodata.__FUNCTION__.12987:0000000000000000 $d
+     /tmp/cco7neSE.s:1935   .rodata.__FUNCTION__.12987:0000000000000000 __FUNCTION__.12987
+     /tmp/cco7neSE.s:1938   .rodata.__FUNCTION__.12997:0000000000000000 $d
+     /tmp/cco7neSE.s:1942   .rodata.__FUNCTION__.12997:0000000000000000 __FUNCTION__.12997
+     /tmp/cco7neSE.s:1945   .rodata.__FUNCTION__.13007:0000000000000000 $d
+     /tmp/cco7neSE.s:1949   .rodata.__FUNCTION__.13007:0000000000000000 __FUNCTION__.13007
+     /tmp/cco7neSE.s:1952   .rodata.__FUNCTION__.13017:0000000000000000 $d
+ARM GAS  /tmp/cco7neSE.s 			page 47
+
+
+     /tmp/cco7neSE.s:1956   .rodata.__FUNCTION__.13017:0000000000000000 __FUNCTION__.13017
+     /tmp/cco7neSE.s:1959   .rodata.__FUNCTION__.13027:0000000000000000 $d
+     /tmp/cco7neSE.s:1963   .rodata.__FUNCTION__.13027:0000000000000000 __FUNCTION__.13027
+     /tmp/cco7neSE.s:1966   .rodata.__FUNCTION__.13037:0000000000000000 $d
+     /tmp/cco7neSE.s:1970   .rodata.__FUNCTION__.13037:0000000000000000 __FUNCTION__.13037
+     /tmp/cco7neSE.s:1973   .rodata._mpu9250_read_reg.str1.4:0000000000000000 $d
+     /tmp/cco7neSE.s:1977   .rodata._mpu9250_write_reg.str1.4:0000000000000000 $d
+     /tmp/cco7neSE.s:1990   .rodata.mpu9250_config.str1.4:0000000000000000 $d
+     /tmp/cco7neSE.s:1994   .rodata.mpu9250_get_accel_raw.str1.4:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+i2c_write_bytes
+stm_log_timestamp
+stm_log_write
+i2c_read_bytes
+calloc
+HAL_Delay
+xQueueCreateMutex
+xQueueSemaphoreTake
+xQueueGenericSend

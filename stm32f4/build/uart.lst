@@ -1,0 +1,1470 @@
+ARM GAS  /tmp/cc4w9UXs.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"uart.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text._uart_get_hw_info,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu fpv4-sp-d16
+  24              	_uart_get_hw_info:
+  25              	.LFB133:
+  26              		.file 1 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c"
+   1:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #include "driver/uart.h"
+   2:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+   3:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART_WORDLENGTH_DEFAULT         UART_WORDLENGTH_8B      /*!< Default UART word length */
+   4:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART_STOPBITS_DEFAULT           UART_STOPBITS_1         /*!< Default UART stop bits */
+   5:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART_PARITY_DEFAULT             UART_PARITY_NONE        /*!< Default UART parity */
+   6:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART_HW_FLOWCTRL_DEFAULT        UART_HWCONTROL_NONE     /*!< Default UART hardware flow con
+   7:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART_OVERSAMPLING_DEFAULT       UART_OVERSAMPLING_16    /*!< Default UART over sampling */
+   8:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART_MODE_DEFAULT               UART_MODE_TX_RX         /*!< Default UART mode */
+   9:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+  10:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART_INIT_ERR_STR           "uart init error"
+  11:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART_TRANS_ERR_STR          "uart transmit error"
+  12:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART_REC_ERR_STR            "uart_receive error"
+  13:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+  14:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** static const char* UART_TAG = "DRIVER UART";
+  15:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART_CHECK(a, str, ret)  if(!(a)) {                                             \
+  16:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****         STM_LOGE(UART_TAG,"%s:%d (%s):%s", __FILE__, __LINE__, __FUNCTION__, str);      \
+  17:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****         return (ret);                                                                   \
+  18:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****         }
+  19:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+  20:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** /* UART Hardware Information */
+  21:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART1_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB2ENR_USART1EN,     \
+  22:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = USART1,                                \
+  23:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOAEN,    \
+  24:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOAEN,    \
+  25:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOA,                               \
+  26:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOA,                               \
+  27:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_9,                           \
+  28:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_10,                          \
+  29:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF7_USART1}
+  30:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+  31:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART1_PP2_HW_INFO   {.rcc_apbenr_usarten = RCC_APB2ENR_USART1EN,     \
+  32:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = USART1,                                \
+ARM GAS  /tmp/cc4w9UXs.s 			page 2
+
+
+  33:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOBEN,    \
+  34:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOBEN,    \
+  35:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOB,                               \
+  36:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOB,                               \
+  37:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_7,                           \
+  38:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_7,                           \
+  39:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF7_USART1}
+  40:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+  41:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART2_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_USART2EN,     \
+  42:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = USART2,                                \
+  43:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOAEN,    \
+  44:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOAEN,    \
+  45:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOA,                               \
+  46:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOA,                               \
+  47:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_2,                           \
+  48:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_3,                           \
+  49:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF7_USART2}
+  50:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+  51:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART2_PP2_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_USART2EN,     \
+  52:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = USART2,                                \
+  53:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIODEN,    \
+  54:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIODEN,    \
+  55:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOD,                               \
+  56:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOD,                               \
+  57:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_5,                           \
+  58:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_6,                           \
+  59:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF7_USART2}
+  60:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+  61:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART3_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,     \
+  62:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = USART3,                                \
+  63:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOBEN,    \
+  64:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOBEN,    \
+  65:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOB,                               \
+  66:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOB,                               \
+  67:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_10,                          \
+  68:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_11,                          \
+  69:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF7_USART3}
+  70:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+  71:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART3_PP2_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,     \
+  72:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = USART3,                                \
+  73:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOCEN,    \
+  74:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOCEN,    \
+  75:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOC,                               \
+  76:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOC,                               \
+  77:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_10,                          \
+  78:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_11,                          \
+  79:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF7_USART3}
+  80:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+  81:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART3_PP3_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_USART3EN,     \
+  82:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = USART3,                                \
+  83:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIODEN,    \
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIODEN,    \
+  85:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOD,                               \
+  86:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOD,                               \
+  87:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_8,                           \
+  88:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_9,                           \
+  89:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF7_USART3}
+ARM GAS  /tmp/cc4w9UXs.s 			page 3
+
+
+  90:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+  91:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART4_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_UART4EN,      \
+  92:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = UART4,                                 \
+  93:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOAEN,    \
+  94:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOAEN,    \
+  95:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOA,                               \
+  96:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOA,                               \
+  97:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_0,                           \
+  98:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_1,                           \
+  99:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF8_UART4}
+ 100:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 101:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART4_PP2_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_UART4EN,      \
+ 102:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = UART4,                                 \
+ 103:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOCEN,    \
+ 104:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOCEN,    \
+ 105:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOC,                               \
+ 106:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOC,                               \
+ 107:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_10,                          \
+ 108:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_11,                          \
+ 109:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF8_UART4}
+ 110:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 111:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART5_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB1ENR_UART5EN,      \
+ 112:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = UART5,                                 \
+ 113:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOCEN,    \
+ 114:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIODEN,    \
+ 115:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOC,                               \
+ 116:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOD,                               \
+ 117:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_12,                          \
+ 118:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_2,                           \
+ 119:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF8_UART5}
+ 120:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 121:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART6_PP1_HW_INFO   {.rcc_apbenr_usarten = RCC_APB2ENR_USART6EN,     \
+ 122:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = USART6,                                \
+ 123:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOCEN,    \
+ 124:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOCEN,    \
+ 125:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOC,                               \
+ 126:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOC,                               \
+ 127:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_6,                           \
+ 128:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_7,                           \
+ 129:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF8_USART6}
+ 130:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 131:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** #define UART6_PP2_HW_INFO   {.rcc_apbenr_usarten = RCC_APB2ENR_USART6EN,     \
+ 132:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .usart = USART6,                                \
+ 133:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_tx = RCC_AHB1ENR_GPIOGEN,    \
+ 134:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .rcc_ahbenr_gpioen_rx = RCC_AHB1ENR_GPIOGEN,    \
+ 135:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_tx = GPIOG,                               \
+ 136:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .port_rx = GPIOG,                               \
+ 137:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_tx = GPIO_PIN_14,                          \
+ 138:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .pin_rx = GPIO_PIN_9,                           \
+ 139:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****                              .alternate_func = GPIO_AF8_USART6}
+ 140:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 141:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** /*
+ 142:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  * UART frame format index.
+ 143:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  */
+ 144:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** typedef enum {
+ 145:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     FRAME_FORMAT_WORD_LEN = 0,      /*!< Word length index */
+ 146:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     FRAME_FORMAT_PARITY,            /*!< Parity index */
+ARM GAS  /tmp/cc4w9UXs.s 			page 4
+
+
+ 147:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     FRAME_FORMAT_STOP_BIT,          /*!< Stop bit index */
+ 148:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     FRAME_FORMAT_MAX_INDEX
+ 149:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** } frame_format_index_t;
+ 150:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 151:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** /*
+ 152:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  * UART Hardware Information Typedef.
+ 153:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  */
+ 154:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** typedef struct {
+ 155:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t       rcc_apbenr_usarten;      /*!< UART RCC APBENR register */
+ 156:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     USART_TypeDef  *usart;                  /*!< USART */
+ 157:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t       rcc_ahbenr_gpioen_tx;    /*!< TX GPIO RCC AHPENR register */
+ 158:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t       rcc_ahbenr_gpioen_rx;    /*!< RX GPIO RCC AHPENR register */
+ 159:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_TypeDef   *port_tx;                /*!< TX General Purpose I/O */
+ 160:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_TypeDef   *port_rx;                /*!< RX General Purpose I/O */
+ 161:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint16_t       pin_tx;                  /*!< TX GPIO Pin */
+ 162:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint16_t       pin_rx;                  /*!< RX GPIO Pin */
+ 163:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint8_t        alternate_func;          /*!< UART alternative function */
+ 164:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** } uart_hw_info_t;
+ 165:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 166:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** /*
+ 167:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  * UART Handle.
+ 168:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  */
+ 169:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** static UART_HandleTypeDef uart_handle[UART_NUM_MAX];
+ 170:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 171:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** /*
+ 172:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  * UART Hardware Information Mapping Table.
+ 173:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  */
+ 174:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** static uart_hw_info_t UART_HW_INFO_MAPPING[UART_NUM_MAX][UART_PINS_PACK_MAX] = {
+ 175:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART1_PP1_HW_INFO, UART1_PP2_HW_INFO,               {0}},
+ 176:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART2_PP1_HW_INFO, UART2_PP2_HW_INFO,               {0}},
+ 177:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART3_PP1_HW_INFO, UART3_PP2_HW_INFO, UART3_PP3_HW_INFO},
+ 178:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART4_PP1_HW_INFO, UART4_PP2_HW_INFO,               {0}},
+ 179:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART5_PP1_HW_INFO,               {0},               {0}},
+ 180:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART6_PP1_HW_INFO, UART6_PP2_HW_INFO,               {0}}
+ 181:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** };
+ 182:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 183:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** /*
+ 184:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  * UART Frame Format Mapping Table.
+ 185:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  */
+ 186:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** static uint32_t UART_FRAME_FORMAT_MAPPING[UART_FRAME_MAX_TYPE][FRAME_FORMAT_MAX_INDEX] = {
+ 187:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_8B, UART_PARITY_NONE, UART_STOPBITS_1},
+ 188:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_8B, UART_PARITY_NONE, UART_STOPBITS_2},
+ 189:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_9B, UART_PARITY_NONE, UART_STOPBITS_1},
+ 190:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_9B, UART_PARITY_NONE, UART_STOPBITS_2},
+ 191:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_8B, UART_PARITY_EVEN, UART_STOPBITS_1},
+ 192:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_8B, UART_PARITY_EVEN, UART_STOPBITS_2},
+ 193:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_9B, UART_PARITY_EVEN, UART_STOPBITS_1},
+ 194:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_9B, UART_PARITY_EVEN, UART_STOPBITS_2},
+ 195:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_8B, UART_PARITY_ODD , UART_STOPBITS_1},
+ 196:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_8B, UART_PARITY_ODD , UART_STOPBITS_2},
+ 197:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_9B, UART_PARITY_ODD , UART_STOPBITS_1},
+ 198:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {UART_WORDLENGTH_9B, UART_PARITY_ODD , UART_STOPBITS_2}
+ 199:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** };
+ 200:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 201:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** /* 
+ 202:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  * UART Transfer Mode Mapping Table.
+ 203:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  */
+ARM GAS  /tmp/cc4w9UXs.s 			page 5
+
+
+ 204:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** static uint32_t UART_TRANSFER_MODE_MAPPING[UART_TRANSFER_MODE_MAX] = {
+ 205:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_MODE_RX,
+ 206:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_MODE_TX,
+ 207:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_MODE_TX_RX
+ 208:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** };
+ 209:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 210:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** /*
+ 211:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  * UART Hardware Flow Control Table.
+ 212:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****  */
+ 213:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** static uint32_t UART_HW_FLW_CTRL_MAPPING[UART_HW_FLW_CTRL_MAX_TYPE] = {
+ 214:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_HWCONTROL_NONE,
+ 215:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_HWCONTROL_RTS,
+ 216:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_HWCONTROL_CTS,
+ 217:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_HWCONTROL_RTS_CTS
+ 218:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** };
+ 219:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 220:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** static uart_hw_info_t _uart_get_hw_info(uart_num_t uart_num, uart_pins_pack_t uart_pins_pack)
+ 221:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** {
+  27              		.loc 1 221 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              	.LVL0:
+  33 0000 70B4     		push	{r4, r5, r6}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 12
+  36              		.cfi_offset 4, -12
+  37              		.cfi_offset 5, -8
+  38              		.cfi_offset 6, -4
+  39 0002 0646     		mov	r6, r0
+ 222:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_hw_info_t hw_info;
+ 223:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     hw_info = UART_HW_INFO_MAPPING[uart_num][uart_pins_pack];
+  40              		.loc 1 223 0
+  41 0004 01EB4101 		add	r1, r1, r1, lsl #1
+  42              	.LVL1:
+  43 0008 0A44     		add	r2, r2, r1
+  44              	.LVL2:
+  45 000a 0546     		mov	r5, r0
+  46 000c 054C     		ldr	r4, .L3
+  47 000e 04EB4214 		add	r4, r4, r2, lsl #5
+  48 0012 0FCC     		ldmia	r4!, {r0, r1, r2, r3}
+  49              	.LVL3:
+  50 0014 0FC5     		stmia	r5!, {r0, r1, r2, r3}
+  51              	.LVL4:
+  52 0016 94E80F00 		ldm	r4, {r0, r1, r2, r3}
+  53 001a 85E80F00 		stm	r5, {r0, r1, r2, r3}
+ 224:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 225:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     return hw_info;
+ 226:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** }
+  54              		.loc 1 226 0
+  55 001e 3046     		mov	r0, r6
+  56 0020 70BC     		pop	{r4, r5, r6}
+  57              	.LCFI1:
+  58              		.cfi_restore 6
+  59              		.cfi_restore 5
+  60              		.cfi_restore 4
+ARM GAS  /tmp/cc4w9UXs.s 			page 6
+
+
+  61              		.cfi_def_cfa_offset 0
+  62              	.LVL5:
+  63 0022 7047     		bx	lr
+  64              	.L4:
+  65              		.align	2
+  66              	.L3:
+  67 0024 00000000 		.word	.LANCHOR0
+  68              		.cfi_endproc
+  69              	.LFE133:
+  71              		.section	.text.uart_config,"ax",%progbits
+  72              		.align	1
+  73              		.global	uart_config
+  74              		.syntax unified
+  75              		.thumb
+  76              		.thumb_func
+  77              		.fpu fpv4-sp-d16
+  79              	uart_config:
+  80              	.LFB134:
+ 227:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 228:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** stm_err_t uart_config(uart_config_t *config)
+ 229:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** {
+  81              		.loc 1 229 0
+  82              		.cfi_startproc
+  83              		@ args = 0, pretend = 0, frame = 56
+  84              		@ frame_needed = 0, uses_anonymous_args = 0
+  85              	.LVL6:
+  86 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  87              	.LCFI2:
+  88              		.cfi_def_cfa_offset 20
+  89              		.cfi_offset 4, -20
+  90              		.cfi_offset 5, -16
+  91              		.cfi_offset 6, -12
+  92              		.cfi_offset 7, -8
+  93              		.cfi_offset 14, -4
+  94 0002 95B0     		sub	sp, sp, #84
+  95              	.LCFI3:
+  96              		.cfi_def_cfa_offset 104
+ 230:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Check input condition */
+ 231:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config, UART_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+  97              		.loc 1 231 0
+  98 0004 F8B1     		cbz	r0, .L18
+  99 0006 0446     		mov	r4, r0
+ 232:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config->uart_num < UART_NUM_MAX, UART_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+ 100              		.loc 1 232 0
+ 101 0008 0578     		ldrb	r5, [r0]	@ zero_extendqisi2
+ 102 000a 052D     		cmp	r5, #5
+ 103 000c 2FD8     		bhi	.L19
+ 233:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config->uart_pins_pack < UART_PINS_PACK_MAX, UART_INIT_ERR_STR, STM_ERR_INVALID_ARG)
+ 104              		.loc 1 233 0
+ 105 000e 4278     		ldrb	r2, [r0, #1]	@ zero_extendqisi2
+ 106 0010 022A     		cmp	r2, #2
+ 107 0012 41D8     		bhi	.L20
+ 234:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config->frame_format < UART_FRAME_MAX_TYPE, UART_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+ 108              		.loc 1 234 0
+ 109 0014 037A     		ldrb	r3, [r0, #8]	@ zero_extendqisi2
+ 110 0016 0B2B     		cmp	r3, #11
+ 111 0018 52D8     		bhi	.L21
+ARM GAS  /tmp/cc4w9UXs.s 			page 7
+
+
+ 235:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config->mode < UART_TRANSFER_MODE_MAX, UART_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+ 112              		.loc 1 235 0
+ 113 001a 437A     		ldrb	r3, [r0, #9]	@ zero_extendqisi2
+ 114 001c 022B     		cmp	r3, #2
+ 115 001e 63D8     		bhi	.L22
+ 236:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config->hw_flw_ctrl < UART_HW_FLW_CTRL_MAX_TYPE, UART_INIT_ERR_STR, STM_ERR_INVALID_
+ 116              		.loc 1 236 0
+ 117 0020 837A     		ldrb	r3, [r0, #10]	@ zero_extendqisi2
+ 118 0022 032B     		cmp	r3, #3
+ 119 0024 74D8     		bhi	.L23
+ 237:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     
+ 238:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Get UART hardware information */
+ 239:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_hw_info_t hw_info;
+ 240:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     hw_info = _uart_get_hw_info(config->uart_num, config->uart_pins_pack);
+ 120              		.loc 1 240 0
+ 121 0026 2946     		mov	r1, r5
+ 122 0028 0CA8     		add	r0, sp, #48
+ 123              	.LVL7:
+ 124 002a FFF7FEFF 		bl	_uart_get_hw_info
+ 125              	.LVL8:
+ 241:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 242:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     int ret;
+ 243:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 244:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Enable UART clock */
+ 245:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t tmpreg = 0x00;
+ 246:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     if ((config->uart_num == UART_NUM_1) || (config->uart_num == UART_NUM_6)) 
+ 126              		.loc 1 246 0
+ 127 002e 002D     		cmp	r5, #0
+ 128 0030 00F08280 		beq	.L13
+ 129              		.loc 1 246 0 is_stmt 0 discriminator 1
+ 130 0034 052D     		cmp	r5, #5
+ 131 0036 7FD0     		beq	.L13
+ 247:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {
+ 248:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****         SET_BIT(RCC->APB2ENR, hw_info.rcc_apbenr_usarten);
+ 249:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****         tmpreg = READ_BIT(RCC->APB2ENR, hw_info.rcc_apbenr_usarten);
+ 250:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     }
+ 251:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     else 
+ 252:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     {
+ 253:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****         SET_BIT(RCC->APB1ENR, hw_info.rcc_apbenr_usarten);
+ 132              		.loc 1 253 0 is_stmt 1
+ 133 0038 804B     		ldr	r3, .L25
+ 134 003a 1A6C     		ldr	r2, [r3, #64]
+ 135 003c 0C99     		ldr	r1, [sp, #48]
+ 136 003e 0A43     		orrs	r2, r2, r1
+ 137 0040 1A64     		str	r2, [r3, #64]
+ 254:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****         tmpreg = READ_BIT(RCC->APB1ENR, hw_info.rcc_apbenr_usarten);
+ 138              		.loc 1 254 0
+ 139 0042 1B6C     		ldr	r3, [r3, #64]
+ 140              	.LVL9:
+ 141 0044 7EE0     		b	.L15
+ 142              	.LVL10:
+ 143              	.L18:
+ 231:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config->uart_num < UART_NUM_MAX, UART_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+ 144              		.loc 1 231 0 discriminator 4
+ 145 0046 FFF7FEFF 		bl	stm_log_timestamp
+ 146              	.LVL11:
+ 147 004a 7D49     		ldr	r1, .L25+4
+ARM GAS  /tmp/cc4w9UXs.s 			page 8
+
+
+ 148 004c 7D4B     		ldr	r3, .L25+8
+ 149 004e 0493     		str	r3, [sp, #16]
+ 150 0050 7D4B     		ldr	r3, .L25+12
+ 151 0052 0393     		str	r3, [sp, #12]
+ 152 0054 E723     		movs	r3, #231
+ 153 0056 0293     		str	r3, [sp, #8]
+ 154 0058 7C4B     		ldr	r3, .L25+16
+ 155 005a 0193     		str	r3, [sp, #4]
+ 156 005c 0091     		str	r1, [sp]
+ 157 005e 0346     		mov	r3, r0
+ 158 0060 7B4A     		ldr	r2, .L25+20
+ 159 0062 0120     		movs	r0, #1
+ 160 0064 FFF7FEFF 		bl	stm_log_write
+ 161              	.LVL12:
+ 162 0068 4FF48170 		mov	r0, #258
+ 163 006c 12E0     		b	.L5
+ 164              	.LVL13:
+ 165              	.L19:
+ 232:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config->uart_pins_pack < UART_PINS_PACK_MAX, UART_INIT_ERR_STR, STM_ERR_INVALID_ARG)
+ 166              		.loc 1 232 0 discriminator 4
+ 167 006e FFF7FEFF 		bl	stm_log_timestamp
+ 168              	.LVL14:
+ 169 0072 7349     		ldr	r1, .L25+4
+ 170 0074 734B     		ldr	r3, .L25+8
+ 171 0076 0493     		str	r3, [sp, #16]
+ 172 0078 734B     		ldr	r3, .L25+12
+ 173 007a 0393     		str	r3, [sp, #12]
+ 174 007c E823     		movs	r3, #232
+ 175 007e 0293     		str	r3, [sp, #8]
+ 176 0080 724B     		ldr	r3, .L25+16
+ 177 0082 0193     		str	r3, [sp, #4]
+ 178 0084 0091     		str	r1, [sp]
+ 179 0086 0346     		mov	r3, r0
+ 180 0088 714A     		ldr	r2, .L25+20
+ 181 008a 0120     		movs	r0, #1
+ 182 008c FFF7FEFF 		bl	stm_log_write
+ 183              	.LVL15:
+ 184 0090 4FF48170 		mov	r0, #258
+ 185              	.LVL16:
+ 186              	.L5:
+ 255:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     }
+ 256:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UNUSED(tmpreg);
+ 257:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 258:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Enable TX GPIO port clock */
+ 259:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     tmpreg = 0x00;
+ 260:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     SET_BIT(RCC->AHB1ENR,  hw_info.rcc_ahbenr_gpioen_tx);
+ 261:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     tmpreg = READ_BIT(RCC->AHB1ENR, hw_info.rcc_ahbenr_gpioen_tx);
+ 262:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UNUSED(tmpreg);
+ 263:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 264:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Enable RX GPIO port clock */
+ 265:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     tmpreg = 0x00;
+ 266:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     SET_BIT(RCC->AHB1ENR, hw_info.rcc_ahbenr_gpioen_rx);
+ 267:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     tmpreg = READ_BIT(RCC->AHB1ENR, hw_info.rcc_ahbenr_gpioen_rx);
+ 268:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UNUSED(tmpreg);
+ 269:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 270:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Get UART parameters */
+ 271:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t word_len       = UART_FRAME_FORMAT_MAPPING[config->frame_format][FRAME_FORMAT_WORD_LEN
+ARM GAS  /tmp/cc4w9UXs.s 			page 9
+
+
+ 272:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t parity         = UART_FRAME_FORMAT_MAPPING[config->frame_format][FRAME_FORMAT_PARITY];
+ 273:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t stop_bit       = UART_FRAME_FORMAT_MAPPING[config->frame_format][FRAME_FORMAT_STOP_BIT
+ 274:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t mode           = UART_TRANSFER_MODE_MAPPING[config->mode];
+ 275:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t hw_flw_ctrl    = UART_HW_FLW_CTRL_MAPPING[config->hw_flw_ctrl];
+ 276:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 277:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Configure UART */
+ 278:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Instance = hw_info.usart;
+ 279:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.BaudRate = config->baudrate;
+ 280:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.WordLength = word_len;
+ 281:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.StopBits = stop_bit;
+ 282:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.Parity = parity;
+ 283:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.Mode = mode;
+ 284:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.HwFlowCtl = hw_flw_ctrl;
+ 285:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.OverSampling = UART_OVERSAMPLING_DEFAULT;
+ 286:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     ret = HAL_UART_Init(&uart_handle[config->uart_num]);
+ 287:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(!ret, UART_INIT_ERR_STR, STM_FAIL);
+ 288:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 289:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Configure UART TX pins */
+ 290:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitTypeDef GPIO_InitStruct = {0};
+ 291:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Pin = hw_info.pin_tx;
+ 292:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 293:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 294:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 295:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Alternate = hw_info.alternate_func;
+ 296:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     HAL_GPIO_Init(hw_info.port_tx, &GPIO_InitStruct);
+ 297:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 298:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Configure UART RX pins */
+ 299:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Pin = hw_info.pin_rx;
+ 300:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 301:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 302:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 303:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Alternate = hw_info.alternate_func;
+ 304:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     HAL_GPIO_Init(hw_info.port_rx, &GPIO_InitStruct);
+ 305:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 306:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     return STM_OK;
+ 307:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** }
+ 187              		.loc 1 307 0
+ 188 0094 15B0     		add	sp, sp, #84
+ 189              	.LCFI4:
+ 190              		.cfi_remember_state
+ 191              		.cfi_def_cfa_offset 20
+ 192              		@ sp needed
+ 193 0096 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 194              	.LVL17:
+ 195              	.L20:
+ 196              	.LCFI5:
+ 197              		.cfi_restore_state
+ 233:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config->frame_format < UART_FRAME_MAX_TYPE, UART_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+ 198              		.loc 1 233 0 discriminator 4
+ 199 0098 FFF7FEFF 		bl	stm_log_timestamp
+ 200              	.LVL18:
+ 201 009c 6849     		ldr	r1, .L25+4
+ 202 009e 694B     		ldr	r3, .L25+8
+ 203 00a0 0493     		str	r3, [sp, #16]
+ 204 00a2 694B     		ldr	r3, .L25+12
+ 205 00a4 0393     		str	r3, [sp, #12]
+ 206 00a6 E923     		movs	r3, #233
+ARM GAS  /tmp/cc4w9UXs.s 			page 10
+
+
+ 207 00a8 0293     		str	r3, [sp, #8]
+ 208 00aa 684B     		ldr	r3, .L25+16
+ 209 00ac 0193     		str	r3, [sp, #4]
+ 210 00ae 0091     		str	r1, [sp]
+ 211 00b0 0346     		mov	r3, r0
+ 212 00b2 674A     		ldr	r2, .L25+20
+ 213 00b4 0120     		movs	r0, #1
+ 214 00b6 FFF7FEFF 		bl	stm_log_write
+ 215              	.LVL19:
+ 216 00ba 4FF48170 		mov	r0, #258
+ 217 00be E9E7     		b	.L5
+ 218              	.LVL20:
+ 219              	.L21:
+ 234:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config->mode < UART_TRANSFER_MODE_MAX, UART_INIT_ERR_STR, STM_ERR_INVALID_ARG);
+ 220              		.loc 1 234 0 discriminator 4
+ 221 00c0 FFF7FEFF 		bl	stm_log_timestamp
+ 222              	.LVL21:
+ 223 00c4 5E49     		ldr	r1, .L25+4
+ 224 00c6 5F4B     		ldr	r3, .L25+8
+ 225 00c8 0493     		str	r3, [sp, #16]
+ 226 00ca 5F4B     		ldr	r3, .L25+12
+ 227 00cc 0393     		str	r3, [sp, #12]
+ 228 00ce EA23     		movs	r3, #234
+ 229 00d0 0293     		str	r3, [sp, #8]
+ 230 00d2 5E4B     		ldr	r3, .L25+16
+ 231 00d4 0193     		str	r3, [sp, #4]
+ 232 00d6 0091     		str	r1, [sp]
+ 233 00d8 0346     		mov	r3, r0
+ 234 00da 5D4A     		ldr	r2, .L25+20
+ 235 00dc 0120     		movs	r0, #1
+ 236 00de FFF7FEFF 		bl	stm_log_write
+ 237              	.LVL22:
+ 238 00e2 4FF48170 		mov	r0, #258
+ 239 00e6 D5E7     		b	.L5
+ 240              	.LVL23:
+ 241              	.L22:
+ 235:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(config->hw_flw_ctrl < UART_HW_FLW_CTRL_MAX_TYPE, UART_INIT_ERR_STR, STM_ERR_INVALID_
+ 242              		.loc 1 235 0 discriminator 4
+ 243 00e8 FFF7FEFF 		bl	stm_log_timestamp
+ 244              	.LVL24:
+ 245 00ec 5449     		ldr	r1, .L25+4
+ 246 00ee 554B     		ldr	r3, .L25+8
+ 247 00f0 0493     		str	r3, [sp, #16]
+ 248 00f2 554B     		ldr	r3, .L25+12
+ 249 00f4 0393     		str	r3, [sp, #12]
+ 250 00f6 EB23     		movs	r3, #235
+ 251 00f8 0293     		str	r3, [sp, #8]
+ 252 00fa 544B     		ldr	r3, .L25+16
+ 253 00fc 0193     		str	r3, [sp, #4]
+ 254 00fe 0091     		str	r1, [sp]
+ 255 0100 0346     		mov	r3, r0
+ 256 0102 534A     		ldr	r2, .L25+20
+ 257 0104 0120     		movs	r0, #1
+ 258 0106 FFF7FEFF 		bl	stm_log_write
+ 259              	.LVL25:
+ 260 010a 4FF48170 		mov	r0, #258
+ 261 010e C1E7     		b	.L5
+ARM GAS  /tmp/cc4w9UXs.s 			page 11
+
+
+ 262              	.LVL26:
+ 263              	.L23:
+ 236:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     
+ 264              		.loc 1 236 0 discriminator 4
+ 265 0110 FFF7FEFF 		bl	stm_log_timestamp
+ 266              	.LVL27:
+ 267 0114 4A49     		ldr	r1, .L25+4
+ 268 0116 4B4B     		ldr	r3, .L25+8
+ 269 0118 0493     		str	r3, [sp, #16]
+ 270 011a 4B4B     		ldr	r3, .L25+12
+ 271 011c 0393     		str	r3, [sp, #12]
+ 272 011e EC23     		movs	r3, #236
+ 273 0120 0293     		str	r3, [sp, #8]
+ 274 0122 4A4B     		ldr	r3, .L25+16
+ 275 0124 0193     		str	r3, [sp, #4]
+ 276 0126 0091     		str	r1, [sp]
+ 277 0128 0346     		mov	r3, r0
+ 278 012a 494A     		ldr	r2, .L25+20
+ 279 012c 0120     		movs	r0, #1
+ 280 012e FFF7FEFF 		bl	stm_log_write
+ 281              	.LVL28:
+ 282 0132 4FF48170 		mov	r0, #258
+ 283 0136 ADE7     		b	.L5
+ 284              	.LVL29:
+ 285              	.L13:
+ 248:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****         tmpreg = READ_BIT(RCC->APB2ENR, hw_info.rcc_apbenr_usarten);
+ 286              		.loc 1 248 0
+ 287 0138 404B     		ldr	r3, .L25
+ 288 013a 5A6C     		ldr	r2, [r3, #68]
+ 289 013c 0C99     		ldr	r1, [sp, #48]
+ 290 013e 0A43     		orrs	r2, r2, r1
+ 291 0140 5A64     		str	r2, [r3, #68]
+ 249:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     }
+ 292              		.loc 1 249 0
+ 293 0142 5B6C     		ldr	r3, [r3, #68]
+ 294              	.LVL30:
+ 295              	.L15:
+ 260:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     tmpreg = READ_BIT(RCC->AHB1ENR, hw_info.rcc_ahbenr_gpioen_tx);
+ 296              		.loc 1 260 0
+ 297 0144 3D4B     		ldr	r3, .L25
+ 298 0146 1A6B     		ldr	r2, [r3, #48]
+ 299 0148 0E99     		ldr	r1, [sp, #56]
+ 300 014a 0A43     		orrs	r2, r2, r1
+ 301 014c 1A63     		str	r2, [r3, #48]
+ 261:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UNUSED(tmpreg);
+ 302              		.loc 1 261 0
+ 303 014e 1A6B     		ldr	r2, [r3, #48]
+ 266:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     tmpreg = READ_BIT(RCC->AHB1ENR, hw_info.rcc_ahbenr_gpioen_rx);
+ 304              		.loc 1 266 0
+ 305 0150 1A6B     		ldr	r2, [r3, #48]
+ 306 0152 0F99     		ldr	r1, [sp, #60]
+ 307 0154 0A43     		orrs	r2, r2, r1
+ 308 0156 1A63     		str	r2, [r3, #48]
+ 267:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UNUSED(tmpreg);
+ 309              		.loc 1 267 0
+ 310 0158 1B6B     		ldr	r3, [r3, #48]
+ 311              	.LVL31:
+ARM GAS  /tmp/cc4w9UXs.s 			page 12
+
+
+ 271:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t parity         = UART_FRAME_FORMAT_MAPPING[config->frame_format][FRAME_FORMAT_PARITY];
+ 312              		.loc 1 271 0
+ 313 015a 257A     		ldrb	r5, [r4, #8]	@ zero_extendqisi2
+ 314 015c 3D4B     		ldr	r3, .L25+24
+ 315 015e 6A00     		lsls	r2, r5, #1
+ 316 0160 5119     		adds	r1, r2, r5
+ 317 0162 8900     		lsls	r1, r1, #2
+ 318 0164 5818     		adds	r0, r3, r1
+ 319 0166 5E58     		ldr	r6, [r3, r1]
+ 320              	.LVL32:
+ 272:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t stop_bit       = UART_FRAME_FORMAT_MAPPING[config->frame_format][FRAME_FORMAT_STOP_BIT
+ 321              		.loc 1 272 0
+ 322 0168 4068     		ldr	r0, [r0, #4]
+ 323              	.LVL33:
+ 273:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t mode           = UART_TRANSFER_MODE_MAPPING[config->mode];
+ 324              		.loc 1 273 0
+ 325 016a 2A44     		add	r2, r2, r5
+ 326 016c 03EB8203 		add	r3, r3, r2, lsl #2
+ 327 0170 D3F808E0 		ldr	lr, [r3, #8]
+ 328              	.LVL34:
+ 274:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uint32_t hw_flw_ctrl    = UART_HW_FLW_CTRL_MAPPING[config->hw_flw_ctrl];
+ 329              		.loc 1 274 0
+ 330 0174 627A     		ldrb	r2, [r4, #9]	@ zero_extendqisi2
+ 331 0176 384B     		ldr	r3, .L25+28
+ 332 0178 53F82250 		ldr	r5, [r3, r2, lsl #2]
+ 333              	.LVL35:
+ 275:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 334              		.loc 1 275 0
+ 335 017c A27A     		ldrb	r2, [r4, #10]	@ zero_extendqisi2
+ 336 017e 374B     		ldr	r3, .L25+32
+ 337 0180 53F82210 		ldr	r1, [r3, r2, lsl #2]
+ 338              	.LVL36:
+ 278:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.BaudRate = config->baudrate;
+ 339              		.loc 1 278 0
+ 340 0184 2778     		ldrb	r7, [r4]	@ zero_extendqisi2
+ 341 0186 364B     		ldr	r3, .L25+36
+ 342 0188 BF01     		lsls	r7, r7, #6
+ 343 018a 0D9A     		ldr	r2, [sp, #52]
+ 344 018c DA51     		str	r2, [r3, r7]
+ 279:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.WordLength = word_len;
+ 345              		.loc 1 279 0
+ 346 018e 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 347 0190 6768     		ldr	r7, [r4, #4]
+ 348 0192 03EB8212 		add	r2, r3, r2, lsl #6
+ 349 0196 5760     		str	r7, [r2, #4]
+ 280:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.StopBits = stop_bit;
+ 350              		.loc 1 280 0
+ 351 0198 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 352 019a 03EB8212 		add	r2, r3, r2, lsl #6
+ 353 019e 9660     		str	r6, [r2, #8]
+ 281:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.Parity = parity;
+ 354              		.loc 1 281 0
+ 355 01a0 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 356 01a2 03EB8212 		add	r2, r3, r2, lsl #6
+ 357 01a6 C2F80CE0 		str	lr, [r2, #12]
+ 282:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.Mode = mode;
+ 358              		.loc 1 282 0
+ARM GAS  /tmp/cc4w9UXs.s 			page 13
+
+
+ 359 01aa 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 360 01ac 03EB8212 		add	r2, r3, r2, lsl #6
+ 361 01b0 1061     		str	r0, [r2, #16]
+ 283:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.HwFlowCtl = hw_flw_ctrl;
+ 362              		.loc 1 283 0
+ 363 01b2 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 364 01b4 03EB8212 		add	r2, r3, r2, lsl #6
+ 365 01b8 5561     		str	r5, [r2, #20]
+ 284:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     uart_handle[config->uart_num].Init.OverSampling = UART_OVERSAMPLING_DEFAULT;
+ 366              		.loc 1 284 0
+ 367 01ba 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 368 01bc 03EB8212 		add	r2, r3, r2, lsl #6
+ 369 01c0 9161     		str	r1, [r2, #24]
+ 285:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     ret = HAL_UART_Init(&uart_handle[config->uart_num]);
+ 370              		.loc 1 285 0
+ 371 01c2 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 372 01c4 03EB8212 		add	r2, r3, r2, lsl #6
+ 373 01c8 0021     		movs	r1, #0
+ 374              	.LVL37:
+ 375 01ca D161     		str	r1, [r2, #28]
+ 286:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(!ret, UART_INIT_ERR_STR, STM_FAIL);
+ 376              		.loc 1 286 0
+ 377 01cc 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 378              	.LVL38:
+ 379 01ce 03EB8010 		add	r0, r3, r0, lsl #6
+ 380 01d2 FFF7FEFF 		bl	HAL_UART_Init
+ 381              	.LVL39:
+ 287:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 382              		.loc 1 287 0
+ 383 01d6 E0B9     		cbnz	r0, .L24
+ 291:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 384              		.loc 1 291 0
+ 385 01d8 BDF84830 		ldrh	r3, [sp, #72]
+ 386 01dc 0793     		str	r3, [sp, #28]
+ 292:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 387              		.loc 1 292 0
+ 388 01de 0227     		movs	r7, #2
+ 389 01e0 0897     		str	r7, [sp, #32]
+ 293:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 390              		.loc 1 293 0
+ 391 01e2 0126     		movs	r6, #1
+ 392              	.LVL40:
+ 393 01e4 0996     		str	r6, [sp, #36]
+ 294:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Alternate = hw_info.alternate_func;
+ 394              		.loc 1 294 0
+ 395 01e6 0325     		movs	r5, #3
+ 396              	.LVL41:
+ 397 01e8 0A95     		str	r5, [sp, #40]
+ 295:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     HAL_GPIO_Init(hw_info.port_tx, &GPIO_InitStruct);
+ 398              		.loc 1 295 0
+ 399 01ea 9DF84C40 		ldrb	r4, [sp, #76]	@ zero_extendqisi2
+ 400              	.LVL42:
+ 401 01ee 0B94     		str	r4, [sp, #44]
+ 296:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 402              		.loc 1 296 0
+ 403 01f0 07A9     		add	r1, sp, #28
+ 404 01f2 1098     		ldr	r0, [sp, #64]
+ARM GAS  /tmp/cc4w9UXs.s 			page 14
+
+
+ 405              	.LVL43:
+ 406 01f4 FFF7FEFF 		bl	HAL_GPIO_Init
+ 407              	.LVL44:
+ 299:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 408              		.loc 1 299 0
+ 409 01f8 BDF84A30 		ldrh	r3, [sp, #74]
+ 410 01fc 0793     		str	r3, [sp, #28]
+ 300:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 411              		.loc 1 300 0
+ 412 01fe 0897     		str	r7, [sp, #32]
+ 301:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 413              		.loc 1 301 0
+ 414 0200 0996     		str	r6, [sp, #36]
+ 302:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     GPIO_InitStruct.Alternate = hw_info.alternate_func;
+ 415              		.loc 1 302 0
+ 416 0202 0A95     		str	r5, [sp, #40]
+ 303:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     HAL_GPIO_Init(hw_info.port_rx, &GPIO_InitStruct);
+ 417              		.loc 1 303 0
+ 418 0204 0B94     		str	r4, [sp, #44]
+ 304:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 419              		.loc 1 304 0
+ 420 0206 07A9     		add	r1, sp, #28
+ 421 0208 1198     		ldr	r0, [sp, #68]
+ 422 020a FFF7FEFF 		bl	HAL_GPIO_Init
+ 423              	.LVL45:
+ 306:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** }
+ 424              		.loc 1 306 0
+ 425 020e 0020     		movs	r0, #0
+ 426 0210 40E7     		b	.L5
+ 427              	.LVL46:
+ 428              	.L24:
+ 287:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 429              		.loc 1 287 0 discriminator 4
+ 430 0212 FFF7FEFF 		bl	stm_log_timestamp
+ 431              	.LVL47:
+ 432 0216 0A49     		ldr	r1, .L25+4
+ 433 0218 0A4B     		ldr	r3, .L25+8
+ 434 021a 0493     		str	r3, [sp, #16]
+ 435 021c 0A4B     		ldr	r3, .L25+12
+ 436 021e 0393     		str	r3, [sp, #12]
+ 437 0220 40F21F13 		movw	r3, #287
+ 438 0224 0293     		str	r3, [sp, #8]
+ 439 0226 094B     		ldr	r3, .L25+16
+ 440 0228 0193     		str	r3, [sp, #4]
+ 441 022a 0091     		str	r1, [sp]
+ 442 022c 0346     		mov	r3, r0
+ 443 022e 084A     		ldr	r2, .L25+20
+ 444 0230 0120     		movs	r0, #1
+ 445 0232 FFF7FEFF 		bl	stm_log_write
+ 446              	.LVL48:
+ 447 0236 4FF0FF30 		mov	r0, #-1
+ 448 023a 2BE7     		b	.L5
+ 449              	.L26:
+ 450              		.align	2
+ 451              	.L25:
+ 452 023c 00380240 		.word	1073887232
+ 453 0240 28000000 		.word	.LC1
+ARM GAS  /tmp/cc4w9UXs.s 			page 15
+
+
+ 454 0244 34000000 		.word	.LC2
+ 455 0248 00000000 		.word	.LANCHOR1
+ 456 024c 44000000 		.word	.LC3
+ 457 0250 00000000 		.word	.LC0
+ 458 0254 00000000 		.word	.LANCHOR2
+ 459 0258 00000000 		.word	.LANCHOR3
+ 460 025c 00000000 		.word	.LANCHOR4
+ 461 0260 00000000 		.word	.LANCHOR5
+ 462              		.cfi_endproc
+ 463              	.LFE134:
+ 465              		.section	.text.uart_write_bytes,"ax",%progbits
+ 466              		.align	1
+ 467              		.global	uart_write_bytes
+ 468              		.syntax unified
+ 469              		.thumb
+ 470              		.thumb_func
+ 471              		.fpu fpv4-sp-d16
+ 473              	uart_write_bytes:
+ 474              	.LFB135:
+ 308:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 309:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** stm_err_t uart_write_bytes(uart_num_t uart_num, uint8_t *data, uint16_t length, uint32_t timeout_ms
+ 310:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** {
+ 475              		.loc 1 310 0
+ 476              		.cfi_startproc
+ 477              		@ args = 0, pretend = 0, frame = 0
+ 478              		@ frame_needed = 0, uses_anonymous_args = 0
+ 479              	.LVL49:
+ 480 0000 10B5     		push	{r4, lr}
+ 481              	.LCFI6:
+ 482              		.cfi_def_cfa_offset 8
+ 483              		.cfi_offset 4, -8
+ 484              		.cfi_offset 14, -4
+ 485 0002 86B0     		sub	sp, sp, #24
+ 486              	.LCFI7:
+ 487              		.cfi_def_cfa_offset 32
+ 311:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(uart_num < UART_NUM_MAX, UART_TRANS_ERR_STR, STM_ERR_INVALID_ARG);
+ 488              		.loc 1 311 0
+ 489 0004 0528     		cmp	r0, #5
+ 490 0006 15D9     		bls	.L28
+ 491              		.loc 1 311 0 is_stmt 0 discriminator 4
+ 492 0008 FFF7FEFF 		bl	stm_log_timestamp
+ 493              	.LVL50:
+ 494 000c 1849     		ldr	r1, .L33
+ 495 000e 194B     		ldr	r3, .L33+4
+ 496 0010 0493     		str	r3, [sp, #16]
+ 497 0012 194B     		ldr	r3, .L33+8
+ 498 0014 0393     		str	r3, [sp, #12]
+ 499 0016 40F23713 		movw	r3, #311
+ 500 001a 0293     		str	r3, [sp, #8]
+ 501 001c 174B     		ldr	r3, .L33+12
+ 502 001e 0193     		str	r3, [sp, #4]
+ 503 0020 0091     		str	r1, [sp]
+ 504 0022 0346     		mov	r3, r0
+ 505 0024 164A     		ldr	r2, .L33+16
+ 506 0026 0120     		movs	r0, #1
+ 507 0028 FFF7FEFF 		bl	stm_log_write
+ 508              	.LVL51:
+ARM GAS  /tmp/cc4w9UXs.s 			page 16
+
+
+ 509 002c 4FF48170 		mov	r0, #258
+ 510              	.L27:
+ 312:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 313:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Transmit data */
+ 314:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     int ret = HAL_UART_Transmit(&uart_handle[uart_num], data, length, timeout_ms);
+ 315:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(!ret, UART_TRANS_ERR_STR, STM_FAIL);
+ 316:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 317:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     return STM_OK;
+ 318:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** }
+ 511              		.loc 1 318 0 is_stmt 1
+ 512 0030 06B0     		add	sp, sp, #24
+ 513              	.LCFI8:
+ 514              		.cfi_remember_state
+ 515              		.cfi_def_cfa_offset 8
+ 516              		@ sp needed
+ 517 0032 10BD     		pop	{r4, pc}
+ 518              	.LVL52:
+ 519              	.L28:
+ 520              	.LCFI9:
+ 521              		.cfi_restore_state
+ 314:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(!ret, UART_TRANS_ERR_STR, STM_FAIL);
+ 522              		.loc 1 314 0
+ 523 0034 134C     		ldr	r4, .L33+20
+ 524 0036 04EB8010 		add	r0, r4, r0, lsl #6
+ 525              	.LVL53:
+ 526 003a FFF7FEFF 		bl	HAL_UART_Transmit
+ 527              	.LVL54:
+ 315:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 528              		.loc 1 315 0
+ 529 003e 08B9     		cbnz	r0, .L32
+ 317:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** }
+ 530              		.loc 1 317 0
+ 531 0040 0020     		movs	r0, #0
+ 532              	.LVL55:
+ 533 0042 F5E7     		b	.L27
+ 534              	.LVL56:
+ 535              	.L32:
+ 315:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 536              		.loc 1 315 0 discriminator 4
+ 537 0044 FFF7FEFF 		bl	stm_log_timestamp
+ 538              	.LVL57:
+ 539 0048 0949     		ldr	r1, .L33
+ 540 004a 0A4B     		ldr	r3, .L33+4
+ 541 004c 0493     		str	r3, [sp, #16]
+ 542 004e 0A4B     		ldr	r3, .L33+8
+ 543 0050 0393     		str	r3, [sp, #12]
+ 544 0052 40F23B13 		movw	r3, #315
+ 545 0056 0293     		str	r3, [sp, #8]
+ 546 0058 084B     		ldr	r3, .L33+12
+ 547 005a 0193     		str	r3, [sp, #4]
+ 548 005c 0091     		str	r1, [sp]
+ 549 005e 0346     		mov	r3, r0
+ 550 0060 074A     		ldr	r2, .L33+16
+ 551 0062 0120     		movs	r0, #1
+ 552 0064 FFF7FEFF 		bl	stm_log_write
+ 553              	.LVL58:
+ 554 0068 4FF0FF30 		mov	r0, #-1
+ARM GAS  /tmp/cc4w9UXs.s 			page 17
+
+
+ 555 006c E0E7     		b	.L27
+ 556              	.L34:
+ 557 006e 00BF     		.align	2
+ 558              	.L33:
+ 559 0070 28000000 		.word	.LC1
+ 560 0074 00000000 		.word	.LC4
+ 561 0078 00000000 		.word	.LANCHOR6
+ 562 007c 44000000 		.word	.LC3
+ 563 0080 00000000 		.word	.LC0
+ 564 0084 00000000 		.word	.LANCHOR5
+ 565              		.cfi_endproc
+ 566              	.LFE135:
+ 568              		.section	.text.uart_read_bytes,"ax",%progbits
+ 569              		.align	1
+ 570              		.global	uart_read_bytes
+ 571              		.syntax unified
+ 572              		.thumb
+ 573              		.thumb_func
+ 574              		.fpu fpv4-sp-d16
+ 576              	uart_read_bytes:
+ 577              	.LFB136:
+ 319:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 320:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** stm_err_t uart_read_bytes(uart_num_t uart_num, uint8_t *buf, uint16_t length, uint32_t timeout_ms)
+ 321:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** {
+ 578              		.loc 1 321 0
+ 579              		.cfi_startproc
+ 580              		@ args = 0, pretend = 0, frame = 0
+ 581              		@ frame_needed = 0, uses_anonymous_args = 0
+ 582              	.LVL59:
+ 583 0000 10B5     		push	{r4, lr}
+ 584              	.LCFI10:
+ 585              		.cfi_def_cfa_offset 8
+ 586              		.cfi_offset 4, -8
+ 587              		.cfi_offset 14, -4
+ 588 0002 86B0     		sub	sp, sp, #24
+ 589              	.LCFI11:
+ 590              		.cfi_def_cfa_offset 32
+ 322:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(uart_num < UART_NUM_MAX, UART_REC_ERR_STR, STM_ERR_INVALID_ARG);
+ 591              		.loc 1 322 0
+ 592 0004 0528     		cmp	r0, #5
+ 593 0006 15D9     		bls	.L36
+ 594              		.loc 1 322 0 is_stmt 0 discriminator 4
+ 595 0008 FFF7FEFF 		bl	stm_log_timestamp
+ 596              	.LVL60:
+ 597 000c 1849     		ldr	r1, .L41
+ 598 000e 194B     		ldr	r3, .L41+4
+ 599 0010 0493     		str	r3, [sp, #16]
+ 600 0012 194B     		ldr	r3, .L41+8
+ 601 0014 0393     		str	r3, [sp, #12]
+ 602 0016 4FF4A173 		mov	r3, #322
+ 603 001a 0293     		str	r3, [sp, #8]
+ 604 001c 174B     		ldr	r3, .L41+12
+ 605 001e 0193     		str	r3, [sp, #4]
+ 606 0020 0091     		str	r1, [sp]
+ 607 0022 0346     		mov	r3, r0
+ 608 0024 164A     		ldr	r2, .L41+16
+ 609 0026 0120     		movs	r0, #1
+ARM GAS  /tmp/cc4w9UXs.s 			page 18
+
+
+ 610 0028 FFF7FEFF 		bl	stm_log_write
+ 611              	.LVL61:
+ 612 002c 4FF48170 		mov	r0, #258
+ 613              	.L35:
+ 323:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 324:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     /* Receive data */
+ 325:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     int ret = HAL_UART_Receive(&uart_handle[uart_num], buf, length, timeout_ms);
+ 326:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(!ret, UART_REC_ERR_STR, STM_FAIL);
+ 327:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 328:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     return STM_OK;
+ 329:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** }
+ 614              		.loc 1 329 0 is_stmt 1
+ 615 0030 06B0     		add	sp, sp, #24
+ 616              	.LCFI12:
+ 617              		.cfi_remember_state
+ 618              		.cfi_def_cfa_offset 8
+ 619              		@ sp needed
+ 620 0032 10BD     		pop	{r4, pc}
+ 621              	.LVL62:
+ 622              	.L36:
+ 623              	.LCFI13:
+ 624              		.cfi_restore_state
+ 325:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c ****     UART_CHECK(!ret, UART_REC_ERR_STR, STM_FAIL);
+ 625              		.loc 1 325 0
+ 626 0034 134C     		ldr	r4, .L41+20
+ 627 0036 04EB8010 		add	r0, r4, r0, lsl #6
+ 628              	.LVL63:
+ 629 003a FFF7FEFF 		bl	HAL_UART_Receive
+ 630              	.LVL64:
+ 326:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 631              		.loc 1 326 0
+ 632 003e 08B9     		cbnz	r0, .L40
+ 328:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** }
+ 633              		.loc 1 328 0
+ 634 0040 0020     		movs	r0, #0
+ 635              	.LVL65:
+ 636 0042 F5E7     		b	.L35
+ 637              	.LVL66:
+ 638              	.L40:
+ 326:/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/uart.c **** 
+ 639              		.loc 1 326 0 discriminator 4
+ 640 0044 FFF7FEFF 		bl	stm_log_timestamp
+ 641              	.LVL67:
+ 642 0048 0949     		ldr	r1, .L41
+ 643 004a 0A4B     		ldr	r3, .L41+4
+ 644 004c 0493     		str	r3, [sp, #16]
+ 645 004e 0A4B     		ldr	r3, .L41+8
+ 646 0050 0393     		str	r3, [sp, #12]
+ 647 0052 4FF4A373 		mov	r3, #326
+ 648 0056 0293     		str	r3, [sp, #8]
+ 649 0058 084B     		ldr	r3, .L41+12
+ 650 005a 0193     		str	r3, [sp, #4]
+ 651 005c 0091     		str	r1, [sp]
+ 652 005e 0346     		mov	r3, r0
+ 653 0060 074A     		ldr	r2, .L41+16
+ 654 0062 0120     		movs	r0, #1
+ 655 0064 FFF7FEFF 		bl	stm_log_write
+ARM GAS  /tmp/cc4w9UXs.s 			page 19
+
+
+ 656              	.LVL68:
+ 657 0068 4FF0FF30 		mov	r0, #-1
+ 658 006c E0E7     		b	.L35
+ 659              	.L42:
+ 660 006e 00BF     		.align	2
+ 661              	.L41:
+ 662 0070 28000000 		.word	.LC1
+ 663 0074 00000000 		.word	.LC5
+ 664 0078 00000000 		.word	.LANCHOR7
+ 665 007c 44000000 		.word	.LC3
+ 666 0080 00000000 		.word	.LC0
+ 667 0084 00000000 		.word	.LANCHOR5
+ 668              		.cfi_endproc
+ 669              	.LFE136:
+ 671              		.section	.bss.uart_handle,"aw",%nobits
+ 672              		.align	2
+ 673              		.set	.LANCHOR5,. + 0
+ 676              	uart_handle:
+ 677 0000 00000000 		.space	384
+ 677      00000000 
+ 677      00000000 
+ 677      00000000 
+ 677      00000000 
+ 678              		.section	.rodata.UART_FRAME_FORMAT_MAPPING,"a",%progbits
+ 679              		.align	2
+ 680              		.set	.LANCHOR2,. + 0
+ 683              	UART_FRAME_FORMAT_MAPPING:
+ 684 0000 00000000 		.word	0
+ 685 0004 00000000 		.word	0
+ 686 0008 00000000 		.word	0
+ 687 000c 00000000 		.word	0
+ 688 0010 00000000 		.word	0
+ 689 0014 00200000 		.word	8192
+ 690 0018 00100000 		.word	4096
+ 691 001c 00000000 		.word	0
+ 692 0020 00000000 		.word	0
+ 693 0024 00100000 		.word	4096
+ 694 0028 00000000 		.word	0
+ 695 002c 00200000 		.word	8192
+ 696 0030 00000000 		.word	0
+ 697 0034 00040000 		.word	1024
+ 698 0038 00000000 		.word	0
+ 699 003c 00000000 		.word	0
+ 700 0040 00040000 		.word	1024
+ 701 0044 00200000 		.word	8192
+ 702 0048 00100000 		.word	4096
+ 703 004c 00040000 		.word	1024
+ 704 0050 00000000 		.word	0
+ 705 0054 00100000 		.word	4096
+ 706 0058 00040000 		.word	1024
+ 707 005c 00200000 		.word	8192
+ 708 0060 00000000 		.word	0
+ 709 0064 00060000 		.word	1536
+ 710 0068 00000000 		.word	0
+ 711 006c 00000000 		.word	0
+ 712 0070 00060000 		.word	1536
+ 713 0074 00200000 		.word	8192
+ARM GAS  /tmp/cc4w9UXs.s 			page 20
+
+
+ 714 0078 00100000 		.word	4096
+ 715 007c 00060000 		.word	1536
+ 716 0080 00000000 		.word	0
+ 717 0084 00100000 		.word	4096
+ 718 0088 00060000 		.word	1536
+ 719 008c 00200000 		.word	8192
+ 720              		.section	.rodata.UART_HW_FLW_CTRL_MAPPING,"a",%progbits
+ 721              		.align	2
+ 722              		.set	.LANCHOR4,. + 0
+ 725              	UART_HW_FLW_CTRL_MAPPING:
+ 726 0000 00000000 		.word	0
+ 727 0004 00010000 		.word	256
+ 728 0008 00020000 		.word	512
+ 729 000c 00030000 		.word	768
+ 730              		.section	.rodata.UART_HW_INFO_MAPPING,"a",%progbits
+ 731              		.align	2
+ 732              		.set	.LANCHOR0,. + 0
+ 735              	UART_HW_INFO_MAPPING:
+ 736 0000 10000000 		.word	16
+ 737 0004 00100140 		.word	1073811456
+ 738 0008 01000000 		.word	1
+ 739 000c 01000000 		.word	1
+ 740 0010 00000240 		.word	1073872896
+ 741 0014 00000240 		.word	1073872896
+ 742 0018 0002     		.short	512
+ 743 001a 0004     		.short	1024
+ 744 001c 07       		.byte	7
+ 745 001d 000000   		.space	3
+ 746 0020 10000000 		.word	16
+ 747 0024 00100140 		.word	1073811456
+ 748 0028 02000000 		.word	2
+ 749 002c 02000000 		.word	2
+ 750 0030 00040240 		.word	1073873920
+ 751 0034 00040240 		.word	1073873920
+ 752 0038 8000     		.short	128
+ 753 003a 8000     		.short	128
+ 754 003c 07       		.byte	7
+ 755 003d 000000   		.space	3
+ 756 0040 00000000 		.word	0
+ 757 0044 00000000 		.space	28
+ 757      00000000 
+ 757      00000000 
+ 757      00000000 
+ 757      00000000 
+ 758 0060 00000200 		.word	131072
+ 759 0064 00440040 		.word	1073759232
+ 760 0068 01000000 		.word	1
+ 761 006c 01000000 		.word	1
+ 762 0070 00000240 		.word	1073872896
+ 763 0074 00000240 		.word	1073872896
+ 764 0078 0400     		.short	4
+ 765 007a 0800     		.short	8
+ 766 007c 07       		.byte	7
+ 767 007d 000000   		.space	3
+ 768 0080 00000200 		.word	131072
+ 769 0084 00440040 		.word	1073759232
+ 770 0088 08000000 		.word	8
+ARM GAS  /tmp/cc4w9UXs.s 			page 21
+
+
+ 771 008c 08000000 		.word	8
+ 772 0090 000C0240 		.word	1073875968
+ 773 0094 000C0240 		.word	1073875968
+ 774 0098 2000     		.short	32
+ 775 009a 4000     		.short	64
+ 776 009c 07       		.byte	7
+ 777 009d 000000   		.space	3
+ 778 00a0 00000000 		.word	0
+ 779 00a4 00000000 		.space	28
+ 779      00000000 
+ 779      00000000 
+ 779      00000000 
+ 779      00000000 
+ 780 00c0 00000400 		.word	262144
+ 781 00c4 00480040 		.word	1073760256
+ 782 00c8 02000000 		.word	2
+ 783 00cc 02000000 		.word	2
+ 784 00d0 00040240 		.word	1073873920
+ 785 00d4 00040240 		.word	1073873920
+ 786 00d8 0004     		.short	1024
+ 787 00da 0008     		.short	2048
+ 788 00dc 07       		.byte	7
+ 789 00dd 000000   		.space	3
+ 790 00e0 00000400 		.word	262144
+ 791 00e4 00480040 		.word	1073760256
+ 792 00e8 04000000 		.word	4
+ 793 00ec 04000000 		.word	4
+ 794 00f0 00080240 		.word	1073874944
+ 795 00f4 00080240 		.word	1073874944
+ 796 00f8 0004     		.short	1024
+ 797 00fa 0008     		.short	2048
+ 798 00fc 07       		.byte	7
+ 799 00fd 000000   		.space	3
+ 800 0100 00000400 		.word	262144
+ 801 0104 00480040 		.word	1073760256
+ 802 0108 08000000 		.word	8
+ 803 010c 08000000 		.word	8
+ 804 0110 000C0240 		.word	1073875968
+ 805 0114 000C0240 		.word	1073875968
+ 806 0118 0001     		.short	256
+ 807 011a 0002     		.short	512
+ 808 011c 07       		.byte	7
+ 809 011d 000000   		.space	3
+ 810 0120 00000800 		.word	524288
+ 811 0124 004C0040 		.word	1073761280
+ 812 0128 01000000 		.word	1
+ 813 012c 01000000 		.word	1
+ 814 0130 00000240 		.word	1073872896
+ 815 0134 00000240 		.word	1073872896
+ 816 0138 0100     		.short	1
+ 817 013a 0200     		.short	2
+ 818 013c 08       		.byte	8
+ 819 013d 000000   		.space	3
+ 820 0140 00000800 		.word	524288
+ 821 0144 004C0040 		.word	1073761280
+ 822 0148 04000000 		.word	4
+ 823 014c 04000000 		.word	4
+ARM GAS  /tmp/cc4w9UXs.s 			page 22
+
+
+ 824 0150 00080240 		.word	1073874944
+ 825 0154 00080240 		.word	1073874944
+ 826 0158 0004     		.short	1024
+ 827 015a 0008     		.short	2048
+ 828 015c 08       		.byte	8
+ 829 015d 000000   		.space	3
+ 830 0160 00000000 		.word	0
+ 831 0164 00000000 		.space	28
+ 831      00000000 
+ 831      00000000 
+ 831      00000000 
+ 831      00000000 
+ 832 0180 00001000 		.word	1048576
+ 833 0184 00500040 		.word	1073762304
+ 834 0188 04000000 		.word	4
+ 835 018c 08000000 		.word	8
+ 836 0190 00080240 		.word	1073874944
+ 837 0194 000C0240 		.word	1073875968
+ 838 0198 0010     		.short	4096
+ 839 019a 0400     		.short	4
+ 840 019c 08       		.byte	8
+ 841 019d 000000   		.space	3
+ 842 01a0 00000000 		.word	0
+ 843 01a4 00000000 		.space	28
+ 843      00000000 
+ 843      00000000 
+ 843      00000000 
+ 843      00000000 
+ 844 01c0 00000000 		.word	0
+ 845 01c4 00000000 		.space	28
+ 845      00000000 
+ 845      00000000 
+ 845      00000000 
+ 845      00000000 
+ 846 01e0 20000000 		.word	32
+ 847 01e4 00140140 		.word	1073812480
+ 848 01e8 04000000 		.word	4
+ 849 01ec 04000000 		.word	4
+ 850 01f0 00080240 		.word	1073874944
+ 851 01f4 00080240 		.word	1073874944
+ 852 01f8 4000     		.short	64
+ 853 01fa 8000     		.short	128
+ 854 01fc 08       		.byte	8
+ 855 01fd 000000   		.space	3
+ 856 0200 20000000 		.word	32
+ 857 0204 00140140 		.word	1073812480
+ 858 0208 40000000 		.word	64
+ 859 020c 40000000 		.word	64
+ 860 0210 00180240 		.word	1073879040
+ 861 0214 00180240 		.word	1073879040
+ 862 0218 0040     		.short	16384
+ 863 021a 0002     		.short	512
+ 864 021c 08       		.byte	8
+ 865 021d 000000   		.space	3
+ 866 0220 00000000 		.word	0
+ 867 0224 00000000 		.space	28
+ 867      00000000 
+ARM GAS  /tmp/cc4w9UXs.s 			page 23
+
+
+ 867      00000000 
+ 867      00000000 
+ 867      00000000 
+ 868              		.section	.rodata.UART_TRANSFER_MODE_MAPPING,"a",%progbits
+ 869              		.align	2
+ 870              		.set	.LANCHOR3,. + 0
+ 873              	UART_TRANSFER_MODE_MAPPING:
+ 874 0000 04000000 		.word	4
+ 875 0004 08000000 		.word	8
+ 876 0008 0C000000 		.word	12
+ 877              		.section	.rodata.__FUNCTION__.12195,"a",%progbits
+ 878              		.align	2
+ 879              		.set	.LANCHOR1,. + 0
+ 882              	__FUNCTION__.12195:
+ 883 0000 75617274 		.ascii	"uart_config\000"
+ 883      5F636F6E 
+ 883      66696700 
+ 884              		.section	.rodata.__FUNCTION__.12211,"a",%progbits
+ 885              		.align	2
+ 886              		.set	.LANCHOR6,. + 0
+ 889              	__FUNCTION__.12211:
+ 890 0000 75617274 		.ascii	"uart_write_bytes\000"
+ 890      5F777269 
+ 890      74655F62 
+ 890      79746573 
+ 890      00
+ 891              		.section	.rodata.__FUNCTION__.12219,"a",%progbits
+ 892              		.align	2
+ 893              		.set	.LANCHOR7,. + 0
+ 896              	__FUNCTION__.12219:
+ 897 0000 75617274 		.ascii	"uart_read_bytes\000"
+ 897      5F726561 
+ 897      645F6279 
+ 897      74657300 
+ 898              		.section	.rodata.uart_config.str1.4,"aMS",%progbits,1
+ 899              		.align	2
+ 900              	.LC0:
+ 901 0000 1B5B303B 		.ascii	"\033[0;31mE (%d) %s: %s:%d (%s):%s\033[0m\015\012\000"
+ 901      33316D45 
+ 901      20282564 
+ 901      29202573 
+ 901      3A202573 
+ 902 0026 0000     		.space	2
+ 903              	.LC1:
+ 904 0028 44524956 		.ascii	"DRIVER UART\000"
+ 904      45522055 
+ 904      41525400 
+ 905              	.LC2:
+ 906 0034 75617274 		.ascii	"uart init error\000"
+ 906      20696E69 
+ 906      74206572 
+ 906      726F7200 
+ 907              	.LC3:
+ 908 0044 2F686F6D 		.ascii	"/home/phong/Documents/thesis/stm32f4/stm-idf/compon"
+ 908      652F7068 
+ 908      6F6E672F 
+ 908      446F6375 
+ARM GAS  /tmp/cc4w9UXs.s 			page 24
+
+
+ 908      6D656E74 
+ 909 0077 656E7473 		.ascii	"ents/driver/uart.c\000"
+ 909      2F647269 
+ 909      7665722F 
+ 909      75617274 
+ 909      2E6300
+ 910              		.section	.rodata.uart_read_bytes.str1.4,"aMS",%progbits,1
+ 911              		.align	2
+ 912              	.LC5:
+ 913 0000 75617274 		.ascii	"uart_receive error\000"
+ 913      5F726563 
+ 913      65697665 
+ 913      20657272 
+ 913      6F7200
+ 914              		.section	.rodata.uart_write_bytes.str1.4,"aMS",%progbits,1
+ 915              		.align	2
+ 916              	.LC4:
+ 917 0000 75617274 		.ascii	"uart transmit error\000"
+ 917      20747261 
+ 917      6E736D69 
+ 917      74206572 
+ 917      726F7200 
+ 918              		.text
+ 919              	.Letext0:
+ 920              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 921              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/lock.h"
+ 922              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_types.h"
+ 923              		.file 5 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 924              		.file 6 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/reent.h"
+ 925              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/stdlib.h"
+ 926              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 927              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 928              		.file 10 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/inc
+ 929              		.file 11 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/inc
+ 930              		.file 12 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ 931              		.file 13 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ 932              		.file 14 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ 933              		.file 15 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ 934              		.file 16 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ 935              		.file 17 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm_common/include/stm_err.h"
+ 936              		.file 18 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/log/include/stm_log.h"
+ 937              		.file 19 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/include/driver/uart.h"
+ARM GAS  /tmp/cc4w9UXs.s 			page 25
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 uart.c
+     /tmp/cc4w9UXs.s:18     .text._uart_get_hw_info:0000000000000000 $t
+     /tmp/cc4w9UXs.s:24     .text._uart_get_hw_info:0000000000000000 _uart_get_hw_info
+     /tmp/cc4w9UXs.s:67     .text._uart_get_hw_info:0000000000000024 $d
+     /tmp/cc4w9UXs.s:72     .text.uart_config:0000000000000000 $t
+     /tmp/cc4w9UXs.s:79     .text.uart_config:0000000000000000 uart_config
+     /tmp/cc4w9UXs.s:452    .text.uart_config:000000000000023c $d
+     /tmp/cc4w9UXs.s:466    .text.uart_write_bytes:0000000000000000 $t
+     /tmp/cc4w9UXs.s:473    .text.uart_write_bytes:0000000000000000 uart_write_bytes
+     /tmp/cc4w9UXs.s:559    .text.uart_write_bytes:0000000000000070 $d
+     /tmp/cc4w9UXs.s:569    .text.uart_read_bytes:0000000000000000 $t
+     /tmp/cc4w9UXs.s:576    .text.uart_read_bytes:0000000000000000 uart_read_bytes
+     /tmp/cc4w9UXs.s:662    .text.uart_read_bytes:0000000000000070 $d
+     /tmp/cc4w9UXs.s:672    .bss.uart_handle:0000000000000000 $d
+     /tmp/cc4w9UXs.s:676    .bss.uart_handle:0000000000000000 uart_handle
+     /tmp/cc4w9UXs.s:679    .rodata.UART_FRAME_FORMAT_MAPPING:0000000000000000 $d
+     /tmp/cc4w9UXs.s:683    .rodata.UART_FRAME_FORMAT_MAPPING:0000000000000000 UART_FRAME_FORMAT_MAPPING
+     /tmp/cc4w9UXs.s:721    .rodata.UART_HW_FLW_CTRL_MAPPING:0000000000000000 $d
+     /tmp/cc4w9UXs.s:725    .rodata.UART_HW_FLW_CTRL_MAPPING:0000000000000000 UART_HW_FLW_CTRL_MAPPING
+     /tmp/cc4w9UXs.s:731    .rodata.UART_HW_INFO_MAPPING:0000000000000000 $d
+     /tmp/cc4w9UXs.s:735    .rodata.UART_HW_INFO_MAPPING:0000000000000000 UART_HW_INFO_MAPPING
+     /tmp/cc4w9UXs.s:869    .rodata.UART_TRANSFER_MODE_MAPPING:0000000000000000 $d
+     /tmp/cc4w9UXs.s:873    .rodata.UART_TRANSFER_MODE_MAPPING:0000000000000000 UART_TRANSFER_MODE_MAPPING
+     /tmp/cc4w9UXs.s:878    .rodata.__FUNCTION__.12195:0000000000000000 $d
+     /tmp/cc4w9UXs.s:882    .rodata.__FUNCTION__.12195:0000000000000000 __FUNCTION__.12195
+     /tmp/cc4w9UXs.s:885    .rodata.__FUNCTION__.12211:0000000000000000 $d
+     /tmp/cc4w9UXs.s:889    .rodata.__FUNCTION__.12211:0000000000000000 __FUNCTION__.12211
+     /tmp/cc4w9UXs.s:892    .rodata.__FUNCTION__.12219:0000000000000000 $d
+     /tmp/cc4w9UXs.s:896    .rodata.__FUNCTION__.12219:0000000000000000 __FUNCTION__.12219
+     /tmp/cc4w9UXs.s:899    .rodata.uart_config.str1.4:0000000000000000 $d
+     /tmp/cc4w9UXs.s:911    .rodata.uart_read_bytes.str1.4:0000000000000000 $d
+     /tmp/cc4w9UXs.s:915    .rodata.uart_write_bytes.str1.4:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+stm_log_timestamp
+stm_log_write
+HAL_UART_Init
+HAL_GPIO_Init
+HAL_UART_Transmit
+HAL_UART_Receive

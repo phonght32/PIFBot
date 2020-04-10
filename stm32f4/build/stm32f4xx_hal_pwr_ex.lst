@@ -1,0 +1,621 @@
+ARM GAS  /tmp/cciNDBTB.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal_pwr_ex.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_PWREx_EnableBkUpReg,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_PWREx_EnableBkUpReg
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	HAL_PWREx_EnableBkUpReg:
+  26              	.LFB130:
+  27              		.file 1 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_ha
+   1:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /**
+   2:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   ******************************************************************************
+   3:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @file    stm32f4xx_hal_pwr_ex.c
+   4:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @author  MCD Application Team
+   5:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @brief   Extended PWR HAL module driver.
+   6:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *          This file provides firmware functions to manage the following 
+   7:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *          functionalities of PWR extension peripheral:           
+   8:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *           + Peripheral Extended features functions
+   9:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *         
+  10:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   ******************************************************************************
+  11:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @attention
+  12:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *
+  13:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  14:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * All rights reserved.</center></h2>
+  15:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *
+  16:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  17:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * the "License"; You may not use this file except in compliance with the
+  18:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * License. You may obtain a copy of the License at:
+  19:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  20:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *
+  21:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   ******************************************************************************
+  22:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */ 
+  23:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  24:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /* Includes ------------------------------------------------------------------*/
+  25:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** #include "stm32f4xx_hal.h"
+  26:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  27:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  28:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @{
+  29:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */
+  30:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  31:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /** @defgroup PWREx PWREx
+ARM GAS  /tmp/cciNDBTB.s 			page 2
+
+
+  32:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @brief PWR HAL module driver
+  33:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @{
+  34:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */
+  35:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  36:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** #ifdef HAL_PWR_MODULE_ENABLED
+  37:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  38:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /* Private typedef -----------------------------------------------------------*/
+  39:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /* Private define ------------------------------------------------------------*/
+  40:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /** @addtogroup PWREx_Private_Constants
+  41:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @{
+  42:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */    
+  43:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** #define PWR_OVERDRIVE_TIMEOUT_VALUE  1000U
+  44:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** #define PWR_UDERDRIVE_TIMEOUT_VALUE  1000U
+  45:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** #define PWR_BKPREG_TIMEOUT_VALUE     1000U
+  46:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** #define PWR_VOSRDY_TIMEOUT_VALUE     1000U
+  47:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /**
+  48:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @}
+  49:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */
+  50:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  51:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****    
+  52:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /* Private macro -------------------------------------------------------------*/
+  53:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /* Private variables ---------------------------------------------------------*/
+  54:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /* Private function prototypes -----------------------------------------------*/
+  55:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /* Private functions ---------------------------------------------------------*/
+  56:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /** @defgroup PWREx_Exported_Functions PWREx Exported Functions
+  57:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *  @{
+  58:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */
+  59:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  60:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /** @defgroup PWREx_Exported_Functions_Group1 Peripheral Extended features functions 
+  61:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *  @brief Peripheral Extended features functions 
+  62:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *
+  63:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** @verbatim   
+  64:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  65:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****  ===============================================================================
+  66:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****                  ##### Peripheral extended features functions #####
+  67:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****  ===============================================================================
+  68:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  69:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     *** Main and Backup Regulators configuration ***
+  70:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     ================================================
+  71:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     [..] 
+  72:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****       (+) The backup domain includes 4 Kbytes of backup SRAM accessible only from 
+  73:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           the CPU, and address in 32-bit, 16-bit or 8-bit mode. Its content is 
+  74:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           retained even in Standby or VBAT mode when the low power backup regulator
+  75:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           is enabled. It can be considered as an internal EEPROM when VBAT is 
+  76:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           always present. You can use the HAL_PWREx_EnableBkUpReg() function to 
+  77:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           enable the low power backup regulator. 
+  78:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  79:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****       (+) When the backup domain is supplied by VDD (analog switch connected to VDD) 
+  80:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           the backup SRAM is powered from VDD which replaces the VBAT power supply to 
+  81:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           save battery life.
+  82:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  83:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****       (+) The backup SRAM is not mass erased by a tamper event. It is read 
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           protected to prevent confidential data, such as cryptographic private 
+  85:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           key, from being accessed. The backup SRAM can be erased only through 
+  86:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           the Flash interface when a protection level change from level 1 to 
+  87:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           level 0 is requested. 
+  88:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****       -@- Refer to the description of Read protection (RDP) in the Flash 
+ARM GAS  /tmp/cciNDBTB.s 			page 3
+
+
+  89:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           programming manual.
+  90:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  91:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****       (+) The main internal regulator can be configured to have a tradeoff between 
+  92:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           performance and power consumption when the device does not operate at 
+  93:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           the maximum frequency. This is done through __HAL_PWR_MAINREGULATORMODE_CONFIG() 
+  94:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           macro which configure VOS bit in PWR_CR register
+  95:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           
+  96:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****         Refer to the product datasheets for more details.
+  97:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+  98:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     *** FLASH Power Down configuration ****
+  99:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     =======================================
+ 100:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     [..] 
+ 101:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****       (+) By setting the FPDS bit in the PWR_CR register by using the 
+ 102:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           HAL_PWREx_EnableFlashPowerDown() function, the Flash memory also enters power 
+ 103:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           down mode when the device enters Stop mode. When the Flash memory 
+ 104:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           is in power down mode, an additional startup delay is incurred when 
+ 105:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           waking up from Stop mode.
+ 106:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****           
+ 107:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****            (+) For STM32F42xxx/43xxx/446xx/469xx/479xx Devices, the scale can be modified only when
+ 108:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****            is OFF and the HSI or HSE clock source is selected as system clock. 
+ 109:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****            The new value programmed is active only when the PLL is ON.
+ 110:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****            When the PLL is OFF, the voltage scale 3 is automatically selected. 
+ 111:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****         Refer to the datasheets for more details.
+ 112:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 113:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     *** Over-Drive and Under-Drive configuration ****
+ 114:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     =================================================
+ 115:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     [..]         
+ 116:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****        (+) For STM32F42xxx/43xxx/446xx/469xx/479xx Devices, in Run mode: the main regulator has
+ 117:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****            2 operating modes available:
+ 118:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****         (++) Normal mode: The CPU and core logic operate at maximum frequency at a given 
+ 119:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****              voltage scaling (scale 1, scale 2 or scale 3)
+ 120:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****         (++) Over-drive mode: This mode allows the CPU and the core logic to operate at a 
+ 121:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****             higher frequency than the normal mode for a given voltage scaling (scale 1,  
+ 122:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****             scale 2 or scale 3). This mode is enabled through HAL_PWREx_EnableOverDrive() function 
+ 123:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****             disabled by HAL_PWREx_DisableOverDrive() function, to enter or exit from Over-drive mod
+ 124:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****             the sequence described in Reference manual.
+ 125:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****              
+ 126:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****        (+) For STM32F42xxx/43xxx/446xx/469xx/479xx Devices, in Stop mode: the main regulator or low
+ 127:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****            supplies a low power voltage to the 1.2V domain, thus preserving the content of register
+ 128:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****            and internal SRAM. 2 operating modes are available:
+ 129:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****          (++) Normal mode: the 1.2V domain is preserved in nominal leakage mode. This mode is only 
+ 130:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****               available when the main regulator or the low power regulator is used in Scale 3 or 
+ 131:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****               low voltage mode.
+ 132:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****          (++) Under-drive mode: the 1.2V domain is preserved in reduced leakage mode. This mode is 
+ 133:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****               available when the main regulator or the low power regulator is in low voltage mode.
+ 134:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 135:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** @endverbatim
+ 136:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @{
+ 137:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */
+ 138:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 139:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /**
+ 140:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @brief Enables the Backup Regulator.
+ 141:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @retval HAL status
+ 142:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */
+ 143:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** HAL_StatusTypeDef HAL_PWREx_EnableBkUpReg(void)
+ 144:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** {
+  28              		.loc 1 144 0
+ARM GAS  /tmp/cciNDBTB.s 			page 4
+
+
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 10B5     		push	{r4, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 4, -8
+  36              		.cfi_offset 14, -4
+  37              	.LVL0:
+ 145:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   uint32_t tickstart = 0U;
+ 146:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 147:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *(__IO uint32_t *) CSR_BRE_BB = (uint32_t)ENABLE;
+  38              		.loc 1 147 0
+  39 0002 0122     		movs	r2, #1
+  40 0004 094B     		ldr	r3, .L8
+  41 0006 1A60     		str	r2, [r3]
+ 148:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 149:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   /* Get tick */
+ 150:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   tickstart = HAL_GetTick();
+  42              		.loc 1 150 0
+  43 0008 FFF7FEFF 		bl	HAL_GetTick
+  44              	.LVL1:
+  45 000c 0446     		mov	r4, r0
+  46              	.LVL2:
+  47              	.L2:
+ 151:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 152:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   /* Wait till Backup regulator ready flag is set */  
+ 153:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   while(__HAL_PWR_GET_FLAG(PWR_FLAG_BRR) == RESET)
+  48              		.loc 1 153 0
+  49 000e 084B     		ldr	r3, .L8+4
+  50 0010 5B68     		ldr	r3, [r3, #4]
+  51 0012 13F0080F 		tst	r3, #8
+  52 0016 07D1     		bne	.L7
+ 154:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   {
+ 155:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     if((HAL_GetTick() - tickstart ) > PWR_BKPREG_TIMEOUT_VALUE)
+  53              		.loc 1 155 0
+  54 0018 FFF7FEFF 		bl	HAL_GetTick
+  55              	.LVL3:
+  56 001c 001B     		subs	r0, r0, r4
+  57 001e B0F57A7F 		cmp	r0, #1000
+  58 0022 F4D9     		bls	.L2
+ 156:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     {
+ 157:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****       return HAL_TIMEOUT;
+  59              		.loc 1 157 0
+  60 0024 0320     		movs	r0, #3
+ 158:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     } 
+ 159:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   }
+ 160:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   return HAL_OK;
+ 161:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** }
+  61              		.loc 1 161 0
+  62 0026 10BD     		pop	{r4, pc}
+  63              	.LVL4:
+  64              	.L7:
+ 160:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** }
+  65              		.loc 1 160 0
+  66 0028 0020     		movs	r0, #0
+  67 002a 10BD     		pop	{r4, pc}
+ARM GAS  /tmp/cciNDBTB.s 			page 5
+
+
+  68              	.LVL5:
+  69              	.L9:
+  70              		.align	2
+  71              	.L8:
+  72 002c A4000E42 		.word	1108213924
+  73 0030 00700040 		.word	1073770496
+  74              		.cfi_endproc
+  75              	.LFE130:
+  77              		.section	.text.HAL_PWREx_DisableBkUpReg,"ax",%progbits
+  78              		.align	1
+  79              		.global	HAL_PWREx_DisableBkUpReg
+  80              		.syntax unified
+  81              		.thumb
+  82              		.thumb_func
+  83              		.fpu fpv4-sp-d16
+  85              	HAL_PWREx_DisableBkUpReg:
+  86              	.LFB131:
+ 162:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 163:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /**
+ 164:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @brief Disables the Backup Regulator.
+ 165:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @retval HAL status
+ 166:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */
+ 167:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** HAL_StatusTypeDef HAL_PWREx_DisableBkUpReg(void)
+ 168:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** {
+  87              		.loc 1 168 0
+  88              		.cfi_startproc
+  89              		@ args = 0, pretend = 0, frame = 0
+  90              		@ frame_needed = 0, uses_anonymous_args = 0
+  91 0000 10B5     		push	{r4, lr}
+  92              	.LCFI1:
+  93              		.cfi_def_cfa_offset 8
+  94              		.cfi_offset 4, -8
+  95              		.cfi_offset 14, -4
+  96              	.LVL6:
+ 169:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   uint32_t tickstart = 0U;
+ 170:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 171:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *(__IO uint32_t *) CSR_BRE_BB = (uint32_t)DISABLE;
+  97              		.loc 1 171 0
+  98 0002 0022     		movs	r2, #0
+  99 0004 094B     		ldr	r3, .L17
+ 100 0006 1A60     		str	r2, [r3]
+ 172:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 173:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   /* Get tick */
+ 174:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   tickstart = HAL_GetTick();
+ 101              		.loc 1 174 0
+ 102 0008 FFF7FEFF 		bl	HAL_GetTick
+ 103              	.LVL7:
+ 104 000c 0446     		mov	r4, r0
+ 105              	.LVL8:
+ 106              	.L11:
+ 175:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 176:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   /* Wait till Backup regulator ready flag is set */  
+ 177:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   while(__HAL_PWR_GET_FLAG(PWR_FLAG_BRR) != RESET)
+ 107              		.loc 1 177 0
+ 108 000e 084B     		ldr	r3, .L17+4
+ 109 0010 5B68     		ldr	r3, [r3, #4]
+ 110 0012 13F0080F 		tst	r3, #8
+ARM GAS  /tmp/cciNDBTB.s 			page 6
+
+
+ 111 0016 07D0     		beq	.L16
+ 178:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   {
+ 179:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     if((HAL_GetTick() - tickstart ) > PWR_BKPREG_TIMEOUT_VALUE)
+ 112              		.loc 1 179 0
+ 113 0018 FFF7FEFF 		bl	HAL_GetTick
+ 114              	.LVL9:
+ 115 001c 001B     		subs	r0, r0, r4
+ 116 001e B0F57A7F 		cmp	r0, #1000
+ 117 0022 F4D9     		bls	.L11
+ 180:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     {
+ 181:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****       return HAL_TIMEOUT;
+ 118              		.loc 1 181 0
+ 119 0024 0320     		movs	r0, #3
+ 182:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     } 
+ 183:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   }
+ 184:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   return HAL_OK;
+ 185:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** }
+ 120              		.loc 1 185 0
+ 121 0026 10BD     		pop	{r4, pc}
+ 122              	.LVL10:
+ 123              	.L16:
+ 184:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** }
+ 124              		.loc 1 184 0
+ 125 0028 0020     		movs	r0, #0
+ 126 002a 10BD     		pop	{r4, pc}
+ 127              	.LVL11:
+ 128              	.L18:
+ 129              		.align	2
+ 130              	.L17:
+ 131 002c A4000E42 		.word	1108213924
+ 132 0030 00700040 		.word	1073770496
+ 133              		.cfi_endproc
+ 134              	.LFE131:
+ 136              		.section	.text.HAL_PWREx_EnableFlashPowerDown,"ax",%progbits
+ 137              		.align	1
+ 138              		.global	HAL_PWREx_EnableFlashPowerDown
+ 139              		.syntax unified
+ 140              		.thumb
+ 141              		.thumb_func
+ 142              		.fpu fpv4-sp-d16
+ 144              	HAL_PWREx_EnableFlashPowerDown:
+ 145              	.LFB132:
+ 186:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 187:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /**
+ 188:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @brief Enables the Flash Power Down in Stop mode.
+ 189:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @retval None
+ 190:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */
+ 191:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** void HAL_PWREx_EnableFlashPowerDown(void)
+ 192:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** {
+ 146              		.loc 1 192 0
+ 147              		.cfi_startproc
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150              		@ link register save eliminated.
+ 193:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *(__IO uint32_t *) CR_FPDS_BB = (uint32_t)ENABLE;
+ 151              		.loc 1 193 0
+ 152 0000 0122     		movs	r2, #1
+ARM GAS  /tmp/cciNDBTB.s 			page 7
+
+
+ 153 0002 014B     		ldr	r3, .L20
+ 154 0004 1A60     		str	r2, [r3]
+ 155 0006 7047     		bx	lr
+ 156              	.L21:
+ 157              		.align	2
+ 158              	.L20:
+ 159 0008 24000E42 		.word	1108213796
+ 160              		.cfi_endproc
+ 161              	.LFE132:
+ 163              		.section	.text.HAL_PWREx_DisableFlashPowerDown,"ax",%progbits
+ 164              		.align	1
+ 165              		.global	HAL_PWREx_DisableFlashPowerDown
+ 166              		.syntax unified
+ 167              		.thumb
+ 168              		.thumb_func
+ 169              		.fpu fpv4-sp-d16
+ 171              	HAL_PWREx_DisableFlashPowerDown:
+ 172              	.LFB133:
+ 194:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** }
+ 195:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 196:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /**
+ 197:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @brief Disables the Flash Power Down in Stop mode.
+ 198:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @retval None
+ 199:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */
+ 200:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** void HAL_PWREx_DisableFlashPowerDown(void)
+ 201:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** {
+ 173              		.loc 1 201 0
+ 174              		.cfi_startproc
+ 175              		@ args = 0, pretend = 0, frame = 0
+ 176              		@ frame_needed = 0, uses_anonymous_args = 0
+ 177              		@ link register save eliminated.
+ 202:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *(__IO uint32_t *) CR_FPDS_BB = (uint32_t)DISABLE;
+ 178              		.loc 1 202 0
+ 179 0000 0022     		movs	r2, #0
+ 180 0002 014B     		ldr	r3, .L23
+ 181 0004 1A60     		str	r2, [r3]
+ 182 0006 7047     		bx	lr
+ 183              	.L24:
+ 184              		.align	2
+ 185              	.L23:
+ 186 0008 24000E42 		.word	1108213796
+ 187              		.cfi_endproc
+ 188              	.LFE133:
+ 190              		.section	.text.HAL_PWREx_GetVoltageRange,"ax",%progbits
+ 191              		.align	1
+ 192              		.global	HAL_PWREx_GetVoltageRange
+ 193              		.syntax unified
+ 194              		.thumb
+ 195              		.thumb_func
+ 196              		.fpu fpv4-sp-d16
+ 198              	HAL_PWREx_GetVoltageRange:
+ 199              	.LFB134:
+ 203:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** }
+ 204:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 205:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /**
+ 206:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @brief Return Voltage Scaling Range.
+ 207:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @retval The configured scale for the regulator voltage(VOS bit field).
+ARM GAS  /tmp/cciNDBTB.s 			page 8
+
+
+ 208:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *         The returned value can be one of the following:
+ 209:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *            - @arg PWR_REGULATOR_VOLTAGE_SCALE1: Regulator voltage output Scale 1 mode
+ 210:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *            - @arg PWR_REGULATOR_VOLTAGE_SCALE2: Regulator voltage output Scale 2 mode
+ 211:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *            - @arg PWR_REGULATOR_VOLTAGE_SCALE3: Regulator voltage output Scale 3 mode
+ 212:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */  
+ 213:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** uint32_t HAL_PWREx_GetVoltageRange(void)
+ 214:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** {
+ 200              		.loc 1 214 0
+ 201              		.cfi_startproc
+ 202              		@ args = 0, pretend = 0, frame = 0
+ 203              		@ frame_needed = 0, uses_anonymous_args = 0
+ 204              		@ link register save eliminated.
+ 215:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   return (PWR->CR & PWR_CR_VOS);
+ 205              		.loc 1 215 0
+ 206 0000 024B     		ldr	r3, .L26
+ 207 0002 1868     		ldr	r0, [r3]
+ 216:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** }
+ 208              		.loc 1 216 0
+ 209 0004 00F48040 		and	r0, r0, #16384
+ 210 0008 7047     		bx	lr
+ 211              	.L27:
+ 212 000a 00BF     		.align	2
+ 213              	.L26:
+ 214 000c 00700040 		.word	1073770496
+ 215              		.cfi_endproc
+ 216              	.LFE134:
+ 218              		.section	.text.HAL_PWREx_ControlVoltageScaling,"ax",%progbits
+ 219              		.align	1
+ 220              		.global	HAL_PWREx_ControlVoltageScaling
+ 221              		.syntax unified
+ 222              		.thumb
+ 223              		.thumb_func
+ 224              		.fpu fpv4-sp-d16
+ 226              	HAL_PWREx_ControlVoltageScaling:
+ 227              	.LFB135:
+ 217:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 218:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** #if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F407xx) || defined(STM32F417xx)
+ 219:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** /**
+ 220:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @brief Configures the main internal regulator output voltage.
+ 221:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @param  VoltageScaling specifies the regulator output voltage to achieve
+ 222:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *         a tradeoff between performance and power consumption.
+ 223:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *          This parameter can be one of the following values:
+ 224:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *            @arg PWR_REGULATOR_VOLTAGE_SCALE1: Regulator voltage output range 1 mode,
+ 225:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *                                               the maximum value of fHCLK = 168 MHz.
+ 226:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *            @arg PWR_REGULATOR_VOLTAGE_SCALE2: Regulator voltage output range 2 mode,
+ 227:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *                                               the maximum value of fHCLK = 144 MHz.
+ 228:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @note  When moving from Range 1 to Range 2, the system frequency must be decreased to
+ 229:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *        a value below 144 MHz before calling HAL_PWREx_ConfigVoltageScaling() API.
+ 230:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *        When moving from Range 2 to Range 1, the system frequency can be increased to
+ 231:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   *        a value up to 168 MHz after calling HAL_PWREx_ConfigVoltageScaling() API.
+ 232:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   * @retval HAL Status
+ 233:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   */
+ 234:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** HAL_StatusTypeDef HAL_PWREx_ControlVoltageScaling(uint32_t VoltageScaling)
+ 235:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** {
+ 228              		.loc 1 235 0
+ 229              		.cfi_startproc
+ 230              		@ args = 0, pretend = 0, frame = 8
+ARM GAS  /tmp/cciNDBTB.s 			page 9
+
+
+ 231              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232              	.LVL12:
+ 233 0000 10B5     		push	{r4, lr}
+ 234              	.LCFI2:
+ 235              		.cfi_def_cfa_offset 8
+ 236              		.cfi_offset 4, -8
+ 237              		.cfi_offset 14, -4
+ 238 0002 82B0     		sub	sp, sp, #8
+ 239              	.LCFI3:
+ 240              		.cfi_def_cfa_offset 16
+ 241              	.LVL13:
+ 242              	.LBB2:
+ 236:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   uint32_t tickstart = 0U;
+ 237:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   
+ 238:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   assert_param(IS_PWR_VOLTAGE_SCALING_RANGE(VoltageScaling));
+ 239:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   
+ 240:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   /* Enable PWR RCC Clock Peripheral */
+ 241:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   __HAL_RCC_PWR_CLK_ENABLE();
+ 243              		.loc 1 241 0
+ 244 0004 0021     		movs	r1, #0
+ 245 0006 0091     		str	r1, [sp]
+ 246 0008 144B     		ldr	r3, .L35
+ 247 000a 1A6C     		ldr	r2, [r3, #64]
+ 248 000c 42F08052 		orr	r2, r2, #268435456
+ 249 0010 1A64     		str	r2, [r3, #64]
+ 250 0012 1B6C     		ldr	r3, [r3, #64]
+ 251 0014 03F08053 		and	r3, r3, #268435456
+ 252 0018 0093     		str	r3, [sp]
+ 253 001a 009B     		ldr	r3, [sp]
+ 254              	.LBE2:
+ 255              	.LBB3:
+ 242:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   
+ 243:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   /* Set Range */
+ 244:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   __HAL_PWR_VOLTAGESCALING_CONFIG(VoltageScaling);
+ 256              		.loc 1 244 0
+ 257 001c 0191     		str	r1, [sp, #4]
+ 258 001e 104A     		ldr	r2, .L35+4
+ 259 0020 1368     		ldr	r3, [r2]
+ 260 0022 23F48043 		bic	r3, r3, #16384
+ 261 0026 1843     		orrs	r0, r0, r3
+ 262              	.LVL14:
+ 263 0028 1060     		str	r0, [r2]
+ 264 002a 1368     		ldr	r3, [r2]
+ 265 002c 03F48043 		and	r3, r3, #16384
+ 266 0030 0193     		str	r3, [sp, #4]
+ 267 0032 019B     		ldr	r3, [sp, #4]
+ 268              	.LBE3:
+ 245:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   
+ 246:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   /* Get Start Tick*/
+ 247:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   tickstart = HAL_GetTick();
+ 269              		.loc 1 247 0
+ 270 0034 FFF7FEFF 		bl	HAL_GetTick
+ 271              	.LVL15:
+ 272 0038 0446     		mov	r4, r0
+ 273              	.LVL16:
+ 274              	.L29:
+ 248:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   while((__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY) == RESET))
+ARM GAS  /tmp/cciNDBTB.s 			page 10
+
+
+ 275              		.loc 1 248 0
+ 276 003a 094B     		ldr	r3, .L35+4
+ 277 003c 5B68     		ldr	r3, [r3, #4]
+ 278 003e 13F4804F 		tst	r3, #16384
+ 279 0042 07D1     		bne	.L34
+ 249:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   {
+ 250:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     if((HAL_GetTick() - tickstart ) > PWR_VOSRDY_TIMEOUT_VALUE)
+ 280              		.loc 1 250 0
+ 281 0044 FFF7FEFF 		bl	HAL_GetTick
+ 282              	.LVL17:
+ 283 0048 001B     		subs	r0, r0, r4
+ 284 004a B0F57A7F 		cmp	r0, #1000
+ 285 004e F4D9     		bls	.L29
+ 251:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     {
+ 252:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****       return HAL_TIMEOUT;
+ 286              		.loc 1 252 0
+ 287 0050 0320     		movs	r0, #3
+ 288 0052 00E0     		b	.L30
+ 289              	.L34:
+ 253:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****     } 
+ 254:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   }
+ 255:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** 
+ 256:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c ****   return HAL_OK;
+ 290              		.loc 1 256 0
+ 291 0054 0020     		movs	r0, #0
+ 292              	.L30:
+ 257:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_pwr_ex.c **** }
+ 293              		.loc 1 257 0
+ 294 0056 02B0     		add	sp, sp, #8
+ 295              	.LCFI4:
+ 296              		.cfi_def_cfa_offset 8
+ 297              		@ sp needed
+ 298 0058 10BD     		pop	{r4, pc}
+ 299              	.LVL18:
+ 300              	.L36:
+ 301 005a 00BF     		.align	2
+ 302              	.L35:
+ 303 005c 00380240 		.word	1073887232
+ 304 0060 00700040 		.word	1073770496
+ 305              		.cfi_endproc
+ 306              	.LFE135:
+ 308              		.text
+ 309              	.Letext0:
+ 310              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 311              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 312              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 313              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 314              		.file 6 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 315              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 316              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 317              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ARM GAS  /tmp/cciNDBTB.s 			page 11
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal_pwr_ex.c
+     /tmp/cciNDBTB.s:18     .text.HAL_PWREx_EnableBkUpReg:0000000000000000 $t
+     /tmp/cciNDBTB.s:25     .text.HAL_PWREx_EnableBkUpReg:0000000000000000 HAL_PWREx_EnableBkUpReg
+     /tmp/cciNDBTB.s:72     .text.HAL_PWREx_EnableBkUpReg:000000000000002c $d
+     /tmp/cciNDBTB.s:78     .text.HAL_PWREx_DisableBkUpReg:0000000000000000 $t
+     /tmp/cciNDBTB.s:85     .text.HAL_PWREx_DisableBkUpReg:0000000000000000 HAL_PWREx_DisableBkUpReg
+     /tmp/cciNDBTB.s:131    .text.HAL_PWREx_DisableBkUpReg:000000000000002c $d
+     /tmp/cciNDBTB.s:137    .text.HAL_PWREx_EnableFlashPowerDown:0000000000000000 $t
+     /tmp/cciNDBTB.s:144    .text.HAL_PWREx_EnableFlashPowerDown:0000000000000000 HAL_PWREx_EnableFlashPowerDown
+     /tmp/cciNDBTB.s:159    .text.HAL_PWREx_EnableFlashPowerDown:0000000000000008 $d
+     /tmp/cciNDBTB.s:164    .text.HAL_PWREx_DisableFlashPowerDown:0000000000000000 $t
+     /tmp/cciNDBTB.s:171    .text.HAL_PWREx_DisableFlashPowerDown:0000000000000000 HAL_PWREx_DisableFlashPowerDown
+     /tmp/cciNDBTB.s:186    .text.HAL_PWREx_DisableFlashPowerDown:0000000000000008 $d
+     /tmp/cciNDBTB.s:191    .text.HAL_PWREx_GetVoltageRange:0000000000000000 $t
+     /tmp/cciNDBTB.s:198    .text.HAL_PWREx_GetVoltageRange:0000000000000000 HAL_PWREx_GetVoltageRange
+     /tmp/cciNDBTB.s:214    .text.HAL_PWREx_GetVoltageRange:000000000000000c $d
+     /tmp/cciNDBTB.s:219    .text.HAL_PWREx_ControlVoltageScaling:0000000000000000 $t
+     /tmp/cciNDBTB.s:226    .text.HAL_PWREx_ControlVoltageScaling:0000000000000000 HAL_PWREx_ControlVoltageScaling
+     /tmp/cciNDBTB.s:303    .text.HAL_PWREx_ControlVoltageScaling:000000000000005c $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_GetTick

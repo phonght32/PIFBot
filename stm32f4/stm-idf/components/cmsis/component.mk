@@ -1,0 +1,1 @@
+COMPONENT_INCLUDES += device/stm32/stm32f4xx/include

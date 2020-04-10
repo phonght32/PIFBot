@@ -1,0 +1,1370 @@
+ARM GAS  /tmp/ccUeDLhh.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal_exti.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_EXTI_SetConfigLine,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_EXTI_SetConfigLine
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	HAL_EXTI_SetConfigLine:
+  26              	.LFB130:
+  27              		.file 1 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_ha
+   1:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+   2:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   ******************************************************************************
+   3:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @file    stm32f4xx_hal_exti.c
+   4:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @author  MCD Application Team
+   5:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @brief   EXTI HAL module driver.
+   6:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *          This file provides firmware functions to manage the following
+   7:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *          functionalities of the Extended Interrupts and events controller (EXTI) peripheral:
+   8:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *           + Initialization and de-initialization functions
+   9:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *           + IO operation functions
+  10:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *
+  11:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   @verbatim
+  12:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   ==============================================================================
+  13:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****                     ##### EXTI Peripheral features #####
+  14:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   ==============================================================================
+  15:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   [..]
+  16:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (+) Each Exti line can be configured within this driver.
+  17:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  18:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (+) Exti line can be configured in 3 different modes
+  19:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Interrupt
+  20:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Event
+  21:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Both of them
+  22:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  23:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (+) Configurable Exti lines can be configured with 3 different triggers
+  24:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Rising
+  25:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Falling
+  26:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Both of them
+  27:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  28:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (+) When set in interrupt mode, configurable Exti lines have two different
+  29:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         interrupts pending registers which allow to distinguish which transition
+  30:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         occurs:
+  31:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Rising edge pending interrupt
+ARM GAS  /tmp/ccUeDLhh.s 			page 2
+
+
+  32:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Falling
+  33:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  34:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (+) Exti lines 0 to 15 are linked to gpio pin number 0 to 15. Gpio port can
+  35:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         be selected through multiplexer.
+  36:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  37:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****                      ##### How to use this driver #####
+  38:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   ==============================================================================
+  39:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   [..]
+  40:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  41:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (#) Configure the EXTI line using HAL_EXTI_SetConfigLine().
+  42:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Choose the interrupt line number by setting "Line" member from
+  43:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****              EXTI_ConfigTypeDef structure.
+  44:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Configure the interrupt and/or event mode using "Mode" member from
+  45:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****              EXTI_ConfigTypeDef structure.
+  46:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) For configurable lines, configure rising and/or falling trigger
+  47:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****              "Trigger" member from EXTI_ConfigTypeDef structure.
+  48:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) For Exti lines linked to gpio, choose gpio port using "GPIOSel"
+  49:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****              member from GPIO_InitTypeDef structure.
+  50:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  51:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (#) Get current Exti configuration of a dedicated line using
+  52:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         HAL_EXTI_GetConfigLine().
+  53:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Provide exiting handle as parameter.
+  54:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Provide pointer on EXTI_ConfigTypeDef structure as second parameter.
+  55:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  56:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (#) Clear Exti configuration of a dedicated line using HAL_EXTI_GetConfigLine().
+  57:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Provide exiting handle as parameter.
+  58:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  59:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (#) Register callback to treat Exti interrupts using HAL_EXTI_RegisterCallback().
+  60:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Provide exiting handle as first parameter.
+  61:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Provide which callback will be registered using one value from
+  62:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****              EXTI_CallbackIDTypeDef.
+  63:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****         (++) Provide callback function pointer.
+  64:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  65:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (#) Get interrupt pending bit using HAL_EXTI_GetPending().
+  66:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  67:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (#) Clear interrupt pending bit using HAL_EXTI_GetPending().
+  68:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  69:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     (#) Generate software interrupt using HAL_EXTI_GenerateSWI().
+  70:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  71:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   @endverbatim
+  72:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   ******************************************************************************
+  73:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @attention
+  74:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *
+  75:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics.
+  76:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * All rights reserved.</center></h2>
+  77:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *
+  78:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  79:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * the "License"; You may not use this file except in compliance with the
+  80:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * License. You may obtain a copy of the License at:
+  81:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  82:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *
+  83:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   ******************************************************************************
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+  85:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  86:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /* Includes ------------------------------------------------------------------*/
+  87:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** #include "stm32f4xx_hal.h"
+  88:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ARM GAS  /tmp/ccUeDLhh.s 			page 3
+
+
+  89:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  90:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @{
+  91:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+  92:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+  93:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /** @addtogroup EXTI
+  94:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @{
+  95:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+  96:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /** MISRA C:2012 deviation rule has been granted for following rule:
+  97:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * Rule-18.1_b - Medium: Array `EXTICR' 1st subscript interval [0,7] may be out
+  98:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * of bounds [0,3] in following API :
+  99:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * HAL_EXTI_SetConfigLine
+ 100:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * HAL_EXTI_GetConfigLine
+ 101:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * HAL_EXTI_ClearConfigLine
+ 102:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 103:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 104:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** #ifdef HAL_EXTI_MODULE_ENABLED
+ 105:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 106:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /* Private typedef -----------------------------------------------------------*/
+ 107:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /* Private defines -----------------------------------------------------------*/
+ 108:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /** @defgroup EXTI_Private_Constants EXTI Private Constants
+ 109:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @{
+ 110:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 111:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 112:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 113:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @}
+ 114:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 115:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 116:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /* Private macros ------------------------------------------------------------*/
+ 117:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /* Private variables ---------------------------------------------------------*/
+ 118:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /* Private function prototypes -----------------------------------------------*/
+ 119:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /* Exported functions --------------------------------------------------------*/
+ 120:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 121:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /** @addtogroup EXTI_Exported_Functions
+ 122:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @{
+ 123:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 124:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 125:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /** @addtogroup EXTI_Exported_Functions_Group1
+ 126:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *  @brief    Configuration functions
+ 127:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *
+ 128:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** @verbatim
+ 129:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****  ===============================================================================
+ 130:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****               ##### Configuration functions #####
+ 131:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****  ===============================================================================
+ 132:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 133:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** @endverbatim
+ 134:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @{
+ 135:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 136:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 137:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 138:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @brief  Set configuration of a dedicated Exti line.
+ 139:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  hexti Exti handle.
+ 140:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  pExtiConfig Pointer on EXTI configuration to be set.
+ 141:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @retval HAL Status.
+ 142:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 143:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** HAL_StatusTypeDef HAL_EXTI_SetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigTypeDef *pExtiConfig
+ 144:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** {
+  28              		.loc 1 144 0
+ARM GAS  /tmp/ccUeDLhh.s 			page 4
+
+
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.LVL0:
+ 145:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t regval;
+ 146:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t linepos;
+ 147:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t maskline;
+ 148:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 149:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check null pointer */
+ 150:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if ((hexti == NULL) || (pExtiConfig == NULL))
+  34              		.loc 1 150 0
+  35 0000 0028     		cmp	r0, #0
+  36 0002 61D0     		beq	.L11
+  37              		.loc 1 150 0 is_stmt 0 discriminator 1
+  38 0004 0029     		cmp	r1, #0
+  39 0006 61D0     		beq	.L12
+ 144:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t regval;
+  40              		.loc 1 144 0 is_stmt 1
+  41 0008 70B4     		push	{r4, r5, r6}
+  42              	.LCFI0:
+  43              		.cfi_def_cfa_offset 12
+  44              		.cfi_offset 4, -12
+  45              		.cfi_offset 5, -8
+  46              		.cfi_offset 6, -4
+ 151:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 152:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     return HAL_ERROR;
+ 153:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 154:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 155:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check parameters */
+ 156:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_LINE(pExtiConfig->Line));
+ 157:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_MODE(pExtiConfig->Mode));
+ 158:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 159:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Assign line number to handle */
+ 160:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   hexti->Line = pExtiConfig->Line;
+  47              		.loc 1 160 0
+  48 000a 0A68     		ldr	r2, [r1]
+  49 000c 0260     		str	r2, [r0]
+ 161:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 162:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Compute line mask */
+ 163:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   linepos = (pExtiConfig->Line & EXTI_PIN_MASK);
+  50              		.loc 1 163 0
+  51 000e 0A68     		ldr	r2, [r1]
+  52 0010 02F01F00 		and	r0, r2, #31
+  53              	.LVL1:
+ 164:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   maskline = (1uL << linepos);
+  54              		.loc 1 164 0
+  55 0014 0123     		movs	r3, #1
+  56 0016 8340     		lsls	r3, r3, r0
+  57              	.LVL2:
+ 165:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 166:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Configure triggers for configurable lines */
+ 167:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if ((pExtiConfig->Line & EXTI_CONFIG) != 0x00u)
+  58              		.loc 1 167 0
+  59 0018 12F0007F 		tst	r2, #33554432
+  60 001c 15D0     		beq	.L3
+ 168:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ARM GAS  /tmp/ccUeDLhh.s 			page 5
+
+
+ 169:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     assert_param(IS_EXTI_TRIGGER(pExtiConfig->Trigger));
+ 170:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 171:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Configure rising trigger */
+ 172:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Mask or set line */
+ 173:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     if ((pExtiConfig->Trigger & EXTI_TRIGGER_RISING) != 0x00u)
+  61              		.loc 1 173 0
+  62 001e 8C68     		ldr	r4, [r1, #8]
+  63 0020 14F0010F 		tst	r4, #1
+  64 0024 25D0     		beq	.L4
+ 174:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 175:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       EXTI->RTSR |= maskline;
+  65              		.loc 1 175 0
+  66 0026 2A4D     		ldr	r5, .L19
+  67 0028 AC68     		ldr	r4, [r5, #8]
+  68 002a 1C43     		orrs	r4, r4, r3
+  69 002c AC60     		str	r4, [r5, #8]
+  70              	.L5:
+ 176:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 177:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     else
+ 178:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 179:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       EXTI->RTSR &= ~maskline;
+ 180:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 181:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 182:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Configure falling trigger */
+ 183:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Mask or set line */
+ 184:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     if ((pExtiConfig->Trigger & EXTI_TRIGGER_FALLING) != 0x00u)
+  71              		.loc 1 184 0
+  72 002e 8C68     		ldr	r4, [r1, #8]
+  73 0030 14F0020F 		tst	r4, #2
+  74 0034 23D0     		beq	.L6
+ 185:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 186:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       EXTI->FTSR |= maskline;
+  75              		.loc 1 186 0
+  76 0036 264D     		ldr	r5, .L19
+  77 0038 EC68     		ldr	r4, [r5, #12]
+  78 003a 1C43     		orrs	r4, r4, r3
+  79 003c EC60     		str	r4, [r5, #12]
+  80              	.L7:
+ 187:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 188:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     else
+ 189:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 190:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       EXTI->FTSR &= ~maskline;
+ 191:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 192:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 193:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 194:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Configure gpio port selection in case of gpio exti line */
+ 195:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     if ((pExtiConfig->Line & EXTI_GPIO) == EXTI_GPIO)
+  81              		.loc 1 195 0
+  82 003e 0C68     		ldr	r4, [r1]
+  83 0040 04F0C064 		and	r4, r4, #100663296
+  84 0044 B4F1C06F 		cmp	r4, #100663296
+  85 0048 1FD0     		beq	.L17
+  86              	.LVL3:
+  87              	.L3:
+ 196:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 197:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       assert_param(IS_EXTI_GPIO_PORT(pExtiConfig->GPIOSel));
+ 198:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       assert_param(IS_EXTI_GPIO_PIN(linepos));
+ARM GAS  /tmp/ccUeDLhh.s 			page 6
+
+
+ 199:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 200:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       regval = SYSCFG->EXTICR[linepos >> 2u];
+ 201:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       regval &= ~(SYSCFG_EXTICR1_EXTI0 << (SYSCFG_EXTICR1_EXTI1_Pos * (linepos & 0x03u)));
+ 202:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       regval |= (pExtiConfig->GPIOSel << (SYSCFG_EXTICR1_EXTI1_Pos * (linepos & 0x03u)));
+ 203:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       SYSCFG->EXTICR[linepos >> 2u] = regval;
+ 204:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 205:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 206:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 207:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Configure interrupt mode : read current mode */
+ 208:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Mask or set line */
+ 209:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if ((pExtiConfig->Mode & EXTI_MODE_INTERRUPT) != 0x00u)
+  88              		.loc 1 209 0
+  89 004a 4A68     		ldr	r2, [r1, #4]
+  90 004c 12F0010F 		tst	r2, #1
+  91 0050 2ED0     		beq	.L8
+ 210:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 211:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     EXTI->IMR |= maskline;
+  92              		.loc 1 211 0
+  93 0052 1F48     		ldr	r0, .L19
+  94 0054 0268     		ldr	r2, [r0]
+  95 0056 1A43     		orrs	r2, r2, r3
+  96 0058 0260     		str	r2, [r0]
+  97              	.L9:
+ 212:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 213:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   else
+ 214:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 215:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     EXTI->IMR &= ~maskline;
+ 216:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 217:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 218:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Configure event mode : read current mode */
+ 219:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Mask or set line */
+ 220:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if ((pExtiConfig->Mode & EXTI_MODE_EVENT) != 0x00u)
+  98              		.loc 1 220 0
+  99 005a 4A68     		ldr	r2, [r1, #4]
+ 100 005c 12F0020F 		tst	r2, #2
+ 101 0060 2CD1     		bne	.L18
+ 221:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 222:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     EXTI->EMR |= maskline;
+ 223:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 224:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   else
+ 225:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 226:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     EXTI->EMR &= ~maskline;
+ 102              		.loc 1 226 0
+ 103 0062 1B49     		ldr	r1, .L19
+ 104              	.LVL4:
+ 105 0064 4A68     		ldr	r2, [r1, #4]
+ 106 0066 22EA0303 		bic	r3, r2, r3
+ 107              	.LVL5:
+ 108 006a 4B60     		str	r3, [r1, #4]
+ 227:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 228:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 229:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   return HAL_OK;
+ 109              		.loc 1 229 0
+ 110 006c 0020     		movs	r0, #0
+ 111              	.L2:
+ 230:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** }
+ 112              		.loc 1 230 0
+ARM GAS  /tmp/ccUeDLhh.s 			page 7
+
+
+ 113 006e 70BC     		pop	{r4, r5, r6}
+ 114              	.LCFI1:
+ 115              		.cfi_remember_state
+ 116              		.cfi_restore 6
+ 117              		.cfi_restore 5
+ 118              		.cfi_restore 4
+ 119              		.cfi_def_cfa_offset 0
+ 120 0070 7047     		bx	lr
+ 121              	.LVL6:
+ 122              	.L4:
+ 123              	.LCFI2:
+ 124              		.cfi_restore_state
+ 179:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 125              		.loc 1 179 0
+ 126 0072 174D     		ldr	r5, .L19
+ 127 0074 AC68     		ldr	r4, [r5, #8]
+ 128 0076 24EA0304 		bic	r4, r4, r3
+ 129 007a AC60     		str	r4, [r5, #8]
+ 130 007c D7E7     		b	.L5
+ 131              	.L6:
+ 190:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 132              		.loc 1 190 0
+ 133 007e 144D     		ldr	r5, .L19
+ 134 0080 EC68     		ldr	r4, [r5, #12]
+ 135 0082 24EA0304 		bic	r4, r4, r3
+ 136 0086 EC60     		str	r4, [r5, #12]
+ 137 0088 D9E7     		b	.L7
+ 138              	.L17:
+ 200:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       regval &= ~(SYSCFG_EXTICR1_EXTI0 << (SYSCFG_EXTICR1_EXTI1_Pos * (linepos & 0x03u)));
+ 139              		.loc 1 200 0
+ 140 008a 8008     		lsrs	r0, r0, #2
+ 141              	.LVL7:
+ 142 008c 114E     		ldr	r6, .L19+4
+ 143 008e 0230     		adds	r0, r0, #2
+ 144 0090 56F82040 		ldr	r4, [r6, r0, lsl #2]
+ 145              	.LVL8:
+ 201:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       regval |= (pExtiConfig->GPIOSel << (SYSCFG_EXTICR1_EXTI1_Pos * (linepos & 0x03u)));
+ 146              		.loc 1 201 0
+ 147 0094 02F00302 		and	r2, r2, #3
+ 148              	.LVL9:
+ 149 0098 9200     		lsls	r2, r2, #2
+ 150 009a 0F25     		movs	r5, #15
+ 151 009c 9540     		lsls	r5, r5, r2
+ 152 009e 24EA0504 		bic	r4, r4, r5
+ 153              	.LVL10:
+ 202:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       SYSCFG->EXTICR[linepos >> 2u] = regval;
+ 154              		.loc 1 202 0
+ 155 00a2 CD68     		ldr	r5, [r1, #12]
+ 156 00a4 05FA02F2 		lsl	r2, r5, r2
+ 157 00a8 2243     		orrs	r2, r2, r4
+ 158              	.LVL11:
+ 203:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 159              		.loc 1 203 0
+ 160 00aa 46F82020 		str	r2, [r6, r0, lsl #2]
+ 161 00ae CCE7     		b	.L3
+ 162              	.LVL12:
+ 163              	.L8:
+ARM GAS  /tmp/ccUeDLhh.s 			page 8
+
+
+ 215:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 164              		.loc 1 215 0
+ 165 00b0 0748     		ldr	r0, .L19
+ 166 00b2 0268     		ldr	r2, [r0]
+ 167 00b4 22EA0302 		bic	r2, r2, r3
+ 168 00b8 0260     		str	r2, [r0]
+ 169 00ba CEE7     		b	.L9
+ 170              	.L18:
+ 222:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 171              		.loc 1 222 0
+ 172 00bc 0449     		ldr	r1, .L19
+ 173              	.LVL13:
+ 174 00be 4A68     		ldr	r2, [r1, #4]
+ 175 00c0 1343     		orrs	r3, r3, r2
+ 176              	.LVL14:
+ 177 00c2 4B60     		str	r3, [r1, #4]
+ 229:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** }
+ 178              		.loc 1 229 0
+ 179 00c4 0020     		movs	r0, #0
+ 180 00c6 D2E7     		b	.L2
+ 181              	.LVL15:
+ 182              	.L11:
+ 183              	.LCFI3:
+ 184              		.cfi_def_cfa_offset 0
+ 185              		.cfi_restore 4
+ 186              		.cfi_restore 5
+ 187              		.cfi_restore 6
+ 152:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 188              		.loc 1 152 0
+ 189 00c8 0120     		movs	r0, #1
+ 190              	.LVL16:
+ 191 00ca 7047     		bx	lr
+ 192              	.LVL17:
+ 193              	.L12:
+ 194 00cc 0120     		movs	r0, #1
+ 195              	.LVL18:
+ 196 00ce 7047     		bx	lr
+ 197              	.L20:
+ 198              		.align	2
+ 199              	.L19:
+ 200 00d0 003C0140 		.word	1073822720
+ 201 00d4 00380140 		.word	1073821696
+ 202              		.cfi_endproc
+ 203              	.LFE130:
+ 205              		.section	.text.HAL_EXTI_GetConfigLine,"ax",%progbits
+ 206              		.align	1
+ 207              		.global	HAL_EXTI_GetConfigLine
+ 208              		.syntax unified
+ 209              		.thumb
+ 210              		.thumb_func
+ 211              		.fpu fpv4-sp-d16
+ 213              	HAL_EXTI_GetConfigLine:
+ 214              	.LFB131:
+ 231:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 232:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 233:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @brief  Get configuration of a dedicated Exti line.
+ 234:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  hexti Exti handle.
+ARM GAS  /tmp/ccUeDLhh.s 			page 9
+
+
+ 235:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  pExtiConfig Pointer on structure to store Exti configuration.
+ 236:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @retval HAL Status.
+ 237:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 238:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigTypeDef *pExtiConfig
+ 239:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** {
+ 215              		.loc 1 239 0
+ 216              		.cfi_startproc
+ 217              		@ args = 0, pretend = 0, frame = 0
+ 218              		@ frame_needed = 0, uses_anonymous_args = 0
+ 219              		@ link register save eliminated.
+ 220              	.LVL19:
+ 240:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t regval;
+ 241:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t linepos;
+ 242:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t maskline;
+ 243:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 244:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check null pointer */
+ 245:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if ((hexti == NULL) || (pExtiConfig == NULL))
+ 221              		.loc 1 245 0
+ 222 0000 0028     		cmp	r0, #0
+ 223 0002 4AD0     		beq	.L31
+ 224              		.loc 1 245 0 is_stmt 0 discriminator 1
+ 225 0004 0029     		cmp	r1, #0
+ 226 0006 4AD0     		beq	.L32
+ 239:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t regval;
+ 227              		.loc 1 239 0 is_stmt 1
+ 228 0008 10B4     		push	{r4}
+ 229              	.LCFI4:
+ 230              		.cfi_def_cfa_offset 4
+ 231              		.cfi_offset 4, -4
+ 246:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 247:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     return HAL_ERROR;
+ 248:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 249:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 250:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check the parameter */
+ 251:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_LINE(hexti->Line));
+ 252:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 253:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Store handle line number to configuration structure */
+ 254:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   pExtiConfig->Line = hexti->Line;
+ 232              		.loc 1 254 0
+ 233 000a 0068     		ldr	r0, [r0]
+ 234              	.LVL20:
+ 235 000c 0860     		str	r0, [r1]
+ 255:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 256:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Compute line mask */
+ 257:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   linepos = (pExtiConfig->Line & EXTI_PIN_MASK);
+ 236              		.loc 1 257 0
+ 237 000e 00F01F04 		and	r4, r0, #31
+ 238              	.LVL21:
+ 258:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   maskline = (1uL << linepos);
+ 239              		.loc 1 258 0
+ 240 0012 0123     		movs	r3, #1
+ 241 0014 A340     		lsls	r3, r3, r4
+ 242              	.LVL22:
+ 259:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 260:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* 1] Get core mode : interrupt */
+ 261:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 262:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check if selected line is enable */
+ARM GAS  /tmp/ccUeDLhh.s 			page 10
+
+
+ 263:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if ((EXTI->IMR & maskline) != 0x00u)
+ 243              		.loc 1 263 0
+ 244 0016 234A     		ldr	r2, .L38
+ 245 0018 1268     		ldr	r2, [r2]
+ 246 001a 1342     		tst	r3, r2
+ 247 001c 22D0     		beq	.L23
+ 264:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 265:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     pExtiConfig->Mode = EXTI_MODE_INTERRUPT;
+ 248              		.loc 1 265 0
+ 249 001e 0122     		movs	r2, #1
+ 250 0020 4A60     		str	r2, [r1, #4]
+ 251              	.L24:
+ 266:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 267:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   else
+ 268:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 269:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     pExtiConfig->Mode = EXTI_MODE_NONE;
+ 270:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 271:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 272:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Get event mode */
+ 273:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check if selected line is enable */
+ 274:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if ((EXTI->EMR & maskline) != 0x00u)
+ 252              		.loc 1 274 0
+ 253 0022 204A     		ldr	r2, .L38
+ 254 0024 5268     		ldr	r2, [r2, #4]
+ 255 0026 1342     		tst	r3, r2
+ 256 0028 03D0     		beq	.L25
+ 275:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 276:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     pExtiConfig->Mode |= EXTI_MODE_EVENT;
+ 257              		.loc 1 276 0
+ 258 002a 4A68     		ldr	r2, [r1, #4]
+ 259 002c 42F00202 		orr	r2, r2, #2
+ 260 0030 4A60     		str	r2, [r1, #4]
+ 261              	.L25:
+ 277:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 278:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 279:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* 2] Get trigger for configurable lines : rising */
+ 280:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if ((pExtiConfig->Line & EXTI_CONFIG) != 0x00u)
+ 262              		.loc 1 280 0
+ 263 0032 10F0007F 		tst	r0, #33554432
+ 264 0036 2AD0     		beq	.L26
+ 281:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 282:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Check if configuration of selected line is enable */
+ 283:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     if ((EXTI->RTSR & maskline) != 0x00u)
+ 265              		.loc 1 283 0
+ 266 0038 1A4A     		ldr	r2, .L38
+ 267 003a 9268     		ldr	r2, [r2, #8]
+ 268 003c 1342     		tst	r3, r2
+ 269 003e 14D0     		beq	.L27
+ 284:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 285:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       pExtiConfig->Trigger = EXTI_TRIGGER_RISING;
+ 270              		.loc 1 285 0
+ 271 0040 0122     		movs	r2, #1
+ 272 0042 8A60     		str	r2, [r1, #8]
+ 273              	.L28:
+ 286:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 287:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     else
+ 288:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ARM GAS  /tmp/ccUeDLhh.s 			page 11
+
+
+ 289:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       pExtiConfig->Trigger = EXTI_TRIGGER_NONE;
+ 290:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 291:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 292:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Get falling configuration */
+ 293:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Check if configuration of selected line is enable */
+ 294:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     if ((EXTI->FTSR & maskline) != 0x00u)
+ 274              		.loc 1 294 0
+ 275 0044 174A     		ldr	r2, .L38
+ 276 0046 D268     		ldr	r2, [r2, #12]
+ 277 0048 1342     		tst	r3, r2
+ 278 004a 03D0     		beq	.L29
+ 295:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 296:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       pExtiConfig->Trigger |= EXTI_TRIGGER_FALLING;
+ 279              		.loc 1 296 0
+ 280 004c 8B68     		ldr	r3, [r1, #8]
+ 281              	.LVL23:
+ 282 004e 43F00203 		orr	r3, r3, #2
+ 283 0052 8B60     		str	r3, [r1, #8]
+ 284              	.L29:
+ 297:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 298:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 299:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Get Gpio port selection for gpio lines */
+ 300:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     if ((pExtiConfig->Line & EXTI_GPIO) == EXTI_GPIO)
+ 285              		.loc 1 300 0
+ 286 0054 00F0C063 		and	r3, r0, #100663296
+ 287 0058 B3F1C06F 		cmp	r3, #100663296
+ 288 005c 08D0     		beq	.L37
+ 301:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 302:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       assert_param(IS_EXTI_GPIO_PIN(linepos));
+ 303:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 304:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       regval = SYSCFG->EXTICR[linepos >> 2u];
+ 305:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       pExtiConfig->GPIOSel = ((regval << (SYSCFG_EXTICR1_EXTI1_Pos * (3uL - (linepos & 0x03u)))) >>
+ 306:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 307:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     else
+ 308:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 309:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       pExtiConfig->GPIOSel = 0x00u;
+ 289              		.loc 1 309 0
+ 290 005e 0020     		movs	r0, #0
+ 291 0060 C860     		str	r0, [r1, #12]
+ 292 0062 17E0     		b	.L22
+ 293              	.LVL24:
+ 294              	.L23:
+ 269:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 295              		.loc 1 269 0
+ 296 0064 0022     		movs	r2, #0
+ 297 0066 4A60     		str	r2, [r1, #4]
+ 298 0068 DBE7     		b	.L24
+ 299              	.L27:
+ 289:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 300              		.loc 1 289 0
+ 301 006a 0022     		movs	r2, #0
+ 302 006c 8A60     		str	r2, [r1, #8]
+ 303 006e E9E7     		b	.L28
+ 304              	.LVL25:
+ 305              	.L37:
+ 304:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       pExtiConfig->GPIOSel = ((regval << (SYSCFG_EXTICR1_EXTI1_Pos * (3uL - (linepos & 0x03u)))) >>
+ 306              		.loc 1 304 0
+ARM GAS  /tmp/ccUeDLhh.s 			page 12
+
+
+ 307 0070 A308     		lsrs	r3, r4, #2
+ 308 0072 0233     		adds	r3, r3, #2
+ 309 0074 0C4A     		ldr	r2, .L38+4
+ 310 0076 52F82320 		ldr	r2, [r2, r3, lsl #2]
+ 311              	.LVL26:
+ 305:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 312              		.loc 1 305 0
+ 313 007a E343     		mvns	r3, r4
+ 314 007c 03F00303 		and	r3, r3, #3
+ 315 0080 9B00     		lsls	r3, r3, #2
+ 316 0082 02FA03F3 		lsl	r3, r2, r3
+ 317 0086 1B0E     		lsrs	r3, r3, #24
+ 318 0088 CB60     		str	r3, [r1, #12]
+ 310:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 311:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 312:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   else
+ 313:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 314:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* No Trigger selected */
+ 315:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     pExtiConfig->Trigger = EXTI_TRIGGER_NONE;
+ 316:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     pExtiConfig->GPIOSel = 0x00u;
+ 317:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 318:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 319:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   return HAL_OK;
+ 319              		.loc 1 319 0
+ 320 008a 0020     		movs	r0, #0
+ 321 008c 02E0     		b	.L22
+ 322              	.LVL27:
+ 323              	.L26:
+ 315:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     pExtiConfig->GPIOSel = 0x00u;
+ 324              		.loc 1 315 0
+ 325 008e 0020     		movs	r0, #0
+ 326 0090 8860     		str	r0, [r1, #8]
+ 316:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 327              		.loc 1 316 0
+ 328 0092 C860     		str	r0, [r1, #12]
+ 329              	.LVL28:
+ 330              	.L22:
+ 320:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** }
+ 331              		.loc 1 320 0
+ 332 0094 5DF8044B 		ldr	r4, [sp], #4
+ 333              	.LCFI5:
+ 334              		.cfi_restore 4
+ 335              		.cfi_def_cfa_offset 0
+ 336              	.LVL29:
+ 337 0098 7047     		bx	lr
+ 338              	.LVL30:
+ 339              	.L31:
+ 247:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 340              		.loc 1 247 0
+ 341 009a 0120     		movs	r0, #1
+ 342              	.LVL31:
+ 343 009c 7047     		bx	lr
+ 344              	.LVL32:
+ 345              	.L32:
+ 346 009e 0120     		movs	r0, #1
+ 347              	.LVL33:
+ 348 00a0 7047     		bx	lr
+ARM GAS  /tmp/ccUeDLhh.s 			page 13
+
+
+ 349              	.L39:
+ 350 00a2 00BF     		.align	2
+ 351              	.L38:
+ 352 00a4 003C0140 		.word	1073822720
+ 353 00a8 00380140 		.word	1073821696
+ 354              		.cfi_endproc
+ 355              	.LFE131:
+ 357              		.section	.text.HAL_EXTI_ClearConfigLine,"ax",%progbits
+ 358              		.align	1
+ 359              		.global	HAL_EXTI_ClearConfigLine
+ 360              		.syntax unified
+ 361              		.thumb
+ 362              		.thumb_func
+ 363              		.fpu fpv4-sp-d16
+ 365              	HAL_EXTI_ClearConfigLine:
+ 366              	.LFB132:
+ 321:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 322:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 323:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @brief  Clear whole configuration of a dedicated Exti line.
+ 324:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  hexti Exti handle.
+ 325:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @retval HAL Status.
+ 326:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 327:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** HAL_StatusTypeDef HAL_EXTI_ClearConfigLine(EXTI_HandleTypeDef *hexti)
+ 328:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** {
+ 367              		.loc 1 328 0
+ 368              		.cfi_startproc
+ 369              		@ args = 0, pretend = 0, frame = 0
+ 370              		@ frame_needed = 0, uses_anonymous_args = 0
+ 371              		@ link register save eliminated.
+ 372              	.LVL34:
+ 329:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t regval;
+ 330:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t linepos;
+ 331:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t maskline;
+ 332:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 333:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check null pointer */
+ 334:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if (hexti == NULL)
+ 373              		.loc 1 334 0
+ 374 0000 0028     		cmp	r0, #0
+ 375 0002 32D0     		beq	.L42
+ 328:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t regval;
+ 376              		.loc 1 328 0
+ 377 0004 30B4     		push	{r4, r5}
+ 378              	.LCFI6:
+ 379              		.cfi_def_cfa_offset 8
+ 380              		.cfi_offset 4, -8
+ 381              		.cfi_offset 5, -4
+ 382 0006 0446     		mov	r4, r0
+ 335:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 336:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     return HAL_ERROR;
+ 337:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 338:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 339:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check the parameter */
+ 340:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_LINE(hexti->Line));
+ 341:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 342:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* compute line mask */
+ 343:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   linepos = (hexti->Line & EXTI_PIN_MASK);
+ 383              		.loc 1 343 0
+ARM GAS  /tmp/ccUeDLhh.s 			page 14
+
+
+ 384 0008 0568     		ldr	r5, [r0]
+ 385 000a 05F01F00 		and	r0, r5, #31
+ 386              	.LVL35:
+ 344:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   maskline = (1uL << linepos);
+ 387              		.loc 1 344 0
+ 388 000e 0123     		movs	r3, #1
+ 389 0010 8340     		lsls	r3, r3, r0
+ 390              	.LVL36:
+ 345:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 346:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* 1] Clear interrupt mode */
+ 347:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   EXTI->IMR = (EXTI->IMR & ~maskline);
+ 391              		.loc 1 347 0
+ 392 0012 184A     		ldr	r2, .L50
+ 393 0014 1168     		ldr	r1, [r2]
+ 394 0016 DB43     		mvns	r3, r3
+ 395              	.LVL37:
+ 396 0018 1940     		ands	r1, r1, r3
+ 397 001a 1160     		str	r1, [r2]
+ 348:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 349:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* 2] Clear event mode */
+ 350:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   EXTI->EMR = (EXTI->EMR & ~maskline);
+ 398              		.loc 1 350 0
+ 399 001c 5168     		ldr	r1, [r2, #4]
+ 400 001e 1940     		ands	r1, r1, r3
+ 401 0020 5160     		str	r1, [r2, #4]
+ 351:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 352:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* 3] Clear triggers in case of configurable lines */
+ 353:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if ((hexti->Line & EXTI_CONFIG) != 0x00u)
+ 402              		.loc 1 353 0
+ 403 0022 2268     		ldr	r2, [r4]
+ 404 0024 12F0007F 		tst	r2, #33554432
+ 405 0028 21D0     		beq	.L43
+ 354:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 355:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     EXTI->RTSR = (EXTI->RTSR & ~maskline);
+ 406              		.loc 1 355 0
+ 407 002a 124A     		ldr	r2, .L50
+ 408 002c 9168     		ldr	r1, [r2, #8]
+ 409 002e 1940     		ands	r1, r1, r3
+ 410 0030 9160     		str	r1, [r2, #8]
+ 356:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     EXTI->FTSR = (EXTI->FTSR & ~maskline);
+ 411              		.loc 1 356 0
+ 412 0032 D168     		ldr	r1, [r2, #12]
+ 413 0034 0B40     		ands	r3, r3, r1
+ 414              	.LVL38:
+ 415 0036 D360     		str	r3, [r2, #12]
+ 357:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 358:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Get Gpio port selection for gpio lines */
+ 359:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     if ((hexti->Line & EXTI_GPIO) == EXTI_GPIO)
+ 416              		.loc 1 359 0
+ 417 0038 2368     		ldr	r3, [r4]
+ 418 003a 03F0C063 		and	r3, r3, #100663296
+ 419 003e B3F1C06F 		cmp	r3, #100663296
+ 420 0042 01D0     		beq	.L49
+ 360:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 361:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       assert_param(IS_EXTI_GPIO_PIN(linepos));
+ 362:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 363:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       regval = SYSCFG->EXTICR[linepos >> 2u];
+ARM GAS  /tmp/ccUeDLhh.s 			page 15
+
+
+ 364:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       regval &= ~(SYSCFG_EXTICR1_EXTI0 << (SYSCFG_EXTICR1_EXTI1_Pos * (linepos & 0x03u)));
+ 365:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       SYSCFG->EXTICR[linepos >> 2u] = regval;
+ 366:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 367:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 368:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 369:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   return HAL_OK;
+ 421              		.loc 1 369 0
+ 422 0044 0020     		movs	r0, #0
+ 423              	.LVL39:
+ 424 0046 13E0     		b	.L41
+ 425              	.LVL40:
+ 426              	.L49:
+ 363:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       regval &= ~(SYSCFG_EXTICR1_EXTI0 << (SYSCFG_EXTICR1_EXTI1_Pos * (linepos & 0x03u)));
+ 427              		.loc 1 363 0
+ 428 0048 8008     		lsrs	r0, r0, #2
+ 429              	.LVL41:
+ 430 004a 0B49     		ldr	r1, .L50+4
+ 431 004c 0230     		adds	r0, r0, #2
+ 432 004e 51F82030 		ldr	r3, [r1, r0, lsl #2]
+ 433              	.LVL42:
+ 364:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       SYSCFG->EXTICR[linepos >> 2u] = regval;
+ 434              		.loc 1 364 0
+ 435 0052 05F00305 		and	r5, r5, #3
+ 436              	.LVL43:
+ 437 0056 AD00     		lsls	r5, r5, #2
+ 438 0058 0F22     		movs	r2, #15
+ 439 005a 02FA05F5 		lsl	r5, r2, r5
+ 440 005e 23EA0505 		bic	r5, r3, r5
+ 441              	.LVL44:
+ 365:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 442              		.loc 1 365 0
+ 443 0062 41F82050 		str	r5, [r1, r0, lsl #2]
+ 444              		.loc 1 369 0
+ 445 0066 0020     		movs	r0, #0
+ 446 0068 02E0     		b	.L41
+ 447              	.LVL45:
+ 448              	.L42:
+ 449              	.LCFI7:
+ 450              		.cfi_def_cfa_offset 0
+ 451              		.cfi_restore 4
+ 452              		.cfi_restore 5
+ 336:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 453              		.loc 1 336 0
+ 454 006a 0120     		movs	r0, #1
+ 455              	.LVL46:
+ 456 006c 7047     		bx	lr
+ 457              	.LVL47:
+ 458              	.L43:
+ 459              	.LCFI8:
+ 460              		.cfi_def_cfa_offset 8
+ 461              		.cfi_offset 4, -8
+ 462              		.cfi_offset 5, -4
+ 463              		.loc 1 369 0
+ 464 006e 0020     		movs	r0, #0
+ 465              	.LVL48:
+ 466              	.L41:
+ 370:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** }
+ARM GAS  /tmp/ccUeDLhh.s 			page 16
+
+
+ 467              		.loc 1 370 0
+ 468 0070 30BC     		pop	{r4, r5}
+ 469              	.LCFI9:
+ 470              		.cfi_restore 5
+ 471              		.cfi_restore 4
+ 472              		.cfi_def_cfa_offset 0
+ 473              	.LVL49:
+ 474 0072 7047     		bx	lr
+ 475              	.L51:
+ 476              		.align	2
+ 477              	.L50:
+ 478 0074 003C0140 		.word	1073822720
+ 479 0078 00380140 		.word	1073821696
+ 480              		.cfi_endproc
+ 481              	.LFE132:
+ 483              		.section	.text.HAL_EXTI_RegisterCallback,"ax",%progbits
+ 484              		.align	1
+ 485              		.global	HAL_EXTI_RegisterCallback
+ 486              		.syntax unified
+ 487              		.thumb
+ 488              		.thumb_func
+ 489              		.fpu fpv4-sp-d16
+ 491              	HAL_EXTI_RegisterCallback:
+ 492              	.LFB133:
+ 371:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 372:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 373:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @brief  Register callback for a dedicated Exti line.
+ 374:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  hexti Exti handle.
+ 375:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  CallbackID User callback identifier.
+ 376:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *         This parameter can be one of @arg @ref EXTI_CallbackIDTypeDef values.
+ 377:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  pPendingCbfn function pointer to be stored as callback.
+ 378:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @retval HAL Status.
+ 379:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 380:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** HAL_StatusTypeDef HAL_EXTI_RegisterCallback(EXTI_HandleTypeDef *hexti, EXTI_CallbackIDTypeDef Callb
+ 381:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** {
+ 493              		.loc 1 381 0
+ 494              		.cfi_startproc
+ 495              		@ args = 0, pretend = 0, frame = 0
+ 496              		@ frame_needed = 0, uses_anonymous_args = 0
+ 497              		@ link register save eliminated.
+ 498              	.LVL50:
+ 382:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 383:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 384:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   switch (CallbackID)
+ 499              		.loc 1 384 0
+ 500 0000 11B9     		cbnz	r1, .L56
+ 385:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 386:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     case  HAL_EXTI_COMMON_CB_ID:
+ 387:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       hexti->PendingCallback = pPendingCbfn;
+ 501              		.loc 1 387 0
+ 502 0002 4260     		str	r2, [r0, #4]
+ 382:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 503              		.loc 1 382 0
+ 504 0004 0020     		movs	r0, #0
+ 505              	.LVL51:
+ 388:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       break;
+ 506              		.loc 1 388 0
+ARM GAS  /tmp/ccUeDLhh.s 			page 17
+
+
+ 507 0006 7047     		bx	lr
+ 508              	.LVL52:
+ 509              	.L56:
+ 389:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 390:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     default:
+ 391:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       status = HAL_ERROR;
+ 510              		.loc 1 391 0
+ 511 0008 0120     		movs	r0, #1
+ 512              	.LVL53:
+ 392:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       break;
+ 393:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 394:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 395:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   return status;
+ 396:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** }
+ 513              		.loc 1 396 0
+ 514 000a 7047     		bx	lr
+ 515              		.cfi_endproc
+ 516              	.LFE133:
+ 518              		.section	.text.HAL_EXTI_GetHandle,"ax",%progbits
+ 519              		.align	1
+ 520              		.global	HAL_EXTI_GetHandle
+ 521              		.syntax unified
+ 522              		.thumb
+ 523              		.thumb_func
+ 524              		.fpu fpv4-sp-d16
+ 526              	HAL_EXTI_GetHandle:
+ 527              	.LFB134:
+ 397:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 398:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 399:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @brief  Store line number as handle private field.
+ 400:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  hexti Exti handle.
+ 401:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  ExtiLine Exti line number.
+ 402:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *         This parameter can be from 0 to @ref EXTI_LINE_NB.
+ 403:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @retval HAL Status.
+ 404:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 405:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** HAL_StatusTypeDef HAL_EXTI_GetHandle(EXTI_HandleTypeDef *hexti, uint32_t ExtiLine)
+ 406:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** {
+ 528              		.loc 1 406 0
+ 529              		.cfi_startproc
+ 530              		@ args = 0, pretend = 0, frame = 0
+ 531              		@ frame_needed = 0, uses_anonymous_args = 0
+ 532              		@ link register save eliminated.
+ 533              	.LVL54:
+ 407:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check the parameters */
+ 408:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_LINE(ExtiLine));
+ 409:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 410:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check null pointer */
+ 411:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if (hexti == NULL)
+ 534              		.loc 1 411 0
+ 535 0000 10B1     		cbz	r0, .L59
+ 412:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 413:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     return HAL_ERROR;
+ 414:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 415:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   else
+ 416:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 417:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Store line number as handle private field */
+ 418:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     hexti->Line = ExtiLine;
+ARM GAS  /tmp/ccUeDLhh.s 			page 18
+
+
+ 536              		.loc 1 418 0
+ 537 0002 0160     		str	r1, [r0]
+ 419:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 420:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     return HAL_OK;
+ 538              		.loc 1 420 0
+ 539 0004 0020     		movs	r0, #0
+ 540              	.LVL55:
+ 541 0006 7047     		bx	lr
+ 542              	.LVL56:
+ 543              	.L59:
+ 413:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 544              		.loc 1 413 0
+ 545 0008 0120     		movs	r0, #1
+ 546              	.LVL57:
+ 421:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 422:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** }
+ 547              		.loc 1 422 0
+ 548 000a 7047     		bx	lr
+ 549              		.cfi_endproc
+ 550              	.LFE134:
+ 552              		.section	.text.HAL_EXTI_IRQHandler,"ax",%progbits
+ 553              		.align	1
+ 554              		.global	HAL_EXTI_IRQHandler
+ 555              		.syntax unified
+ 556              		.thumb
+ 557              		.thumb_func
+ 558              		.fpu fpv4-sp-d16
+ 560              	HAL_EXTI_IRQHandler:
+ 561              	.LFB135:
+ 423:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 424:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 425:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @}
+ 426:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 427:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 428:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /** @addtogroup EXTI_Exported_Functions_Group2
+ 429:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *  @brief EXTI IO functions.
+ 430:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *
+ 431:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** @verbatim
+ 432:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****  ===============================================================================
+ 433:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****                        ##### IO operation functions #####
+ 434:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****  ===============================================================================
+ 435:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 436:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** @endverbatim
+ 437:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @{
+ 438:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 439:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 440:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 441:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @brief  Handle EXTI interrupt request.
+ 442:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  hexti Exti handle.
+ 443:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @retval none.
+ 444:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 445:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** void HAL_EXTI_IRQHandler(EXTI_HandleTypeDef *hexti)
+ 446:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** {
+ 562              		.loc 1 446 0
+ 563              		.cfi_startproc
+ 564              		@ args = 0, pretend = 0, frame = 0
+ 565              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccUeDLhh.s 			page 19
+
+
+ 566              	.LVL58:
+ 567 0000 08B5     		push	{r3, lr}
+ 568              	.LCFI10:
+ 569              		.cfi_def_cfa_offset 8
+ 570              		.cfi_offset 3, -8
+ 571              		.cfi_offset 14, -4
+ 447:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t regval;
+ 448:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t maskline;
+ 449:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 450:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Compute line mask */
+ 451:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   maskline = (1uL << (hexti->Line & EXTI_PIN_MASK));
+ 572              		.loc 1 451 0
+ 573 0002 0368     		ldr	r3, [r0]
+ 574 0004 03F01F02 		and	r2, r3, #31
+ 575 0008 0123     		movs	r3, #1
+ 576 000a 9340     		lsls	r3, r3, r2
+ 577              	.LVL59:
+ 452:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 453:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Get pending bit  */
+ 454:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   regval = (EXTI->PR & maskline);
+ 578              		.loc 1 454 0
+ 579 000c 044A     		ldr	r2, .L63
+ 580 000e 5269     		ldr	r2, [r2, #20]
+ 581              	.LVL60:
+ 455:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   if (regval != 0x00u)
+ 582              		.loc 1 455 0
+ 583 0010 1342     		tst	r3, r2
+ 584 0012 04D0     		beq	.L60
+ 456:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   {
+ 457:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Clear pending bit */
+ 458:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     EXTI->PR = maskline;
+ 585              		.loc 1 458 0
+ 586 0014 024A     		ldr	r2, .L63
+ 587              	.LVL61:
+ 588 0016 5361     		str	r3, [r2, #20]
+ 459:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 460:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     /* Call callback */
+ 461:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     if (hexti->PendingCallback != NULL)
+ 589              		.loc 1 461 0
+ 590 0018 4368     		ldr	r3, [r0, #4]
+ 591              	.LVL62:
+ 592 001a 03B1     		cbz	r3, .L60
+ 462:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     {
+ 463:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****       hexti->PendingCallback();
+ 593              		.loc 1 463 0
+ 594 001c 9847     		blx	r3
+ 595              	.LVL63:
+ 596              	.L60:
+ 597 001e 08BD     		pop	{r3, pc}
+ 598              	.L64:
+ 599              		.align	2
+ 600              	.L63:
+ 601 0020 003C0140 		.word	1073822720
+ 602              		.cfi_endproc
+ 603              	.LFE135:
+ 605              		.section	.text.HAL_EXTI_GetPending,"ax",%progbits
+ 606              		.align	1
+ARM GAS  /tmp/ccUeDLhh.s 			page 20
+
+
+ 607              		.global	HAL_EXTI_GetPending
+ 608              		.syntax unified
+ 609              		.thumb
+ 610              		.thumb_func
+ 611              		.fpu fpv4-sp-d16
+ 613              	HAL_EXTI_GetPending:
+ 614              	.LFB136:
+ 464:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****     }
+ 465:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   }
+ 466:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** }
+ 467:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 468:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 469:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @brief  Get interrupt pending bit of a dedicated line.
+ 470:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  hexti Exti handle.
+ 471:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  Edge Specify which pending edge as to be checked.
+ 472:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *         This parameter can be one of the following values:
+ 473:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *           @arg @ref EXTI_TRIGGER_RISING_FALLING
+ 474:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *         This parameter is kept for compatibility with other series.
+ 475:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @retval 1 if interrupt is pending else 0.
+ 476:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 477:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** uint32_t HAL_EXTI_GetPending(EXTI_HandleTypeDef *hexti, uint32_t Edge)
+ 478:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** {
+ 615              		.loc 1 478 0
+ 616              		.cfi_startproc
+ 617              		@ args = 0, pretend = 0, frame = 0
+ 618              		@ frame_needed = 0, uses_anonymous_args = 0
+ 619              		@ link register save eliminated.
+ 620              	.LVL64:
+ 479:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t regval;
+ 480:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t linepos;
+ 481:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t maskline;
+ 482:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 483:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check parameters */
+ 484:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_LINE(hexti->Line));
+ 485:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_CONFIG_LINE(hexti->Line));
+ 486:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_PENDING_EDGE(Edge));
+ 487:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 488:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Compute line mask */
+ 489:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   linepos = (hexti->Line & EXTI_PIN_MASK);
+ 621              		.loc 1 489 0
+ 622 0000 0068     		ldr	r0, [r0]
+ 623              	.LVL65:
+ 624 0002 00F01F00 		and	r0, r0, #31
+ 625              	.LVL66:
+ 490:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   maskline = (1uL << linepos);
+ 626              		.loc 1 490 0
+ 627 0006 0123     		movs	r3, #1
+ 628 0008 8340     		lsls	r3, r3, r0
+ 629              	.LVL67:
+ 491:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 492:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* return 1 if bit is set else 0 */
+ 493:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   regval = ((EXTI->PR & maskline) >> linepos);
+ 630              		.loc 1 493 0
+ 631 000a 034A     		ldr	r2, .L66
+ 632 000c 5269     		ldr	r2, [r2, #20]
+ 633 000e 1340     		ands	r3, r3, r2
+ 634              	.LVL68:
+ARM GAS  /tmp/ccUeDLhh.s 			page 21
+
+
+ 494:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   return regval;
+ 495:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** }
+ 635              		.loc 1 495 0
+ 636 0010 23FA00F0 		lsr	r0, r3, r0
+ 637              	.LVL69:
+ 638 0014 7047     		bx	lr
+ 639              	.L67:
+ 640 0016 00BF     		.align	2
+ 641              	.L66:
+ 642 0018 003C0140 		.word	1073822720
+ 643              		.cfi_endproc
+ 644              	.LFE136:
+ 646              		.section	.text.HAL_EXTI_ClearPending,"ax",%progbits
+ 647              		.align	1
+ 648              		.global	HAL_EXTI_ClearPending
+ 649              		.syntax unified
+ 650              		.thumb
+ 651              		.thumb_func
+ 652              		.fpu fpv4-sp-d16
+ 654              	HAL_EXTI_ClearPending:
+ 655              	.LFB137:
+ 496:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 497:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 498:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @brief  Clear interrupt pending bit of a dedicated line.
+ 499:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  hexti Exti handle.
+ 500:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  Edge Specify which pending edge as to be clear.
+ 501:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *         This parameter can be one of the following values:
+ 502:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *           @arg @ref EXTI_TRIGGER_RISING_FALLING
+ 503:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   *         This parameter is kept for compatibility with other series.
+ 504:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @retval None.
+ 505:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 506:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** void HAL_EXTI_ClearPending(EXTI_HandleTypeDef *hexti, uint32_t Edge)
+ 507:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** {
+ 656              		.loc 1 507 0
+ 657              		.cfi_startproc
+ 658              		@ args = 0, pretend = 0, frame = 0
+ 659              		@ frame_needed = 0, uses_anonymous_args = 0
+ 660              		@ link register save eliminated.
+ 661              	.LVL70:
+ 508:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t maskline;
+ 509:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 510:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check parameters */
+ 511:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_LINE(hexti->Line));
+ 512:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_CONFIG_LINE(hexti->Line));
+ 513:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_PENDING_EDGE(Edge));
+ 514:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 515:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Compute line mask */
+ 516:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   maskline = (1uL << (hexti->Line & EXTI_PIN_MASK));
+ 662              		.loc 1 516 0
+ 663 0000 0268     		ldr	r2, [r0]
+ 664 0002 02F01F02 		and	r2, r2, #31
+ 665 0006 0123     		movs	r3, #1
+ 666 0008 9340     		lsls	r3, r3, r2
+ 667              	.LVL71:
+ 517:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 518:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Clear Pending bit */
+ 519:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   EXTI->PR =  maskline;
+ARM GAS  /tmp/ccUeDLhh.s 			page 22
+
+
+ 668              		.loc 1 519 0
+ 669 000a 014A     		ldr	r2, .L69
+ 670 000c 5361     		str	r3, [r2, #20]
+ 671 000e 7047     		bx	lr
+ 672              	.L70:
+ 673              		.align	2
+ 674              	.L69:
+ 675 0010 003C0140 		.word	1073822720
+ 676              		.cfi_endproc
+ 677              	.LFE137:
+ 679              		.section	.text.HAL_EXTI_GenerateSWI,"ax",%progbits
+ 680              		.align	1
+ 681              		.global	HAL_EXTI_GenerateSWI
+ 682              		.syntax unified
+ 683              		.thumb
+ 684              		.thumb_func
+ 685              		.fpu fpv4-sp-d16
+ 687              	HAL_EXTI_GenerateSWI:
+ 688              	.LFB138:
+ 520:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** }
+ 521:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 522:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** /**
+ 523:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @brief  Generate a software interrupt for a dedicated line.
+ 524:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @param  hexti Exti handle.
+ 525:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   * @retval None.
+ 526:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   */
+ 527:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** void HAL_EXTI_GenerateSWI(EXTI_HandleTypeDef *hexti)
+ 528:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** {
+ 689              		.loc 1 528 0
+ 690              		.cfi_startproc
+ 691              		@ args = 0, pretend = 0, frame = 0
+ 692              		@ frame_needed = 0, uses_anonymous_args = 0
+ 693              		@ link register save eliminated.
+ 694              	.LVL72:
+ 529:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   uint32_t maskline;
+ 530:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 531:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Check parameters */
+ 532:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_LINE(hexti->Line));
+ 533:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   assert_param(IS_EXTI_CONFIG_LINE(hexti->Line));
+ 534:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 535:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Compute line mask */
+ 536:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   maskline = (1uL << (hexti->Line & EXTI_PIN_MASK));
+ 695              		.loc 1 536 0
+ 696 0000 0268     		ldr	r2, [r0]
+ 697 0002 02F01F02 		and	r2, r2, #31
+ 698 0006 0123     		movs	r3, #1
+ 699 0008 9340     		lsls	r3, r3, r2
+ 700              	.LVL73:
+ 537:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c **** 
+ 538:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   /* Generate Software interrupt */
+ 539:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_exti.c ****   EXTI->SWIER = maskline;
+ 701              		.loc 1 539 0
+ 702 000a 014A     		ldr	r2, .L72
+ 703 000c 1361     		str	r3, [r2, #16]
+ 704 000e 7047     		bx	lr
+ 705              	.L73:
+ 706              		.align	2
+ARM GAS  /tmp/ccUeDLhh.s 			page 23
+
+
+ 707              	.L72:
+ 708 0010 003C0140 		.word	1073822720
+ 709              		.cfi_endproc
+ 710              	.LFE138:
+ 712              		.text
+ 713              	.Letext0:
+ 714              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 715              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 716              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 717              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 718              		.file 6 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 719              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 720              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 721              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ARM GAS  /tmp/ccUeDLhh.s 			page 24
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal_exti.c
+     /tmp/ccUeDLhh.s:18     .text.HAL_EXTI_SetConfigLine:0000000000000000 $t
+     /tmp/ccUeDLhh.s:25     .text.HAL_EXTI_SetConfigLine:0000000000000000 HAL_EXTI_SetConfigLine
+     /tmp/ccUeDLhh.s:200    .text.HAL_EXTI_SetConfigLine:00000000000000d0 $d
+     /tmp/ccUeDLhh.s:206    .text.HAL_EXTI_GetConfigLine:0000000000000000 $t
+     /tmp/ccUeDLhh.s:213    .text.HAL_EXTI_GetConfigLine:0000000000000000 HAL_EXTI_GetConfigLine
+     /tmp/ccUeDLhh.s:352    .text.HAL_EXTI_GetConfigLine:00000000000000a4 $d
+     /tmp/ccUeDLhh.s:358    .text.HAL_EXTI_ClearConfigLine:0000000000000000 $t
+     /tmp/ccUeDLhh.s:365    .text.HAL_EXTI_ClearConfigLine:0000000000000000 HAL_EXTI_ClearConfigLine
+     /tmp/ccUeDLhh.s:478    .text.HAL_EXTI_ClearConfigLine:0000000000000074 $d
+     /tmp/ccUeDLhh.s:484    .text.HAL_EXTI_RegisterCallback:0000000000000000 $t
+     /tmp/ccUeDLhh.s:491    .text.HAL_EXTI_RegisterCallback:0000000000000000 HAL_EXTI_RegisterCallback
+     /tmp/ccUeDLhh.s:519    .text.HAL_EXTI_GetHandle:0000000000000000 $t
+     /tmp/ccUeDLhh.s:526    .text.HAL_EXTI_GetHandle:0000000000000000 HAL_EXTI_GetHandle
+     /tmp/ccUeDLhh.s:553    .text.HAL_EXTI_IRQHandler:0000000000000000 $t
+     /tmp/ccUeDLhh.s:560    .text.HAL_EXTI_IRQHandler:0000000000000000 HAL_EXTI_IRQHandler
+     /tmp/ccUeDLhh.s:601    .text.HAL_EXTI_IRQHandler:0000000000000020 $d
+     /tmp/ccUeDLhh.s:606    .text.HAL_EXTI_GetPending:0000000000000000 $t
+     /tmp/ccUeDLhh.s:613    .text.HAL_EXTI_GetPending:0000000000000000 HAL_EXTI_GetPending
+     /tmp/ccUeDLhh.s:642    .text.HAL_EXTI_GetPending:0000000000000018 $d
+     /tmp/ccUeDLhh.s:647    .text.HAL_EXTI_ClearPending:0000000000000000 $t
+     /tmp/ccUeDLhh.s:654    .text.HAL_EXTI_ClearPending:0000000000000000 HAL_EXTI_ClearPending
+     /tmp/ccUeDLhh.s:675    .text.HAL_EXTI_ClearPending:0000000000000010 $d
+     /tmp/ccUeDLhh.s:680    .text.HAL_EXTI_GenerateSWI:0000000000000000 $t
+     /tmp/ccUeDLhh.s:687    .text.HAL_EXTI_GenerateSWI:0000000000000000 HAL_EXTI_GenerateSWI
+     /tmp/ccUeDLhh.s:708    .text.HAL_EXTI_GenerateSWI:0000000000000010 $d
+                     .debug_frame:0000000000000010 $d
+
+NO UNDEFINED SYMBOLS

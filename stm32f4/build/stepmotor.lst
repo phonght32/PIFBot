@@ -1,0 +1,1469 @@
+ARM GAS  /tmp/ccZy5WDY.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stepmotor.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.stepmotor_config,"ax",%progbits
+  18              		.align	1
+  19              		.global	stepmotor_config
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	stepmotor_config:
+  26              	.LFB138:
+  27              		.file 1 "/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c"
+   1:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #include "stepmotor.h"
+   2:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+   3:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define STEPMOTOR_INIT_ERR_STR                  "step motor init error"
+   4:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define STEPMOTOR_SET_DIR_ERR_STR               "step motor set direction error"
+   5:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define STEPMOTOR_TOGGLE_DIR_ERR_STR            "step motor toggle direction error"
+   6:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define STEPMOTOR_SET_PWM_FREQ_ERR_STR          "step motor set pwm frequency error"
+   7:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define STEPMOTOR_SET_PWM_DUTYCYCLE_ERR_STR     "step motor set pwm duty cycle error"
+   8:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define STEPMOTOR_START_ERR_STR                 "step motor start error"
+   9:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define STEPMOTOR_STOP_ERR_STR                  "step motor stop error"
+  10:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  11:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** static const char* STEPMOTOR_TAG = "STEP MOTOR";
+  12:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define STEPMOTOR_CHECK(a, str, ret)  if(!(a)) {                                            \
+  13:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****         STM_LOGE(STEPMOTOR_TAG,"%s:%d (%s):%s", __FILE__, __LINE__, __FUNCTION__, str);     \
+  14:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****         return (ret);                                                                       \
+  15:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****         }
+  16:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  17:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** /* Mutex define */
+  18:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define mutex_lock(x)       while (xSemaphoreTake(x, portMAX_DELAY) != pdPASS)
+  19:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define mutex_unlock(x)     xSemaphoreGive(x)
+  20:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define mutex_create()      xSemaphoreCreateMutex()
+  21:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** #define mutex_destroy(x)    vQueueDelete(x)
+  22:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  23:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** typedef struct stepmotor {
+  24:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     gpio_port_t         dir_gpio_port;          /*!< Pin dir GPIO Port */
+  25:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     gpio_num_t          dir_gpio_num;           /*!< Pin dir GPIO Num */
+  26:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     timer_num_t         pulse_timer_num;        /*!< Pin pulse Timer Num */
+  27:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     timer_pins_pack_t   pulse_timer_pins_pack;  /*!< Pin pulse Timer Pins Pack */
+  28:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     timer_channel_t     pulse_timer_channel;    /*!< Pin pulse Timer Channel */
+  29:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     bool                dir;                    /*!< Direction */
+  30:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     uint32_t            freq_hz;                /*!< PWM frequency in Hz */
+  31:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     uint8_t             duty;                   /*!< PWM duty cycle in % */
+ARM GAS  /tmp/ccZy5WDY.s 			page 2
+
+
+  32:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     stepmotor_status_t  status;                 /*!< Step motor status */
+  33:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     SemaphoreHandle_t   lock;                   /*!< Step motor mutex */
+  34:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** } stepmotor_t;
+  35:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  36:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** stepmotor_handle_t stepmotor_config(stepmotor_config_t *config)
+  37:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** {
+  28              		.loc 1 37 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 16
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 20
+  36              		.cfi_offset 4, -20
+  37              		.cfi_offset 5, -16
+  38              		.cfi_offset 6, -12
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+  41 0002 8BB0     		sub	sp, sp, #44
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 64
+  38:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     /* Check input conditions */
+  39:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config, STEPMOTOR_INIT_ERR_STR, NULL);
+  44              		.loc 1 39 0
+  45 0004 0028     		cmp	r0, #0
+  46 0006 60D0     		beq	.L15
+  47 0008 0446     		mov	r4, r0
+  40:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config->dir_gpio_port < GPIO_PORT_MAX, STEPMOTOR_INIT_ERR_STR, NULL);
+  48              		.loc 1 40 0
+  49 000a 0678     		ldrb	r6, [r0]	@ zero_extendqisi2
+  50 000c 082E     		cmp	r6, #8
+  51 000e 6FD8     		bhi	.L16
+  41:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config->dir_gpio_num < GPIO_NUM_MAX, STEPMOTOR_INIT_ERR_STR, NULL);
+  52              		.loc 1 41 0
+  53 0010 4778     		ldrb	r7, [r0, #1]	@ zero_extendqisi2
+  54 0012 0F2F     		cmp	r7, #15
+  55 0014 7FD8     		bhi	.L17
+  42:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config->pulse_timer_num < TIMER_NUM_MAX, STEPMOTOR_INIT_ERR_STR, NULL);
+  56              		.loc 1 42 0
+  57 0016 8378     		ldrb	r3, [r0, #2]	@ zero_extendqisi2
+  58 0018 0D2B     		cmp	r3, #13
+  59 001a 00F28F80 		bhi	.L18
+  43:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config->pulse_timer_pins_pack < TIMER_PINS_PACK_MAX, STEPMOTOR_INIT_ERR_STR, NU
+  60              		.loc 1 43 0
+  61 001e C378     		ldrb	r3, [r0, #3]	@ zero_extendqisi2
+  62 0020 022B     		cmp	r3, #2
+  63 0022 00F29E80 		bhi	.L19
+  44:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config->pulse_timer_channel < TIMER_CHANNEL_MAX, STEPMOTOR_INIT_ERR_STR, NULL);
+  64              		.loc 1 44 0
+  65 0026 0379     		ldrb	r3, [r0, #4]	@ zero_extendqisi2
+  66 0028 032B     		cmp	r3, #3
+  67 002a 00F2AD80 		bhi	.L20
+  45:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  46:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     /* Allocate memory for handle structure */
+  47:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     stepmotor_handle_t handle = calloc(1,sizeof(stepmotor_t));
+  68              		.loc 1 47 0
+ARM GAS  /tmp/ccZy5WDY.s 			page 3
+
+
+  69 002e 1421     		movs	r1, #20
+  70 0030 0120     		movs	r0, #1
+  71              	.LVL1:
+  72 0032 FFF7FEFF 		bl	calloc
+  73              	.LVL2:
+  48:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(handle, STEPMOTOR_INIT_ERR_STR, NULL);
+  74              		.loc 1 48 0
+  75 0036 0546     		mov	r5, r0
+  76 0038 0028     		cmp	r0, #0
+  77 003a 00F0B880 		beq	.L21
+  49:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  50:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     int ret;
+  51:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  52:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     /* Configure pin direction */
+  53:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     gpio_config_t dir_cfg;
+  54:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     dir_cfg.gpio_port = config->dir_gpio_port;
+  78              		.loc 1 54 0
+  79 003e 8DF82060 		strb	r6, [sp, #32]
+  55:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     dir_cfg.gpio_num = config->dir_gpio_num;
+  80              		.loc 1 55 0
+  81 0042 8DF82170 		strb	r7, [sp, #33]
+  56:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     dir_cfg.mode = GPIO_OUTPUT;
+  82              		.loc 1 56 0
+  83 0046 0123     		movs	r3, #1
+  84 0048 8DF82230 		strb	r3, [sp, #34]
+  57:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     dir_cfg.pull_mode = GPIO_REG_PULL_NONE;
+  85              		.loc 1 57 0
+  86 004c 0023     		movs	r3, #0
+  87 004e 8DF82330 		strb	r3, [sp, #35]
+  58:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     ret = gpio_config(&dir_cfg);
+  88              		.loc 1 58 0
+  89 0052 08A8     		add	r0, sp, #32
+  90              	.LVL3:
+  91 0054 FFF7FEFF 		bl	gpio_config
+  92              	.LVL4:
+  59:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_INIT_ERR_STR, NULL);
+  93              		.loc 1 59 0
+  94 0058 0028     		cmp	r0, #0
+  95 005a 40F0BA80 		bne	.L22
+  60:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     ret = gpio_set_level(config->dir_gpio_port, config->dir_gpio_num, 0);
+  96              		.loc 1 60 0
+  97 005e 0022     		movs	r2, #0
+  98 0060 6178     		ldrb	r1, [r4, #1]	@ zero_extendqisi2
+  99 0062 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 100              	.LVL5:
+ 101 0064 FFF7FEFF 		bl	gpio_set_level
+ 102              	.LVL6:
+  61:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_INIT_ERR_STR, NULL);
+ 103              		.loc 1 61 0
+ 104 0068 0028     		cmp	r0, #0
+ 105 006a 40F0C580 		bne	.L23
+  62:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  63:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     /* Configure pin pulse */
+  64:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     pwm_config_t pulse_cfg;
+  65:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     pulse_cfg.timer_num = config->pulse_timer_num;
+ 106              		.loc 1 65 0
+ 107 006e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ARM GAS  /tmp/ccZy5WDY.s 			page 4
+
+
+ 108 0070 8DF81C30 		strb	r3, [sp, #28]
+  66:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     pulse_cfg.timer_pins_pack = config->pulse_timer_pins_pack;
+ 109              		.loc 1 66 0
+ 110 0074 E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
+ 111 0076 8DF81E30 		strb	r3, [sp, #30]
+  67:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     pulse_cfg.timer_channel = config->pulse_timer_channel;
+ 112              		.loc 1 67 0
+ 113 007a 2379     		ldrb	r3, [r4, #4]	@ zero_extendqisi2
+ 114 007c 8DF81D30 		strb	r3, [sp, #29]
+  68:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     ret = pwm_config(&pulse_cfg);
+ 115              		.loc 1 68 0
+ 116 0080 07A8     		add	r0, sp, #28
+ 117              	.LVL7:
+ 118 0082 FFF7FEFF 		bl	pwm_config
+ 119              	.LVL8:
+  69:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_INIT_ERR_STR, NULL);
+ 120              		.loc 1 69 0
+ 121 0086 0028     		cmp	r0, #0
+ 122 0088 40F0C980 		bne	.L24
+  70:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     ret = pwm_set_params(config->pulse_timer_num, config->pulse_timer_channel, 0, 0);
+ 123              		.loc 1 70 0
+ 124 008c 0023     		movs	r3, #0
+ 125 008e 1A46     		mov	r2, r3
+ 126 0090 2179     		ldrb	r1, [r4, #4]	@ zero_extendqisi2
+ 127 0092 A078     		ldrb	r0, [r4, #2]	@ zero_extendqisi2
+ 128              	.LVL9:
+ 129 0094 FFF7FEFF 		bl	pwm_set_params
+ 130              	.LVL10:
+  71:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_INIT_ERR_STR, NULL);
+ 131              		.loc 1 71 0
+ 132 0098 0028     		cmp	r0, #0
+ 133 009a 40F0D380 		bne	.L25
+  72:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  73:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     /* Update handle structure */
+  74:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->dir_gpio_port = config->dir_gpio_port;
+ 134              		.loc 1 74 0
+ 135 009e 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 136 00a0 2B70     		strb	r3, [r5]
+  75:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->dir_gpio_num = config->dir_gpio_num;
+ 137              		.loc 1 75 0
+ 138 00a2 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 139 00a4 6B70     		strb	r3, [r5, #1]
+  76:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->pulse_timer_num = config->pulse_timer_num;
+ 140              		.loc 1 76 0
+ 141 00a6 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 142 00a8 AB70     		strb	r3, [r5, #2]
+  77:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->pulse_timer_pins_pack = config->pulse_timer_pins_pack;
+ 143              		.loc 1 77 0
+ 144 00aa E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
+ 145 00ac EB70     		strb	r3, [r5, #3]
+  78:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->pulse_timer_channel = config->pulse_timer_channel;
+ 146              		.loc 1 78 0
+ 147 00ae 2379     		ldrb	r3, [r4, #4]	@ zero_extendqisi2
+ 148 00b0 2B71     		strb	r3, [r5, #4]
+  79:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->dir = 0;
+ 149              		.loc 1 79 0
+ 150 00b2 0023     		movs	r3, #0
+ARM GAS  /tmp/ccZy5WDY.s 			page 5
+
+
+ 151 00b4 6B71     		strb	r3, [r5, #5]
+  80:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->freq_hz = 0;
+ 152              		.loc 1 80 0
+ 153 00b6 AB60     		str	r3, [r5, #8]
+  81:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->duty = 0;
+ 154              		.loc 1 81 0
+ 155 00b8 2B73     		strb	r3, [r5, #12]
+  82:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->status = STEPMOTOR_READY;
+ 156              		.loc 1 82 0
+ 157 00ba 6B73     		strb	r3, [r5, #13]
+  83:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->lock = mutex_create();
+ 158              		.loc 1 83 0
+ 159 00bc 0120     		movs	r0, #1
+ 160              	.LVL11:
+ 161 00be FFF7FEFF 		bl	xQueueCreateMutex
+ 162              	.LVL12:
+ 163 00c2 2861     		str	r0, [r5, #16]
+ 164              	.LVL13:
+ 165              	.L1:
+  84:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  85:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     return handle;
+  86:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** }
+ 166              		.loc 1 86 0
+ 167 00c4 2846     		mov	r0, r5
+ 168 00c6 0BB0     		add	sp, sp, #44
+ 169              	.LCFI2:
+ 170              		.cfi_remember_state
+ 171              		.cfi_def_cfa_offset 20
+ 172              		@ sp needed
+ 173 00c8 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 174              	.LVL14:
+ 175              	.L15:
+ 176              	.LCFI3:
+ 177              		.cfi_restore_state
+  39:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config->dir_gpio_port < GPIO_PORT_MAX, STEPMOTOR_INIT_ERR_STR, NULL);
+ 178              		.loc 1 39 0 discriminator 4
+ 179 00ca FFF7FEFF 		bl	stm_log_timestamp
+ 180              	.LVL15:
+ 181 00ce 6749     		ldr	r1, .L26
+ 182 00d0 674B     		ldr	r3, .L26+4
+ 183 00d2 0493     		str	r3, [sp, #16]
+ 184 00d4 674B     		ldr	r3, .L26+8
+ 185 00d6 0393     		str	r3, [sp, #12]
+ 186 00d8 2723     		movs	r3, #39
+ 187 00da 0293     		str	r3, [sp, #8]
+ 188 00dc 664B     		ldr	r3, .L26+12
+ 189 00de 0193     		str	r3, [sp, #4]
+ 190 00e0 0091     		str	r1, [sp]
+ 191 00e2 0346     		mov	r3, r0
+ 192 00e4 654A     		ldr	r2, .L26+16
+ 193 00e6 0120     		movs	r0, #1
+ 194 00e8 FFF7FEFF 		bl	stm_log_write
+ 195              	.LVL16:
+ 196 00ec 0025     		movs	r5, #0
+ 197 00ee E9E7     		b	.L1
+ 198              	.LVL17:
+ 199              	.L16:
+ARM GAS  /tmp/ccZy5WDY.s 			page 6
+
+
+  40:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config->dir_gpio_num < GPIO_NUM_MAX, STEPMOTOR_INIT_ERR_STR, NULL);
+ 200              		.loc 1 40 0 discriminator 4
+ 201 00f0 FFF7FEFF 		bl	stm_log_timestamp
+ 202              	.LVL18:
+ 203 00f4 5D49     		ldr	r1, .L26
+ 204 00f6 5E4B     		ldr	r3, .L26+4
+ 205 00f8 0493     		str	r3, [sp, #16]
+ 206 00fa 5E4B     		ldr	r3, .L26+8
+ 207 00fc 0393     		str	r3, [sp, #12]
+ 208 00fe 2823     		movs	r3, #40
+ 209 0100 0293     		str	r3, [sp, #8]
+ 210 0102 5D4B     		ldr	r3, .L26+12
+ 211 0104 0193     		str	r3, [sp, #4]
+ 212 0106 0091     		str	r1, [sp]
+ 213 0108 0346     		mov	r3, r0
+ 214 010a 5C4A     		ldr	r2, .L26+16
+ 215 010c 0120     		movs	r0, #1
+ 216 010e FFF7FEFF 		bl	stm_log_write
+ 217              	.LVL19:
+ 218 0112 0025     		movs	r5, #0
+ 219 0114 D6E7     		b	.L1
+ 220              	.LVL20:
+ 221              	.L17:
+  41:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config->pulse_timer_num < TIMER_NUM_MAX, STEPMOTOR_INIT_ERR_STR, NULL);
+ 222              		.loc 1 41 0 discriminator 4
+ 223 0116 FFF7FEFF 		bl	stm_log_timestamp
+ 224              	.LVL21:
+ 225 011a 5449     		ldr	r1, .L26
+ 226 011c 544B     		ldr	r3, .L26+4
+ 227 011e 0493     		str	r3, [sp, #16]
+ 228 0120 544B     		ldr	r3, .L26+8
+ 229 0122 0393     		str	r3, [sp, #12]
+ 230 0124 2923     		movs	r3, #41
+ 231 0126 0293     		str	r3, [sp, #8]
+ 232 0128 534B     		ldr	r3, .L26+12
+ 233 012a 0193     		str	r3, [sp, #4]
+ 234 012c 0091     		str	r1, [sp]
+ 235 012e 0346     		mov	r3, r0
+ 236 0130 524A     		ldr	r2, .L26+16
+ 237 0132 0120     		movs	r0, #1
+ 238 0134 FFF7FEFF 		bl	stm_log_write
+ 239              	.LVL22:
+ 240 0138 0025     		movs	r5, #0
+ 241 013a C3E7     		b	.L1
+ 242              	.LVL23:
+ 243              	.L18:
+  42:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config->pulse_timer_pins_pack < TIMER_PINS_PACK_MAX, STEPMOTOR_INIT_ERR_STR, NU
+ 244              		.loc 1 42 0 discriminator 4
+ 245 013c FFF7FEFF 		bl	stm_log_timestamp
+ 246              	.LVL24:
+ 247 0140 4A49     		ldr	r1, .L26
+ 248 0142 4B4B     		ldr	r3, .L26+4
+ 249 0144 0493     		str	r3, [sp, #16]
+ 250 0146 4B4B     		ldr	r3, .L26+8
+ 251 0148 0393     		str	r3, [sp, #12]
+ 252 014a 2A23     		movs	r3, #42
+ 253 014c 0293     		str	r3, [sp, #8]
+ARM GAS  /tmp/ccZy5WDY.s 			page 7
+
+
+ 254 014e 4A4B     		ldr	r3, .L26+12
+ 255 0150 0193     		str	r3, [sp, #4]
+ 256 0152 0091     		str	r1, [sp]
+ 257 0154 0346     		mov	r3, r0
+ 258 0156 494A     		ldr	r2, .L26+16
+ 259 0158 0120     		movs	r0, #1
+ 260 015a FFF7FEFF 		bl	stm_log_write
+ 261              	.LVL25:
+ 262 015e 0025     		movs	r5, #0
+ 263 0160 B0E7     		b	.L1
+ 264              	.LVL26:
+ 265              	.L19:
+  43:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(config->pulse_timer_channel < TIMER_CHANNEL_MAX, STEPMOTOR_INIT_ERR_STR, NULL);
+ 266              		.loc 1 43 0 discriminator 4
+ 267 0162 FFF7FEFF 		bl	stm_log_timestamp
+ 268              	.LVL27:
+ 269 0166 4149     		ldr	r1, .L26
+ 270 0168 414B     		ldr	r3, .L26+4
+ 271 016a 0493     		str	r3, [sp, #16]
+ 272 016c 414B     		ldr	r3, .L26+8
+ 273 016e 0393     		str	r3, [sp, #12]
+ 274 0170 2B23     		movs	r3, #43
+ 275 0172 0293     		str	r3, [sp, #8]
+ 276 0174 404B     		ldr	r3, .L26+12
+ 277 0176 0193     		str	r3, [sp, #4]
+ 278 0178 0091     		str	r1, [sp]
+ 279 017a 0346     		mov	r3, r0
+ 280 017c 3F4A     		ldr	r2, .L26+16
+ 281 017e 0120     		movs	r0, #1
+ 282 0180 FFF7FEFF 		bl	stm_log_write
+ 283              	.LVL28:
+ 284 0184 0025     		movs	r5, #0
+ 285 0186 9DE7     		b	.L1
+ 286              	.LVL29:
+ 287              	.L20:
+  44:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 288              		.loc 1 44 0 discriminator 4
+ 289 0188 FFF7FEFF 		bl	stm_log_timestamp
+ 290              	.LVL30:
+ 291 018c 3749     		ldr	r1, .L26
+ 292 018e 384B     		ldr	r3, .L26+4
+ 293 0190 0493     		str	r3, [sp, #16]
+ 294 0192 384B     		ldr	r3, .L26+8
+ 295 0194 0393     		str	r3, [sp, #12]
+ 296 0196 2C23     		movs	r3, #44
+ 297 0198 0293     		str	r3, [sp, #8]
+ 298 019a 374B     		ldr	r3, .L26+12
+ 299 019c 0193     		str	r3, [sp, #4]
+ 300 019e 0091     		str	r1, [sp]
+ 301 01a0 0346     		mov	r3, r0
+ 302 01a2 364A     		ldr	r2, .L26+16
+ 303 01a4 0120     		movs	r0, #1
+ 304 01a6 FFF7FEFF 		bl	stm_log_write
+ 305              	.LVL31:
+ 306 01aa 0025     		movs	r5, #0
+ 307 01ac 8AE7     		b	.L1
+ 308              	.LVL32:
+ARM GAS  /tmp/ccZy5WDY.s 			page 8
+
+
+ 309              	.L21:
+  48:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 310              		.loc 1 48 0 discriminator 4
+ 311 01ae FFF7FEFF 		bl	stm_log_timestamp
+ 312              	.LVL33:
+ 313 01b2 2E49     		ldr	r1, .L26
+ 314 01b4 2E4B     		ldr	r3, .L26+4
+ 315 01b6 0493     		str	r3, [sp, #16]
+ 316 01b8 2E4B     		ldr	r3, .L26+8
+ 317 01ba 0393     		str	r3, [sp, #12]
+ 318 01bc 3023     		movs	r3, #48
+ 319 01be 0293     		str	r3, [sp, #8]
+ 320 01c0 2D4B     		ldr	r3, .L26+12
+ 321 01c2 0193     		str	r3, [sp, #4]
+ 322 01c4 0091     		str	r1, [sp]
+ 323 01c6 0346     		mov	r3, r0
+ 324 01c8 2C4A     		ldr	r2, .L26+16
+ 325 01ca 0120     		movs	r0, #1
+ 326 01cc FFF7FEFF 		bl	stm_log_write
+ 327              	.LVL34:
+ 328 01d0 78E7     		b	.L1
+ 329              	.LVL35:
+ 330              	.L22:
+  59:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     ret = gpio_set_level(config->dir_gpio_port, config->dir_gpio_num, 0);
+ 331              		.loc 1 59 0 discriminator 4
+ 332 01d2 FFF7FEFF 		bl	stm_log_timestamp
+ 333              	.LVL36:
+ 334 01d6 2549     		ldr	r1, .L26
+ 335 01d8 254B     		ldr	r3, .L26+4
+ 336 01da 0493     		str	r3, [sp, #16]
+ 337 01dc 254B     		ldr	r3, .L26+8
+ 338 01de 0393     		str	r3, [sp, #12]
+ 339 01e0 3B23     		movs	r3, #59
+ 340 01e2 0293     		str	r3, [sp, #8]
+ 341 01e4 244B     		ldr	r3, .L26+12
+ 342 01e6 0193     		str	r3, [sp, #4]
+ 343 01e8 0091     		str	r1, [sp]
+ 344 01ea 0346     		mov	r3, r0
+ 345 01ec 234A     		ldr	r2, .L26+16
+ 346 01ee 0120     		movs	r0, #1
+ 347 01f0 FFF7FEFF 		bl	stm_log_write
+ 348              	.LVL37:
+ 349 01f4 0025     		movs	r5, #0
+ 350              	.LVL38:
+ 351 01f6 65E7     		b	.L1
+ 352              	.LVL39:
+ 353              	.L23:
+  61:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 354              		.loc 1 61 0 discriminator 4
+ 355 01f8 FFF7FEFF 		bl	stm_log_timestamp
+ 356              	.LVL40:
+ 357 01fc 1B49     		ldr	r1, .L26
+ 358 01fe 1C4B     		ldr	r3, .L26+4
+ 359 0200 0493     		str	r3, [sp, #16]
+ 360 0202 1C4B     		ldr	r3, .L26+8
+ 361 0204 0393     		str	r3, [sp, #12]
+ 362 0206 3D23     		movs	r3, #61
+ARM GAS  /tmp/ccZy5WDY.s 			page 9
+
+
+ 363 0208 0293     		str	r3, [sp, #8]
+ 364 020a 1B4B     		ldr	r3, .L26+12
+ 365 020c 0193     		str	r3, [sp, #4]
+ 366 020e 0091     		str	r1, [sp]
+ 367 0210 0346     		mov	r3, r0
+ 368 0212 1A4A     		ldr	r2, .L26+16
+ 369 0214 0120     		movs	r0, #1
+ 370 0216 FFF7FEFF 		bl	stm_log_write
+ 371              	.LVL41:
+ 372 021a 0025     		movs	r5, #0
+ 373              	.LVL42:
+ 374 021c 52E7     		b	.L1
+ 375              	.LVL43:
+ 376              	.L24:
+  69:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     ret = pwm_set_params(config->pulse_timer_num, config->pulse_timer_channel, 0, 0);
+ 377              		.loc 1 69 0 discriminator 4
+ 378 021e FFF7FEFF 		bl	stm_log_timestamp
+ 379              	.LVL44:
+ 380 0222 1249     		ldr	r1, .L26
+ 381 0224 124B     		ldr	r3, .L26+4
+ 382 0226 0493     		str	r3, [sp, #16]
+ 383 0228 124B     		ldr	r3, .L26+8
+ 384 022a 0393     		str	r3, [sp, #12]
+ 385 022c 4523     		movs	r3, #69
+ 386 022e 0293     		str	r3, [sp, #8]
+ 387 0230 114B     		ldr	r3, .L26+12
+ 388 0232 0193     		str	r3, [sp, #4]
+ 389 0234 0091     		str	r1, [sp]
+ 390 0236 0346     		mov	r3, r0
+ 391 0238 104A     		ldr	r2, .L26+16
+ 392 023a 0120     		movs	r0, #1
+ 393 023c FFF7FEFF 		bl	stm_log_write
+ 394              	.LVL45:
+ 395 0240 0025     		movs	r5, #0
+ 396              	.LVL46:
+ 397 0242 3FE7     		b	.L1
+ 398              	.LVL47:
+ 399              	.L25:
+  71:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 400              		.loc 1 71 0 discriminator 4
+ 401 0244 FFF7FEFF 		bl	stm_log_timestamp
+ 402              	.LVL48:
+ 403 0248 0849     		ldr	r1, .L26
+ 404 024a 094B     		ldr	r3, .L26+4
+ 405 024c 0493     		str	r3, [sp, #16]
+ 406 024e 094B     		ldr	r3, .L26+8
+ 407 0250 0393     		str	r3, [sp, #12]
+ 408 0252 4723     		movs	r3, #71
+ 409 0254 0293     		str	r3, [sp, #8]
+ 410 0256 084B     		ldr	r3, .L26+12
+ 411 0258 0193     		str	r3, [sp, #4]
+ 412 025a 0091     		str	r1, [sp]
+ 413 025c 0346     		mov	r3, r0
+ 414 025e 074A     		ldr	r2, .L26+16
+ 415 0260 0120     		movs	r0, #1
+ 416 0262 FFF7FEFF 		bl	stm_log_write
+ 417              	.LVL49:
+ARM GAS  /tmp/ccZy5WDY.s 			page 10
+
+
+ 418 0266 0025     		movs	r5, #0
+ 419              	.LVL50:
+ 420 0268 2CE7     		b	.L1
+ 421              	.L27:
+ 422 026a 00BF     		.align	2
+ 423              	.L26:
+ 424 026c 28000000 		.word	.LC1
+ 425 0270 34000000 		.word	.LC2
+ 426 0274 00000000 		.word	.LANCHOR0
+ 427 0278 4C000000 		.word	.LC3
+ 428 027c 00000000 		.word	.LC0
+ 429              		.cfi_endproc
+ 430              	.LFE138:
+ 432              		.section	.text.stepmotor_set_dir,"ax",%progbits
+ 433              		.align	1
+ 434              		.global	stepmotor_set_dir
+ 435              		.syntax unified
+ 436              		.thumb
+ 437              		.thumb_func
+ 438              		.fpu fpv4-sp-d16
+ 440              	stepmotor_set_dir:
+ 441              	.LFB139:
+  87:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  88:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** stm_err_t stepmotor_set_dir(stepmotor_handle_t handle, bool dir)
+  89:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** {
+ 442              		.loc 1 89 0
+ 443              		.cfi_startproc
+ 444              		@ args = 0, pretend = 0, frame = 0
+ 445              		@ frame_needed = 0, uses_anonymous_args = 0
+ 446              	.LVL51:
+ 447 0000 30B5     		push	{r4, r5, lr}
+ 448              	.LCFI4:
+ 449              		.cfi_def_cfa_offset 12
+ 450              		.cfi_offset 4, -12
+ 451              		.cfi_offset 5, -8
+ 452              		.cfi_offset 14, -4
+ 453 0002 87B0     		sub	sp, sp, #28
+ 454              	.LCFI5:
+ 455              		.cfi_def_cfa_offset 40
+ 456 0004 0446     		mov	r4, r0
+ 457 0006 0D46     		mov	r5, r1
+ 458              	.LVL52:
+ 459              	.L29:
+  90:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_lock(handle->lock);
+ 460              		.loc 1 90 0 discriminator 1
+ 461 0008 4FF0FF31 		mov	r1, #-1
+ 462 000c 2069     		ldr	r0, [r4, #16]
+ 463 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 464              	.LVL53:
+ 465 0012 0128     		cmp	r0, #1
+ 466 0014 F8D1     		bne	.L29
+  91:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     int ret = gpio_set_level(handle->dir_gpio_port, handle->dir_gpio_num, dir);
+ 467              		.loc 1 91 0
+ 468 0016 2A46     		mov	r2, r5
+ 469 0018 6178     		ldrb	r1, [r4, #1]	@ zero_extendqisi2
+ 470 001a 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 471 001c FFF7FEFF 		bl	gpio_set_level
+ARM GAS  /tmp/ccZy5WDY.s 			page 11
+
+
+ 472              	.LVL54:
+  92:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_SET_DIR_ERR_STR, STM_FAIL);
+ 473              		.loc 1 92 0
+ 474 0020 48B9     		cbnz	r0, .L33
+  93:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  94:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->dir = dir;
+ 475              		.loc 1 94 0
+ 476 0022 6571     		strb	r5, [r4, #5]
+  95:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_unlock(handle->lock);
+ 477              		.loc 1 95 0
+ 478 0024 0023     		movs	r3, #0
+ 479 0026 1A46     		mov	r2, r3
+ 480 0028 1946     		mov	r1, r3
+ 481 002a 2069     		ldr	r0, [r4, #16]
+ 482              	.LVL55:
+ 483 002c FFF7FEFF 		bl	xQueueGenericSend
+ 484              	.LVL56:
+  96:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     return STM_OK;
+ 485              		.loc 1 96 0
+ 486 0030 0020     		movs	r0, #0
+ 487              	.L28:
+  97:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** }
+ 488              		.loc 1 97 0
+ 489 0032 07B0     		add	sp, sp, #28
+ 490              	.LCFI6:
+ 491              		.cfi_remember_state
+ 492              		.cfi_def_cfa_offset 12
+ 493              		@ sp needed
+ 494 0034 30BD     		pop	{r4, r5, pc}
+ 495              	.LVL57:
+ 496              	.L33:
+ 497              	.LCFI7:
+ 498              		.cfi_restore_state
+  92:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 499              		.loc 1 92 0 discriminator 4
+ 500 0036 FFF7FEFF 		bl	stm_log_timestamp
+ 501              	.LVL58:
+ 502 003a 0949     		ldr	r1, .L34
+ 503 003c 094B     		ldr	r3, .L34+4
+ 504 003e 0493     		str	r3, [sp, #16]
+ 505 0040 094B     		ldr	r3, .L34+8
+ 506 0042 0393     		str	r3, [sp, #12]
+ 507 0044 5C23     		movs	r3, #92
+ 508 0046 0293     		str	r3, [sp, #8]
+ 509 0048 084B     		ldr	r3, .L34+12
+ 510 004a 0193     		str	r3, [sp, #4]
+ 511 004c 0091     		str	r1, [sp]
+ 512 004e 0346     		mov	r3, r0
+ 513 0050 074A     		ldr	r2, .L34+16
+ 514 0052 0120     		movs	r0, #1
+ 515 0054 FFF7FEFF 		bl	stm_log_write
+ 516              	.LVL59:
+ 517 0058 4FF0FF30 		mov	r0, #-1
+ 518 005c E9E7     		b	.L28
+ 519              	.L35:
+ 520 005e 00BF     		.align	2
+ 521              	.L34:
+ARM GAS  /tmp/ccZy5WDY.s 			page 12
+
+
+ 522 0060 28000000 		.word	.LC1
+ 523 0064 00000000 		.word	.LC4
+ 524 0068 00000000 		.word	.LANCHOR1
+ 525 006c 4C000000 		.word	.LC3
+ 526 0070 00000000 		.word	.LC0
+ 527              		.cfi_endproc
+ 528              	.LFE139:
+ 530              		.section	.text.stepmotor_toggle_dir,"ax",%progbits
+ 531              		.align	1
+ 532              		.global	stepmotor_toggle_dir
+ 533              		.syntax unified
+ 534              		.thumb
+ 535              		.thumb_func
+ 536              		.fpu fpv4-sp-d16
+ 538              	stepmotor_toggle_dir:
+ 539              	.LFB140:
+  98:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+  99:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** stm_err_t stepmotor_toggle_dir(stepmotor_handle_t handle)
+ 100:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** {
+ 540              		.loc 1 100 0
+ 541              		.cfi_startproc
+ 542              		@ args = 0, pretend = 0, frame = 0
+ 543              		@ frame_needed = 0, uses_anonymous_args = 0
+ 544              	.LVL60:
+ 545 0000 10B5     		push	{r4, lr}
+ 546              	.LCFI8:
+ 547              		.cfi_def_cfa_offset 8
+ 548              		.cfi_offset 4, -8
+ 549              		.cfi_offset 14, -4
+ 550 0002 86B0     		sub	sp, sp, #24
+ 551              	.LCFI9:
+ 552              		.cfi_def_cfa_offset 32
+ 553 0004 0446     		mov	r4, r0
+ 554              	.LVL61:
+ 555              	.L37:
+ 101:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_lock(handle->lock);
+ 556              		.loc 1 101 0 discriminator 1
+ 557 0006 4FF0FF31 		mov	r1, #-1
+ 558 000a 2069     		ldr	r0, [r4, #16]
+ 559 000c FFF7FEFF 		bl	xQueueSemaphoreTake
+ 560              	.LVL62:
+ 561 0010 0128     		cmp	r0, #1
+ 562 0012 F8D1     		bne	.L37
+ 102:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     int ret = gpio_toggle_level(handle->dir_gpio_port, handle->dir_gpio_num);
+ 563              		.loc 1 102 0
+ 564 0014 6178     		ldrb	r1, [r4, #1]	@ zero_extendqisi2
+ 565 0016 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 566 0018 FFF7FEFF 		bl	gpio_toggle_level
+ 567              	.LVL63:
+ 103:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_TOGGLE_DIR_ERR_STR, STM_FAIL);
+ 568              		.loc 1 103 0
+ 569 001c 60B9     		cbnz	r0, .L41
+ 104:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 105:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->dir = !handle->dir;
+ 570              		.loc 1 105 0
+ 571 001e 6379     		ldrb	r3, [r4, #5]	@ zero_extendqisi2
+ 572 0020 83F00103 		eor	r3, r3, #1
+ARM GAS  /tmp/ccZy5WDY.s 			page 13
+
+
+ 573 0024 6371     		strb	r3, [r4, #5]
+ 106:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_unlock(handle->lock);
+ 574              		.loc 1 106 0
+ 575 0026 0023     		movs	r3, #0
+ 576 0028 1A46     		mov	r2, r3
+ 577 002a 1946     		mov	r1, r3
+ 578 002c 2069     		ldr	r0, [r4, #16]
+ 579              	.LVL64:
+ 580 002e FFF7FEFF 		bl	xQueueGenericSend
+ 581              	.LVL65:
+ 107:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     return STM_OK;
+ 582              		.loc 1 107 0
+ 583 0032 0020     		movs	r0, #0
+ 584              	.L36:
+ 108:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** }
+ 585              		.loc 1 108 0
+ 586 0034 06B0     		add	sp, sp, #24
+ 587              	.LCFI10:
+ 588              		.cfi_remember_state
+ 589              		.cfi_def_cfa_offset 8
+ 590              		@ sp needed
+ 591 0036 10BD     		pop	{r4, pc}
+ 592              	.LVL66:
+ 593              	.L41:
+ 594              	.LCFI11:
+ 595              		.cfi_restore_state
+ 103:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 596              		.loc 1 103 0 discriminator 4
+ 597 0038 FFF7FEFF 		bl	stm_log_timestamp
+ 598              	.LVL67:
+ 599 003c 0849     		ldr	r1, .L42
+ 600 003e 094B     		ldr	r3, .L42+4
+ 601 0040 0493     		str	r3, [sp, #16]
+ 602 0042 094B     		ldr	r3, .L42+8
+ 603 0044 0393     		str	r3, [sp, #12]
+ 604 0046 6723     		movs	r3, #103
+ 605 0048 0293     		str	r3, [sp, #8]
+ 606 004a 084B     		ldr	r3, .L42+12
+ 607 004c 0193     		str	r3, [sp, #4]
+ 608 004e 0091     		str	r1, [sp]
+ 609 0050 0346     		mov	r3, r0
+ 610 0052 074A     		ldr	r2, .L42+16
+ 611 0054 0120     		movs	r0, #1
+ 612 0056 FFF7FEFF 		bl	stm_log_write
+ 613              	.LVL68:
+ 614 005a 4FF0FF30 		mov	r0, #-1
+ 615 005e E9E7     		b	.L36
+ 616              	.L43:
+ 617              		.align	2
+ 618              	.L42:
+ 619 0060 28000000 		.word	.LC1
+ 620 0064 00000000 		.word	.LC5
+ 621 0068 00000000 		.word	.LANCHOR2
+ 622 006c 4C000000 		.word	.LC3
+ 623 0070 00000000 		.word	.LC0
+ 624              		.cfi_endproc
+ 625              	.LFE140:
+ARM GAS  /tmp/ccZy5WDY.s 			page 14
+
+
+ 627              		.section	.text.stepmotor_set_pwm_freq,"ax",%progbits
+ 628              		.align	1
+ 629              		.global	stepmotor_set_pwm_freq
+ 630              		.syntax unified
+ 631              		.thumb
+ 632              		.thumb_func
+ 633              		.fpu fpv4-sp-d16
+ 635              	stepmotor_set_pwm_freq:
+ 636              	.LFB141:
+ 109:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 110:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** stm_err_t stepmotor_set_pwm_freq(stepmotor_handle_t handle, uint32_t freq_hz)
+ 111:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** {
+ 637              		.loc 1 111 0
+ 638              		.cfi_startproc
+ 639              		@ args = 0, pretend = 0, frame = 0
+ 640              		@ frame_needed = 0, uses_anonymous_args = 0
+ 641              	.LVL69:
+ 642 0000 30B5     		push	{r4, r5, lr}
+ 643              	.LCFI12:
+ 644              		.cfi_def_cfa_offset 12
+ 645              		.cfi_offset 4, -12
+ 646              		.cfi_offset 5, -8
+ 647              		.cfi_offset 14, -4
+ 648 0002 87B0     		sub	sp, sp, #28
+ 649              	.LCFI13:
+ 650              		.cfi_def_cfa_offset 40
+ 651 0004 0446     		mov	r4, r0
+ 652 0006 0D46     		mov	r5, r1
+ 653              	.LVL70:
+ 654              	.L45:
+ 112:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_lock(handle->lock);
+ 655              		.loc 1 112 0 discriminator 1
+ 656 0008 4FF0FF31 		mov	r1, #-1
+ 657 000c 2069     		ldr	r0, [r4, #16]
+ 658 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 659              	.LVL71:
+ 660 0012 0128     		cmp	r0, #1
+ 661 0014 F8D1     		bne	.L45
+ 113:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     int ret = pwm_set_params(handle->pulse_timer_num, handle->pulse_timer_channel, freq_hz, handle-
+ 662              		.loc 1 113 0
+ 663 0016 237B     		ldrb	r3, [r4, #12]	@ zero_extendqisi2
+ 664 0018 2A46     		mov	r2, r5
+ 665 001a 2179     		ldrb	r1, [r4, #4]	@ zero_extendqisi2
+ 666 001c A078     		ldrb	r0, [r4, #2]	@ zero_extendqisi2
+ 667 001e FFF7FEFF 		bl	pwm_set_params
+ 668              	.LVL72:
+ 114:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_SET_PWM_FREQ_ERR_STR, STM_FAIL);
+ 669              		.loc 1 114 0
+ 670 0022 48B9     		cbnz	r0, .L49
+ 115:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 116:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->freq_hz = freq_hz;
+ 671              		.loc 1 116 0
+ 672 0024 A560     		str	r5, [r4, #8]
+ 117:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_unlock(handle->lock);
+ 673              		.loc 1 117 0
+ 674 0026 0023     		movs	r3, #0
+ 675 0028 1A46     		mov	r2, r3
+ARM GAS  /tmp/ccZy5WDY.s 			page 15
+
+
+ 676 002a 1946     		mov	r1, r3
+ 677 002c 2069     		ldr	r0, [r4, #16]
+ 678              	.LVL73:
+ 679 002e FFF7FEFF 		bl	xQueueGenericSend
+ 680              	.LVL74:
+ 118:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     return STM_OK;
+ 681              		.loc 1 118 0
+ 682 0032 0020     		movs	r0, #0
+ 683              	.L44:
+ 119:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** }
+ 684              		.loc 1 119 0
+ 685 0034 07B0     		add	sp, sp, #28
+ 686              	.LCFI14:
+ 687              		.cfi_remember_state
+ 688              		.cfi_def_cfa_offset 12
+ 689              		@ sp needed
+ 690 0036 30BD     		pop	{r4, r5, pc}
+ 691              	.LVL75:
+ 692              	.L49:
+ 693              	.LCFI15:
+ 694              		.cfi_restore_state
+ 114:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 695              		.loc 1 114 0 discriminator 4
+ 696 0038 FFF7FEFF 		bl	stm_log_timestamp
+ 697              	.LVL76:
+ 698 003c 0849     		ldr	r1, .L50
+ 699 003e 094B     		ldr	r3, .L50+4
+ 700 0040 0493     		str	r3, [sp, #16]
+ 701 0042 094B     		ldr	r3, .L50+8
+ 702 0044 0393     		str	r3, [sp, #12]
+ 703 0046 7223     		movs	r3, #114
+ 704 0048 0293     		str	r3, [sp, #8]
+ 705 004a 084B     		ldr	r3, .L50+12
+ 706 004c 0193     		str	r3, [sp, #4]
+ 707 004e 0091     		str	r1, [sp]
+ 708 0050 0346     		mov	r3, r0
+ 709 0052 074A     		ldr	r2, .L50+16
+ 710 0054 0120     		movs	r0, #1
+ 711 0056 FFF7FEFF 		bl	stm_log_write
+ 712              	.LVL77:
+ 713 005a 4FF0FF30 		mov	r0, #-1
+ 714 005e E9E7     		b	.L44
+ 715              	.L51:
+ 716              		.align	2
+ 717              	.L50:
+ 718 0060 28000000 		.word	.LC1
+ 719 0064 00000000 		.word	.LC6
+ 720 0068 00000000 		.word	.LANCHOR3
+ 721 006c 4C000000 		.word	.LC3
+ 722 0070 00000000 		.word	.LC0
+ 723              		.cfi_endproc
+ 724              	.LFE141:
+ 726              		.section	.text.stepmotor_set_pwm_duty,"ax",%progbits
+ 727              		.align	1
+ 728              		.global	stepmotor_set_pwm_duty
+ 729              		.syntax unified
+ 730              		.thumb
+ARM GAS  /tmp/ccZy5WDY.s 			page 16
+
+
+ 731              		.thumb_func
+ 732              		.fpu fpv4-sp-d16
+ 734              	stepmotor_set_pwm_duty:
+ 735              	.LFB142:
+ 120:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 121:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** stm_err_t stepmotor_set_pwm_duty(stepmotor_handle_t handle, uint8_t duty)
+ 122:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** {
+ 736              		.loc 1 122 0
+ 737              		.cfi_startproc
+ 738              		@ args = 0, pretend = 0, frame = 0
+ 739              		@ frame_needed = 0, uses_anonymous_args = 0
+ 740              	.LVL78:
+ 741 0000 30B5     		push	{r4, r5, lr}
+ 742              	.LCFI16:
+ 743              		.cfi_def_cfa_offset 12
+ 744              		.cfi_offset 4, -12
+ 745              		.cfi_offset 5, -8
+ 746              		.cfi_offset 14, -4
+ 747 0002 87B0     		sub	sp, sp, #28
+ 748              	.LCFI17:
+ 749              		.cfi_def_cfa_offset 40
+ 750 0004 0446     		mov	r4, r0
+ 751 0006 0D46     		mov	r5, r1
+ 752              	.LVL79:
+ 753              	.L53:
+ 123:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_lock(handle->lock);
+ 754              		.loc 1 123 0 discriminator 1
+ 755 0008 4FF0FF31 		mov	r1, #-1
+ 756 000c 2069     		ldr	r0, [r4, #16]
+ 757 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 758              	.LVL80:
+ 759 0012 0128     		cmp	r0, #1
+ 760 0014 F8D1     		bne	.L53
+ 124:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     int ret = pwm_set_params(handle->pulse_timer_num, handle->pulse_timer_channel, handle->freq_hz,
+ 761              		.loc 1 124 0
+ 762 0016 2B46     		mov	r3, r5
+ 763 0018 A268     		ldr	r2, [r4, #8]
+ 764 001a 2179     		ldrb	r1, [r4, #4]	@ zero_extendqisi2
+ 765 001c A078     		ldrb	r0, [r4, #2]	@ zero_extendqisi2
+ 766 001e FFF7FEFF 		bl	pwm_set_params
+ 767              	.LVL81:
+ 125:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_SET_PWM_DUTYCYCLE_ERR_STR, STM_FAIL);
+ 768              		.loc 1 125 0
+ 769 0022 48B9     		cbnz	r0, .L57
+ 126:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 127:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->duty = duty;
+ 770              		.loc 1 127 0
+ 771 0024 2573     		strb	r5, [r4, #12]
+ 128:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_unlock(handle->lock);
+ 772              		.loc 1 128 0
+ 773 0026 0023     		movs	r3, #0
+ 774 0028 1A46     		mov	r2, r3
+ 775 002a 1946     		mov	r1, r3
+ 776 002c 2069     		ldr	r0, [r4, #16]
+ 777              	.LVL82:
+ 778 002e FFF7FEFF 		bl	xQueueGenericSend
+ 779              	.LVL83:
+ARM GAS  /tmp/ccZy5WDY.s 			page 17
+
+
+ 129:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     return STM_OK;
+ 780              		.loc 1 129 0
+ 781 0032 0020     		movs	r0, #0
+ 782              	.L52:
+ 130:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** }
+ 783              		.loc 1 130 0
+ 784 0034 07B0     		add	sp, sp, #28
+ 785              	.LCFI18:
+ 786              		.cfi_remember_state
+ 787              		.cfi_def_cfa_offset 12
+ 788              		@ sp needed
+ 789 0036 30BD     		pop	{r4, r5, pc}
+ 790              	.LVL84:
+ 791              	.L57:
+ 792              	.LCFI19:
+ 793              		.cfi_restore_state
+ 125:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 794              		.loc 1 125 0 discriminator 4
+ 795 0038 FFF7FEFF 		bl	stm_log_timestamp
+ 796              	.LVL85:
+ 797 003c 0849     		ldr	r1, .L58
+ 798 003e 094B     		ldr	r3, .L58+4
+ 799 0040 0493     		str	r3, [sp, #16]
+ 800 0042 094B     		ldr	r3, .L58+8
+ 801 0044 0393     		str	r3, [sp, #12]
+ 802 0046 7D23     		movs	r3, #125
+ 803 0048 0293     		str	r3, [sp, #8]
+ 804 004a 084B     		ldr	r3, .L58+12
+ 805 004c 0193     		str	r3, [sp, #4]
+ 806 004e 0091     		str	r1, [sp]
+ 807 0050 0346     		mov	r3, r0
+ 808 0052 074A     		ldr	r2, .L58+16
+ 809 0054 0120     		movs	r0, #1
+ 810 0056 FFF7FEFF 		bl	stm_log_write
+ 811              	.LVL86:
+ 812 005a 4FF0FF30 		mov	r0, #-1
+ 813 005e E9E7     		b	.L52
+ 814              	.L59:
+ 815              		.align	2
+ 816              	.L58:
+ 817 0060 28000000 		.word	.LC1
+ 818 0064 00000000 		.word	.LC7
+ 819 0068 00000000 		.word	.LANCHOR4
+ 820 006c 4C000000 		.word	.LC3
+ 821 0070 00000000 		.word	.LC0
+ 822              		.cfi_endproc
+ 823              	.LFE142:
+ 825              		.section	.text.stepmotor_start,"ax",%progbits
+ 826              		.align	1
+ 827              		.global	stepmotor_start
+ 828              		.syntax unified
+ 829              		.thumb
+ 830              		.thumb_func
+ 831              		.fpu fpv4-sp-d16
+ 833              	stepmotor_start:
+ 834              	.LFB143:
+ 131:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ARM GAS  /tmp/ccZy5WDY.s 			page 18
+
+
+ 132:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** stm_err_t stepmotor_start(stepmotor_handle_t handle)
+ 133:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** {
+ 835              		.loc 1 133 0
+ 836              		.cfi_startproc
+ 837              		@ args = 0, pretend = 0, frame = 0
+ 838              		@ frame_needed = 0, uses_anonymous_args = 0
+ 839              	.LVL87:
+ 840 0000 10B5     		push	{r4, lr}
+ 841              	.LCFI20:
+ 842              		.cfi_def_cfa_offset 8
+ 843              		.cfi_offset 4, -8
+ 844              		.cfi_offset 14, -4
+ 845 0002 86B0     		sub	sp, sp, #24
+ 846              	.LCFI21:
+ 847              		.cfi_def_cfa_offset 32
+ 848 0004 0446     		mov	r4, r0
+ 849              	.LVL88:
+ 850              	.L61:
+ 134:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_lock(handle->lock);
+ 851              		.loc 1 134 0 discriminator 1
+ 852 0006 4FF0FF31 		mov	r1, #-1
+ 853 000a 2069     		ldr	r0, [r4, #16]
+ 854 000c FFF7FEFF 		bl	xQueueSemaphoreTake
+ 855              	.LVL89:
+ 856 0010 0128     		cmp	r0, #1
+ 857 0012 F8D1     		bne	.L61
+ 135:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     int ret = pwm_start(handle->pulse_timer_num, handle->pulse_timer_channel);
+ 858              		.loc 1 135 0
+ 859 0014 2179     		ldrb	r1, [r4, #4]	@ zero_extendqisi2
+ 860 0016 A078     		ldrb	r0, [r4, #2]	@ zero_extendqisi2
+ 861 0018 FFF7FEFF 		bl	pwm_start
+ 862              	.LVL90:
+ 136:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_START_ERR_STR, STM_FAIL);
+ 863              		.loc 1 136 0
+ 864 001c 50B9     		cbnz	r0, .L65
+ 137:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 138:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->status = STEPMOTOR_RUNNING;
+ 865              		.loc 1 138 0
+ 866 001e 0123     		movs	r3, #1
+ 867 0020 6373     		strb	r3, [r4, #13]
+ 139:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_unlock(handle->lock);
+ 868              		.loc 1 139 0
+ 869 0022 0023     		movs	r3, #0
+ 870 0024 1A46     		mov	r2, r3
+ 871 0026 1946     		mov	r1, r3
+ 872 0028 2069     		ldr	r0, [r4, #16]
+ 873              	.LVL91:
+ 874 002a FFF7FEFF 		bl	xQueueGenericSend
+ 875              	.LVL92:
+ 140:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     return STM_OK;
+ 876              		.loc 1 140 0
+ 877 002e 0020     		movs	r0, #0
+ 878              	.L60:
+ 141:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** }
+ 879              		.loc 1 141 0
+ 880 0030 06B0     		add	sp, sp, #24
+ 881              	.LCFI22:
+ARM GAS  /tmp/ccZy5WDY.s 			page 19
+
+
+ 882              		.cfi_remember_state
+ 883              		.cfi_def_cfa_offset 8
+ 884              		@ sp needed
+ 885 0032 10BD     		pop	{r4, pc}
+ 886              	.LVL93:
+ 887              	.L65:
+ 888              	.LCFI23:
+ 889              		.cfi_restore_state
+ 136:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 890              		.loc 1 136 0 discriminator 4
+ 891 0034 FFF7FEFF 		bl	stm_log_timestamp
+ 892              	.LVL94:
+ 893 0038 0849     		ldr	r1, .L66
+ 894 003a 094B     		ldr	r3, .L66+4
+ 895 003c 0493     		str	r3, [sp, #16]
+ 896 003e 094B     		ldr	r3, .L66+8
+ 897 0040 0393     		str	r3, [sp, #12]
+ 898 0042 8823     		movs	r3, #136
+ 899 0044 0293     		str	r3, [sp, #8]
+ 900 0046 084B     		ldr	r3, .L66+12
+ 901 0048 0193     		str	r3, [sp, #4]
+ 902 004a 0091     		str	r1, [sp]
+ 903 004c 0346     		mov	r3, r0
+ 904 004e 074A     		ldr	r2, .L66+16
+ 905 0050 0120     		movs	r0, #1
+ 906 0052 FFF7FEFF 		bl	stm_log_write
+ 907              	.LVL95:
+ 908 0056 4FF0FF30 		mov	r0, #-1
+ 909 005a E9E7     		b	.L60
+ 910              	.L67:
+ 911              		.align	2
+ 912              	.L66:
+ 913 005c 28000000 		.word	.LC1
+ 914 0060 00000000 		.word	.LC8
+ 915 0064 00000000 		.word	.LANCHOR5
+ 916 0068 4C000000 		.word	.LC3
+ 917 006c 00000000 		.word	.LC0
+ 918              		.cfi_endproc
+ 919              	.LFE143:
+ 921              		.section	.text.stepmotor_stop,"ax",%progbits
+ 922              		.align	1
+ 923              		.global	stepmotor_stop
+ 924              		.syntax unified
+ 925              		.thumb
+ 926              		.thumb_func
+ 927              		.fpu fpv4-sp-d16
+ 929              	stepmotor_stop:
+ 930              	.LFB144:
+ 142:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 143:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** stm_err_t stepmotor_stop(stepmotor_handle_t handle)
+ 144:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** {
+ 931              		.loc 1 144 0
+ 932              		.cfi_startproc
+ 933              		@ args = 0, pretend = 0, frame = 0
+ 934              		@ frame_needed = 0, uses_anonymous_args = 0
+ 935              	.LVL96:
+ 936 0000 10B5     		push	{r4, lr}
+ARM GAS  /tmp/ccZy5WDY.s 			page 20
+
+
+ 937              	.LCFI24:
+ 938              		.cfi_def_cfa_offset 8
+ 939              		.cfi_offset 4, -8
+ 940              		.cfi_offset 14, -4
+ 941 0002 86B0     		sub	sp, sp, #24
+ 942              	.LCFI25:
+ 943              		.cfi_def_cfa_offset 32
+ 944 0004 0446     		mov	r4, r0
+ 945              	.LVL97:
+ 946              	.L69:
+ 145:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_lock(handle->lock);
+ 947              		.loc 1 145 0 discriminator 1
+ 948 0006 4FF0FF31 		mov	r1, #-1
+ 949 000a 2069     		ldr	r0, [r4, #16]
+ 950 000c FFF7FEFF 		bl	xQueueSemaphoreTake
+ 951              	.LVL98:
+ 952 0010 0128     		cmp	r0, #1
+ 953 0012 F8D1     		bne	.L69
+ 146:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     int ret = pwm_stop(handle->pulse_timer_num, handle->pulse_timer_channel);
+ 954              		.loc 1 146 0
+ 955 0014 2179     		ldrb	r1, [r4, #4]	@ zero_extendqisi2
+ 956 0016 A078     		ldrb	r0, [r4, #2]	@ zero_extendqisi2
+ 957 0018 FFF7FEFF 		bl	pwm_stop
+ 958              	.LVL99:
+ 147:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_STOP_ERR_STR, STM_FAIL);
+ 959              		.loc 1 147 0
+ 960 001c 50B9     		cbnz	r0, .L73
+ 148:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** 
+ 149:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     handle->status = STEPMOTOR_STOP;
+ 961              		.loc 1 149 0
+ 962 001e 0223     		movs	r3, #2
+ 963 0020 6373     		strb	r3, [r4, #13]
+ 150:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     mutex_unlock(handle->lock);
+ 964              		.loc 1 150 0
+ 965 0022 0023     		movs	r3, #0
+ 966 0024 1A46     		mov	r2, r3
+ 967 0026 1946     		mov	r1, r3
+ 968 0028 2069     		ldr	r0, [r4, #16]
+ 969              	.LVL100:
+ 970 002a FFF7FEFF 		bl	xQueueGenericSend
+ 971              	.LVL101:
+ 151:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     return STM_OK;
+ 972              		.loc 1 151 0
+ 973 002e 0020     		movs	r0, #0
+ 974              	.L68:
+ 152:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c **** }...
+ 975              		.loc 1 152 0
+ 976 0030 06B0     		add	sp, sp, #24
+ 977              	.LCFI26:
+ 978              		.cfi_remember_state
+ 979              		.cfi_def_cfa_offset 8
+ 980              		@ sp needed
+ 981 0032 10BD     		pop	{r4, pc}
+ 982              	.LVL102:
+ 983              	.L73:
+ 984              	.LCFI27:
+ 985              		.cfi_restore_state
+ARM GAS  /tmp/ccZy5WDY.s 			page 21
+
+
+ 147:/home/phong/Documents/thesis/stm32f4/components/motor/stepmotor.c ****     STEPMOTOR_CHECK(!ret, STEPMOTOR_STOP_ERR_STR, STM_FAIL);
+ 986              		.loc 1 147 0 discriminator 4
+ 987 0034 FFF7FEFF 		bl	stm_log_timestamp
+ 988              	.LVL103:
+ 989 0038 0849     		ldr	r1, .L74
+ 990 003a 094B     		ldr	r3, .L74+4
+ 991 003c 0493     		str	r3, [sp, #16]
+ 992 003e 094B     		ldr	r3, .L74+8
+ 993 0040 0393     		str	r3, [sp, #12]
+ 994 0042 9323     		movs	r3, #147
+ 995 0044 0293     		str	r3, [sp, #8]
+ 996 0046 084B     		ldr	r3, .L74+12
+ 997 0048 0193     		str	r3, [sp, #4]
+ 998 004a 0091     		str	r1, [sp]
+ 999 004c 0346     		mov	r3, r0
+ 1000 004e 074A     		ldr	r2, .L74+16
+ 1001 0050 0120     		movs	r0, #1
+ 1002 0052 FFF7FEFF 		bl	stm_log_write
+ 1003              	.LVL104:
+ 1004 0056 4FF0FF30 		mov	r0, #-1
+ 1005 005a E9E7     		b	.L68
+ 1006              	.L75:
+ 1007              		.align	2
+ 1008              	.L74:
+ 1009 005c 28000000 		.word	.LC1
+ 1010 0060 00000000 		.word	.LC9
+ 1011 0064 00000000 		.word	.LANCHOR6
+ 1012 0068 4C000000 		.word	.LC3
+ 1013 006c 00000000 		.word	.LC0
+ 1014              		.cfi_endproc
+ 1015              	.LFE144:
+ 1017              		.section	.rodata.__FUNCTION__.12780,"a",%progbits
+ 1018              		.align	2
+ 1019              		.set	.LANCHOR0,. + 0
+ 1022              	__FUNCTION__.12780:
+ 1023 0000 73746570 		.ascii	"stepmotor_config\000"
+ 1023      6D6F746F 
+ 1023      725F636F 
+ 1023      6E666967 
+ 1023      00
+ 1024              		.section	.rodata.__FUNCTION__.12793,"a",%progbits
+ 1025              		.align	2
+ 1026              		.set	.LANCHOR1,. + 0
+ 1029              	__FUNCTION__.12793:
+ 1030 0000 73746570 		.ascii	"stepmotor_set_dir\000"
+ 1030      6D6F746F 
+ 1030      725F7365 
+ 1030      745F6469 
+ 1030      7200
+ 1031              		.section	.rodata.__FUNCTION__.12801,"a",%progbits
+ 1032              		.align	2
+ 1033              		.set	.LANCHOR2,. + 0
+ 1036              	__FUNCTION__.12801:
+ 1037 0000 73746570 		.ascii	"stepmotor_toggle_dir\000"
+ 1037      6D6F746F 
+ 1037      725F746F 
+ 1037      67676C65 
+ARM GAS  /tmp/ccZy5WDY.s 			page 22
+
+
+ 1037      5F646972 
+ 1038              		.section	.rodata.__FUNCTION__.12810,"a",%progbits
+ 1039              		.align	2
+ 1040              		.set	.LANCHOR3,. + 0
+ 1043              	__FUNCTION__.12810:
+ 1044 0000 73746570 		.ascii	"stepmotor_set_pwm_freq\000"
+ 1044      6D6F746F 
+ 1044      725F7365 
+ 1044      745F7077 
+ 1044      6D5F6672 
+ 1045              		.section	.rodata.__FUNCTION__.12819,"a",%progbits
+ 1046              		.align	2
+ 1047              		.set	.LANCHOR4,. + 0
+ 1050              	__FUNCTION__.12819:
+ 1051 0000 73746570 		.ascii	"stepmotor_set_pwm_duty\000"
+ 1051      6D6F746F 
+ 1051      725F7365 
+ 1051      745F7077 
+ 1051      6D5F6475 
+ 1052              		.section	.rodata.__FUNCTION__.12827,"a",%progbits
+ 1053              		.align	2
+ 1054              		.set	.LANCHOR5,. + 0
+ 1057              	__FUNCTION__.12827:
+ 1058 0000 73746570 		.ascii	"stepmotor_start\000"
+ 1058      6D6F746F 
+ 1058      725F7374 
+ 1058      61727400 
+ 1059              		.section	.rodata.__FUNCTION__.12835,"a",%progbits
+ 1060              		.align	2
+ 1061              		.set	.LANCHOR6,. + 0
+ 1064              	__FUNCTION__.12835:
+ 1065 0000 73746570 		.ascii	"stepmotor_stop\000"
+ 1065      6D6F746F 
+ 1065      725F7374 
+ 1065      6F7000
+ 1066              		.section	.rodata.stepmotor_config.str1.4,"aMS",%progbits,1
+ 1067              		.align	2
+ 1068              	.LC0:
+ 1069 0000 1B5B303B 		.ascii	"\033[0;31mE (%d) %s: %s:%d (%s):%s\033[0m\015\012\000"
+ 1069      33316D45 
+ 1069      20282564 
+ 1069      29202573 
+ 1069      3A202573 
+ 1070 0026 0000     		.space	2
+ 1071              	.LC1:
+ 1072 0028 53544550 		.ascii	"STEP MOTOR\000"
+ 1072      204D4F54 
+ 1072      4F5200
+ 1073 0033 00       		.space	1
+ 1074              	.LC2:
+ 1075 0034 73746570 		.ascii	"step motor init error\000"
+ 1075      206D6F74 
+ 1075      6F722069 
+ 1075      6E697420 
+ 1075      6572726F 
+ 1076 004a 0000     		.space	2
+ 1077              	.LC3:
+ARM GAS  /tmp/ccZy5WDY.s 			page 23
+
+
+ 1078 004c 2F686F6D 		.ascii	"/home/phong/Documents/thesis/stm32f4/components/mot"
+ 1078      652F7068 
+ 1078      6F6E672F 
+ 1078      446F6375 
+ 1078      6D656E74 
+ 1079 007f 6F722F73 		.ascii	"or/stepmotor.c\000"
+ 1079      7465706D 
+ 1079      6F746F72 
+ 1079      2E6300
+ 1080              		.section	.rodata.stepmotor_set_dir.str1.4,"aMS",%progbits,1
+ 1081              		.align	2
+ 1082              	.LC4:
+ 1083 0000 73746570 		.ascii	"step motor set direction error\000"
+ 1083      206D6F74 
+ 1083      6F722073 
+ 1083      65742064 
+ 1083      69726563 
+ 1084              		.section	.rodata.stepmotor_set_pwm_duty.str1.4,"aMS",%progbits,1
+ 1085              		.align	2
+ 1086              	.LC7:
+ 1087 0000 73746570 		.ascii	"step motor set pwm duty cycle error\000"
+ 1087      206D6F74 
+ 1087      6F722073 
+ 1087      65742070 
+ 1087      776D2064 
+ 1088              		.section	.rodata.stepmotor_set_pwm_freq.str1.4,"aMS",%progbits,1
+ 1089              		.align	2
+ 1090              	.LC6:
+ 1091 0000 73746570 		.ascii	"step motor set pwm frequency error\000"
+ 1091      206D6F74 
+ 1091      6F722073 
+ 1091      65742070 
+ 1091      776D2066 
+ 1092              		.section	.rodata.stepmotor_start.str1.4,"aMS",%progbits,1
+ 1093              		.align	2
+ 1094              	.LC8:
+ 1095 0000 73746570 		.ascii	"step motor start error\000"
+ 1095      206D6F74 
+ 1095      6F722073 
+ 1095      74617274 
+ 1095      20657272 
+ 1096              		.section	.rodata.stepmotor_stop.str1.4,"aMS",%progbits,1
+ 1097              		.align	2
+ 1098              	.LC9:
+ 1099 0000 73746570 		.ascii	"step motor stop error\000"
+ 1099      206D6F74 
+ 1099      6F722073 
+ 1099      746F7020 
+ 1099      6572726F 
+ 1100              		.section	.rodata.stepmotor_toggle_dir.str1.4,"aMS",%progbits,1
+ 1101              		.align	2
+ 1102              	.LC5:
+ 1103 0000 73746570 		.ascii	"step motor toggle direction error\000"
+ 1103      206D6F74 
+ 1103      6F722074 
+ 1103      6F67676C 
+ 1103      65206469 
+ARM GAS  /tmp/ccZy5WDY.s 			page 24
+
+
+ 1104              		.text
+ 1105              	.Letext0:
+ 1106              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 1107              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 1108              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 1109              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 1110              		.file 6 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 1111              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/po
+ 1112              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/queue.h
+ 1113              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/semphr.
+ 1114              		.file 10 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/lock.h"
+ 1115              		.file 11 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_types.h"
+ 1116              		.file 12 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 1117              		.file 13 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/reent.h"
+ 1118              		.file 14 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm_common/include/stm_err.h"
+ 1119              		.file 15 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/stdlib.h"
+ 1120              		.file 16 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/log/include/stm_log.h"
+ 1121              		.file 17 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/include/driver/gpio.h"
+ 1122              		.file 18 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/include/driver/timer.h"
+ 1123              		.file 19 "/home/phong/Documents/thesis/stm32f4/components/motor/include/stepmotor.h"
+ARM GAS  /tmp/ccZy5WDY.s 			page 25
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stepmotor.c
+     /tmp/ccZy5WDY.s:18     .text.stepmotor_config:0000000000000000 $t
+     /tmp/ccZy5WDY.s:25     .text.stepmotor_config:0000000000000000 stepmotor_config
+     /tmp/ccZy5WDY.s:424    .text.stepmotor_config:000000000000026c $d
+     /tmp/ccZy5WDY.s:433    .text.stepmotor_set_dir:0000000000000000 $t
+     /tmp/ccZy5WDY.s:440    .text.stepmotor_set_dir:0000000000000000 stepmotor_set_dir
+     /tmp/ccZy5WDY.s:522    .text.stepmotor_set_dir:0000000000000060 $d
+     /tmp/ccZy5WDY.s:531    .text.stepmotor_toggle_dir:0000000000000000 $t
+     /tmp/ccZy5WDY.s:538    .text.stepmotor_toggle_dir:0000000000000000 stepmotor_toggle_dir
+     /tmp/ccZy5WDY.s:619    .text.stepmotor_toggle_dir:0000000000000060 $d
+     /tmp/ccZy5WDY.s:628    .text.stepmotor_set_pwm_freq:0000000000000000 $t
+     /tmp/ccZy5WDY.s:635    .text.stepmotor_set_pwm_freq:0000000000000000 stepmotor_set_pwm_freq
+     /tmp/ccZy5WDY.s:718    .text.stepmotor_set_pwm_freq:0000000000000060 $d
+     /tmp/ccZy5WDY.s:727    .text.stepmotor_set_pwm_duty:0000000000000000 $t
+     /tmp/ccZy5WDY.s:734    .text.stepmotor_set_pwm_duty:0000000000000000 stepmotor_set_pwm_duty
+     /tmp/ccZy5WDY.s:817    .text.stepmotor_set_pwm_duty:0000000000000060 $d
+     /tmp/ccZy5WDY.s:826    .text.stepmotor_start:0000000000000000 $t
+     /tmp/ccZy5WDY.s:833    .text.stepmotor_start:0000000000000000 stepmotor_start
+     /tmp/ccZy5WDY.s:913    .text.stepmotor_start:000000000000005c $d
+     /tmp/ccZy5WDY.s:922    .text.stepmotor_stop:0000000000000000 $t
+     /tmp/ccZy5WDY.s:929    .text.stepmotor_stop:0000000000000000 stepmotor_stop
+     /tmp/ccZy5WDY.s:1009   .text.stepmotor_stop:000000000000005c $d
+     /tmp/ccZy5WDY.s:1018   .rodata.__FUNCTION__.12780:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1022   .rodata.__FUNCTION__.12780:0000000000000000 __FUNCTION__.12780
+     /tmp/ccZy5WDY.s:1025   .rodata.__FUNCTION__.12793:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1029   .rodata.__FUNCTION__.12793:0000000000000000 __FUNCTION__.12793
+     /tmp/ccZy5WDY.s:1032   .rodata.__FUNCTION__.12801:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1036   .rodata.__FUNCTION__.12801:0000000000000000 __FUNCTION__.12801
+     /tmp/ccZy5WDY.s:1039   .rodata.__FUNCTION__.12810:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1043   .rodata.__FUNCTION__.12810:0000000000000000 __FUNCTION__.12810
+     /tmp/ccZy5WDY.s:1046   .rodata.__FUNCTION__.12819:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1050   .rodata.__FUNCTION__.12819:0000000000000000 __FUNCTION__.12819
+     /tmp/ccZy5WDY.s:1053   .rodata.__FUNCTION__.12827:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1057   .rodata.__FUNCTION__.12827:0000000000000000 __FUNCTION__.12827
+     /tmp/ccZy5WDY.s:1060   .rodata.__FUNCTION__.12835:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1064   .rodata.__FUNCTION__.12835:0000000000000000 __FUNCTION__.12835
+     /tmp/ccZy5WDY.s:1067   .rodata.stepmotor_config.str1.4:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1081   .rodata.stepmotor_set_dir.str1.4:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1085   .rodata.stepmotor_set_pwm_duty.str1.4:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1089   .rodata.stepmotor_set_pwm_freq.str1.4:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1093   .rodata.stepmotor_start.str1.4:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1097   .rodata.stepmotor_stop.str1.4:0000000000000000 $d
+     /tmp/ccZy5WDY.s:1101   .rodata.stepmotor_toggle_dir.str1.4:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+calloc
+gpio_config
+gpio_set_level
+pwm_config
+pwm_set_params
+xQueueCreateMutex
+stm_log_timestamp
+stm_log_write
+xQueueSemaphoreTake
+xQueueGenericSend
+ARM GAS  /tmp/ccZy5WDY.s 			page 26
+
+
+gpio_toggle_level
+pwm_start
+pwm_stop

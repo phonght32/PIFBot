@@ -1,0 +1,1472 @@
+ARM GAS  /tmp/ccJwXKFM.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"heap_4.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.prvHeapInit,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu fpv4-sp-d16
+  24              	prvHeapInit:
+  25              	.LFB10:
+  26              		.file 1 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.
+   1:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*
+   2:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * FreeRTOS Kernel V10.0.1
+   3:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  *
+   5:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   6:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * this software and associated documentation files (the "Software"), to deal in
+   7:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * the Software without restriction, including without limitation the rights to
+   8:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+   9:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  10:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * subject to the following conditions:
+  11:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  *
+  12:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * The above copyright notice and this permission notice shall be included in all
+  13:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * copies or substantial portions of the Software.
+  14:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  *
+  15:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  16:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  17:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  18:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  19:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  20:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  21:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  *
+  22:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * http://www.FreeRTOS.org
+  23:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * http://aws.amazon.com/freertos
+  24:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  *
+  25:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * 1 tab == 4 spaces!
+  26:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  */
+  27:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  28:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*
+  29:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * A sample implementation of pvPortMalloc() and vPortFree() that combines
+  30:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * (coalescences) adjacent memory blocks as they are freed, and in so doing
+  31:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * limits memory fragmentation.
+  32:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  *
+ARM GAS  /tmp/ccJwXKFM.s 			page 2
+
+
+  33:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * See heap_1.c, heap_2.c and heap_3.c for alternative implementations, and the
+  34:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * memory management pages of http://www.FreeRTOS.org for more information.
+  35:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  */
+  36:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #include <stdlib.h>
+  37:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  38:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /* Defining MPU_WRAPPERS_INCLUDED_FROM_API_FILE prevents task.h from redefining
+  39:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** all the API functions to use the MPU wrappers.  That should only be done when
+  40:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** task.h is included from an application file. */
+  41:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #define MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  42:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  43:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #include "FreeRTOS.h"
+  44:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #include "task.h"
+  45:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  46:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  47:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  48:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #if( configSUPPORT_DYNAMIC_ALLOCATION == 0 )
+  49:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	#error This file must not be used if configSUPPORT_DYNAMIC_ALLOCATION is 0
+  50:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #endif
+  51:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  52:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /* Block sizes must not get too small. */
+  53:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #define heapMINIMUM_BLOCK_SIZE	( ( size_t ) ( xHeapStructSize << 1 ) )
+  54:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  55:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /* Assumes 8bit bytes! */
+  56:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #define heapBITS_PER_BYTE		( ( size_t ) 8 )
+  57:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  58:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /* Allocate the memory for the heap. */
+  59:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #if( configAPPLICATION_ALLOCATED_HEAP == 1 )
+  60:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* The application writer has already defined the array used for the RTOS
+  61:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	heap - probably so it can be placed in a special segment or address. */
+  62:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	extern uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+  63:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #else
+  64:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	static uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+  65:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** #endif /* configAPPLICATION_ALLOCATED_HEAP */
+  66:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  67:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /* Define the linked list structure.  This is used to link free blocks in order
+  68:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** of their memory address. */
+  69:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** typedef struct A_BLOCK_LINK
+  70:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** {
+  71:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	struct A_BLOCK_LINK *pxNextFreeBlock;	/*<< The next free block in the list. */
+  72:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	size_t xBlockSize;						/*<< The size of the free block. */
+  73:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** } BlockLink_t;
+  74:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  75:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+  76:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  77:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*
+  78:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * Inserts a block of memory that is being freed into the correct position in
+  79:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * the list of free memory blocks.  The block being freed will be merged with
+  80:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * the block in front it and/or the block behind it if the memory blocks are
+  81:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * adjacent to each other.
+  82:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  */
+  83:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert );
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  85:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*
+  86:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * Called automatically to setup the required heap structures the first time
+  87:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  * pvPortMalloc() is called.
+  88:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c ****  */
+  89:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** static void prvHeapInit( void );
+ARM GAS  /tmp/ccJwXKFM.s 			page 3
+
+
+  90:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  91:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+  92:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  93:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /* The size of the structure placed at the beginning of each allocated memory
+  94:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** block must by correctly byte aligned. */
+  95:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** static const size_t xHeapStructSize	= ( sizeof( BlockLink_t ) + ( ( size_t ) ( portBYTE_ALIGNMENT -
+  96:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  97:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /* Create a couple of list links to mark the start and end of the list. */
+  98:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** static BlockLink_t xStart, *pxEnd = NULL;
+  99:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 100:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /* Keeps track of the number of free bytes remaining, but says nothing about
+ 101:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** fragmentation. */
+ 102:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** static size_t xFreeBytesRemaining = 0U;
+ 103:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** static size_t xMinimumEverFreeBytesRemaining = 0U;
+ 104:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 105:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /* Gets set to the top bit of an size_t type.  When this bit in the xBlockSize
+ 106:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** member of an BlockLink_t structure is set then the block belongs to the
+ 107:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** application.  When the bit is free the block is still part of the free heap
+ 108:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** space. */
+ 109:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** static size_t xBlockAllocatedBit = 0;
+ 110:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 111:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+ 112:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 113:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** void *pvPortMalloc( size_t xWantedSize )
+ 114:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** {
+ 115:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
+ 116:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** void *pvReturn = NULL;
+ 117:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 118:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	vTaskSuspendAll();
+ 119:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 120:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		/* If this is the first call to malloc then the heap will require
+ 121:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		initialisation to setup the list of free blocks. */
+ 122:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		if( pxEnd == NULL )
+ 123:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 124:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			prvHeapInit();
+ 125:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 126:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		else
+ 127:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 128:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			mtCOVERAGE_TEST_MARKER();
+ 129:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 130:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 131:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		/* Check the requested block size is not so large that the top bit is
+ 132:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		set.  The top bit of the block size member of the BlockLink_t structure
+ 133:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		is used to determine who owns the block - the application or the
+ 134:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		kernel, so it must be free. */
+ 135:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		if( ( xWantedSize & xBlockAllocatedBit ) == 0 )
+ 136:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 137:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			/* The wanted size is increased so it can contain a BlockLink_t
+ 138:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			structure in addition to the requested amount of bytes. */
+ 139:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			if( xWantedSize > 0 )
+ 140:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			{
+ 141:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				xWantedSize += xHeapStructSize;
+ 142:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 143:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				/* Ensure that blocks are always aligned to the required number
+ 144:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				of bytes. */
+ 145:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				if( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) != 0x00 )
+ 146:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ARM GAS  /tmp/ccJwXKFM.s 			page 4
+
+
+ 147:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					/* Byte alignment required. */
+ 148:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					xWantedSize += ( portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_MASK ) );
+ 149:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					configASSERT( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 150:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				}
+ 151:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				else
+ 152:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 153:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					mtCOVERAGE_TEST_MARKER();
+ 154:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				}
+ 155:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			}
+ 156:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			else
+ 157:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			{
+ 158:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				mtCOVERAGE_TEST_MARKER();
+ 159:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			}
+ 160:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 161:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			if( ( xWantedSize > 0 ) && ( xWantedSize <= xFreeBytesRemaining ) )
+ 162:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			{
+ 163:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				/* Traverse the list from the start	(lowest address) block until
+ 164:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				one	of adequate size is found. */
+ 165:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				pxPreviousBlock = &xStart;
+ 166:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				pxBlock = xStart.pxNextFreeBlock;
+ 167:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock != NULL ) )
+ 168:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 169:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					pxPreviousBlock = pxBlock;
+ 170:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					pxBlock = pxBlock->pxNextFreeBlock;
+ 171:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				}
+ 172:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 173:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				/* If the end marker was reached then a block of adequate size
+ 174:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				was	not found. */
+ 175:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				if( pxBlock != pxEnd )
+ 176:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 177:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					/* Return the memory space pointed to - jumping over the
+ 178:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					BlockLink_t structure at its start. */
+ 179:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					pvReturn = ( void * ) ( ( ( uint8_t * ) pxPreviousBlock->pxNextFreeBlock ) + xHeapStructSize )
+ 180:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 181:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					/* This block is being returned for use so must be taken out
+ 182:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					of the list of free blocks. */
+ 183:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					pxPreviousBlock->pxNextFreeBlock = pxBlock->pxNextFreeBlock;
+ 184:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 185:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					/* If the block is larger than required it can be split into
+ 186:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					two. */
+ 187:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					if( ( pxBlock->xBlockSize - xWantedSize ) > heapMINIMUM_BLOCK_SIZE )
+ 188:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					{
+ 189:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						/* This block is to be split into two.  Create a new
+ 190:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						block following the number of bytes requested. The void
+ 191:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						cast is used to prevent byte alignment warnings from the
+ 192:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						compiler. */
+ 193:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						pxNewBlockLink = ( void * ) ( ( ( uint8_t * ) pxBlock ) + xWantedSize );
+ 194:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 195:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 196:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						/* Calculate the sizes of two blocks split from the
+ 197:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						single block. */
+ 198:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						pxNewBlockLink->xBlockSize = pxBlock->xBlockSize - xWantedSize;
+ 199:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						pxBlock->xBlockSize = xWantedSize;
+ 200:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 201:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						/* Insert the new block into the list of free blocks. */
+ 202:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						prvInsertBlockIntoFreeList( pxNewBlockLink );
+ 203:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					}
+ARM GAS  /tmp/ccJwXKFM.s 			page 5
+
+
+ 204:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					else
+ 205:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					{
+ 206:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						mtCOVERAGE_TEST_MARKER();
+ 207:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					}
+ 208:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 209:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					xFreeBytesRemaining -= pxBlock->xBlockSize;
+ 210:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 211:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					if( xFreeBytesRemaining < xMinimumEverFreeBytesRemaining )
+ 212:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					{
+ 213:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						xMinimumEverFreeBytesRemaining = xFreeBytesRemaining;
+ 214:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					}
+ 215:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					else
+ 216:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					{
+ 217:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						mtCOVERAGE_TEST_MARKER();
+ 218:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					}
+ 219:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 220:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					/* The block is being returned - it is allocated and owned
+ 221:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					by the application and has no "next" block. */
+ 222:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					pxBlock->xBlockSize |= xBlockAllocatedBit;
+ 223:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					pxBlock->pxNextFreeBlock = NULL;
+ 224:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				}
+ 225:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				else
+ 226:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 227:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					mtCOVERAGE_TEST_MARKER();
+ 228:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				}
+ 229:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			}
+ 230:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			else
+ 231:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			{
+ 232:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				mtCOVERAGE_TEST_MARKER();
+ 233:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			}
+ 234:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 235:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		else
+ 236:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 237:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			mtCOVERAGE_TEST_MARKER();
+ 238:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 239:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 240:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		traceMALLOC( pvReturn, xWantedSize );
+ 241:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 242:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	( void ) xTaskResumeAll();
+ 243:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 244:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	#if( configUSE_MALLOC_FAILED_HOOK == 1 )
+ 245:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 246:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		if( pvReturn == NULL )
+ 247:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 248:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			extern void vApplicationMallocFailedHook( void );
+ 249:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			vApplicationMallocFailedHook();
+ 250:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 251:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		else
+ 252:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 253:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			mtCOVERAGE_TEST_MARKER();
+ 254:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 255:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 256:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	#endif
+ 257:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 258:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	configASSERT( ( ( ( size_t ) pvReturn ) & ( size_t ) portBYTE_ALIGNMENT_MASK ) == 0 );
+ 259:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	return pvReturn;
+ 260:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** }
+ARM GAS  /tmp/ccJwXKFM.s 			page 6
+
+
+ 261:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+ 262:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 263:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** void vPortFree( void *pv )
+ 264:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** {
+ 265:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** uint8_t *puc = ( uint8_t * ) pv;
+ 266:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** BlockLink_t *pxLink;
+ 267:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 268:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	if( pv != NULL )
+ 269:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 270:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		/* The memory being freed will have an BlockLink_t structure immediately
+ 271:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		before it. */
+ 272:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		puc -= xHeapStructSize;
+ 273:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 274:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		/* This casting is to keep the compiler from issuing warnings. */
+ 275:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		pxLink = ( void * ) puc;
+ 276:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 277:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		/* Check the block is actually allocated. */
+ 278:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		configASSERT( ( pxLink->xBlockSize & xBlockAllocatedBit ) != 0 );
+ 279:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 280:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 281:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		if( ( pxLink->xBlockSize & xBlockAllocatedBit ) != 0 )
+ 282:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 283:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			if( pxLink->pxNextFreeBlock == NULL )
+ 284:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			{
+ 285:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				/* The block is being returned to the heap - it is no longer
+ 286:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				allocated. */
+ 287:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				pxLink->xBlockSize &= ~xBlockAllocatedBit;
+ 288:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 289:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				vTaskSuspendAll();
+ 290:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 291:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					/* Add this block to the list of free blocks. */
+ 292:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					xFreeBytesRemaining += pxLink->xBlockSize;
+ 293:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					traceFREE( pv, pxLink->xBlockSize );
+ 294:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					prvInsertBlockIntoFreeList( ( ( BlockLink_t * ) pxLink ) );
+ 295:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				}
+ 296:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				( void ) xTaskResumeAll();
+ 297:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			}
+ 298:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			else
+ 299:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			{
+ 300:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				mtCOVERAGE_TEST_MARKER();
+ 301:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			}
+ 302:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 303:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		else
+ 304:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 305:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			mtCOVERAGE_TEST_MARKER();
+ 306:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 307:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 308:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** }
+ 309:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+ 310:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 311:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** size_t xPortGetFreeHeapSize( void )
+ 312:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** {
+ 313:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	return xFreeBytesRemaining;
+ 314:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** }
+ 315:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+ 316:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 317:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** size_t xPortGetMinimumEverFreeHeapSize( void )
+ARM GAS  /tmp/ccJwXKFM.s 			page 7
+
+
+ 318:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** {
+ 319:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	return xMinimumEverFreeBytesRemaining;
+ 320:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** }
+ 321:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+ 322:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 323:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** void vPortInitialiseBlocks( void )
+ 324:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** {
+ 325:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* This just exists to keep the linker quiet. */
+ 326:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** }
+ 327:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+ 328:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 329:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** static void prvHeapInit( void )
+ 330:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** {
+  27              		.loc 1 330 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              	.LVL0:
+ 331:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** BlockLink_t *pxFirstFreeBlock;
+ 332:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** uint8_t *pucAlignedHeap;
+ 333:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** size_t uxAddress;
+ 334:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** size_t xTotalHeapSize = configTOTAL_HEAP_SIZE;
+ 335:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 336:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* Ensure the heap starts on a correctly aligned boundary. */
+ 337:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	uxAddress = ( size_t ) ucHeap;
+  33              		.loc 1 337 0
+  34 0000 124A     		ldr	r2, .L4
+  35              	.LVL1:
+ 338:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 339:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	if( ( uxAddress & portBYTE_ALIGNMENT_MASK ) != 0 )
+  36              		.loc 1 339 0
+  37 0002 12F0070F 		tst	r2, #7
+  38 0006 1ED0     		beq	.L3
+ 340:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 341:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		uxAddress += ( portBYTE_ALIGNMENT - 1 );
+  39              		.loc 1 341 0
+  40 0008 D11D     		adds	r1, r2, #7
+  41              	.LVL2:
+ 342:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		uxAddress &= ~( ( size_t ) portBYTE_ALIGNMENT_MASK );
+  42              		.loc 1 342 0
+  43 000a 21F00701 		bic	r1, r1, #7
+  44              	.LVL3:
+ 343:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		xTotalHeapSize -= uxAddress - ( size_t ) ucHeap;
+  45              		.loc 1 343 0
+  46 000e C1F57053 		rsb	r3, r1, #15360
+  47 0012 1344     		add	r3, r3, r2
+  48              	.LVL4:
+ 342:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		uxAddress &= ~( ( size_t ) portBYTE_ALIGNMENT_MASK );
+  49              		.loc 1 342 0
+  50 0014 0A46     		mov	r2, r1
+  51              	.LVL5:
+  52              	.L2:
+ 344:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 345:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 346:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	pucAlignedHeap = ( uint8_t * ) uxAddress;
+ 347:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ARM GAS  /tmp/ccJwXKFM.s 			page 8
+
+
+ 348:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* xStart is used to hold a pointer to the first item in the list of free
+ 349:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	blocks.  The void cast is used to prevent compiler warnings. */
+ 350:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	xStart.pxNextFreeBlock = ( void * ) pucAlignedHeap;
+  53              		.loc 1 350 0
+  54 0016 0E48     		ldr	r0, .L4+4
+  55 0018 0260     		str	r2, [r0]
+ 351:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	xStart.xBlockSize = ( size_t ) 0;
+  56              		.loc 1 351 0
+  57 001a 0021     		movs	r1, #0
+  58 001c 4160     		str	r1, [r0, #4]
+ 352:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 353:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* pxEnd is used to mark the end of the list of free blocks and is inserted
+ 354:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	at the end of the heap space. */
+ 355:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	uxAddress = ( ( size_t ) pucAlignedHeap ) + xTotalHeapSize;
+  59              		.loc 1 355 0
+  60 001e 1344     		add	r3, r3, r2
+  61              	.LVL6:
+ 356:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	uxAddress -= xHeapStructSize;
+  62              		.loc 1 356 0
+  63 0020 083B     		subs	r3, r3, #8
+  64              	.LVL7:
+ 357:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	uxAddress &= ~( ( size_t ) portBYTE_ALIGNMENT_MASK );
+  65              		.loc 1 357 0
+  66 0022 23F00703 		bic	r3, r3, #7
+  67              	.LVL8:
+ 358:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	pxEnd = ( void * ) uxAddress;
+  68              		.loc 1 358 0
+  69 0026 0B48     		ldr	r0, .L4+8
+  70 0028 0360     		str	r3, [r0]
+ 359:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	pxEnd->xBlockSize = 0;
+  71              		.loc 1 359 0
+  72 002a 5960     		str	r1, [r3, #4]
+ 360:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	pxEnd->pxNextFreeBlock = NULL;
+  73              		.loc 1 360 0
+  74 002c 1960     		str	r1, [r3]
+  75              	.LVL9:
+ 361:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 362:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* To start with there is a single free block that is sized to take up the
+ 363:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	entire heap space, minus the space taken by pxEnd. */
+ 364:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	pxFirstFreeBlock = ( void * ) pucAlignedHeap;
+ 365:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	pxFirstFreeBlock->xBlockSize = uxAddress - ( size_t ) pxFirstFreeBlock;
+  76              		.loc 1 365 0
+  77 002e 991A     		subs	r1, r3, r2
+  78 0030 5160     		str	r1, [r2, #4]
+ 366:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	pxFirstFreeBlock->pxNextFreeBlock = pxEnd;
+  79              		.loc 1 366 0
+  80 0032 1360     		str	r3, [r2]
+ 367:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 368:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* Only one block exists - and it covers the entire usable heap space. */
+ 369:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	xMinimumEverFreeBytesRemaining = pxFirstFreeBlock->xBlockSize;
+  81              		.loc 1 369 0
+  82 0034 084B     		ldr	r3, .L4+12
+  83              	.LVL10:
+  84 0036 1960     		str	r1, [r3]
+ 370:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	xFreeBytesRemaining = pxFirstFreeBlock->xBlockSize;
+  85              		.loc 1 370 0
+  86 0038 084B     		ldr	r3, .L4+16
+ARM GAS  /tmp/ccJwXKFM.s 			page 9
+
+
+  87 003a 1960     		str	r1, [r3]
+ 371:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 372:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* Work out the position of the top bit in a size_t variable. */
+ 373:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	xBlockAllocatedBit = ( ( size_t ) 1 ) << ( ( sizeof( size_t ) * heapBITS_PER_BYTE ) - 1 );
+  88              		.loc 1 373 0
+  89 003c 4FF00042 		mov	r2, #-2147483648
+  90              	.LVL11:
+  91 0040 074B     		ldr	r3, .L4+20
+  92 0042 1A60     		str	r2, [r3]
+  93 0044 7047     		bx	lr
+  94              	.LVL12:
+  95              	.L3:
+ 334:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+  96              		.loc 1 334 0
+  97 0046 4FF47053 		mov	r3, #15360
+  98 004a E4E7     		b	.L2
+  99              	.L5:
+ 100              		.align	2
+ 101              	.L4:
+ 102 004c 00000000 		.word	.LANCHOR0
+ 103 0050 00000000 		.word	.LANCHOR1
+ 104 0054 00000000 		.word	.LANCHOR2
+ 105 0058 00000000 		.word	.LANCHOR3
+ 106 005c 00000000 		.word	.LANCHOR4
+ 107 0060 00000000 		.word	.LANCHOR5
+ 108              		.cfi_endproc
+ 109              	.LFE10:
+ 111              		.section	.text.prvInsertBlockIntoFreeList,"ax",%progbits
+ 112              		.align	1
+ 113              		.syntax unified
+ 114              		.thumb
+ 115              		.thumb_func
+ 116              		.fpu fpv4-sp-d16
+ 118              	prvInsertBlockIntoFreeList:
+ 119              	.LFB11:
+ 374:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** }
+ 375:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+ 376:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 377:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert )
+ 378:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** {
+ 120              		.loc 1 378 0
+ 121              		.cfi_startproc
+ 122              		@ args = 0, pretend = 0, frame = 0
+ 123              		@ frame_needed = 0, uses_anonymous_args = 0
+ 124              		@ link register save eliminated.
+ 125              	.LVL13:
+ 126 0000 10B4     		push	{r4}
+ 127              	.LCFI0:
+ 128              		.cfi_def_cfa_offset 4
+ 129              		.cfi_offset 4, -4
+ 130              	.LVL14:
+ 379:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** BlockLink_t *pxIterator;
+ 380:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** uint8_t *puc;
+ 381:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 382:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* Iterate through the list until a block is found that has a higher address
+ 383:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	than the block being inserted. */
+ 384:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	for( pxIterator = &xStart; pxIterator->pxNextFreeBlock < pxBlockToInsert; pxIterator = pxIterator-
+ARM GAS  /tmp/ccJwXKFM.s 			page 10
+
+
+ 131              		.loc 1 384 0
+ 132 0002 134B     		ldr	r3, .L15
+ 133              	.LVL15:
+ 134              	.L7:
+ 135              		.loc 1 384 0 is_stmt 0 discriminator 1
+ 136 0004 1A68     		ldr	r2, [r3]
+ 137 0006 8242     		cmp	r2, r0
+ 138 0008 1BD3     		bcc	.L13
+ 139              	.LVL16:
+ 385:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 386:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		/* Nothing to do here, just iterate to the right position. */
+ 387:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 388:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 389:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* Do the block being inserted, and the block it is being inserted after
+ 390:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	make a contiguous block of memory? */
+ 391:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	puc = ( uint8_t * ) pxIterator;
+ 392:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	if( ( puc + pxIterator->xBlockSize ) == ( uint8_t * ) pxBlockToInsert )
+ 140              		.loc 1 392 0 is_stmt 1
+ 141 000a 5968     		ldr	r1, [r3, #4]
+ 142 000c 5C18     		adds	r4, r3, r1
+ 143 000e A042     		cmp	r0, r4
+ 144 0010 03D1     		bne	.L8
+ 393:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 394:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		pxIterator->xBlockSize += pxBlockToInsert->xBlockSize;
+ 145              		.loc 1 394 0
+ 146 0012 4068     		ldr	r0, [r0, #4]
+ 147              	.LVL17:
+ 148 0014 0144     		add	r1, r1, r0
+ 149 0016 5960     		str	r1, [r3, #4]
+ 150              	.LVL18:
+ 395:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		pxBlockToInsert = pxIterator;
+ 151              		.loc 1 395 0
+ 152 0018 1846     		mov	r0, r3
+ 153              	.LVL19:
+ 154              	.L8:
+ 396:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 397:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	else
+ 398:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 399:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		mtCOVERAGE_TEST_MARKER();
+ 400:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 401:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 402:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* Do the block being inserted, and the block it is being inserted before
+ 403:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	make a contiguous block of memory? */
+ 404:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	puc = ( uint8_t * ) pxBlockToInsert;
+ 405:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	if( ( puc + pxBlockToInsert->xBlockSize ) == ( uint8_t * ) pxIterator->pxNextFreeBlock )
+ 155              		.loc 1 405 0
+ 156 001a 4168     		ldr	r1, [r0, #4]
+ 157 001c 4418     		adds	r4, r0, r1
+ 158 001e A242     		cmp	r2, r4
+ 159 0020 13D1     		bne	.L9
+ 406:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 407:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		if( pxIterator->pxNextFreeBlock != pxEnd )
+ 160              		.loc 1 407 0
+ 161 0022 0C4C     		ldr	r4, .L15+4
+ 162 0024 2468     		ldr	r4, [r4]
+ 163 0026 A242     		cmp	r2, r4
+ 164 0028 0DD0     		beq	.L10
+ARM GAS  /tmp/ccJwXKFM.s 			page 11
+
+
+ 408:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 409:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			/* Form one big block from the two blocks. */
+ 410:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			pxBlockToInsert->xBlockSize += pxIterator->pxNextFreeBlock->xBlockSize;
+ 165              		.loc 1 410 0
+ 166 002a 5268     		ldr	r2, [r2, #4]
+ 167 002c 1144     		add	r1, r1, r2
+ 168 002e 4160     		str	r1, [r0, #4]
+ 411:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock->pxNextFreeBlock;
+ 169              		.loc 1 411 0
+ 170 0030 1A68     		ldr	r2, [r3]
+ 171 0032 1268     		ldr	r2, [r2]
+ 172 0034 0260     		str	r2, [r0]
+ 173              	.L11:
+ 412:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 413:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		else
+ 414:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 415:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			pxBlockToInsert->pxNextFreeBlock = pxEnd;
+ 416:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 417:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 418:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	else
+ 419:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 420:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock;
+ 421:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 422:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 423:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* If the block being inserted plugged a gab, so was merged with the block
+ 424:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	before and the block after, then it's pxNextFreeBlock pointer will have
+ 425:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	already been set, and should not be set here as that would make it point
+ 426:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	to itself. */
+ 427:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	if( pxIterator != pxBlockToInsert )
+ 174              		.loc 1 427 0
+ 175 0036 9842     		cmp	r0, r3
+ 176 0038 00D0     		beq	.L6
+ 428:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 429:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		pxIterator->pxNextFreeBlock = pxBlockToInsert;
+ 177              		.loc 1 429 0
+ 178 003a 1860     		str	r0, [r3]
+ 179              	.L6:
+ 430:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 431:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	else
+ 432:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 433:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		mtCOVERAGE_TEST_MARKER();
+ 434:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 435:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** }
+ 180              		.loc 1 435 0
+ 181 003c 5DF8044B 		ldr	r4, [sp], #4
+ 182              	.LCFI1:
+ 183              		.cfi_remember_state
+ 184              		.cfi_restore 4
+ 185              		.cfi_def_cfa_offset 0
+ 186 0040 7047     		bx	lr
+ 187              	.LVL20:
+ 188              	.L13:
+ 189              	.LCFI2:
+ 190              		.cfi_restore_state
+ 384:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 191              		.loc 1 384 0
+ 192 0042 1346     		mov	r3, r2
+ARM GAS  /tmp/ccJwXKFM.s 			page 12
+
+
+ 193              	.LVL21:
+ 194 0044 DEE7     		b	.L7
+ 195              	.LVL22:
+ 196              	.L10:
+ 415:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 197              		.loc 1 415 0
+ 198 0046 0460     		str	r4, [r0]
+ 199 0048 F5E7     		b	.L11
+ 200              	.L9:
+ 420:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	}
+ 201              		.loc 1 420 0
+ 202 004a 0260     		str	r2, [r0]
+ 203 004c F3E7     		b	.L11
+ 204              	.L16:
+ 205 004e 00BF     		.align	2
+ 206              	.L15:
+ 207 0050 00000000 		.word	.LANCHOR1
+ 208 0054 00000000 		.word	.LANCHOR2
+ 209              		.cfi_endproc
+ 210              	.LFE11:
+ 212              		.section	.text.pvPortMalloc,"ax",%progbits
+ 213              		.align	1
+ 214              		.global	pvPortMalloc
+ 215              		.syntax unified
+ 216              		.thumb
+ 217              		.thumb_func
+ 218              		.fpu fpv4-sp-d16
+ 220              	pvPortMalloc:
+ 221              	.LFB5:
+ 114:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
+ 222              		.loc 1 114 0
+ 223              		.cfi_startproc
+ 224              		@ args = 0, pretend = 0, frame = 0
+ 225              		@ frame_needed = 0, uses_anonymous_args = 0
+ 226              	.LVL23:
+ 227 0000 70B5     		push	{r4, r5, r6, lr}
+ 228              	.LCFI3:
+ 229              		.cfi_def_cfa_offset 16
+ 230              		.cfi_offset 4, -16
+ 231              		.cfi_offset 5, -12
+ 232              		.cfi_offset 6, -8
+ 233              		.cfi_offset 14, -4
+ 234 0002 0446     		mov	r4, r0
+ 235              	.LVL24:
+ 118:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 236              		.loc 1 118 0
+ 237 0004 FFF7FEFF 		bl	vTaskSuspendAll
+ 238              	.LVL25:
+ 122:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 239              		.loc 1 122 0
+ 240 0008 3A4B     		ldr	r3, .L37
+ 241 000a 1B68     		ldr	r3, [r3]
+ 242 000c BBB1     		cbz	r3, .L36
+ 243              	.L18:
+ 135:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		{
+ 244              		.loc 1 135 0
+ 245 000e 3A4B     		ldr	r3, .L37+4
+ARM GAS  /tmp/ccJwXKFM.s 			page 13
+
+
+ 246 0010 1B68     		ldr	r3, [r3]
+ 247 0012 1C42     		tst	r4, r3
+ 248 0014 63D1     		bne	.L30
+ 139:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			{
+ 249              		.loc 1 139 0
+ 250 0016 ACB1     		cbz	r4, .L20
+ 141:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 251              		.loc 1 141 0
+ 252 0018 0834     		adds	r4, r4, #8
+ 253              	.LVL26:
+ 145:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 254              		.loc 1 145 0
+ 255 001a 14F0070F 		tst	r4, #7
+ 256 001e 11D0     		beq	.L20
+ 148:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					configASSERT( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 257              		.loc 1 148 0
+ 258 0020 24F00704 		bic	r4, r4, #7
+ 259              	.LVL27:
+ 260 0024 0834     		adds	r4, r4, #8
+ 261              	.LVL28:
+ 149:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				}
+ 262              		.loc 1 149 0
+ 263 0026 04F00703 		and	r3, r4, #7
+ 264 002a 5BB1     		cbz	r3, .L20
+ 265              	.LBB12:
+ 266              	.LBB13:
+ 267              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/po
+   1:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /*
+   2:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * FreeRTOS Kernel V10.0.1
+   3:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  *
+   5:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   6:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * this software and associated documentation files (the "Software"), to deal in
+   7:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * the Software without restriction, including without limitation the rights to
+   8:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+   9:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  10:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * subject to the following conditions:
+  11:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  *
+  12:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * The above copyright notice and this permission notice shall be included in all
+  13:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * copies or substantial portions of the Software.
+  14:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  *
+  15:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  16:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  17:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  18:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  19:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  20:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  21:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  *
+  22:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * http://www.FreeRTOS.org
+  23:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * http://aws.amazon.com/freertos
+  24:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  *
+  25:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * 1 tab == 4 spaces!
+  26:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  */
+  27:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  28:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  29:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #ifndef PORTMACRO_H
+  30:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define PORTMACRO_H
+ARM GAS  /tmp/ccJwXKFM.s 			page 14
+
+
+  31:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  32:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #ifdef __cplusplus
+  33:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** extern "C" {
+  34:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #endif
+  35:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  36:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /*-----------------------------------------------------------
+  37:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * Port specific definitions.
+  38:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  *
+  39:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * The settings in this file configure FreeRTOS correctly for the
+  40:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * given hardware and compiler.
+  41:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  *
+  42:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  * These settings should not be altered.
+  43:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  *-----------------------------------------------------------
+  44:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h ****  */
+  45:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  46:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /* Type definitions. */
+  47:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portCHAR		char
+  48:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portFLOAT		float
+  49:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portDOUBLE		double
+  50:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portLONG		long
+  51:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portSHORT		short
+  52:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portSTACK_TYPE	uint32_t
+  53:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portBASE_TYPE	long
+  54:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  55:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** typedef portSTACK_TYPE StackType_t;
+  56:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** typedef long BaseType_t;
+  57:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** typedef unsigned long UBaseType_t;
+  58:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  59:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #if( configUSE_16_BIT_TICKS == 1 )
+  60:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	typedef uint16_t TickType_t;
+  61:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#define portMAX_DELAY ( TickType_t ) 0xffff
+  62:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #else
+  63:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	typedef uint32_t TickType_t;
+  64:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#define portMAX_DELAY ( TickType_t ) 0xffffffffUL
+  65:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  66:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	/* 32-bit tick type on a 32-bit architecture, so reads of the tick count do
+  67:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	not need to be guarded with a critical section. */
+  68:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#define portTICK_TYPE_IS_ATOMIC 1
+  69:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #endif
+  70:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /*-----------------------------------------------------------*/
+  71:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  72:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /* Architecture specifics. */
+  73:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portSTACK_GROWTH			( -1 )
+  74:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portTICK_PERIOD_MS			( ( TickType_t ) 1000 / configTICK_RATE_HZ )
+  75:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portBYTE_ALIGNMENT			8
+  76:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /*-----------------------------------------------------------*/
+  77:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  78:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /* Scheduler utilities. */
+  79:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portYIELD() 															\
+  80:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** {																				\
+  81:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	/* Set a PendSV to request a context switch. */								\
+  82:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;								\
+  83:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 																				\
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	/* Barriers are normally not required but do ensure the code is completely	\
+  85:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	within the specified behaviour for the architecture. */						\
+  86:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	__asm volatile( "dsb" ::: "memory" );										\
+  87:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	__asm volatile( "isb" );													\
+ARM GAS  /tmp/ccJwXKFM.s 			page 15
+
+
+  88:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** }
+  89:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  90:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portNVIC_INT_CTRL_REG		( * ( ( volatile uint32_t * ) 0xe000ed04 ) )
+  91:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portNVIC_PENDSVSET_BIT		( 1UL << 28UL )
+  92:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portEND_SWITCHING_ISR( xSwitchRequired ) if( xSwitchRequired != pdFALSE ) portYIELD()
+  93:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portYIELD_FROM_ISR( x ) portEND_SWITCHING_ISR( x )
+  94:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /*-----------------------------------------------------------*/
+  95:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+  96:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /* Critical section management. */
+  97:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** extern void vPortEnterCritical( void );
+  98:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** extern void vPortExitCritical( void );
+  99:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portSET_INTERRUPT_MASK_FROM_ISR()		ulPortRaiseBASEPRI()
+ 100:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portCLEAR_INTERRUPT_MASK_FROM_ISR(x)	vPortSetBASEPRI(x)
+ 101:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portDISABLE_INTERRUPTS()				vPortRaiseBASEPRI()
+ 102:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portENABLE_INTERRUPTS()					vPortSetBASEPRI(0)
+ 103:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portENTER_CRITICAL()					vPortEnterCritical()
+ 104:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portEXIT_CRITICAL()						vPortExitCritical()
+ 105:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 106:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /*-----------------------------------------------------------*/
+ 107:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 108:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /* Task function macros as described on the FreeRTOS.org WEB site.  These are
+ 109:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** not necessary for to use this port.  They are defined so the common demo files
+ 110:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** (which build with all the ports) will build. */
+ 111:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portTASK_FUNCTION_PROTO( vFunction, pvParameters ) void vFunction( void *pvParameters )
+ 112:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portTASK_FUNCTION( vFunction, pvParameters ) void vFunction( void *pvParameters )
+ 113:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /*-----------------------------------------------------------*/
+ 114:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 115:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /* Tickless idle/low power functionality. */
+ 116:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #ifndef portSUPPRESS_TICKS_AND_SLEEP
+ 117:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	extern void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime );
+ 118:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime ) vPortSuppressTicksAndSleep( xExpectedIdl
+ 119:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #endif
+ 120:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /*-----------------------------------------------------------*/
+ 121:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 122:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /* Architecture specific optimisations. */
+ 123:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #ifndef configUSE_PORT_OPTIMISED_TASK_SELECTION
+ 124:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
+ 125:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #endif
+ 126:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 127:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #if configUSE_PORT_OPTIMISED_TASK_SELECTION == 1
+ 128:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 129:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	/* Generic helper function. */
+ 130:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	__attribute__( ( always_inline ) ) static inline uint8_t ucPortCountLeadingZeros( uint32_t ulBitma
+ 131:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	{
+ 132:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	uint8_t ucReturn;
+ 133:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 134:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 		__asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) : "memory" );
+ 135:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 		return ucReturn;
+ 136:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	}
+ 137:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 138:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	/* Check the configuration. */
+ 139:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#if( configMAX_PRIORITIES > 32 )
+ 140:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 		#error configUSE_PORT_OPTIMISED_TASK_SELECTION can only be set to 1 when configMAX_PRIORITIES is 
+ 141:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#endif
+ 142:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 143:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	/* Store/clear the ready priorities in a bit map. */
+ 144:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#define portRECORD_READY_PRIORITY( uxPriority, uxReadyPriorities ) ( uxReadyPriorities ) |= ( 1UL 
+ARM GAS  /tmp/ccJwXKFM.s 			page 16
+
+
+ 145:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#define portRESET_READY_PRIORITY( uxPriority, uxReadyPriorities ) ( uxReadyPriorities ) &= ~( 1UL 
+ 146:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 147:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	/*-----------------------------------------------------------*/
+ 148:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 149:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#define portGET_HIGHEST_PRIORITY( uxTopPriority, uxReadyPriorities ) uxTopPriority = ( 31UL - ( ui
+ 150:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 151:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #endif /* configUSE_PORT_OPTIMISED_TASK_SELECTION */
+ 152:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 153:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /*-----------------------------------------------------------*/
+ 154:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 155:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #ifdef configASSERT
+ 156:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	void vPortValidateInterruptPriority( void );
+ 157:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#define portASSERT_IF_INTERRUPT_PRIORITY_INVALID() 	vPortValidateInterruptPriority()
+ 158:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #endif
+ 159:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 160:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /* portNOP() is not required by this port. */
+ 161:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portNOP()
+ 162:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 163:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #define portINLINE	__inline
+ 164:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 165:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #ifndef portFORCE_INLINE
+ 166:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	#define portFORCE_INLINE inline __attribute__(( always_inline))
+ 167:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** #endif
+ 168:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 169:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** portFORCE_INLINE static BaseType_t xPortIsInsideInterrupt( void )
+ 170:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** {
+ 171:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** uint32_t ulCurrentInterrupt;
+ 172:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** BaseType_t xReturn;
+ 173:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 174:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	/* Obtain the number of the currently executing interrupt. */
+ 175:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	__asm volatile( "mrs %0, ipsr" : "=r"( ulCurrentInterrupt ) :: "memory" );
+ 176:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 177:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	if( ulCurrentInterrupt == 0 )
+ 178:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	{
+ 179:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 		xReturn = pdFALSE;
+ 180:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	}
+ 181:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	else
+ 182:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	{
+ 183:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 		xReturn = pdTRUE;
+ 184:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	}
+ 185:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 186:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	return xReturn;
+ 187:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** }
+ 188:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 189:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** /*-----------------------------------------------------------*/
+ 190:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 191:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** portFORCE_INLINE static void vPortRaiseBASEPRI( void )
+ 192:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** {
+ 193:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** uint32_t ulNewBASEPRI;
+ 194:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 
+ 195:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portmacro.h **** 	__asm volatile
+ 268              		.loc 2 195 0
+ 269              		.syntax unified
+ 270              	@ 195 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portm
+ 271 002c 4FF05003 			mov r3, #80												
+ 272 0030 83F31188 		msr basepri, r3											
+ 273 0034 BFF36F8F 		isb														
+ARM GAS  /tmp/ccJwXKFM.s 			page 17
+
+
+ 274 0038 BFF34F8F 		dsb														
+ 275              	
+ 276              	@ 0 "" 2
+ 277              	.LVL29:
+ 278              		.thumb
+ 279              		.syntax unified
+ 280              	.L21:
+ 281 003c FEE7     		b	.L21
+ 282              	.L36:
+ 283              	.LBE13:
+ 284              	.LBE12:
+ 124:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		}
+ 285              		.loc 1 124 0
+ 286 003e FFF7FEFF 		bl	prvHeapInit
+ 287              	.LVL30:
+ 288 0042 E4E7     		b	.L18
+ 289              	.L20:
+ 161:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			{
+ 290              		.loc 1 161 0
+ 291 0044 002C     		cmp	r4, #0
+ 292 0046 4CD0     		beq	.L31
+ 161:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			{
+ 293              		.loc 1 161 0 is_stmt 0 discriminator 1
+ 294 0048 2C4B     		ldr	r3, .L37+8
+ 295 004a 1B68     		ldr	r3, [r3]
+ 296 004c 9C42     		cmp	r4, r3
+ 297 004e 4AD8     		bhi	.L32
+ 298              	.LVL31:
+ 166:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock != NULL ) )
+ 299              		.loc 1 166 0 is_stmt 1
+ 300 0050 2B4B     		ldr	r3, .L37+12
+ 301 0052 1D68     		ldr	r5, [r3]
+ 302              	.LVL32:
+ 167:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 303              		.loc 1 167 0
+ 304 0054 01E0     		b	.L23
+ 305              	.LVL33:
+ 306              	.L33:
+ 169:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					pxBlock = pxBlock->pxNextFreeBlock;
+ 307              		.loc 1 169 0
+ 308 0056 2B46     		mov	r3, r5
+ 309              	.LVL34:
+ 170:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				}
+ 310              		.loc 1 170 0
+ 311 0058 1546     		mov	r5, r2
+ 312              	.LVL35:
+ 313              	.L23:
+ 167:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 314              		.loc 1 167 0
+ 315 005a 6A68     		ldr	r2, [r5, #4]
+ 316 005c 9442     		cmp	r4, r2
+ 317 005e 02D9     		bls	.L22
+ 167:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 318              		.loc 1 167 0 is_stmt 0 discriminator 1
+ 319 0060 2A68     		ldr	r2, [r5]
+ 320 0062 002A     		cmp	r2, #0
+ 321 0064 F7D1     		bne	.L33
+ARM GAS  /tmp/ccJwXKFM.s 			page 18
+
+
+ 322              	.L22:
+ 175:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 323              		.loc 1 175 0 is_stmt 1
+ 324 0066 234A     		ldr	r2, .L37
+ 325 0068 1268     		ldr	r2, [r2]
+ 326 006a 9542     		cmp	r5, r2
+ 327 006c 3DD0     		beq	.L34
+ 179:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 328              		.loc 1 179 0
+ 329 006e 1E68     		ldr	r6, [r3]
+ 330 0070 0836     		adds	r6, r6, #8
+ 331              	.LVL36:
+ 183:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 332              		.loc 1 183 0
+ 333 0072 2A68     		ldr	r2, [r5]
+ 334 0074 1A60     		str	r2, [r3]
+ 187:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					{
+ 335              		.loc 1 187 0
+ 336 0076 6B68     		ldr	r3, [r5, #4]
+ 337              	.LVL37:
+ 338 0078 1B1B     		subs	r3, r3, r4
+ 339 007a 102B     		cmp	r3, #16
+ 340 007c 10D9     		bls	.L24
+ 193:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 341              		.loc 1 193 0
+ 342 007e 2819     		adds	r0, r5, r4
+ 343              	.LVL38:
+ 194:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 344              		.loc 1 194 0
+ 345 0080 10F0070F 		tst	r0, #7
+ 346 0084 08D0     		beq	.L25
+ 347              	.LBB14:
+ 348              	.LBB15:
+ 349              		.loc 2 195 0
+ 350              		.syntax unified
+ 351              	@ 195 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portm
+ 352 0086 4FF05003 			mov r3, #80												
+ 353 008a 83F31188 		msr basepri, r3											
+ 354 008e BFF36F8F 		isb														
+ 355 0092 BFF34F8F 		dsb														
+ 356              	
+ 357              	@ 0 "" 2
+ 358              	.LVL39:
+ 359              		.thumb
+ 360              		.syntax unified
+ 361              	.L26:
+ 362 0096 FEE7     		b	.L26
+ 363              	.L25:
+ 364              	.LBE15:
+ 365              	.LBE14:
+ 198:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 						pxBlock->xBlockSize = xWantedSize;
+ 366              		.loc 1 198 0
+ 367 0098 4360     		str	r3, [r0, #4]
+ 199:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 368              		.loc 1 199 0
+ 369 009a 6C60     		str	r4, [r5, #4]
+ 202:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					}
+ARM GAS  /tmp/ccJwXKFM.s 			page 19
+
+
+ 370              		.loc 1 202 0
+ 371 009c FFF7FEFF 		bl	prvInsertBlockIntoFreeList
+ 372              	.LVL40:
+ 373              	.L24:
+ 209:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 374              		.loc 1 209 0
+ 375 00a0 6A68     		ldr	r2, [r5, #4]
+ 376 00a2 1649     		ldr	r1, .L37+8
+ 377 00a4 0B68     		ldr	r3, [r1]
+ 378 00a6 9B1A     		subs	r3, r3, r2
+ 379 00a8 0B60     		str	r3, [r1]
+ 211:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					{
+ 380              		.loc 1 211 0
+ 381 00aa 1649     		ldr	r1, .L37+16
+ 382 00ac 0968     		ldr	r1, [r1]
+ 383 00ae 8B42     		cmp	r3, r1
+ 384 00b0 01D2     		bcs	.L27
+ 213:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					}
+ 385              		.loc 1 213 0
+ 386 00b2 1449     		ldr	r1, .L37+16
+ 387 00b4 0B60     		str	r3, [r1]
+ 388              	.L27:
+ 222:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					pxBlock->pxNextFreeBlock = NULL;
+ 389              		.loc 1 222 0
+ 390 00b6 104B     		ldr	r3, .L37+4
+ 391 00b8 1B68     		ldr	r3, [r3]
+ 392 00ba 1343     		orrs	r3, r3, r2
+ 393 00bc 6B60     		str	r3, [r5, #4]
+ 223:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				}
+ 394              		.loc 1 223 0
+ 395 00be 0023     		movs	r3, #0
+ 396 00c0 2B60     		str	r3, [r5]
+ 397              	.LVL41:
+ 398              	.L19:
+ 242:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 399              		.loc 1 242 0
+ 400 00c2 FFF7FEFF 		bl	xTaskResumeAll
+ 401              	.LVL42:
+ 258:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	return pvReturn;
+ 402              		.loc 1 258 0
+ 403 00c6 16F0070F 		tst	r6, #7
+ 404 00ca 10D0     		beq	.L17
+ 405              	.LBB16:
+ 406              	.LBB17:
+ 407              		.loc 2 195 0
+ 408              		.syntax unified
+ 409              	@ 195 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portm
+ 410 00cc 4FF05003 			mov r3, #80												
+ 411 00d0 83F31188 		msr basepri, r3											
+ 412 00d4 BFF36F8F 		isb														
+ 413 00d8 BFF34F8F 		dsb														
+ 414              	
+ 415              	@ 0 "" 2
+ 416              	.LVL43:
+ 417              		.thumb
+ 418              		.syntax unified
+ 419              	.L29:
+ARM GAS  /tmp/ccJwXKFM.s 			page 20
+
+
+ 420 00dc FEE7     		b	.L29
+ 421              	.LVL44:
+ 422              	.L30:
+ 423              	.LBE17:
+ 424              	.LBE16:
+ 116:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 425              		.loc 1 116 0
+ 426 00de 0026     		movs	r6, #0
+ 427 00e0 EFE7     		b	.L19
+ 428              	.L31:
+ 429 00e2 0026     		movs	r6, #0
+ 430 00e4 EDE7     		b	.L19
+ 431              	.L32:
+ 432 00e6 0026     		movs	r6, #0
+ 433 00e8 EBE7     		b	.L19
+ 434              	.LVL45:
+ 435              	.L34:
+ 436 00ea 0026     		movs	r6, #0
+ 437 00ec E9E7     		b	.L19
+ 438              	.LVL46:
+ 439              	.L17:
+ 260:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+ 440              		.loc 1 260 0
+ 441 00ee 3046     		mov	r0, r6
+ 442 00f0 70BD     		pop	{r4, r5, r6, pc}
+ 443              	.LVL47:
+ 444              	.L38:
+ 445 00f2 00BF     		.align	2
+ 446              	.L37:
+ 447 00f4 00000000 		.word	.LANCHOR2
+ 448 00f8 00000000 		.word	.LANCHOR5
+ 449 00fc 00000000 		.word	.LANCHOR4
+ 450 0100 00000000 		.word	.LANCHOR1
+ 451 0104 00000000 		.word	.LANCHOR3
+ 452              		.cfi_endproc
+ 453              	.LFE5:
+ 455              		.section	.text.vPortFree,"ax",%progbits
+ 456              		.align	1
+ 457              		.global	vPortFree
+ 458              		.syntax unified
+ 459              		.thumb
+ 460              		.thumb_func
+ 461              		.fpu fpv4-sp-d16
+ 463              	vPortFree:
+ 464              	.LFB6:
+ 264:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** uint8_t *puc = ( uint8_t * ) pv;
+ 465              		.loc 1 264 0
+ 466              		.cfi_startproc
+ 467              		@ args = 0, pretend = 0, frame = 0
+ 468              		@ frame_needed = 0, uses_anonymous_args = 0
+ 469              	.LVL48:
+ 268:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	{
+ 470              		.loc 1 268 0
+ 471 0000 80B3     		cbz	r0, .L46
+ 264:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** uint8_t *puc = ( uint8_t * ) pv;
+ 472              		.loc 1 264 0
+ 473 0002 38B5     		push	{r3, r4, r5, lr}
+ARM GAS  /tmp/ccJwXKFM.s 			page 21
+
+
+ 474              	.LCFI4:
+ 475              		.cfi_def_cfa_offset 16
+ 476              		.cfi_offset 3, -16
+ 477              		.cfi_offset 4, -12
+ 478              		.cfi_offset 5, -8
+ 479              		.cfi_offset 14, -4
+ 480 0004 0446     		mov	r4, r0
+ 272:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 481              		.loc 1 272 0
+ 482 0006 A0F10805 		sub	r5, r0, #8
+ 483              	.LVL49:
+ 278:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 		configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 484              		.loc 1 278 0
+ 485 000a 50F8042C 		ldr	r2, [r0, #-4]
+ 486 000e 1649     		ldr	r1, .L49
+ 487 0010 0968     		ldr	r1, [r1]
+ 488 0012 0A42     		tst	r2, r1
+ 489 0014 08D1     		bne	.L41
+ 490              	.LBB18:
+ 491              	.LBB19:
+ 492              		.loc 2 195 0
+ 493              		.syntax unified
+ 494              	@ 195 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portm
+ 495 0016 4FF05003 			mov r3, #80												
+ 496 001a 83F31188 		msr basepri, r3											
+ 497 001e BFF36F8F 		isb														
+ 498 0022 BFF34F8F 		dsb														
+ 499              	
+ 500              	@ 0 "" 2
+ 501              	.LVL50:
+ 502              		.thumb
+ 503              		.syntax unified
+ 504              	.L42:
+ 505 0026 FEE7     		b	.L42
+ 506              	.L41:
+ 507              	.LBE19:
+ 508              	.LBE18:
+ 279:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 509              		.loc 1 279 0
+ 510 0028 50F8080C 		ldr	r0, [r0, #-8]
+ 511              	.LVL51:
+ 512 002c 40B1     		cbz	r0, .L43
+ 513              	.LBB20:
+ 514              	.LBB21:
+ 515              		.loc 2 195 0
+ 516              		.syntax unified
+ 517              	@ 195 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/portm
+ 518 002e 4FF05003 			mov r3, #80												
+ 519 0032 83F31188 		msr basepri, r3											
+ 520 0036 BFF36F8F 		isb														
+ 521 003a BFF34F8F 		dsb														
+ 522              	
+ 523              	@ 0 "" 2
+ 524              	.LVL52:
+ 525              		.thumb
+ 526              		.syntax unified
+ 527              	.L44:
+ARM GAS  /tmp/ccJwXKFM.s 			page 22
+
+
+ 528 003e FEE7     		b	.L44
+ 529              	.L43:
+ 530              	.LBE21:
+ 531              	.LBE20:
+ 287:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 
+ 532              		.loc 1 287 0
+ 533 0040 22EA0102 		bic	r2, r2, r1
+ 534 0044 44F8042C 		str	r2, [r4, #-4]
+ 289:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				{
+ 535              		.loc 1 289 0
+ 536 0048 FFF7FEFF 		bl	vTaskSuspendAll
+ 537              	.LVL53:
+ 292:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 					traceFREE( pv, pxLink->xBlockSize );
+ 538              		.loc 1 292 0
+ 539 004c 54F8041C 		ldr	r1, [r4, #-4]
+ 540 0050 064A     		ldr	r2, .L49+4
+ 541 0052 1368     		ldr	r3, [r2]
+ 542 0054 0B44     		add	r3, r3, r1
+ 543 0056 1360     		str	r3, [r2]
+ 294:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 				}
+ 544              		.loc 1 294 0
+ 545 0058 2846     		mov	r0, r5
+ 546 005a FFF7FEFF 		bl	prvInsertBlockIntoFreeList
+ 547              	.LVL54:
+ 296:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 			}
+ 548              		.loc 1 296 0
+ 549 005e FFF7FEFF 		bl	xTaskResumeAll
+ 550              	.LVL55:
+ 551 0062 38BD     		pop	{r3, r4, r5, pc}
+ 552              	.LVL56:
+ 553              	.L46:
+ 554              	.LCFI5:
+ 555              		.cfi_def_cfa_offset 0
+ 556              		.cfi_restore 3
+ 557              		.cfi_restore 4
+ 558              		.cfi_restore 5
+ 559              		.cfi_restore 14
+ 560 0064 7047     		bx	lr
+ 561              	.L50:
+ 562 0066 00BF     		.align	2
+ 563              	.L49:
+ 564 0068 00000000 		.word	.LANCHOR5
+ 565 006c 00000000 		.word	.LANCHOR4
+ 566              		.cfi_endproc
+ 567              	.LFE6:
+ 569              		.section	.text.xPortGetFreeHeapSize,"ax",%progbits
+ 570              		.align	1
+ 571              		.global	xPortGetFreeHeapSize
+ 572              		.syntax unified
+ 573              		.thumb
+ 574              		.thumb_func
+ 575              		.fpu fpv4-sp-d16
+ 577              	xPortGetFreeHeapSize:
+ 578              	.LFB7:
+ 312:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	return xFreeBytesRemaining;
+ 579              		.loc 1 312 0
+ 580              		.cfi_startproc
+ARM GAS  /tmp/ccJwXKFM.s 			page 23
+
+
+ 581              		@ args = 0, pretend = 0, frame = 0
+ 582              		@ frame_needed = 0, uses_anonymous_args = 0
+ 583              		@ link register save eliminated.
+ 314:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+ 584              		.loc 1 314 0
+ 585 0000 014B     		ldr	r3, .L52
+ 586 0002 1868     		ldr	r0, [r3]
+ 587 0004 7047     		bx	lr
+ 588              	.L53:
+ 589 0006 00BF     		.align	2
+ 590              	.L52:
+ 591 0008 00000000 		.word	.LANCHOR4
+ 592              		.cfi_endproc
+ 593              	.LFE7:
+ 595              		.section	.text.xPortGetMinimumEverFreeHeapSize,"ax",%progbits
+ 596              		.align	1
+ 597              		.global	xPortGetMinimumEverFreeHeapSize
+ 598              		.syntax unified
+ 599              		.thumb
+ 600              		.thumb_func
+ 601              		.fpu fpv4-sp-d16
+ 603              	xPortGetMinimumEverFreeHeapSize:
+ 604              	.LFB8:
+ 318:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	return xMinimumEverFreeBytesRemaining;
+ 605              		.loc 1 318 0
+ 606              		.cfi_startproc
+ 607              		@ args = 0, pretend = 0, frame = 0
+ 608              		@ frame_needed = 0, uses_anonymous_args = 0
+ 609              		@ link register save eliminated.
+ 320:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** /*-----------------------------------------------------------*/
+ 610              		.loc 1 320 0
+ 611 0000 014B     		ldr	r3, .L55
+ 612 0002 1868     		ldr	r0, [r3]
+ 613 0004 7047     		bx	lr
+ 614              	.L56:
+ 615 0006 00BF     		.align	2
+ 616              	.L55:
+ 617 0008 00000000 		.word	.LANCHOR3
+ 618              		.cfi_endproc
+ 619              	.LFE8:
+ 621              		.section	.text.vPortInitialiseBlocks,"ax",%progbits
+ 622              		.align	1
+ 623              		.global	vPortInitialiseBlocks
+ 624              		.syntax unified
+ 625              		.thumb
+ 626              		.thumb_func
+ 627              		.fpu fpv4-sp-d16
+ 629              	vPortInitialiseBlocks:
+ 630              	.LFB9:
+ 324:/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/memmang/heap_4.c **** 	/* This just exists to keep the linker quiet. */
+ 631              		.loc 1 324 0
+ 632              		.cfi_startproc
+ 633              		@ args = 0, pretend = 0, frame = 0
+ 634              		@ frame_needed = 0, uses_anonymous_args = 0
+ 635              		@ link register save eliminated.
+ 636 0000 7047     		bx	lr
+ 637              		.cfi_endproc
+ARM GAS  /tmp/ccJwXKFM.s 			page 24
+
+
+ 638              	.LFE9:
+ 640              		.section	.bss.pxEnd,"aw",%nobits
+ 641              		.align	2
+ 642              		.set	.LANCHOR2,. + 0
+ 645              	pxEnd:
+ 646 0000 00000000 		.space	4
+ 647              		.section	.bss.ucHeap,"aw",%nobits
+ 648              		.align	2
+ 649              		.set	.LANCHOR0,. + 0
+ 652              	ucHeap:
+ 653 0000 00000000 		.space	15360
+ 653      00000000 
+ 653      00000000 
+ 653      00000000 
+ 653      00000000 
+ 654              		.section	.bss.xBlockAllocatedBit,"aw",%nobits
+ 655              		.align	2
+ 656              		.set	.LANCHOR5,. + 0
+ 659              	xBlockAllocatedBit:
+ 660 0000 00000000 		.space	4
+ 661              		.section	.bss.xFreeBytesRemaining,"aw",%nobits
+ 662              		.align	2
+ 663              		.set	.LANCHOR4,. + 0
+ 666              	xFreeBytesRemaining:
+ 667 0000 00000000 		.space	4
+ 668              		.section	.bss.xMinimumEverFreeBytesRemaining,"aw",%nobits
+ 669              		.align	2
+ 670              		.set	.LANCHOR3,. + 0
+ 673              	xMinimumEverFreeBytesRemaining:
+ 674 0000 00000000 		.space	4
+ 675              		.section	.bss.xStart,"aw",%nobits
+ 676              		.align	2
+ 677              		.set	.LANCHOR1,. + 0
+ 680              	xStart:
+ 681 0000 00000000 		.space	8
+ 681      00000000 
+ 682              		.text
+ 683              	.Letext0:
+ 684              		.file 3 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 685              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 686              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/lock.h"
+ 687              		.file 6 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_types.h"
+ 688              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/reent.h"
+ 689              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/stdlib.h"
+ 690              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 691              		.file 10 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/FreeRT
+ 692              		.file 11 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/task.h
+ARM GAS  /tmp/ccJwXKFM.s 			page 25
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 heap_4.c
+     /tmp/ccJwXKFM.s:18     .text.prvHeapInit:0000000000000000 $t
+     /tmp/ccJwXKFM.s:24     .text.prvHeapInit:0000000000000000 prvHeapInit
+     /tmp/ccJwXKFM.s:102    .text.prvHeapInit:000000000000004c $d
+     /tmp/ccJwXKFM.s:112    .text.prvInsertBlockIntoFreeList:0000000000000000 $t
+     /tmp/ccJwXKFM.s:118    .text.prvInsertBlockIntoFreeList:0000000000000000 prvInsertBlockIntoFreeList
+     /tmp/ccJwXKFM.s:207    .text.prvInsertBlockIntoFreeList:0000000000000050 $d
+     /tmp/ccJwXKFM.s:213    .text.pvPortMalloc:0000000000000000 $t
+     /tmp/ccJwXKFM.s:220    .text.pvPortMalloc:0000000000000000 pvPortMalloc
+     /tmp/ccJwXKFM.s:447    .text.pvPortMalloc:00000000000000f4 $d
+     /tmp/ccJwXKFM.s:456    .text.vPortFree:0000000000000000 $t
+     /tmp/ccJwXKFM.s:463    .text.vPortFree:0000000000000000 vPortFree
+     /tmp/ccJwXKFM.s:564    .text.vPortFree:0000000000000068 $d
+     /tmp/ccJwXKFM.s:570    .text.xPortGetFreeHeapSize:0000000000000000 $t
+     /tmp/ccJwXKFM.s:577    .text.xPortGetFreeHeapSize:0000000000000000 xPortGetFreeHeapSize
+     /tmp/ccJwXKFM.s:591    .text.xPortGetFreeHeapSize:0000000000000008 $d
+     /tmp/ccJwXKFM.s:596    .text.xPortGetMinimumEverFreeHeapSize:0000000000000000 $t
+     /tmp/ccJwXKFM.s:603    .text.xPortGetMinimumEverFreeHeapSize:0000000000000000 xPortGetMinimumEverFreeHeapSize
+     /tmp/ccJwXKFM.s:617    .text.xPortGetMinimumEverFreeHeapSize:0000000000000008 $d
+     /tmp/ccJwXKFM.s:622    .text.vPortInitialiseBlocks:0000000000000000 $t
+     /tmp/ccJwXKFM.s:629    .text.vPortInitialiseBlocks:0000000000000000 vPortInitialiseBlocks
+     /tmp/ccJwXKFM.s:641    .bss.pxEnd:0000000000000000 $d
+     /tmp/ccJwXKFM.s:645    .bss.pxEnd:0000000000000000 pxEnd
+     /tmp/ccJwXKFM.s:648    .bss.ucHeap:0000000000000000 $d
+     /tmp/ccJwXKFM.s:652    .bss.ucHeap:0000000000000000 ucHeap
+     /tmp/ccJwXKFM.s:655    .bss.xBlockAllocatedBit:0000000000000000 $d
+     /tmp/ccJwXKFM.s:659    .bss.xBlockAllocatedBit:0000000000000000 xBlockAllocatedBit
+     /tmp/ccJwXKFM.s:662    .bss.xFreeBytesRemaining:0000000000000000 $d
+     /tmp/ccJwXKFM.s:666    .bss.xFreeBytesRemaining:0000000000000000 xFreeBytesRemaining
+     /tmp/ccJwXKFM.s:669    .bss.xMinimumEverFreeBytesRemaining:0000000000000000 $d
+     /tmp/ccJwXKFM.s:673    .bss.xMinimumEverFreeBytesRemaining:0000000000000000 xMinimumEverFreeBytesRemaining
+     /tmp/ccJwXKFM.s:676    .bss.xStart:0000000000000000 $d
+     /tmp/ccJwXKFM.s:680    .bss.xStart:0000000000000000 xStart
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+vTaskSuspendAll
+xTaskResumeAll

@@ -1,0 +1,1096 @@
+ARM GAS  /tmp/ccmpldsT.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"software_resolver.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.software_resolver_config,"ax",%progbits
+  18              		.align	1
+  19              		.global	software_resolver_config
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	software_resolver_config:
+  26              	.LFB138:
+  27              		.file 1 "/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c"
+   1:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #include "software_resolver.h"
+   2:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+   3:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define SOFTWARE_RESOLVER_INIT_ERR_STR				"software resolver init error"
+   4:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define SOFTWARE_RESOLVER_SET_COUNTER_MODE_ERR_STR	"software resolver set counter mode error"
+   5:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define SOFTWARE_RESOLVER_GET_VALUE_ERR_STR			"software resolver get counter value error"
+   6:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define SOFTWARE_RESOLVER_SET_VALUE_ERR_STR			"software resolver set counter value error"
+   7:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define SOFTWARE_RESOLVER_START_ERR_STR				"software resolver start error"
+   8:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define SOFTWARE_RESOLVER_STOP_ERR_STR				"software resolver stop error"
+   9:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  10:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** static const char* SOFTWARE_RESOLVER_TAG = "SOFTWARE RESOLVER";
+  11:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define SOFTWARE_RESOLVER_CHECK(a, str, ret)  if(!(a)) {                                           
+  12:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c ****         STM_LOGE(SOFTWARE_RESOLVER_TAG,"%s:%d (%s):%s", __FILE__, __LINE__, __FUNCTION__, str);    
+  13:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c ****         return (ret);                                                                       		\
+  14:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c ****         }
+  15:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  16:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** /* Mutex define */
+  17:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define mutex_lock(x)       while (xSemaphoreTake(x, portMAX_DELAY) != pdPASS)
+  18:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define mutex_unlock(x)     xSemaphoreGive(x)
+  19:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define mutex_create()      xSemaphoreCreateMutex()
+  20:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** #define mutex_destroy(x)    vQueueDelete(x)
+  21:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  22:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** typedef struct software_resolver {
+  23:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	timer_num_t 			timer_num;				/*!< Timer num */
+  24:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	timer_pins_pack_t		timer_pins_pack;		/*!< Timer pins pack */
+  25:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	uint32_t 				max_reload;				/*!< Max reload value */
+  26:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	timer_counter_mode_t	counter_mode;			/*!< Counter mode */
+  27:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SemaphoreHandle_t   	lock;                   /*!< Software resolver mutex */
+  28:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** } software_resolver_t;
+  29:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  30:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** software_resolver_handle_t software_resolver_config(software_resolver_config_t *config)
+  31:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** {
+ARM GAS  /tmp/ccmpldsT.s 			page 2
+
+
+  28              		.loc 1 31 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 16
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 24
+  36              		.cfi_offset 4, -24
+  37              		.cfi_offset 5, -20
+  38              		.cfi_offset 6, -16
+  39              		.cfi_offset 7, -12
+  40              		.cfi_offset 8, -8
+  41              		.cfi_offset 14, -4
+  42 0004 8AB0     		sub	sp, sp, #40
+  43              	.LCFI1:
+  44              		.cfi_def_cfa_offset 64
+  32:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	/* Check input conditions */
+  33:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(config, SOFTWARE_RESOLVER_INIT_ERR_STR, NULL);
+  45              		.loc 1 33 0
+  46 0006 0028     		cmp	r0, #0
+  47 0008 2FD0     		beq	.L10
+  48 000a 0446     		mov	r4, r0
+  34:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(config->timer_num < TIMER_NUM_MAX, SOFTWARE_RESOLVER_INIT_ERR_STR, NULL);
+  49              		.loc 1 34 0
+  50 000c 0678     		ldrb	r6, [r0]	@ zero_extendqisi2
+  51 000e 0D2E     		cmp	r6, #13
+  52 0010 3ED8     		bhi	.L11
+  35:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(config->timer_pins_pack < TIMER_PINS_PACK_MAX, SOFTWARE_RESOLVER_INIT_ERR_
+  53              		.loc 1 35 0
+  54 0012 4778     		ldrb	r7, [r0, #1]	@ zero_extendqisi2
+  55 0014 022F     		cmp	r7, #2
+  56 0016 4ED8     		bhi	.L12
+  36:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(config->counter_mode < TIMER_COUNTER_MODE_MAX, SOFTWARE_RESOLVER_INIT_ERR_
+  57              		.loc 1 36 0
+  58 0018 90F80880 		ldrb	r8, [r0, #8]	@ zero_extendqisi2
+  59 001c B8F1010F 		cmp	r8, #1
+  60 0020 5CD8     		bhi	.L13
+  37:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	
+  38:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	/* Allocate memory for handle structure */
+  39:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	software_resolver_handle_t handle = calloc(1, sizeof(software_resolver_t));
+  61              		.loc 1 39 0
+  62 0022 1021     		movs	r1, #16
+  63 0024 0120     		movs	r0, #1
+  64              	.LVL1:
+  65 0026 FFF7FEFF 		bl	calloc
+  66              	.LVL2:
+  40:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(handle, SOFTWARE_RESOLVER_INIT_ERR_STR, NULL);
+  67              		.loc 1 40 0
+  68 002a 0546     		mov	r5, r0
+  69 002c 0028     		cmp	r0, #0
+  70 002e 68D0     		beq	.L14
+  41:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	
+  42:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	int ret;
+  43:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	
+  44:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	/* Configure ETR */
+  45:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	etr_config_t software_resolver_cfg;
+ARM GAS  /tmp/ccmpldsT.s 			page 3
+
+
+  46:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	software_resolver_cfg.timer_num = config->timer_num;
+  71              		.loc 1 46 0
+  72 0030 8DF81C60 		strb	r6, [sp, #28]
+  47:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	software_resolver_cfg.timer_pins_pack = config->timer_pins_pack;
+  73              		.loc 1 47 0
+  74 0034 8DF81D70 		strb	r7, [sp, #29]
+  48:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	software_resolver_cfg.max_reload = config->max_reload;
+  75              		.loc 1 48 0
+  76 0038 6368     		ldr	r3, [r4, #4]
+  77 003a 0893     		str	r3, [sp, #32]
+  49:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	software_resolver_cfg.counter_mode = config->counter_mode;
+  78              		.loc 1 49 0
+  79 003c 8DF82480 		strb	r8, [sp, #36]
+  50:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	ret = etr_config(&software_resolver_cfg);
+  80              		.loc 1 50 0
+  81 0040 07A8     		add	r0, sp, #28
+  82              	.LVL3:
+  83 0042 FFF7FEFF 		bl	etr_config
+  84              	.LVL4:
+  51:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(!ret, SOFTWARE_RESOLVER_INIT_ERR_STR, NULL);
+  85              		.loc 1 51 0
+  86 0046 0028     		cmp	r0, #0
+  87 0048 6DD1     		bne	.L15
+  52:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	
+  53:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	/* Update handle structure */
+  54:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	handle->timer_num = config->timer_num;
+  88              		.loc 1 54 0
+  89 004a 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+  90 004c 2B70     		strb	r3, [r5]
+  55:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	handle->timer_pins_pack = config->timer_pins_pack;
+  91              		.loc 1 55 0
+  92 004e 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+  93 0050 6B70     		strb	r3, [r5, #1]
+  56:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	handle->counter_mode = config->counter_mode;
+  94              		.loc 1 56 0
+  95 0052 237A     		ldrb	r3, [r4, #8]	@ zero_extendqisi2
+  96 0054 2B72     		strb	r3, [r5, #8]
+  57:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	handle->max_reload = config->max_reload;
+  97              		.loc 1 57 0
+  98 0056 6368     		ldr	r3, [r4, #4]
+  99 0058 6B60     		str	r3, [r5, #4]
+  58:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	handle->lock = mutex_create();
+ 100              		.loc 1 58 0
+ 101 005a 0120     		movs	r0, #1
+ 102              	.LVL5:
+ 103 005c FFF7FEFF 		bl	xQueueCreateMutex
+ 104              	.LVL6:
+ 105 0060 E860     		str	r0, [r5, #12]
+ 106              	.LVL7:
+ 107              	.L1:
+  59:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  60:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	return handle;
+  61:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** }
+ 108              		.loc 1 61 0
+ 109 0062 2846     		mov	r0, r5
+ 110 0064 0AB0     		add	sp, sp, #40
+ 111              	.LCFI2:
+ARM GAS  /tmp/ccmpldsT.s 			page 4
+
+
+ 112              		.cfi_remember_state
+ 113              		.cfi_def_cfa_offset 24
+ 114              		@ sp needed
+ 115 0066 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 116              	.LVL8:
+ 117              	.L10:
+ 118              	.LCFI3:
+ 119              		.cfi_restore_state
+  33:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(config->timer_num < TIMER_NUM_MAX, SOFTWARE_RESOLVER_INIT_ERR_STR, NULL);
+ 120              		.loc 1 33 0 discriminator 4
+ 121 006a FFF7FEFF 		bl	stm_log_timestamp
+ 122              	.LVL9:
+ 123 006e 3749     		ldr	r1, .L16
+ 124 0070 374B     		ldr	r3, .L16+4
+ 125 0072 0493     		str	r3, [sp, #16]
+ 126 0074 374B     		ldr	r3, .L16+8
+ 127 0076 0393     		str	r3, [sp, #12]
+ 128 0078 2123     		movs	r3, #33
+ 129 007a 0293     		str	r3, [sp, #8]
+ 130 007c 364B     		ldr	r3, .L16+12
+ 131 007e 0193     		str	r3, [sp, #4]
+ 132 0080 0091     		str	r1, [sp]
+ 133 0082 0346     		mov	r3, r0
+ 134 0084 354A     		ldr	r2, .L16+16
+ 135 0086 0120     		movs	r0, #1
+ 136 0088 FFF7FEFF 		bl	stm_log_write
+ 137              	.LVL10:
+ 138 008c 0025     		movs	r5, #0
+ 139 008e E8E7     		b	.L1
+ 140              	.LVL11:
+ 141              	.L11:
+  34:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(config->timer_pins_pack < TIMER_PINS_PACK_MAX, SOFTWARE_RESOLVER_INIT_ERR_
+ 142              		.loc 1 34 0 discriminator 4
+ 143 0090 FFF7FEFF 		bl	stm_log_timestamp
+ 144              	.LVL12:
+ 145 0094 2D49     		ldr	r1, .L16
+ 146 0096 2E4B     		ldr	r3, .L16+4
+ 147 0098 0493     		str	r3, [sp, #16]
+ 148 009a 2E4B     		ldr	r3, .L16+8
+ 149 009c 0393     		str	r3, [sp, #12]
+ 150 009e 2223     		movs	r3, #34
+ 151 00a0 0293     		str	r3, [sp, #8]
+ 152 00a2 2D4B     		ldr	r3, .L16+12
+ 153 00a4 0193     		str	r3, [sp, #4]
+ 154 00a6 0091     		str	r1, [sp]
+ 155 00a8 0346     		mov	r3, r0
+ 156 00aa 2C4A     		ldr	r2, .L16+16
+ 157 00ac 0120     		movs	r0, #1
+ 158 00ae FFF7FEFF 		bl	stm_log_write
+ 159              	.LVL13:
+ 160 00b2 0025     		movs	r5, #0
+ 161 00b4 D5E7     		b	.L1
+ 162              	.LVL14:
+ 163              	.L12:
+  35:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(config->counter_mode < TIMER_COUNTER_MODE_MAX, SOFTWARE_RESOLVER_INIT_ERR_
+ 164              		.loc 1 35 0 discriminator 4
+ 165 00b6 FFF7FEFF 		bl	stm_log_timestamp
+ARM GAS  /tmp/ccmpldsT.s 			page 5
+
+
+ 166              	.LVL15:
+ 167 00ba 2449     		ldr	r1, .L16
+ 168 00bc 244B     		ldr	r3, .L16+4
+ 169 00be 0493     		str	r3, [sp, #16]
+ 170 00c0 244B     		ldr	r3, .L16+8
+ 171 00c2 0393     		str	r3, [sp, #12]
+ 172 00c4 2323     		movs	r3, #35
+ 173 00c6 0293     		str	r3, [sp, #8]
+ 174 00c8 234B     		ldr	r3, .L16+12
+ 175 00ca 0193     		str	r3, [sp, #4]
+ 176 00cc 0091     		str	r1, [sp]
+ 177 00ce 0346     		mov	r3, r0
+ 178 00d0 224A     		ldr	r2, .L16+16
+ 179 00d2 0120     		movs	r0, #1
+ 180 00d4 FFF7FEFF 		bl	stm_log_write
+ 181              	.LVL16:
+ 182 00d8 0025     		movs	r5, #0
+ 183 00da C2E7     		b	.L1
+ 184              	.LVL17:
+ 185              	.L13:
+  36:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	
+ 186              		.loc 1 36 0 discriminator 4
+ 187 00dc FFF7FEFF 		bl	stm_log_timestamp
+ 188              	.LVL18:
+ 189 00e0 1A49     		ldr	r1, .L16
+ 190 00e2 1B4B     		ldr	r3, .L16+4
+ 191 00e4 0493     		str	r3, [sp, #16]
+ 192 00e6 1B4B     		ldr	r3, .L16+8
+ 193 00e8 0393     		str	r3, [sp, #12]
+ 194 00ea 2423     		movs	r3, #36
+ 195 00ec 0293     		str	r3, [sp, #8]
+ 196 00ee 1A4B     		ldr	r3, .L16+12
+ 197 00f0 0193     		str	r3, [sp, #4]
+ 198 00f2 0091     		str	r1, [sp]
+ 199 00f4 0346     		mov	r3, r0
+ 200 00f6 194A     		ldr	r2, .L16+16
+ 201 00f8 0120     		movs	r0, #1
+ 202 00fa FFF7FEFF 		bl	stm_log_write
+ 203              	.LVL19:
+ 204 00fe 0025     		movs	r5, #0
+ 205 0100 AFE7     		b	.L1
+ 206              	.LVL20:
+ 207              	.L14:
+  40:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	
+ 208              		.loc 1 40 0 discriminator 4
+ 209 0102 FFF7FEFF 		bl	stm_log_timestamp
+ 210              	.LVL21:
+ 211 0106 1149     		ldr	r1, .L16
+ 212 0108 114B     		ldr	r3, .L16+4
+ 213 010a 0493     		str	r3, [sp, #16]
+ 214 010c 114B     		ldr	r3, .L16+8
+ 215 010e 0393     		str	r3, [sp, #12]
+ 216 0110 2823     		movs	r3, #40
+ 217 0112 0293     		str	r3, [sp, #8]
+ 218 0114 104B     		ldr	r3, .L16+12
+ 219 0116 0193     		str	r3, [sp, #4]
+ 220 0118 0091     		str	r1, [sp]
+ARM GAS  /tmp/ccmpldsT.s 			page 6
+
+
+ 221 011a 0346     		mov	r3, r0
+ 222 011c 0F4A     		ldr	r2, .L16+16
+ 223 011e 0120     		movs	r0, #1
+ 224 0120 FFF7FEFF 		bl	stm_log_write
+ 225              	.LVL22:
+ 226 0124 9DE7     		b	.L1
+ 227              	.LVL23:
+ 228              	.L15:
+  51:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	
+ 229              		.loc 1 51 0 discriminator 4
+ 230 0126 FFF7FEFF 		bl	stm_log_timestamp
+ 231              	.LVL24:
+ 232 012a 0849     		ldr	r1, .L16
+ 233 012c 084B     		ldr	r3, .L16+4
+ 234 012e 0493     		str	r3, [sp, #16]
+ 235 0130 084B     		ldr	r3, .L16+8
+ 236 0132 0393     		str	r3, [sp, #12]
+ 237 0134 3323     		movs	r3, #51
+ 238 0136 0293     		str	r3, [sp, #8]
+ 239 0138 074B     		ldr	r3, .L16+12
+ 240 013a 0193     		str	r3, [sp, #4]
+ 241 013c 0091     		str	r1, [sp]
+ 242 013e 0346     		mov	r3, r0
+ 243 0140 064A     		ldr	r2, .L16+16
+ 244 0142 0120     		movs	r0, #1
+ 245 0144 FFF7FEFF 		bl	stm_log_write
+ 246              	.LVL25:
+ 247 0148 0025     		movs	r5, #0
+ 248              	.LVL26:
+ 249 014a 8AE7     		b	.L1
+ 250              	.L17:
+ 251              		.align	2
+ 252              	.L16:
+ 253 014c 28000000 		.word	.LC1
+ 254 0150 3C000000 		.word	.LC2
+ 255 0154 00000000 		.word	.LANCHOR0
+ 256 0158 5C000000 		.word	.LC3
+ 257 015c 00000000 		.word	.LC0
+ 258              		.cfi_endproc
+ 259              	.LFE138:
+ 261              		.section	.text.software_resolver_start,"ax",%progbits
+ 262              		.align	1
+ 263              		.global	software_resolver_start
+ 264              		.syntax unified
+ 265              		.thumb
+ 266              		.thumb_func
+ 267              		.fpu fpv4-sp-d16
+ 269              	software_resolver_start:
+ 270              	.LFB139:
+  62:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  63:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** stm_err_t software_resolver_start(software_resolver_handle_t handle)
+  64:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** {
+ 271              		.loc 1 64 0
+ 272              		.cfi_startproc
+ 273              		@ args = 0, pretend = 0, frame = 0
+ 274              		@ frame_needed = 0, uses_anonymous_args = 0
+ 275              	.LVL27:
+ARM GAS  /tmp/ccmpldsT.s 			page 7
+
+
+ 276 0000 10B5     		push	{r4, lr}
+ 277              	.LCFI4:
+ 278              		.cfi_def_cfa_offset 8
+ 279              		.cfi_offset 4, -8
+ 280              		.cfi_offset 14, -4
+ 281 0002 86B0     		sub	sp, sp, #24
+ 282              	.LCFI5:
+ 283              		.cfi_def_cfa_offset 32
+ 284 0004 0446     		mov	r4, r0
+ 285              	.LVL28:
+ 286              	.L19:
+  65:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_lock(handle->lock);
+ 287              		.loc 1 65 0 discriminator 1
+ 288 0006 4FF0FF31 		mov	r1, #-1
+ 289 000a E068     		ldr	r0, [r4, #12]
+ 290 000c FFF7FEFF 		bl	xQueueSemaphoreTake
+ 291              	.LVL29:
+ 292 0010 0128     		cmp	r0, #1
+ 293 0012 F8D1     		bne	.L19
+  66:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	int ret = etr_start(handle->timer_num);
+ 294              		.loc 1 66 0
+ 295 0014 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 296 0016 FFF7FEFF 		bl	etr_start
+ 297              	.LVL30:
+  67:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(!ret, SOFTWARE_RESOLVER_START_ERR_STR, STM_FAIL);
+ 298              		.loc 1 67 0
+ 299 001a 40B9     		cbnz	r0, .L23
+  68:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_unlock(handle->lock);
+ 300              		.loc 1 68 0
+ 301 001c 0023     		movs	r3, #0
+ 302 001e 1A46     		mov	r2, r3
+ 303 0020 1946     		mov	r1, r3
+ 304 0022 E068     		ldr	r0, [r4, #12]
+ 305              	.LVL31:
+ 306 0024 FFF7FEFF 		bl	xQueueGenericSend
+ 307              	.LVL32:
+  69:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  70:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	return STM_OK;
+ 308              		.loc 1 70 0
+ 309 0028 0020     		movs	r0, #0
+ 310              	.L18:
+  71:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** }
+ 311              		.loc 1 71 0
+ 312 002a 06B0     		add	sp, sp, #24
+ 313              	.LCFI6:
+ 314              		.cfi_remember_state
+ 315              		.cfi_def_cfa_offset 8
+ 316              		@ sp needed
+ 317 002c 10BD     		pop	{r4, pc}
+ 318              	.LVL33:
+ 319              	.L23:
+ 320              	.LCFI7:
+ 321              		.cfi_restore_state
+  67:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_unlock(handle->lock);
+ 322              		.loc 1 67 0 discriminator 4
+ 323 002e FFF7FEFF 		bl	stm_log_timestamp
+ 324              	.LVL34:
+ARM GAS  /tmp/ccmpldsT.s 			page 8
+
+
+ 325 0032 0949     		ldr	r1, .L24
+ 326 0034 094B     		ldr	r3, .L24+4
+ 327 0036 0493     		str	r3, [sp, #16]
+ 328 0038 094B     		ldr	r3, .L24+8
+ 329 003a 0393     		str	r3, [sp, #12]
+ 330 003c 4323     		movs	r3, #67
+ 331 003e 0293     		str	r3, [sp, #8]
+ 332 0040 084B     		ldr	r3, .L24+12
+ 333 0042 0193     		str	r3, [sp, #4]
+ 334 0044 0091     		str	r1, [sp]
+ 335 0046 0346     		mov	r3, r0
+ 336 0048 074A     		ldr	r2, .L24+16
+ 337 004a 0120     		movs	r0, #1
+ 338 004c FFF7FEFF 		bl	stm_log_write
+ 339              	.LVL35:
+ 340 0050 4FF0FF30 		mov	r0, #-1
+ 341 0054 E9E7     		b	.L18
+ 342              	.L25:
+ 343 0056 00BF     		.align	2
+ 344              	.L24:
+ 345 0058 28000000 		.word	.LC1
+ 346 005c 00000000 		.word	.LC4
+ 347 0060 00000000 		.word	.LANCHOR1
+ 348 0064 5C000000 		.word	.LC3
+ 349 0068 00000000 		.word	.LC0
+ 350              		.cfi_endproc
+ 351              	.LFE139:
+ 353              		.section	.text.software_resolver_stop,"ax",%progbits
+ 354              		.align	1
+ 355              		.global	software_resolver_stop
+ 356              		.syntax unified
+ 357              		.thumb
+ 358              		.thumb_func
+ 359              		.fpu fpv4-sp-d16
+ 361              	software_resolver_stop:
+ 362              	.LFB140:
+  72:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  73:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** stm_err_t software_resolver_stop(software_resolver_handle_t handle)
+  74:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** {
+ 363              		.loc 1 74 0
+ 364              		.cfi_startproc
+ 365              		@ args = 0, pretend = 0, frame = 0
+ 366              		@ frame_needed = 0, uses_anonymous_args = 0
+ 367              	.LVL36:
+ 368 0000 10B5     		push	{r4, lr}
+ 369              	.LCFI8:
+ 370              		.cfi_def_cfa_offset 8
+ 371              		.cfi_offset 4, -8
+ 372              		.cfi_offset 14, -4
+ 373 0002 86B0     		sub	sp, sp, #24
+ 374              	.LCFI9:
+ 375              		.cfi_def_cfa_offset 32
+ 376 0004 0446     		mov	r4, r0
+ 377              	.LVL37:
+ 378              	.L27:
+  75:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_lock(handle->lock);
+ 379              		.loc 1 75 0 discriminator 1
+ARM GAS  /tmp/ccmpldsT.s 			page 9
+
+
+ 380 0006 4FF0FF31 		mov	r1, #-1
+ 381 000a E068     		ldr	r0, [r4, #12]
+ 382 000c FFF7FEFF 		bl	xQueueSemaphoreTake
+ 383              	.LVL38:
+ 384 0010 0128     		cmp	r0, #1
+ 385 0012 F8D1     		bne	.L27
+  76:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	int ret = etr_stop(handle->timer_num);
+ 386              		.loc 1 76 0
+ 387 0014 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 388 0016 FFF7FEFF 		bl	etr_stop
+ 389              	.LVL39:
+  77:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(!ret, SOFTWARE_RESOLVER_STOP_ERR_STR, STM_FAIL);
+ 390              		.loc 1 77 0
+ 391 001a 40B9     		cbnz	r0, .L31
+  78:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_unlock(handle->lock);
+ 392              		.loc 1 78 0
+ 393 001c 0023     		movs	r3, #0
+ 394 001e 1A46     		mov	r2, r3
+ 395 0020 1946     		mov	r1, r3
+ 396 0022 E068     		ldr	r0, [r4, #12]
+ 397              	.LVL40:
+ 398 0024 FFF7FEFF 		bl	xQueueGenericSend
+ 399              	.LVL41:
+  79:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  80:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	return STM_OK;
+ 400              		.loc 1 80 0
+ 401 0028 0020     		movs	r0, #0
+ 402              	.L26:
+  81:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** }
+ 403              		.loc 1 81 0
+ 404 002a 06B0     		add	sp, sp, #24
+ 405              	.LCFI10:
+ 406              		.cfi_remember_state
+ 407              		.cfi_def_cfa_offset 8
+ 408              		@ sp needed
+ 409 002c 10BD     		pop	{r4, pc}
+ 410              	.LVL42:
+ 411              	.L31:
+ 412              	.LCFI11:
+ 413              		.cfi_restore_state
+  77:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_unlock(handle->lock);
+ 414              		.loc 1 77 0 discriminator 4
+ 415 002e FFF7FEFF 		bl	stm_log_timestamp
+ 416              	.LVL43:
+ 417 0032 0949     		ldr	r1, .L32
+ 418 0034 094B     		ldr	r3, .L32+4
+ 419 0036 0493     		str	r3, [sp, #16]
+ 420 0038 094B     		ldr	r3, .L32+8
+ 421 003a 0393     		str	r3, [sp, #12]
+ 422 003c 4D23     		movs	r3, #77
+ 423 003e 0293     		str	r3, [sp, #8]
+ 424 0040 084B     		ldr	r3, .L32+12
+ 425 0042 0193     		str	r3, [sp, #4]
+ 426 0044 0091     		str	r1, [sp]
+ 427 0046 0346     		mov	r3, r0
+ 428 0048 074A     		ldr	r2, .L32+16
+ 429 004a 0120     		movs	r0, #1
+ARM GAS  /tmp/ccmpldsT.s 			page 10
+
+
+ 430 004c FFF7FEFF 		bl	stm_log_write
+ 431              	.LVL44:
+ 432 0050 4FF0FF30 		mov	r0, #-1
+ 433 0054 E9E7     		b	.L26
+ 434              	.L33:
+ 435 0056 00BF     		.align	2
+ 436              	.L32:
+ 437 0058 28000000 		.word	.LC1
+ 438 005c 00000000 		.word	.LC5
+ 439 0060 00000000 		.word	.LANCHOR2
+ 440 0064 5C000000 		.word	.LC3
+ 441 0068 00000000 		.word	.LC0
+ 442              		.cfi_endproc
+ 443              	.LFE140:
+ 445              		.section	.text.software_resolver_get_value,"ax",%progbits
+ 446              		.align	1
+ 447              		.global	software_resolver_get_value
+ 448              		.syntax unified
+ 449              		.thumb
+ 450              		.thumb_func
+ 451              		.fpu fpv4-sp-d16
+ 453              	software_resolver_get_value:
+ 454              	.LFB141:
+  82:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  83:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** stm_err_t software_resolver_get_value(software_resolver_handle_t handle, uint32_t *value)
+  84:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** {
+ 455              		.loc 1 84 0
+ 456              		.cfi_startproc
+ 457              		@ args = 0, pretend = 0, frame = 0
+ 458              		@ frame_needed = 0, uses_anonymous_args = 0
+ 459              	.LVL45:
+ 460 0000 30B5     		push	{r4, r5, lr}
+ 461              	.LCFI12:
+ 462              		.cfi_def_cfa_offset 12
+ 463              		.cfi_offset 4, -12
+ 464              		.cfi_offset 5, -8
+ 465              		.cfi_offset 14, -4
+ 466 0002 87B0     		sub	sp, sp, #28
+ 467              	.LCFI13:
+ 468              		.cfi_def_cfa_offset 40
+ 469 0004 0446     		mov	r4, r0
+ 470 0006 0D46     		mov	r5, r1
+ 471              	.LVL46:
+ 472              	.L35:
+  85:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_lock(handle->lock);
+ 473              		.loc 1 85 0 discriminator 1
+ 474 0008 4FF0FF31 		mov	r1, #-1
+ 475 000c E068     		ldr	r0, [r4, #12]
+ 476 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 477              	.LVL47:
+ 478 0012 0128     		cmp	r0, #1
+ 479 0014 F8D1     		bne	.L35
+  86:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	int ret = etr_get_value(handle->timer_num, value);
+ 480              		.loc 1 86 0
+ 481 0016 2946     		mov	r1, r5
+ 482 0018 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 483 001a FFF7FEFF 		bl	etr_get_value
+ARM GAS  /tmp/ccmpldsT.s 			page 11
+
+
+ 484              	.LVL48:
+  87:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(!ret, SOFTWARE_RESOLVER_GET_VALUE_ERR_STR, STM_FAIL);
+ 485              		.loc 1 87 0
+ 486 001e 40B9     		cbnz	r0, .L39
+  88:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_unlock(handle->lock);
+ 487              		.loc 1 88 0
+ 488 0020 0023     		movs	r3, #0
+ 489 0022 1A46     		mov	r2, r3
+ 490 0024 1946     		mov	r1, r3
+ 491 0026 E068     		ldr	r0, [r4, #12]
+ 492              	.LVL49:
+ 493 0028 FFF7FEFF 		bl	xQueueGenericSend
+ 494              	.LVL50:
+  89:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  90:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	return STM_OK;
+ 495              		.loc 1 90 0
+ 496 002c 0020     		movs	r0, #0
+ 497              	.L34:
+  91:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** }
+ 498              		.loc 1 91 0
+ 499 002e 07B0     		add	sp, sp, #28
+ 500              	.LCFI14:
+ 501              		.cfi_remember_state
+ 502              		.cfi_def_cfa_offset 12
+ 503              		@ sp needed
+ 504 0030 30BD     		pop	{r4, r5, pc}
+ 505              	.LVL51:
+ 506              	.L39:
+ 507              	.LCFI15:
+ 508              		.cfi_restore_state
+  87:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_unlock(handle->lock);
+ 509              		.loc 1 87 0 discriminator 4
+ 510 0032 FFF7FEFF 		bl	stm_log_timestamp
+ 511              	.LVL52:
+ 512 0036 0949     		ldr	r1, .L40
+ 513 0038 094B     		ldr	r3, .L40+4
+ 514 003a 0493     		str	r3, [sp, #16]
+ 515 003c 094B     		ldr	r3, .L40+8
+ 516 003e 0393     		str	r3, [sp, #12]
+ 517 0040 5723     		movs	r3, #87
+ 518 0042 0293     		str	r3, [sp, #8]
+ 519 0044 084B     		ldr	r3, .L40+12
+ 520 0046 0193     		str	r3, [sp, #4]
+ 521 0048 0091     		str	r1, [sp]
+ 522 004a 0346     		mov	r3, r0
+ 523 004c 074A     		ldr	r2, .L40+16
+ 524 004e 0120     		movs	r0, #1
+ 525 0050 FFF7FEFF 		bl	stm_log_write
+ 526              	.LVL53:
+ 527 0054 4FF0FF30 		mov	r0, #-1
+ 528 0058 E9E7     		b	.L34
+ 529              	.L41:
+ 530 005a 00BF     		.align	2
+ 531              	.L40:
+ 532 005c 28000000 		.word	.LC1
+ 533 0060 00000000 		.word	.LC6
+ 534 0064 00000000 		.word	.LANCHOR3
+ARM GAS  /tmp/ccmpldsT.s 			page 12
+
+
+ 535 0068 5C000000 		.word	.LC3
+ 536 006c 00000000 		.word	.LC0
+ 537              		.cfi_endproc
+ 538              	.LFE141:
+ 540              		.section	.text.software_resolver_set_value,"ax",%progbits
+ 541              		.align	1
+ 542              		.global	software_resolver_set_value
+ 543              		.syntax unified
+ 544              		.thumb
+ 545              		.thumb_func
+ 546              		.fpu fpv4-sp-d16
+ 548              	software_resolver_set_value:
+ 549              	.LFB142:
+  92:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+  93:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** stm_err_t software_resolver_set_value(software_resolver_handle_t handle, uint32_t value)
+  94:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** {
+ 550              		.loc 1 94 0
+ 551              		.cfi_startproc
+ 552              		@ args = 0, pretend = 0, frame = 0
+ 553              		@ frame_needed = 0, uses_anonymous_args = 0
+ 554              	.LVL54:
+ 555 0000 30B5     		push	{r4, r5, lr}
+ 556              	.LCFI16:
+ 557              		.cfi_def_cfa_offset 12
+ 558              		.cfi_offset 4, -12
+ 559              		.cfi_offset 5, -8
+ 560              		.cfi_offset 14, -4
+ 561 0002 87B0     		sub	sp, sp, #28
+ 562              	.LCFI17:
+ 563              		.cfi_def_cfa_offset 40
+ 564 0004 0446     		mov	r4, r0
+ 565 0006 0D46     		mov	r5, r1
+ 566              	.LVL55:
+ 567              	.L43:
+  95:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_lock(handle->lock);
+ 568              		.loc 1 95 0 discriminator 1
+ 569 0008 4FF0FF31 		mov	r1, #-1
+ 570 000c E068     		ldr	r0, [r4, #12]
+ 571 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 572              	.LVL56:
+ 573 0012 0128     		cmp	r0, #1
+ 574 0014 F8D1     		bne	.L43
+  96:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	int ret = etr_set_value(handle->timer_num, value);
+ 575              		.loc 1 96 0
+ 576 0016 2946     		mov	r1, r5
+ 577 0018 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 578 001a FFF7FEFF 		bl	etr_set_value
+ 579              	.LVL57:
+  97:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(!ret, SOFTWARE_RESOLVER_SET_VALUE_ERR_STR, STM_FAIL);
+ 580              		.loc 1 97 0
+ 581 001e 40B9     		cbnz	r0, .L47
+  98:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_unlock(handle->lock);
+ 582              		.loc 1 98 0
+ 583 0020 0023     		movs	r3, #0
+ 584 0022 1A46     		mov	r2, r3
+ 585 0024 1946     		mov	r1, r3
+ 586 0026 E068     		ldr	r0, [r4, #12]
+ARM GAS  /tmp/ccmpldsT.s 			page 13
+
+
+ 587              	.LVL58:
+ 588 0028 FFF7FEFF 		bl	xQueueGenericSend
+ 589              	.LVL59:
+  99:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+ 100:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	return STM_OK;
+ 590              		.loc 1 100 0
+ 591 002c 0020     		movs	r0, #0
+ 592              	.L42:
+ 101:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** }
+ 593              		.loc 1 101 0
+ 594 002e 07B0     		add	sp, sp, #28
+ 595              	.LCFI18:
+ 596              		.cfi_remember_state
+ 597              		.cfi_def_cfa_offset 12
+ 598              		@ sp needed
+ 599 0030 30BD     		pop	{r4, r5, pc}
+ 600              	.LVL60:
+ 601              	.L47:
+ 602              	.LCFI19:
+ 603              		.cfi_restore_state
+  97:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_unlock(handle->lock);
+ 604              		.loc 1 97 0 discriminator 4
+ 605 0032 FFF7FEFF 		bl	stm_log_timestamp
+ 606              	.LVL61:
+ 607 0036 0949     		ldr	r1, .L48
+ 608 0038 094B     		ldr	r3, .L48+4
+ 609 003a 0493     		str	r3, [sp, #16]
+ 610 003c 094B     		ldr	r3, .L48+8
+ 611 003e 0393     		str	r3, [sp, #12]
+ 612 0040 6123     		movs	r3, #97
+ 613 0042 0293     		str	r3, [sp, #8]
+ 614 0044 084B     		ldr	r3, .L48+12
+ 615 0046 0193     		str	r3, [sp, #4]
+ 616 0048 0091     		str	r1, [sp]
+ 617 004a 0346     		mov	r3, r0
+ 618 004c 074A     		ldr	r2, .L48+16
+ 619 004e 0120     		movs	r0, #1
+ 620 0050 FFF7FEFF 		bl	stm_log_write
+ 621              	.LVL62:
+ 622 0054 4FF0FF30 		mov	r0, #-1
+ 623 0058 E9E7     		b	.L42
+ 624              	.L49:
+ 625 005a 00BF     		.align	2
+ 626              	.L48:
+ 627 005c 28000000 		.word	.LC1
+ 628 0060 00000000 		.word	.LC7
+ 629 0064 00000000 		.word	.LANCHOR4
+ 630 0068 5C000000 		.word	.LC3
+ 631 006c 00000000 		.word	.LC0
+ 632              		.cfi_endproc
+ 633              	.LFE142:
+ 635              		.section	.text.software_resolver_set_mode,"ax",%progbits
+ 636              		.align	1
+ 637              		.global	software_resolver_set_mode
+ 638              		.syntax unified
+ 639              		.thumb
+ 640              		.thumb_func
+ARM GAS  /tmp/ccmpldsT.s 			page 14
+
+
+ 641              		.fpu fpv4-sp-d16
+ 643              	software_resolver_set_mode:
+ 644              	.LFB143:
+ 102:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+ 103:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** stm_err_t software_resolver_set_mode(software_resolver_handle_t handle, timer_counter_mode_t counte
+ 104:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** {
+ 645              		.loc 1 104 0
+ 646              		.cfi_startproc
+ 647              		@ args = 0, pretend = 0, frame = 0
+ 648              		@ frame_needed = 0, uses_anonymous_args = 0
+ 649              	.LVL63:
+ 650 0000 30B5     		push	{r4, r5, lr}
+ 651              	.LCFI20:
+ 652              		.cfi_def_cfa_offset 12
+ 653              		.cfi_offset 4, -12
+ 654              		.cfi_offset 5, -8
+ 655              		.cfi_offset 14, -4
+ 656 0002 87B0     		sub	sp, sp, #28
+ 657              	.LCFI21:
+ 658              		.cfi_def_cfa_offset 40
+ 659 0004 0446     		mov	r4, r0
+ 660 0006 0D46     		mov	r5, r1
+ 661              	.LVL64:
+ 662              	.L51:
+ 105:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_lock(handle->lock);
+ 663              		.loc 1 105 0 discriminator 1
+ 664 0008 4FF0FF31 		mov	r1, #-1
+ 665 000c E068     		ldr	r0, [r4, #12]
+ 666 000e FFF7FEFF 		bl	xQueueSemaphoreTake
+ 667              	.LVL65:
+ 668 0012 0128     		cmp	r0, #1
+ 669 0014 F8D1     		bne	.L51
+ 106:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	int ret = etr_set_mode(handle->timer_num, counter_mode);
+ 670              		.loc 1 106 0
+ 671 0016 2946     		mov	r1, r5
+ 672 0018 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 673 001a FFF7FEFF 		bl	etr_set_mode
+ 674              	.LVL66:
+ 107:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(!ret, SOFTWARE_RESOLVER_SET_COUNTER_MODE_ERR_STR, STM_FAIL);
+ 675              		.loc 1 107 0
+ 676 001e 40B9     		cbnz	r0, .L55
+ 108:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	mutex_unlock(handle->lock);
+ 677              		.loc 1 108 0
+ 678 0020 0023     		movs	r3, #0
+ 679 0022 1A46     		mov	r2, r3
+ 680 0024 1946     		mov	r1, r3
+ 681 0026 E068     		ldr	r0, [r4, #12]
+ 682              	.LVL67:
+ 683 0028 FFF7FEFF 		bl	xQueueGenericSend
+ 684              	.LVL68:
+ 109:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 
+ 110:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	return STM_OK;
+ 685              		.loc 1 110 0
+ 686 002c 0020     		movs	r0, #0
+ 687              	.L50:
+ 111:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** }...
+ 688              		.loc 1 111 0
+ARM GAS  /tmp/ccmpldsT.s 			page 15
+
+
+ 689 002e 07B0     		add	sp, sp, #28
+ 690              	.LCFI22:
+ 691              		.cfi_remember_state
+ 692              		.cfi_def_cfa_offset 12
+ 693              		@ sp needed
+ 694 0030 30BD     		pop	{r4, r5, pc}
+ 695              	.LVL69:
+ 696              	.L55:
+ 697              	.LCFI23:
+ 698              		.cfi_restore_state
+ 107:/home/phong/Documents/thesis/stm32f4/components/motor/software_resolver.c **** 	SOFTWARE_RESOLVER_CHECK(!ret, SOFTWARE_RESOLVER_SET_COUNTER_MODE_ERR_STR, STM_FAIL);
+ 699              		.loc 1 107 0 discriminator 4
+ 700 0032 FFF7FEFF 		bl	stm_log_timestamp
+ 701              	.LVL70:
+ 702 0036 0949     		ldr	r1, .L56
+ 703 0038 094B     		ldr	r3, .L56+4
+ 704 003a 0493     		str	r3, [sp, #16]
+ 705 003c 094B     		ldr	r3, .L56+8
+ 706 003e 0393     		str	r3, [sp, #12]
+ 707 0040 6B23     		movs	r3, #107
+ 708 0042 0293     		str	r3, [sp, #8]
+ 709 0044 084B     		ldr	r3, .L56+12
+ 710 0046 0193     		str	r3, [sp, #4]
+ 711 0048 0091     		str	r1, [sp]
+ 712 004a 0346     		mov	r3, r0
+ 713 004c 074A     		ldr	r2, .L56+16
+ 714 004e 0120     		movs	r0, #1
+ 715 0050 FFF7FEFF 		bl	stm_log_write
+ 716              	.LVL71:
+ 717 0054 4FF0FF30 		mov	r0, #-1
+ 718 0058 E9E7     		b	.L50
+ 719              	.L57:
+ 720 005a 00BF     		.align	2
+ 721              	.L56:
+ 722 005c 28000000 		.word	.LC1
+ 723 0060 00000000 		.word	.LC8
+ 724 0064 00000000 		.word	.LANCHOR5
+ 725 0068 5C000000 		.word	.LC3
+ 726 006c 00000000 		.word	.LC0
+ 727              		.cfi_endproc
+ 728              	.LFE143:
+ 730              		.section	.rodata.__FUNCTION__.12700,"a",%progbits
+ 731              		.align	2
+ 732              		.set	.LANCHOR0,. + 0
+ 735              	__FUNCTION__.12700:
+ 736 0000 736F6674 		.ascii	"software_resolver_config\000"
+ 736      77617265 
+ 736      5F726573 
+ 736      6F6C7665 
+ 736      725F636F 
+ 737              		.section	.rodata.__FUNCTION__.12711,"a",%progbits
+ 738              		.align	2
+ 739              		.set	.LANCHOR1,. + 0
+ 742              	__FUNCTION__.12711:
+ 743 0000 736F6674 		.ascii	"software_resolver_start\000"
+ 743      77617265 
+ 743      5F726573 
+ARM GAS  /tmp/ccmpldsT.s 			page 16
+
+
+ 743      6F6C7665 
+ 743      725F7374 
+ 744              		.section	.rodata.__FUNCTION__.12719,"a",%progbits
+ 745              		.align	2
+ 746              		.set	.LANCHOR2,. + 0
+ 749              	__FUNCTION__.12719:
+ 750 0000 736F6674 		.ascii	"software_resolver_stop\000"
+ 750      77617265 
+ 750      5F726573 
+ 750      6F6C7665 
+ 750      725F7374 
+ 751              		.section	.rodata.__FUNCTION__.12728,"a",%progbits
+ 752              		.align	2
+ 753              		.set	.LANCHOR3,. + 0
+ 756              	__FUNCTION__.12728:
+ 757 0000 736F6674 		.ascii	"software_resolver_get_value\000"
+ 757      77617265 
+ 757      5F726573 
+ 757      6F6C7665 
+ 757      725F6765 
+ 758              		.section	.rodata.__FUNCTION__.12737,"a",%progbits
+ 759              		.align	2
+ 760              		.set	.LANCHOR4,. + 0
+ 763              	__FUNCTION__.12737:
+ 764 0000 736F6674 		.ascii	"software_resolver_set_value\000"
+ 764      77617265 
+ 764      5F726573 
+ 764      6F6C7665 
+ 764      725F7365 
+ 765              		.section	.rodata.__FUNCTION__.12746,"a",%progbits
+ 766              		.align	2
+ 767              		.set	.LANCHOR5,. + 0
+ 770              	__FUNCTION__.12746:
+ 771 0000 736F6674 		.ascii	"software_resolver_set_mode\000"
+ 771      77617265 
+ 771      5F726573 
+ 771      6F6C7665 
+ 771      725F7365 
+ 772              		.section	.rodata.software_resolver_config.str1.4,"aMS",%progbits,1
+ 773              		.align	2
+ 774              	.LC0:
+ 775 0000 1B5B303B 		.ascii	"\033[0;31mE (%d) %s: %s:%d (%s):%s\033[0m\015\012\000"
+ 775      33316D45 
+ 775      20282564 
+ 775      29202573 
+ 775      3A202573 
+ 776 0026 0000     		.space	2
+ 777              	.LC1:
+ 778 0028 534F4654 		.ascii	"SOFTWARE RESOLVER\000"
+ 778      57415245 
+ 778      20524553 
+ 778      4F4C5645 
+ 778      5200
+ 779 003a 0000     		.space	2
+ 780              	.LC2:
+ 781 003c 736F6674 		.ascii	"software resolver init error\000"
+ 781      77617265 
+ARM GAS  /tmp/ccmpldsT.s 			page 17
+
+
+ 781      20726573 
+ 781      6F6C7665 
+ 781      7220696E 
+ 782 0059 000000   		.space	3
+ 783              	.LC3:
+ 784 005c 2F686F6D 		.ascii	"/home/phong/Documents/thesis/stm32f4/components/mot"
+ 784      652F7068 
+ 784      6F6E672F 
+ 784      446F6375 
+ 784      6D656E74 
+ 785 008f 6F722F73 		.ascii	"or/software_resolver.c\000"
+ 785      6F667477 
+ 785      6172655F 
+ 785      7265736F 
+ 785      6C766572 
+ 786              		.section	.rodata.software_resolver_get_value.str1.4,"aMS",%progbits,1
+ 787              		.align	2
+ 788              	.LC6:
+ 789 0000 736F6674 		.ascii	"software resolver get counter value error\000"
+ 789      77617265 
+ 789      20726573 
+ 789      6F6C7665 
+ 789      72206765 
+ 790              		.section	.rodata.software_resolver_set_mode.str1.4,"aMS",%progbits,1
+ 791              		.align	2
+ 792              	.LC8:
+ 793 0000 736F6674 		.ascii	"software resolver set counter mode error\000"
+ 793      77617265 
+ 793      20726573 
+ 793      6F6C7665 
+ 793      72207365 
+ 794              		.section	.rodata.software_resolver_set_value.str1.4,"aMS",%progbits,1
+ 795              		.align	2
+ 796              	.LC7:
+ 797 0000 736F6674 		.ascii	"software resolver set counter value error\000"
+ 797      77617265 
+ 797      20726573 
+ 797      6F6C7665 
+ 797      72207365 
+ 798              		.section	.rodata.software_resolver_start.str1.4,"aMS",%progbits,1
+ 799              		.align	2
+ 800              	.LC4:
+ 801 0000 736F6674 		.ascii	"software resolver start error\000"
+ 801      77617265 
+ 801      20726573 
+ 801      6F6C7665 
+ 801      72207374 
+ 802              		.section	.rodata.software_resolver_stop.str1.4,"aMS",%progbits,1
+ 803              		.align	2
+ 804              	.LC5:
+ 805 0000 736F6674 		.ascii	"software resolver stop error\000"
+ 805      77617265 
+ 805      20726573 
+ 805      6F6C7665 
+ 805      72207374 
+ 806              		.text
+ 807              	.Letext0:
+ARM GAS  /tmp/ccmpldsT.s 			page 18
+
+
+ 808              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 809              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 810              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 811              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 812              		.file 6 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 813              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/portable/gcc/arm_cm4f/po
+ 814              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/queue.h
+ 815              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/freertos/include/freertos/semphr.
+ 816              		.file 10 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/lock.h"
+ 817              		.file 11 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_types.h"
+ 818              		.file 12 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 819              		.file 13 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/reent.h"
+ 820              		.file 14 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm_common/include/stm_err.h"
+ 821              		.file 15 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/stdlib.h"
+ 822              		.file 16 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/log/include/stm_log.h"
+ 823              		.file 17 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/driver/include/driver/timer.h"
+ 824              		.file 18 "/home/phong/Documents/thesis/stm32f4/components/motor/include/software_resolver.h"
+ARM GAS  /tmp/ccmpldsT.s 			page 19
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 software_resolver.c
+     /tmp/ccmpldsT.s:18     .text.software_resolver_config:0000000000000000 $t
+     /tmp/ccmpldsT.s:25     .text.software_resolver_config:0000000000000000 software_resolver_config
+     /tmp/ccmpldsT.s:253    .text.software_resolver_config:000000000000014c $d
+     /tmp/ccmpldsT.s:262    .text.software_resolver_start:0000000000000000 $t
+     /tmp/ccmpldsT.s:269    .text.software_resolver_start:0000000000000000 software_resolver_start
+     /tmp/ccmpldsT.s:345    .text.software_resolver_start:0000000000000058 $d
+     /tmp/ccmpldsT.s:354    .text.software_resolver_stop:0000000000000000 $t
+     /tmp/ccmpldsT.s:361    .text.software_resolver_stop:0000000000000000 software_resolver_stop
+     /tmp/ccmpldsT.s:437    .text.software_resolver_stop:0000000000000058 $d
+     /tmp/ccmpldsT.s:446    .text.software_resolver_get_value:0000000000000000 $t
+     /tmp/ccmpldsT.s:453    .text.software_resolver_get_value:0000000000000000 software_resolver_get_value
+     /tmp/ccmpldsT.s:532    .text.software_resolver_get_value:000000000000005c $d
+     /tmp/ccmpldsT.s:541    .text.software_resolver_set_value:0000000000000000 $t
+     /tmp/ccmpldsT.s:548    .text.software_resolver_set_value:0000000000000000 software_resolver_set_value
+     /tmp/ccmpldsT.s:627    .text.software_resolver_set_value:000000000000005c $d
+     /tmp/ccmpldsT.s:636    .text.software_resolver_set_mode:0000000000000000 $t
+     /tmp/ccmpldsT.s:643    .text.software_resolver_set_mode:0000000000000000 software_resolver_set_mode
+     /tmp/ccmpldsT.s:722    .text.software_resolver_set_mode:000000000000005c $d
+     /tmp/ccmpldsT.s:731    .rodata.__FUNCTION__.12700:0000000000000000 $d
+     /tmp/ccmpldsT.s:735    .rodata.__FUNCTION__.12700:0000000000000000 __FUNCTION__.12700
+     /tmp/ccmpldsT.s:738    .rodata.__FUNCTION__.12711:0000000000000000 $d
+     /tmp/ccmpldsT.s:742    .rodata.__FUNCTION__.12711:0000000000000000 __FUNCTION__.12711
+     /tmp/ccmpldsT.s:745    .rodata.__FUNCTION__.12719:0000000000000000 $d
+     /tmp/ccmpldsT.s:749    .rodata.__FUNCTION__.12719:0000000000000000 __FUNCTION__.12719
+     /tmp/ccmpldsT.s:752    .rodata.__FUNCTION__.12728:0000000000000000 $d
+     /tmp/ccmpldsT.s:756    .rodata.__FUNCTION__.12728:0000000000000000 __FUNCTION__.12728
+     /tmp/ccmpldsT.s:759    .rodata.__FUNCTION__.12737:0000000000000000 $d
+     /tmp/ccmpldsT.s:763    .rodata.__FUNCTION__.12737:0000000000000000 __FUNCTION__.12737
+     /tmp/ccmpldsT.s:766    .rodata.__FUNCTION__.12746:0000000000000000 $d
+     /tmp/ccmpldsT.s:770    .rodata.__FUNCTION__.12746:0000000000000000 __FUNCTION__.12746
+     /tmp/ccmpldsT.s:773    .rodata.software_resolver_config.str1.4:0000000000000000 $d
+     /tmp/ccmpldsT.s:787    .rodata.software_resolver_get_value.str1.4:0000000000000000 $d
+     /tmp/ccmpldsT.s:791    .rodata.software_resolver_set_mode.str1.4:0000000000000000 $d
+     /tmp/ccmpldsT.s:795    .rodata.software_resolver_set_value.str1.4:0000000000000000 $d
+     /tmp/ccmpldsT.s:799    .rodata.software_resolver_start.str1.4:0000000000000000 $d
+     /tmp/ccmpldsT.s:803    .rodata.software_resolver_stop.str1.4:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+calloc
+etr_config
+xQueueCreateMutex
+stm_log_timestamp
+stm_log_write
+xQueueSemaphoreTake
+etr_start
+xQueueGenericSend
+etr_stop
+etr_get_value
+etr_set_value
+etr_set_mode

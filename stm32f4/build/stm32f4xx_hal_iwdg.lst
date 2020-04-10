@@ -1,0 +1,398 @@
+ARM GAS  /tmp/cc1BYqgC.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal_iwdg.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_IWDG_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_IWDG_Init
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	HAL_IWDG_Init:
+  26              	.LFB130:
+  27              		.file 1 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_ha
+   1:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /**
+   2:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   ******************************************************************************
+   3:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @file    stm32f4xx_hal_iwdg.c
+   4:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @author  MCD Application Team
+   5:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @brief   IWDG HAL module driver.
+   6:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *          This file provides firmware functions to manage the following
+   7:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *          functionalities of the Independent Watchdog (IWDG) peripheral:
+   8:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *           + Initialization and Start functions
+   9:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *           + IO operation functions
+  10:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *
+  11:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   @verbatim
+  12:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   ==============================================================================
+  13:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****                     ##### IWDG Generic features #####
+  14:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   ==============================================================================
+  15:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   [..]
+  16:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     (+) The IWDG can be started by either software or hardware (configurable
+  17:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         through option byte).
+  18:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  19:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     (+) The IWDG is clocked by Low-Speed clock (LSI) and thus stays active even
+  20:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         if the main clock fails.
+  21:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  22:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     (+) Once the IWDG is started, the LSI is forced ON and both can not be
+  23:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         disabled. The counter starts counting down from the reset value (0xFFF).
+  24:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         When it reaches the end of count value (0x000) a reset signal is
+  25:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         generated (IWDG reset).
+  26:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  27:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     (+) Whenever the key value 0x0000 AAAA is written in the IWDG_KR register,
+  28:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         the IWDG_RLR value is reloaded in the counter and the watchdog reset is
+  29:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         prevented.
+  30:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  31:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     (+) The IWDG is implemented in the VDD voltage domain that is still functional
+ARM GAS  /tmp/cc1BYqgC.s 			page 2
+
+
+  32:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         in STOP and STANDBY mode (IWDG reset can wake-up from STANDBY).
+  33:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         IWDGRST flag in RCC_CSR register can be used to inform when an IWDG
+  34:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         reset occurs.
+  35:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  36:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     (+) Debug mode : When the microcontroller enters debug mode (core halted),
+  37:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         the IWDG counter either continues to work normally or stops, depending
+  38:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         on DBG_IWDG_STOP configuration bit in DBG module, accessible through
+  39:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         __HAL_DBGMCU_FREEZE_IWDG() and __HAL_DBGMCU_UNFREEZE_IWDG() macros.
+  40:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  41:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     [..] Min-max timeout value @32KHz (LSI): ~125us / ~32.7s
+  42:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****          The IWDG timeout may vary due to LSI frequency dispersion. STM32F4xx
+  43:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****          devices provide the capability to measure the LSI frequency (LSI clock
+  44:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****          connected internally to TIM5 CH4 input capture). The measured value
+  45:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****          can be used to have an IWDG timeout with an acceptable accuracy.
+  46:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  47:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****                      ##### How to use this driver #####
+  48:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   ==============================================================================
+  49:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   [..]
+  50:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     (#) Use IWDG using HAL_IWDG_Init() function to :
+  51:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****       (++) Enable instance by writing Start keyword in IWDG_KEY register. LSI
+  52:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****            clock is forced ON and IWDG counter starts counting down.
+  53:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****       (++) Enable write access to configuration registers:
+  54:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****           IWDG_PR and IWDG_RLR.
+  55:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****       (++) Configure the IWDG prescaler and counter reload value. This reload
+  56:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****            value will be loaded in the IWDG counter each time the watchdog is
+  57:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****            reloaded, then the IWDG will start counting down from this value.
+  58:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****       (++) Wait for status flags to be reset.
+  59:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  60:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     (#) Then the application program must refresh the IWDG counter at regular
+  61:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         intervals during normal operation to prevent an MCU reset, using
+  62:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****         HAL_IWDG_Refresh() function.
+  63:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  64:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****      *** IWDG HAL driver macros list ***
+  65:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****      ====================================
+  66:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****      [..]
+  67:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****        Below the list of most used macros in IWDG HAL driver:
+  68:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****       (+) __HAL_IWDG_START: Enable the IWDG peripheral
+  69:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****       (+) __HAL_IWDG_RELOAD_COUNTER: Reloads IWDG counter with value defined in
+  70:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****           the reload register
+  71:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  72:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   @endverbatim
+  73:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   ******************************************************************************
+  74:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @attention
+  75:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *
+  76:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
+  77:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * All rights reserved.</center></h2>
+  78:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *
+  79:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  80:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * the "License"; You may not use this file except in compliance with the
+  81:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * License. You may obtain a copy of the License at:
+  82:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  83:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   ******************************************************************************
+  85:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+  86:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  87:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /* Includes ------------------------------------------------------------------*/
+  88:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** #include "stm32f4xx_hal.h"
+ARM GAS  /tmp/cc1BYqgC.s 			page 3
+
+
+  89:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  90:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  91:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @{
+  92:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+  93:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  94:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** #ifdef HAL_IWDG_MODULE_ENABLED
+  95:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /** @addtogroup IWDG
+  96:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @brief IWDG HAL module driver.
+  97:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @{
+  98:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+  99:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 100:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /* Private typedef -----------------------------------------------------------*/
+ 101:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /* Private define ------------------------------------------------------------*/
+ 102:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /** @defgroup IWDG_Private_Defines IWDG Private Defines
+ 103:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @{
+ 104:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+ 105:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /* Status register need 5 RC LSI divided by prescaler clock to be updated. With
+ 106:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****    higher prescaler (256), and according to LSI variation, we need to wait at
+ 107:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****    least 6 cycles so 48 ms. */
+ 108:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** #define HAL_IWDG_DEFAULT_TIMEOUT            48u
+ 109:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /**
+ 110:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @}
+ 111:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+ 112:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 113:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /* Private macro -------------------------------------------------------------*/
+ 114:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /* Private variables ---------------------------------------------------------*/
+ 115:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /* Private function prototypes -----------------------------------------------*/
+ 116:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /* Exported functions --------------------------------------------------------*/
+ 117:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 118:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /** @addtogroup IWDG_Exported_Functions
+ 119:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @{
+ 120:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+ 121:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 122:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /** @addtogroup IWDG_Exported_Functions_Group1
+ 123:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *  @brief    Initialization and Start functions.
+ 124:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *
+ 125:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** @verbatim
+ 126:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****  ===============================================================================
+ 127:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****           ##### Initialization and Start functions #####
+ 128:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****  ===============================================================================
+ 129:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****  [..]  This section provides functions allowing to:
+ 130:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****       (+) Initialize the IWDG according to the specified parameters in the
+ 131:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****           IWDG_InitTypeDef of associated handle.
+ 132:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****       (+) Once initialization is performed in HAL_IWDG_Init function, Watchdog
+ 133:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****           is reloaded in order to exit function with correct time base.
+ 134:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 135:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** @endverbatim
+ 136:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @{
+ 137:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+ 138:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 139:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /**
+ 140:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @brief  Initialize the IWDG according to the specified parameters in the
+ 141:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *         IWDG_InitTypeDef and start watchdog. Before exiting function,
+ 142:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *         watchdog is refreshed in order to have correct time base.
+ 143:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @param  hiwdg  pointer to a IWDG_HandleTypeDef structure that contains
+ 144:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *                the configuration information for the specified IWDG module.
+ 145:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @retval HAL status
+ARM GAS  /tmp/cc1BYqgC.s 			page 4
+
+
+ 146:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+ 147:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** HAL_StatusTypeDef HAL_IWDG_Init(IWDG_HandleTypeDef *hiwdg)
+ 148:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** {
+  28              		.loc 1 148 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+ 149:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   uint32_t tickstart;
+ 150:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 151:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Check the IWDG handle allocation */
+ 152:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   if (hiwdg == NULL)
+  33              		.loc 1 152 0
+  34 0000 08B3     		cbz	r0, .L5
+ 148:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   uint32_t tickstart;
+  35              		.loc 1 148 0
+  36 0002 38B5     		push	{r3, r4, r5, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 16
+  39              		.cfi_offset 3, -16
+  40              		.cfi_offset 4, -12
+  41              		.cfi_offset 5, -8
+  42              		.cfi_offset 14, -4
+  43 0004 0446     		mov	r4, r0
+ 153:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   {
+ 154:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     return HAL_ERROR;
+ 155:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   }
+ 156:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 157:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Check the parameters */
+ 158:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   assert_param(IS_IWDG_ALL_INSTANCE(hiwdg->Instance));
+ 159:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   assert_param(IS_IWDG_PRESCALER(hiwdg->Init.Prescaler));
+ 160:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   assert_param(IS_IWDG_RELOAD(hiwdg->Init.Reload));
+ 161:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 162:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Enable IWDG. LSI is turned on automatically */
+ 163:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   __HAL_IWDG_START(hiwdg);
+  44              		.loc 1 163 0
+  45 0006 0368     		ldr	r3, [r0]
+  46 0008 4CF6CC42 		movw	r2, #52428
+  47 000c 1A60     		str	r2, [r3]
+ 164:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 165:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Enable write access to IWDG_PR and IWDG_RLR registers by writing
+ 166:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   0x5555 in KR */
+ 167:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   IWDG_ENABLE_WRITE_ACCESS(hiwdg);
+  48              		.loc 1 167 0
+  49 000e 0368     		ldr	r3, [r0]
+  50 0010 45F25552 		movw	r2, #21845
+  51 0014 1A60     		str	r2, [r3]
+ 168:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 169:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Write to IWDG registers the Prescaler & Reload values to work with */
+ 170:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   hiwdg->Instance->PR = hiwdg->Init.Prescaler;
+  52              		.loc 1 170 0
+  53 0016 0368     		ldr	r3, [r0]
+  54 0018 4268     		ldr	r2, [r0, #4]
+  55 001a 5A60     		str	r2, [r3, #4]
+ 171:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   hiwdg->Instance->RLR = hiwdg->Init.Reload;
+  56              		.loc 1 171 0
+  57 001c 0368     		ldr	r3, [r0]
+ARM GAS  /tmp/cc1BYqgC.s 			page 5
+
+
+  58 001e 8268     		ldr	r2, [r0, #8]
+  59 0020 9A60     		str	r2, [r3, #8]
+ 172:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 173:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Check pending flag, if previous update not done, return timeout */
+ 174:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   tickstart = HAL_GetTick();
+  60              		.loc 1 174 0
+  61 0022 FFF7FEFF 		bl	HAL_GetTick
+  62              	.LVL1:
+  63 0026 0546     		mov	r5, r0
+  64              	.LVL2:
+  65              	.L3:
+ 175:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 176:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Wait for register to be updated */
+ 177:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   while (hiwdg->Instance->SR != 0x00u)
+  66              		.loc 1 177 0
+  67 0028 2368     		ldr	r3, [r4]
+  68 002a DA68     		ldr	r2, [r3, #12]
+  69 002c 32B1     		cbz	r2, .L11
+ 178:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   {
+ 179:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     if ((HAL_GetTick() - tickstart) > HAL_IWDG_DEFAULT_TIMEOUT)
+  70              		.loc 1 179 0
+  71 002e FFF7FEFF 		bl	HAL_GetTick
+  72              	.LVL3:
+  73 0032 401B     		subs	r0, r0, r5
+  74 0034 3028     		cmp	r0, #48
+  75 0036 F7D9     		bls	.L3
+ 180:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     {
+ 181:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****       return HAL_TIMEOUT;
+  76              		.loc 1 181 0
+  77 0038 0320     		movs	r0, #3
+ 182:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****     }
+ 183:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   }
+ 184:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 185:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Reload IWDG counter with value defined in the reload register */
+ 186:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   __HAL_IWDG_RELOAD_COUNTER(hiwdg);
+ 187:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 188:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Return function status */
+ 189:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   return HAL_OK;
+ 190:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** }
+  78              		.loc 1 190 0
+  79 003a 38BD     		pop	{r3, r4, r5, pc}
+  80              	.LVL4:
+  81              	.L11:
+ 186:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+  82              		.loc 1 186 0
+  83 003c 4AF6AA22 		movw	r2, #43690
+  84 0040 1A60     		str	r2, [r3]
+ 189:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** }
+  85              		.loc 1 189 0
+  86 0042 0020     		movs	r0, #0
+  87 0044 38BD     		pop	{r3, r4, r5, pc}
+  88              	.LVL5:
+  89              	.L5:
+  90              	.LCFI1:
+  91              		.cfi_def_cfa_offset 0
+  92              		.cfi_restore 3
+  93              		.cfi_restore 4
+ARM GAS  /tmp/cc1BYqgC.s 			page 6
+
+
+  94              		.cfi_restore 5
+  95              		.cfi_restore 14
+ 154:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   }
+  96              		.loc 1 154 0
+  97 0046 0120     		movs	r0, #1
+  98              	.LVL6:
+  99 0048 7047     		bx	lr
+ 100              		.cfi_endproc
+ 101              	.LFE130:
+ 103              		.section	.text.HAL_IWDG_Refresh,"ax",%progbits
+ 104              		.align	1
+ 105              		.global	HAL_IWDG_Refresh
+ 106              		.syntax unified
+ 107              		.thumb
+ 108              		.thumb_func
+ 109              		.fpu fpv4-sp-d16
+ 111              	HAL_IWDG_Refresh:
+ 112              	.LFB131:
+ 191:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 192:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /**
+ 193:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @}
+ 194:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+ 195:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 196:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 197:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /** @addtogroup IWDG_Exported_Functions_Group2
+ 198:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *  @brief   IO operation functions
+ 199:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *
+ 200:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** @verbatim
+ 201:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****  ===============================================================================
+ 202:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****                       ##### IO operation functions #####
+ 203:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****  ===============================================================================
+ 204:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****  [..]  This section provides functions allowing to:
+ 205:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****       (+) Refresh the IWDG.
+ 206:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 207:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** @endverbatim
+ 208:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @{
+ 209:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+ 210:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 211:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 212:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** /**
+ 213:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @brief  Refresh the IWDG.
+ 214:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @param  hiwdg  pointer to a IWDG_HandleTypeDef structure that contains
+ 215:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   *                the configuration information for the specified IWDG module.
+ 216:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   * @retval HAL status
+ 217:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   */
+ 218:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** HAL_StatusTypeDef HAL_IWDG_Refresh(IWDG_HandleTypeDef *hiwdg)
+ 219:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** {
+ 113              		.loc 1 219 0
+ 114              		.cfi_startproc
+ 115              		@ args = 0, pretend = 0, frame = 0
+ 116              		@ frame_needed = 0, uses_anonymous_args = 0
+ 117              		@ link register save eliminated.
+ 118              	.LVL7:
+ 220:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Reload IWDG counter with value defined in the reload register */
+ 221:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   __HAL_IWDG_RELOAD_COUNTER(hiwdg);
+ 119              		.loc 1 221 0
+ 120 0000 0368     		ldr	r3, [r0]
+ARM GAS  /tmp/cc1BYqgC.s 			page 7
+
+
+ 121 0002 4AF6AA22 		movw	r2, #43690
+ 122 0006 1A60     		str	r2, [r3]
+ 222:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** 
+ 223:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   /* Return function status */
+ 224:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c ****   return HAL_OK;
+ 225:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal_iwdg.c **** }
+ 123              		.loc 1 225 0
+ 124 0008 0020     		movs	r0, #0
+ 125              	.LVL8:
+ 126 000a 7047     		bx	lr
+ 127              		.cfi_endproc
+ 128              	.LFE131:
+ 130              		.text
+ 131              	.Letext0:
+ 132              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 133              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 134              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 135              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 136              		.file 6 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 137              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 138              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 139              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ARM GAS  /tmp/cc1BYqgC.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal_iwdg.c
+     /tmp/cc1BYqgC.s:18     .text.HAL_IWDG_Init:0000000000000000 $t
+     /tmp/cc1BYqgC.s:25     .text.HAL_IWDG_Init:0000000000000000 HAL_IWDG_Init
+     /tmp/cc1BYqgC.s:104    .text.HAL_IWDG_Refresh:0000000000000000 $t
+     /tmp/cc1BYqgC.s:111    .text.HAL_IWDG_Refresh:0000000000000000 HAL_IWDG_Refresh
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_GetTick

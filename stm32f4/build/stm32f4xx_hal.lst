@@ -1,0 +1,1624 @@
+ARM GAS  /tmp/ccDPmcP8.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_MspInit,"ax",%progbits
+  18              		.align	1
+  19              		.weak	HAL_MspInit
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	HAL_MspInit:
+  26              	.LFB132:
+  27              		.file 1 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_ha
+   1:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+   2:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   ******************************************************************************
+   3:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @file    stm32f4xx_hal.c
+   4:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @author  MCD Application Team
+   5:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief   HAL module driver.
+   6:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *          This is the common part of the HAL initialization
+   7:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *
+   8:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   @verbatim
+   9:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   ==============================================================================
+  10:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****                      ##### How to use this driver #####
+  11:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   ==============================================================================
+  12:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     [..]
+  13:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     The common HAL driver contains a set of generic and common APIs that can be
+  14:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     used by the PPP peripheral drivers and the user to start using the HAL. 
+  15:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     [..]
+  16:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     The HAL contains two APIs' categories: 
+  17:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****          (+) Common HAL APIs
+  18:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****          (+) Services HAL APIs
+  19:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  20:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   @endverbatim
+  21:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   ******************************************************************************
+  22:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @attention
+  23:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *
+  24:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  25:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * All rights reserved.</center></h2>
+  26:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *
+  27:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  28:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * the "License"; You may not use this file except in compliance with the
+  29:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * License. You may obtain a copy of the License at:
+  30:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  31:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *
+ARM GAS  /tmp/ccDPmcP8.s 			page 2
+
+
+  32:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   ******************************************************************************
+  33:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */ 
+  34:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  35:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* Includes ------------------------------------------------------------------*/
+  36:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #include "stm32f4xx_hal.h"
+  37:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  38:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  39:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @{
+  40:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+  41:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  42:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /** @defgroup HAL HAL
+  43:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief HAL module driver.
+  44:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @{
+  45:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+  46:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  47:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* Private typedef -----------------------------------------------------------*/
+  48:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* Private define ------------------------------------------------------------*/
+  49:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /** @addtogroup HAL_Private_Constants
+  50:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @{
+  51:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+  52:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+  53:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief STM32F4xx HAL Driver version number V1.7.7
+  54:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+  55:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define __STM32F4xx_HAL_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
+  56:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define __STM32F4xx_HAL_VERSION_SUB1   (0x07U) /*!< [23:16] sub1 version */
+  57:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define __STM32F4xx_HAL_VERSION_SUB2   (0x07U) /*!< [15:8]  sub2 version */
+  58:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define __STM32F4xx_HAL_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */ 
+  59:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define __STM32F4xx_HAL_VERSION         ((__STM32F4xx_HAL_VERSION_MAIN << 24U)\
+  60:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****                                         |(__STM32F4xx_HAL_VERSION_SUB1 << 16U)\
+  61:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****                                         |(__STM32F4xx_HAL_VERSION_SUB2 << 8U )\
+  62:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****                                         |(__STM32F4xx_HAL_VERSION_RC))
+  63:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****                                         
+  64:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define IDCODE_DEVID_MASK    0x00000FFFU
+  65:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  66:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* ------------ RCC registers bit address in the alias region ----------- */
+  67:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define SYSCFG_OFFSET             (SYSCFG_BASE - PERIPH_BASE)
+  68:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* ---  MEMRMP Register ---*/ 
+  69:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* Alias word address of UFB_MODE bit */ 
+  70:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define MEMRMP_OFFSET             SYSCFG_OFFSET 
+  71:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define UFB_MODE_BIT_NUMBER       SYSCFG_MEMRMP_UFB_MODE_Pos
+  72:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define UFB_MODE_BB               (uint32_t)(PERIPH_BB_BASE + (MEMRMP_OFFSET * 32U) + (UFB_MODE_BIT
+  73:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  74:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* ---  CMPCR Register ---*/ 
+  75:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* Alias word address of CMP_PD bit */ 
+  76:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define CMPCR_OFFSET              (SYSCFG_OFFSET + 0x20U) 
+  77:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define CMP_PD_BIT_NUMBER         SYSCFG_CMPCR_CMP_PD_Pos
+  78:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define CMPCR_CMP_PD_BB           (uint32_t)(PERIPH_BB_BASE + (CMPCR_OFFSET * 32U) + (CMP_PD_BIT_NU
+  79:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  80:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* ---  MCHDLYCR Register ---*/ 
+  81:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* Alias word address of BSCKSEL bit */ 
+  82:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define MCHDLYCR_OFFSET            (SYSCFG_OFFSET + 0x30U) 
+  83:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define BSCKSEL_BIT_NUMBER         SYSCFG_MCHDLYCR_BSCKSEL_Pos
+  84:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #define MCHDLYCR_BSCKSEL_BB        (uint32_t)(PERIPH_BB_BASE + (MCHDLYCR_OFFSET * 32U) + (BSCKSEL_B
+  85:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+  86:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @}
+  87:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+  88:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ARM GAS  /tmp/ccDPmcP8.s 			page 3
+
+
+  89:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* Private macro -------------------------------------------------------------*/
+  90:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* Private variables ---------------------------------------------------------*/
+  91:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /** @addtogroup HAL_Private_Variables
+  92:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @{
+  93:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+  94:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** __IO uint32_t uwTick;
+  95:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** uint32_t uwTickPrio   = (1UL << __NVIC_PRIO_BITS); /* Invalid PRIO */
+  96:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** HAL_TickFreqTypeDef uwTickFreq = HAL_TICK_FREQ_DEFAULT;  /* 1KHz */
+  97:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+  98:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @}
+  99:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 100:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* Private function prototypes -----------------------------------------------*/
+ 101:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /* Private functions ---------------------------------------------------------*/
+ 102:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 103:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /** @defgroup HAL_Exported_Functions HAL Exported Functions
+ 104:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @{
+ 105:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 106:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 107:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /** @defgroup HAL_Exported_Functions_Group1 Initialization and de-initialization Functions 
+ 108:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****  *  @brief    Initialization and de-initialization functions
+ 109:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****  *
+ 110:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** @verbatim    
+ 111:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****  ===============================================================================
+ 112:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****               ##### Initialization and Configuration functions #####
+ 113:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****  ===============================================================================
+ 114:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     [..]  This section provides functions allowing to:
+ 115:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Initializes the Flash interface the NVIC allocation and initial clock 
+ 116:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****           configuration. It initializes the systick also when timeout is needed 
+ 117:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****           and the backup domain when enabled.
+ 118:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) De-Initializes common part of the HAL.
+ 119:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Configure the time base source to have 1ms time base with a dedicated 
+ 120:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****           Tick interrupt priority. 
+ 121:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****         (++) SysTick timer is used by default as source of time base, but user
+ 122:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****              can eventually implement his proper time base source (a general purpose 
+ 123:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****              timer for example or other time source), keeping in mind that Time base 
+ 124:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****              duration should be kept 1ms since PPP_TIMEOUT_VALUEs are defined and 
+ 125:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****              handled in milliseconds basis.
+ 126:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****         (++) Time base configuration function (HAL_InitTick ()) is called automatically 
+ 127:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****              at the beginning of the program after reset by HAL_Init() or at any time 
+ 128:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****              when clock is configured, by HAL_RCC_ClockConfig(). 
+ 129:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****         (++) Source of time base is configured  to generate interrupts at regular 
+ 130:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****              time intervals. Care must be taken if HAL_Delay() is called from a 
+ 131:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****              peripheral ISR process, the Tick interrupt line must have higher priority 
+ 132:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****             (numerically lower) than the peripheral interrupt. Otherwise the caller 
+ 133:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****             ISR process will be blocked. 
+ 134:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****        (++) functions affecting time base configurations are declared as __weak  
+ 135:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****              to make  override possible  in case of other  implementations in user file.
+ 136:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** @endverbatim
+ 137:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @{
+ 138:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 139:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 140:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 141:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  This function is used to initialize the HAL Library; it must be the first 
+ 142:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *         instruction to be executed in the main program (before to call any other
+ 143:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *         HAL function), it performs the following:
+ 144:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *           Configure the Flash prefetch, instruction and Data caches.
+ 145:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *           Configures the SysTick to generate an interrupt each 1 millisecond,
+ARM GAS  /tmp/ccDPmcP8.s 			page 4
+
+
+ 146:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *           which is clocked by the HSI (at this stage, the clock is not yet
+ 147:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *           configured and thus the system is running from the internal HSI at 16 MHz).
+ 148:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *           Set NVIC Group Priority to 4.
+ 149:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *           Calls the HAL_MspInit() callback function defined in user file 
+ 150:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *           "stm32f4xx_hal_msp.c" to do the global low level hardware initialization 
+ 151:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *            
+ 152:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note   SysTick is used as time base for the HAL_Delay() function, the application
+ 153:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *         need to ensure that the SysTick time base is always set to 1 millisecond
+ 154:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *         to have correct HAL operation.
+ 155:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval HAL status
+ 156:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 157:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** HAL_StatusTypeDef HAL_Init(void)
+ 158:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 159:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Configure Flash prefetch, Instruction cache, Data cache */ 
+ 160:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #if (INSTRUCTION_CACHE_ENABLE != 0U)
+ 161:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_FLASH_INSTRUCTION_CACHE_ENABLE();
+ 162:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #endif /* INSTRUCTION_CACHE_ENABLE */
+ 163:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 164:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #if (DATA_CACHE_ENABLE != 0U)
+ 165:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_FLASH_DATA_CACHE_ENABLE();
+ 166:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #endif /* DATA_CACHE_ENABLE */
+ 167:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 168:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #if (PREFETCH_ENABLE != 0U)
+ 169:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
+ 170:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #endif /* PREFETCH_ENABLE */
+ 171:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 172:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Set Interrupt Group Priority */
+ 173:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+ 174:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 175:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Use systick as time base source and configure 1ms tick (default clock after Reset is HSI) */
+ 176:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   HAL_InitTick(TICK_INT_PRIORITY);
+ 177:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 178:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Init the low level hardware */
+ 179:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   HAL_MspInit();
+ 180:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 181:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Return function status */
+ 182:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return HAL_OK;
+ 183:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 184:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 185:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 186:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  This function de-Initializes common part of the HAL and stops the systick.
+ 187:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *         This function is optional.   
+ 188:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval HAL status
+ 189:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 190:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** HAL_StatusTypeDef HAL_DeInit(void)
+ 191:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 192:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Reset of all peripherals */
+ 193:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_APB1_FORCE_RESET();
+ 194:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_APB1_RELEASE_RESET();
+ 195:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 196:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_APB2_FORCE_RESET();
+ 197:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_APB2_RELEASE_RESET();
+ 198:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 199:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_AHB1_FORCE_RESET();
+ 200:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_AHB1_RELEASE_RESET();
+ 201:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 202:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_AHB2_FORCE_RESET();
+ARM GAS  /tmp/ccDPmcP8.s 			page 5
+
+
+ 203:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_AHB2_RELEASE_RESET();
+ 204:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 205:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_AHB3_FORCE_RESET();
+ 206:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_AHB3_RELEASE_RESET();
+ 207:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 208:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* De-Init the low level hardware */
+ 209:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   HAL_MspDeInit();
+ 210:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     
+ 211:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Return function status */
+ 212:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return HAL_OK;
+ 213:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 214:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 215:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 216:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Initialize the MSP.
+ 217:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 218:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 219:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** __weak void HAL_MspInit(void)
+ 220:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+  28              		.loc 1 220 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33 0000 7047     		bx	lr
+  34              		.cfi_endproc
+  35              	.LFE132:
+  37              		.section	.text.HAL_MspDeInit,"ax",%progbits
+  38              		.align	1
+  39              		.weak	HAL_MspDeInit
+  40              		.syntax unified
+  41              		.thumb
+  42              		.thumb_func
+  43              		.fpu fpv4-sp-d16
+  45              	HAL_MspDeInit:
+  46              	.LFB133:
+ 221:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 222:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****             the HAL_MspInit could be implemented in the user file
+ 223:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****    */
+ 224:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 225:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 226:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 227:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  DeInitializes the MSP.
+ 228:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 229:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 230:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** __weak void HAL_MspDeInit(void)
+ 231:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+  47              		.loc 1 231 0
+  48              		.cfi_startproc
+  49              		@ args = 0, pretend = 0, frame = 0
+  50              		@ frame_needed = 0, uses_anonymous_args = 0
+  51              		@ link register save eliminated.
+  52 0000 7047     		bx	lr
+  53              		.cfi_endproc
+  54              	.LFE133:
+  56              		.section	.text.HAL_DeInit,"ax",%progbits
+  57              		.align	1
+  58              		.global	HAL_DeInit
+ARM GAS  /tmp/ccDPmcP8.s 			page 6
+
+
+  59              		.syntax unified
+  60              		.thumb
+  61              		.thumb_func
+  62              		.fpu fpv4-sp-d16
+  64              	HAL_DeInit:
+  65              	.LFB131:
+ 191:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Reset of all peripherals */
+  66              		.loc 1 191 0
+  67              		.cfi_startproc
+  68              		@ args = 0, pretend = 0, frame = 0
+  69              		@ frame_needed = 0, uses_anonymous_args = 0
+ 191:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Reset of all peripherals */
+  70              		.loc 1 191 0
+  71 0000 10B5     		push	{r4, lr}
+  72              	.LCFI0:
+  73              		.cfi_def_cfa_offset 8
+  74              		.cfi_offset 4, -8
+  75              		.cfi_offset 14, -4
+ 193:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_APB1_RELEASE_RESET();
+  76              		.loc 1 193 0
+  77 0002 094B     		ldr	r3, .L5
+  78 0004 4FF0FF32 		mov	r2, #-1
+  79 0008 1A62     		str	r2, [r3, #32]
+ 194:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  80              		.loc 1 194 0
+  81 000a 0024     		movs	r4, #0
+  82 000c 1C62     		str	r4, [r3, #32]
+ 196:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_APB2_RELEASE_RESET();
+  83              		.loc 1 196 0
+  84 000e 5A62     		str	r2, [r3, #36]
+ 197:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  85              		.loc 1 197 0
+  86 0010 5C62     		str	r4, [r3, #36]
+ 199:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_AHB1_RELEASE_RESET();
+  87              		.loc 1 199 0
+  88 0012 1A61     		str	r2, [r3, #16]
+ 200:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  89              		.loc 1 200 0
+  90 0014 1C61     		str	r4, [r3, #16]
+ 202:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_AHB2_RELEASE_RESET();
+  91              		.loc 1 202 0
+  92 0016 5A61     		str	r2, [r3, #20]
+ 203:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  93              		.loc 1 203 0
+  94 0018 5C61     		str	r4, [r3, #20]
+ 205:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   __HAL_RCC_AHB3_RELEASE_RESET();
+  95              		.loc 1 205 0
+  96 001a 9A61     		str	r2, [r3, #24]
+ 206:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+  97              		.loc 1 206 0
+  98 001c 9C61     		str	r4, [r3, #24]
+ 209:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     
+  99              		.loc 1 209 0
+ 100 001e FFF7FEFF 		bl	HAL_MspDeInit
+ 101              	.LVL0:
+ 213:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 102              		.loc 1 213 0
+ARM GAS  /tmp/ccDPmcP8.s 			page 7
+
+
+ 103 0022 2046     		mov	r0, r4
+ 104 0024 10BD     		pop	{r4, pc}
+ 105              	.L6:
+ 106 0026 00BF     		.align	2
+ 107              	.L5:
+ 108 0028 00380240 		.word	1073887232
+ 109              		.cfi_endproc
+ 110              	.LFE131:
+ 112              		.section	.text.HAL_InitTick,"ax",%progbits
+ 113              		.align	1
+ 114              		.weak	HAL_InitTick
+ 115              		.syntax unified
+ 116              		.thumb
+ 117              		.thumb_func
+ 118              		.fpu fpv4-sp-d16
+ 120              	HAL_InitTick:
+ 121              	.LFB134:
+ 232:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 233:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****             the HAL_MspDeInit could be implemented in the user file
+ 234:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****    */ 
+ 235:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 236:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 237:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 238:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief This function configures the source of the time base.
+ 239:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *        The time source is configured  to have 1ms time base with a dedicated 
+ 240:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *        Tick interrupt priority.
+ 241:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note This function is called  automatically at the beginning of program after
+ 242:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       reset by HAL_Init() or at any time when clock is reconfigured  by HAL_RCC_ClockConfig().
+ 243:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note In the default implementation, SysTick timer is the source of time base. 
+ 244:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       It is used to generate interrupts at regular time intervals. 
+ 245:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       Care must be taken if HAL_Delay() is called from a peripheral ISR process, 
+ 246:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       The SysTick interrupt must have higher priority (numerically lower)
+ 247:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       than the peripheral interrupt. Otherwise the caller ISR process will be blocked.
+ 248:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       The function is declared as __weak  to be overwritten  in case of other
+ 249:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       implementation  in user file.
+ 250:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @param TickPriority Tick interrupt priority.
+ 251:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval HAL status
+ 252:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 253:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
+ 254:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 122              		.loc 1 254 0
+ 123              		.cfi_startproc
+ 124              		@ args = 0, pretend = 0, frame = 0
+ 125              		@ frame_needed = 0, uses_anonymous_args = 0
+ 126              	.LVL1:
+ 127 0000 10B5     		push	{r4, lr}
+ 128              	.LCFI1:
+ 129              		.cfi_def_cfa_offset 8
+ 130              		.cfi_offset 4, -8
+ 131              		.cfi_offset 14, -4
+ 132 0002 0446     		mov	r4, r0
+ 255:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Configure the SysTick to have interrupt in 1ms time basis*/
+ 256:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   if (HAL_SYSTICK_Config(SystemCoreClock / (1000U / uwTickFreq)) > 0U)
+ 133              		.loc 1 256 0
+ 134 0004 0E4B     		ldr	r3, .L13
+ 135 0006 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 136              	.LVL2:
+ARM GAS  /tmp/ccDPmcP8.s 			page 8
+
+
+ 137 0008 4FF47A73 		mov	r3, #1000
+ 138 000c B3FBF0F3 		udiv	r3, r3, r0
+ 139 0010 0C4A     		ldr	r2, .L13+4
+ 140 0012 1068     		ldr	r0, [r2]
+ 141 0014 B0FBF3F0 		udiv	r0, r0, r3
+ 142 0018 FFF7FEFF 		bl	HAL_SYSTICK_Config
+ 143              	.LVL3:
+ 144 001c 68B9     		cbnz	r0, .L9
+ 257:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   {
+ 258:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     return HAL_ERROR;
+ 259:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   }
+ 260:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 261:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Configure the SysTick IRQ priority */
+ 262:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   if (TickPriority < (1UL << __NVIC_PRIO_BITS))
+ 145              		.loc 1 262 0
+ 146 001e 0F2C     		cmp	r4, #15
+ 147 0020 01D9     		bls	.L12
+ 263:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   {
+ 264:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     HAL_NVIC_SetPriority(SysTick_IRQn, TickPriority, 0U);
+ 265:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     uwTickPrio = TickPriority;
+ 266:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   }
+ 267:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   else
+ 268:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   {
+ 269:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     return HAL_ERROR;
+ 148              		.loc 1 269 0
+ 149 0022 0120     		movs	r0, #1
+ 270:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   }
+ 271:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 272:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Return function status */
+ 273:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return HAL_OK;
+ 274:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 150              		.loc 1 274 0
+ 151 0024 10BD     		pop	{r4, pc}
+ 152              	.LVL4:
+ 153              	.L12:
+ 264:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     uwTickPrio = TickPriority;
+ 154              		.loc 1 264 0
+ 155 0026 0022     		movs	r2, #0
+ 156 0028 2146     		mov	r1, r4
+ 157 002a 4FF0FF30 		mov	r0, #-1
+ 158 002e FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 159              	.LVL5:
+ 265:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   }
+ 160              		.loc 1 265 0
+ 161 0032 054B     		ldr	r3, .L13+8
+ 162 0034 1C60     		str	r4, [r3]
+ 273:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 163              		.loc 1 273 0
+ 164 0036 0020     		movs	r0, #0
+ 165 0038 10BD     		pop	{r4, pc}
+ 166              	.LVL6:
+ 167              	.L9:
+ 258:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   }
+ 168              		.loc 1 258 0
+ 169 003a 0120     		movs	r0, #1
+ 170 003c 10BD     		pop	{r4, pc}
+ 171              	.LVL7:
+ARM GAS  /tmp/ccDPmcP8.s 			page 9
+
+
+ 172              	.L14:
+ 173 003e 00BF     		.align	2
+ 174              	.L13:
+ 175 0040 00000000 		.word	.LANCHOR0
+ 176 0044 00000000 		.word	SystemCoreClock
+ 177 0048 00000000 		.word	.LANCHOR1
+ 178              		.cfi_endproc
+ 179              	.LFE134:
+ 181              		.section	.text.HAL_Init,"ax",%progbits
+ 182              		.align	1
+ 183              		.global	HAL_Init
+ 184              		.syntax unified
+ 185              		.thumb
+ 186              		.thumb_func
+ 187              		.fpu fpv4-sp-d16
+ 189              	HAL_Init:
+ 190              	.LFB130:
+ 158:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Configure Flash prefetch, Instruction cache, Data cache */ 
+ 191              		.loc 1 158 0
+ 192              		.cfi_startproc
+ 193              		@ args = 0, pretend = 0, frame = 0
+ 194              		@ frame_needed = 0, uses_anonymous_args = 0
+ 195 0000 08B5     		push	{r3, lr}
+ 196              	.LCFI2:
+ 197              		.cfi_def_cfa_offset 8
+ 198              		.cfi_offset 3, -8
+ 199              		.cfi_offset 14, -4
+ 161:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #endif /* INSTRUCTION_CACHE_ENABLE */
+ 200              		.loc 1 161 0
+ 201 0002 094B     		ldr	r3, .L17
+ 202 0004 1A68     		ldr	r2, [r3]
+ 203 0006 42F40072 		orr	r2, r2, #512
+ 204 000a 1A60     		str	r2, [r3]
+ 165:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** #endif /* DATA_CACHE_ENABLE */
+ 205              		.loc 1 165 0
+ 206 000c 1A68     		ldr	r2, [r3]
+ 207 000e 42F48062 		orr	r2, r2, #1024
+ 208 0012 1A60     		str	r2, [r3]
+ 173:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 209              		.loc 1 173 0
+ 210 0014 0320     		movs	r0, #3
+ 211 0016 FFF7FEFF 		bl	HAL_NVIC_SetPriorityGrouping
+ 212              	.LVL8:
+ 176:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 213              		.loc 1 176 0
+ 214 001a 0F20     		movs	r0, #15
+ 215 001c FFF7FEFF 		bl	HAL_InitTick
+ 216              	.LVL9:
+ 179:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 217              		.loc 1 179 0
+ 218 0020 FFF7FEFF 		bl	HAL_MspInit
+ 219              	.LVL10:
+ 183:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 220              		.loc 1 183 0
+ 221 0024 0020     		movs	r0, #0
+ 222 0026 08BD     		pop	{r3, pc}
+ 223              	.L18:
+ARM GAS  /tmp/ccDPmcP8.s 			page 10
+
+
+ 224              		.align	2
+ 225              	.L17:
+ 226 0028 003C0240 		.word	1073888256
+ 227              		.cfi_endproc
+ 228              	.LFE130:
+ 230              		.section	.text.HAL_IncTick,"ax",%progbits
+ 231              		.align	1
+ 232              		.weak	HAL_IncTick
+ 233              		.syntax unified
+ 234              		.thumb
+ 235              		.thumb_func
+ 236              		.fpu fpv4-sp-d16
+ 238              	HAL_IncTick:
+ 239              	.LFB135:
+ 275:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 276:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 277:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @}
+ 278:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 279:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 280:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /** @defgroup HAL_Exported_Functions_Group2 HAL Control functions 
+ 281:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****  *  @brief    HAL Control functions
+ 282:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****  *
+ 283:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** @verbatim
+ 284:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****  ===============================================================================
+ 285:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****                       ##### HAL Control functions #####
+ 286:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****  ===============================================================================
+ 287:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     [..]  This section provides functions allowing to:
+ 288:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Provide a tick value in millisecond
+ 289:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Provide a blocking delay in millisecond
+ 290:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Suspend the time base source interrupt
+ 291:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Resume the time base source interrupt
+ 292:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Get the HAL API driver version
+ 293:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Get the device identifier
+ 294:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Get the device revision identifier
+ 295:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Enable/Disable Debug module during SLEEP mode
+ 296:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Enable/Disable Debug module during STOP mode
+ 297:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       (+) Enable/Disable Debug module during STANDBY mode
+ 298:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 299:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** @endverbatim
+ 300:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @{
+ 301:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 302:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 303:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 304:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief This function is called to increment  a global variable "uwTick"
+ 305:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *        used as application time base.
+ 306:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note In the default implementation, this variable is incremented each 1ms
+ 307:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       in SysTick ISR.
+ 308:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****  * @note This function is declared as __weak to be overwritten in case of other 
+ 309:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *      implementations in user file.
+ 310:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 311:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 312:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** __weak void HAL_IncTick(void)
+ 313:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 240              		.loc 1 313 0
+ 241              		.cfi_startproc
+ 242              		@ args = 0, pretend = 0, frame = 0
+ 243              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccDPmcP8.s 			page 11
+
+
+ 244              		@ link register save eliminated.
+ 314:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   uwTick += uwTickFreq;
+ 245              		.loc 1 314 0
+ 246 0000 034A     		ldr	r2, .L20
+ 247 0002 1168     		ldr	r1, [r2]
+ 248 0004 034B     		ldr	r3, .L20+4
+ 249 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 250 0008 0B44     		add	r3, r3, r1
+ 251 000a 1360     		str	r3, [r2]
+ 252 000c 7047     		bx	lr
+ 253              	.L21:
+ 254 000e 00BF     		.align	2
+ 255              	.L20:
+ 256 0010 00000000 		.word	uwTick
+ 257 0014 00000000 		.word	.LANCHOR0
+ 258              		.cfi_endproc
+ 259              	.LFE135:
+ 261              		.section	.text.HAL_GetTick,"ax",%progbits
+ 262              		.align	1
+ 263              		.weak	HAL_GetTick
+ 264              		.syntax unified
+ 265              		.thumb
+ 266              		.thumb_func
+ 267              		.fpu fpv4-sp-d16
+ 269              	HAL_GetTick:
+ 270              	.LFB136:
+ 315:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 316:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 317:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 318:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief Provides a tick value in millisecond.
+ 319:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note This function is declared as __weak to be overwritten in case of other 
+ 320:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       implementations in user file.
+ 321:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval tick value
+ 322:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 323:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** __weak uint32_t HAL_GetTick(void)
+ 324:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 271              		.loc 1 324 0
+ 272              		.cfi_startproc
+ 273              		@ args = 0, pretend = 0, frame = 0
+ 274              		@ frame_needed = 0, uses_anonymous_args = 0
+ 275              		@ link register save eliminated.
+ 325:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return uwTick;
+ 276              		.loc 1 325 0
+ 277 0000 014B     		ldr	r3, .L23
+ 278 0002 1868     		ldr	r0, [r3]
+ 326:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 279              		.loc 1 326 0
+ 280 0004 7047     		bx	lr
+ 281              	.L24:
+ 282 0006 00BF     		.align	2
+ 283              	.L23:
+ 284 0008 00000000 		.word	uwTick
+ 285              		.cfi_endproc
+ 286              	.LFE136:
+ 288              		.section	.text.HAL_GetTickPrio,"ax",%progbits
+ 289              		.align	1
+ 290              		.global	HAL_GetTickPrio
+ARM GAS  /tmp/ccDPmcP8.s 			page 12
+
+
+ 291              		.syntax unified
+ 292              		.thumb
+ 293              		.thumb_func
+ 294              		.fpu fpv4-sp-d16
+ 296              	HAL_GetTickPrio:
+ 297              	.LFB137:
+ 327:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 328:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 329:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief This function returns a tick priority.
+ 330:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval tick priority
+ 331:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 332:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** uint32_t HAL_GetTickPrio(void)
+ 333:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 298              		.loc 1 333 0
+ 299              		.cfi_startproc
+ 300              		@ args = 0, pretend = 0, frame = 0
+ 301              		@ frame_needed = 0, uses_anonymous_args = 0
+ 302              		@ link register save eliminated.
+ 334:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return uwTickPrio;
+ 335:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 303              		.loc 1 335 0
+ 304 0000 014B     		ldr	r3, .L26
+ 305 0002 1868     		ldr	r0, [r3]
+ 306 0004 7047     		bx	lr
+ 307              	.L27:
+ 308 0006 00BF     		.align	2
+ 309              	.L26:
+ 310 0008 00000000 		.word	.LANCHOR1
+ 311              		.cfi_endproc
+ 312              	.LFE137:
+ 314              		.section	.text.HAL_SetTickFreq,"ax",%progbits
+ 315              		.align	1
+ 316              		.global	HAL_SetTickFreq
+ 317              		.syntax unified
+ 318              		.thumb
+ 319              		.thumb_func
+ 320              		.fpu fpv4-sp-d16
+ 322              	HAL_SetTickFreq:
+ 323              	.LFB138:
+ 336:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 337:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 338:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief Set new tick Freq.
+ 339:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval Status
+ 340:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 341:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** HAL_StatusTypeDef HAL_SetTickFreq(HAL_TickFreqTypeDef Freq)
+ 342:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 324              		.loc 1 342 0
+ 325              		.cfi_startproc
+ 326              		@ args = 0, pretend = 0, frame = 0
+ 327              		@ frame_needed = 0, uses_anonymous_args = 0
+ 328              	.LVL11:
+ 329 0000 10B5     		push	{r4, lr}
+ 330              	.LCFI3:
+ 331              		.cfi_def_cfa_offset 8
+ 332              		.cfi_offset 4, -8
+ 333              		.cfi_offset 14, -4
+ 334              	.LVL12:
+ARM GAS  /tmp/ccDPmcP8.s 			page 13
+
+
+ 343:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   HAL_StatusTypeDef status  = HAL_OK;
+ 344:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   HAL_TickFreqTypeDef prevTickFreq;
+ 345:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 346:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   assert_param(IS_TICKFREQ(Freq));
+ 347:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 348:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   if (uwTickFreq != Freq)
+ 335              		.loc 1 348 0
+ 336 0002 084B     		ldr	r3, .L32
+ 337 0004 1C78     		ldrb	r4, [r3]	@ zero_extendqisi2
+ 338 0006 8442     		cmp	r4, r0
+ 339 0008 0AD0     		beq	.L30
+ 340              	.LVL13:
+ 349:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   {
+ 350:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     /* Back up uwTickFreq frequency */
+ 351:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     prevTickFreq = uwTickFreq;
+ 352:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 353:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     /* Update uwTickFreq global variable used by HAL_InitTick() */
+ 354:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     uwTickFreq = Freq;
+ 341              		.loc 1 354 0
+ 342 000a 1870     		strb	r0, [r3]
+ 355:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 356:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     /* Apply the new tick Freq  */
+ 357:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     status = HAL_InitTick(uwTickPrio);
+ 343              		.loc 1 357 0
+ 344 000c 064B     		ldr	r3, .L32+4
+ 345 000e 1868     		ldr	r0, [r3]
+ 346              	.LVL14:
+ 347 0010 FFF7FEFF 		bl	HAL_InitTick
+ 348              	.LVL15:
+ 358:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 359:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     if (status != HAL_OK)
+ 349              		.loc 1 359 0
+ 350 0014 0346     		mov	r3, r0
+ 351 0016 08B1     		cbz	r0, .L29
+ 360:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     {
+ 361:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       /* Restore previous tick frequency */
+ 362:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****       uwTickFreq = prevTickFreq;
+ 352              		.loc 1 362 0
+ 353 0018 024A     		ldr	r2, .L32
+ 354 001a 1470     		strb	r4, [r2]
+ 355              	.LVL16:
+ 356              	.L29:
+ 363:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     }
+ 364:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   }
+ 365:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 366:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return status;
+ 367:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 357              		.loc 1 367 0
+ 358 001c 1846     		mov	r0, r3
+ 359 001e 10BD     		pop	{r4, pc}
+ 360              	.LVL17:
+ 361              	.L30:
+ 343:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   HAL_TickFreqTypeDef prevTickFreq;
+ 362              		.loc 1 343 0
+ 363 0020 0023     		movs	r3, #0
+ 364 0022 FBE7     		b	.L29
+ 365              	.L33:
+ARM GAS  /tmp/ccDPmcP8.s 			page 14
+
+
+ 366              		.align	2
+ 367              	.L32:
+ 368 0024 00000000 		.word	.LANCHOR0
+ 369 0028 00000000 		.word	.LANCHOR1
+ 370              		.cfi_endproc
+ 371              	.LFE138:
+ 373              		.section	.text.HAL_GetTickFreq,"ax",%progbits
+ 374              		.align	1
+ 375              		.global	HAL_GetTickFreq
+ 376              		.syntax unified
+ 377              		.thumb
+ 378              		.thumb_func
+ 379              		.fpu fpv4-sp-d16
+ 381              	HAL_GetTickFreq:
+ 382              	.LFB139:
+ 368:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 369:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 370:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief Return tick frequency.
+ 371:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval tick period in Hz
+ 372:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 373:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** HAL_TickFreqTypeDef HAL_GetTickFreq(void)
+ 374:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 383              		.loc 1 374 0
+ 384              		.cfi_startproc
+ 385              		@ args = 0, pretend = 0, frame = 0
+ 386              		@ frame_needed = 0, uses_anonymous_args = 0
+ 387              		@ link register save eliminated.
+ 375:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return uwTickFreq;
+ 376:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 388              		.loc 1 376 0
+ 389 0000 014B     		ldr	r3, .L35
+ 390 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 391 0004 7047     		bx	lr
+ 392              	.L36:
+ 393 0006 00BF     		.align	2
+ 394              	.L35:
+ 395 0008 00000000 		.word	.LANCHOR0
+ 396              		.cfi_endproc
+ 397              	.LFE139:
+ 399              		.section	.text.HAL_Delay,"ax",%progbits
+ 400              		.align	1
+ 401              		.weak	HAL_Delay
+ 402              		.syntax unified
+ 403              		.thumb
+ 404              		.thumb_func
+ 405              		.fpu fpv4-sp-d16
+ 407              	HAL_Delay:
+ 408              	.LFB140:
+ 377:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 378:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 379:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief This function provides minimum delay (in milliseconds) based 
+ 380:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *        on variable incremented.
+ 381:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note In the default implementation , SysTick timer is the source of time base.
+ 382:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       It is used to generate interrupts at regular time intervals where uwTick
+ 383:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       is incremented.
+ 384:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note This function is declared as __weak to be overwritten in case of other
+ 385:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       implementations in user file.
+ARM GAS  /tmp/ccDPmcP8.s 			page 15
+
+
+ 386:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @param Delay specifies the delay time length, in milliseconds.
+ 387:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 388:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 389:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** __weak void HAL_Delay(uint32_t Delay)
+ 390:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 409              		.loc 1 390 0
+ 410              		.cfi_startproc
+ 411              		@ args = 0, pretend = 0, frame = 0
+ 412              		@ frame_needed = 0, uses_anonymous_args = 0
+ 413              	.LVL18:
+ 414 0000 38B5     		push	{r3, r4, r5, lr}
+ 415              	.LCFI4:
+ 416              		.cfi_def_cfa_offset 16
+ 417              		.cfi_offset 3, -16
+ 418              		.cfi_offset 4, -12
+ 419              		.cfi_offset 5, -8
+ 420              		.cfi_offset 14, -4
+ 421 0002 0446     		mov	r4, r0
+ 391:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   uint32_t tickstart = HAL_GetTick();
+ 422              		.loc 1 391 0
+ 423 0004 FFF7FEFF 		bl	HAL_GetTick
+ 424              	.LVL19:
+ 425 0008 0546     		mov	r5, r0
+ 426              	.LVL20:
+ 392:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   uint32_t wait = Delay;
+ 393:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 394:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Add a freq to guarantee minimum wait */
+ 395:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   if (wait < HAL_MAX_DELAY)
+ 427              		.loc 1 395 0
+ 428 000a B4F1FF3F 		cmp	r4, #-1
+ 429 000e 02D0     		beq	.L39
+ 396:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   {
+ 397:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****     wait += (uint32_t)(uwTickFreq);
+ 430              		.loc 1 397 0
+ 431 0010 044B     		ldr	r3, .L41
+ 432 0012 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 433 0014 1C44     		add	r4, r4, r3
+ 434              	.LVL21:
+ 435              	.L39:
+ 398:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   }
+ 399:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 400:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   while((HAL_GetTick() - tickstart) < wait)
+ 436              		.loc 1 400 0 discriminator 1
+ 437 0016 FFF7FEFF 		bl	HAL_GetTick
+ 438              	.LVL22:
+ 439 001a 401B     		subs	r0, r0, r5
+ 440 001c 8442     		cmp	r4, r0
+ 441 001e FAD8     		bhi	.L39
+ 401:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   {
+ 402:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   }
+ 403:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 442              		.loc 1 403 0
+ 443 0020 38BD     		pop	{r3, r4, r5, pc}
+ 444              	.LVL23:
+ 445              	.L42:
+ 446 0022 00BF     		.align	2
+ 447              	.L41:
+ARM GAS  /tmp/ccDPmcP8.s 			page 16
+
+
+ 448 0024 00000000 		.word	.LANCHOR0
+ 449              		.cfi_endproc
+ 450              	.LFE140:
+ 452              		.section	.text.HAL_SuspendTick,"ax",%progbits
+ 453              		.align	1
+ 454              		.weak	HAL_SuspendTick
+ 455              		.syntax unified
+ 456              		.thumb
+ 457              		.thumb_func
+ 458              		.fpu fpv4-sp-d16
+ 460              	HAL_SuspendTick:
+ 461              	.LFB141:
+ 404:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 405:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 406:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief Suspend Tick increment.
+ 407:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note In the default implementation , SysTick timer is the source of time base. It is
+ 408:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       used to generate interrupts at regular time intervals. Once HAL_SuspendTick()
+ 409:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       is called, the SysTick interrupt will be disabled and so Tick increment 
+ 410:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       is suspended.
+ 411:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note This function is declared as __weak to be overwritten in case of other
+ 412:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       implementations in user file.
+ 413:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 414:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 415:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** __weak void HAL_SuspendTick(void)
+ 416:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 462              		.loc 1 416 0
+ 463              		.cfi_startproc
+ 464              		@ args = 0, pretend = 0, frame = 0
+ 465              		@ frame_needed = 0, uses_anonymous_args = 0
+ 466              		@ link register save eliminated.
+ 417:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Disable SysTick Interrupt */
+ 418:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
+ 467              		.loc 1 418 0
+ 468 0000 024A     		ldr	r2, .L44
+ 469 0002 1368     		ldr	r3, [r2]
+ 470 0004 23F00203 		bic	r3, r3, #2
+ 471 0008 1360     		str	r3, [r2]
+ 472 000a 7047     		bx	lr
+ 473              	.L45:
+ 474              		.align	2
+ 475              	.L44:
+ 476 000c 10E000E0 		.word	-536813552
+ 477              		.cfi_endproc
+ 478              	.LFE141:
+ 480              		.section	.text.HAL_ResumeTick,"ax",%progbits
+ 481              		.align	1
+ 482              		.weak	HAL_ResumeTick
+ 483              		.syntax unified
+ 484              		.thumb
+ 485              		.thumb_func
+ 486              		.fpu fpv4-sp-d16
+ 488              	HAL_ResumeTick:
+ 489              	.LFB142:
+ 419:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 420:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 421:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 422:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief Resume Tick increment.
+ARM GAS  /tmp/ccDPmcP8.s 			page 17
+
+
+ 423:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note In the default implementation , SysTick timer is the source of time base. It is
+ 424:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       used to generate interrupts at regular time intervals. Once HAL_ResumeTick()
+ 425:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       is called, the SysTick interrupt will be enabled and so Tick increment 
+ 426:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       is resumed.
+ 427:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note This function is declared as __weak to be overwritten in case of other
+ 428:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *       implementations in user file.
+ 429:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 430:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 431:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** __weak void HAL_ResumeTick(void)
+ 432:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 490              		.loc 1 432 0
+ 491              		.cfi_startproc
+ 492              		@ args = 0, pretend = 0, frame = 0
+ 493              		@ frame_needed = 0, uses_anonymous_args = 0
+ 494              		@ link register save eliminated.
+ 433:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   /* Enable SysTick Interrupt */
+ 434:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   SysTick->CTRL  |= SysTick_CTRL_TICKINT_Msk;
+ 495              		.loc 1 434 0
+ 496 0000 024A     		ldr	r2, .L47
+ 497 0002 1368     		ldr	r3, [r2]
+ 498 0004 43F00203 		orr	r3, r3, #2
+ 499 0008 1360     		str	r3, [r2]
+ 500 000a 7047     		bx	lr
+ 501              	.L48:
+ 502              		.align	2
+ 503              	.L47:
+ 504 000c 10E000E0 		.word	-536813552
+ 505              		.cfi_endproc
+ 506              	.LFE142:
+ 508              		.section	.text.HAL_GetHalVersion,"ax",%progbits
+ 509              		.align	1
+ 510              		.global	HAL_GetHalVersion
+ 511              		.syntax unified
+ 512              		.thumb
+ 513              		.thumb_func
+ 514              		.fpu fpv4-sp-d16
+ 516              	HAL_GetHalVersion:
+ 517              	.LFB143:
+ 435:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 436:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 437:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 438:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Returns the HAL revision
+ 439:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval version : 0xXYZR (8bits for each decimal, R for RC)
+ 440:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 441:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** uint32_t HAL_GetHalVersion(void)
+ 442:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 518              		.loc 1 442 0
+ 519              		.cfi_startproc
+ 520              		@ args = 0, pretend = 0, frame = 0
+ 521              		@ frame_needed = 0, uses_anonymous_args = 0
+ 522              		@ link register save eliminated.
+ 443:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return __STM32F4xx_HAL_VERSION;
+ 444:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 523              		.loc 1 444 0
+ 524 0000 0048     		ldr	r0, .L50
+ 525 0002 7047     		bx	lr
+ 526              	.L51:
+ARM GAS  /tmp/ccDPmcP8.s 			page 18
+
+
+ 527              		.align	2
+ 528              	.L50:
+ 529 0004 00070701 		.word	17237760
+ 530              		.cfi_endproc
+ 531              	.LFE143:
+ 533              		.section	.text.HAL_GetREVID,"ax",%progbits
+ 534              		.align	1
+ 535              		.global	HAL_GetREVID
+ 536              		.syntax unified
+ 537              		.thumb
+ 538              		.thumb_func
+ 539              		.fpu fpv4-sp-d16
+ 541              	HAL_GetREVID:
+ 542              	.LFB144:
+ 445:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 446:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 447:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Returns the device revision identifier.
+ 448:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval Device revision identifier
+ 449:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 450:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** uint32_t HAL_GetREVID(void)
+ 451:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 543              		.loc 1 451 0
+ 544              		.cfi_startproc
+ 545              		@ args = 0, pretend = 0, frame = 0
+ 546              		@ frame_needed = 0, uses_anonymous_args = 0
+ 547              		@ link register save eliminated.
+ 452:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return((DBGMCU->IDCODE) >> 16U);
+ 548              		.loc 1 452 0
+ 549 0000 014B     		ldr	r3, .L53
+ 550 0002 1868     		ldr	r0, [r3]
+ 453:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 551              		.loc 1 453 0
+ 552 0004 000C     		lsrs	r0, r0, #16
+ 553 0006 7047     		bx	lr
+ 554              	.L54:
+ 555              		.align	2
+ 556              	.L53:
+ 557 0008 002004E0 		.word	-536600576
+ 558              		.cfi_endproc
+ 559              	.LFE144:
+ 561              		.section	.text.HAL_GetDEVID,"ax",%progbits
+ 562              		.align	1
+ 563              		.global	HAL_GetDEVID
+ 564              		.syntax unified
+ 565              		.thumb
+ 566              		.thumb_func
+ 567              		.fpu fpv4-sp-d16
+ 569              	HAL_GetDEVID:
+ 570              	.LFB145:
+ 454:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 455:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 456:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Returns the device identifier.
+ 457:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval Device identifier
+ 458:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 459:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** uint32_t HAL_GetDEVID(void)
+ 460:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 571              		.loc 1 460 0
+ARM GAS  /tmp/ccDPmcP8.s 			page 19
+
+
+ 572              		.cfi_startproc
+ 573              		@ args = 0, pretend = 0, frame = 0
+ 574              		@ frame_needed = 0, uses_anonymous_args = 0
+ 575              		@ link register save eliminated.
+ 461:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return((DBGMCU->IDCODE) & IDCODE_DEVID_MASK);
+ 576              		.loc 1 461 0
+ 577 0000 024B     		ldr	r3, .L56
+ 578 0002 1868     		ldr	r0, [r3]
+ 462:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 579              		.loc 1 462 0
+ 580 0004 C0F30B00 		ubfx	r0, r0, #0, #12
+ 581 0008 7047     		bx	lr
+ 582              	.L57:
+ 583 000a 00BF     		.align	2
+ 584              	.L56:
+ 585 000c 002004E0 		.word	-536600576
+ 586              		.cfi_endproc
+ 587              	.LFE145:
+ 589              		.section	.text.HAL_DBGMCU_EnableDBGSleepMode,"ax",%progbits
+ 590              		.align	1
+ 591              		.global	HAL_DBGMCU_EnableDBGSleepMode
+ 592              		.syntax unified
+ 593              		.thumb
+ 594              		.thumb_func
+ 595              		.fpu fpv4-sp-d16
+ 597              	HAL_DBGMCU_EnableDBGSleepMode:
+ 598              	.LFB146:
+ 463:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 464:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 465:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Enable the Debug Module during SLEEP mode
+ 466:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 467:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 468:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** void HAL_DBGMCU_EnableDBGSleepMode(void)
+ 469:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 599              		.loc 1 469 0
+ 600              		.cfi_startproc
+ 601              		@ args = 0, pretend = 0, frame = 0
+ 602              		@ frame_needed = 0, uses_anonymous_args = 0
+ 603              		@ link register save eliminated.
+ 470:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEP);
+ 604              		.loc 1 470 0
+ 605 0000 024A     		ldr	r2, .L59
+ 606 0002 5368     		ldr	r3, [r2, #4]
+ 607 0004 43F00103 		orr	r3, r3, #1
+ 608 0008 5360     		str	r3, [r2, #4]
+ 609 000a 7047     		bx	lr
+ 610              	.L60:
+ 611              		.align	2
+ 612              	.L59:
+ 613 000c 002004E0 		.word	-536600576
+ 614              		.cfi_endproc
+ 615              	.LFE146:
+ 617              		.section	.text.HAL_DBGMCU_DisableDBGSleepMode,"ax",%progbits
+ 618              		.align	1
+ 619              		.global	HAL_DBGMCU_DisableDBGSleepMode
+ 620              		.syntax unified
+ 621              		.thumb
+ARM GAS  /tmp/ccDPmcP8.s 			page 20
+
+
+ 622              		.thumb_func
+ 623              		.fpu fpv4-sp-d16
+ 625              	HAL_DBGMCU_DisableDBGSleepMode:
+ 626              	.LFB147:
+ 471:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 472:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 473:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 474:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Disable the Debug Module during SLEEP mode
+ 475:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 476:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 477:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** void HAL_DBGMCU_DisableDBGSleepMode(void)
+ 478:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 627              		.loc 1 478 0
+ 628              		.cfi_startproc
+ 629              		@ args = 0, pretend = 0, frame = 0
+ 630              		@ frame_needed = 0, uses_anonymous_args = 0
+ 631              		@ link register save eliminated.
+ 479:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEP);
+ 632              		.loc 1 479 0
+ 633 0000 024A     		ldr	r2, .L62
+ 634 0002 5368     		ldr	r3, [r2, #4]
+ 635 0004 23F00103 		bic	r3, r3, #1
+ 636 0008 5360     		str	r3, [r2, #4]
+ 637 000a 7047     		bx	lr
+ 638              	.L63:
+ 639              		.align	2
+ 640              	.L62:
+ 641 000c 002004E0 		.word	-536600576
+ 642              		.cfi_endproc
+ 643              	.LFE147:
+ 645              		.section	.text.HAL_DBGMCU_EnableDBGStopMode,"ax",%progbits
+ 646              		.align	1
+ 647              		.global	HAL_DBGMCU_EnableDBGStopMode
+ 648              		.syntax unified
+ 649              		.thumb
+ 650              		.thumb_func
+ 651              		.fpu fpv4-sp-d16
+ 653              	HAL_DBGMCU_EnableDBGStopMode:
+ 654              	.LFB148:
+ 480:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 481:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 482:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 483:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Enable the Debug Module during STOP mode
+ 484:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 485:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 486:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** void HAL_DBGMCU_EnableDBGStopMode(void)
+ 487:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 655              		.loc 1 487 0
+ 656              		.cfi_startproc
+ 657              		@ args = 0, pretend = 0, frame = 0
+ 658              		@ frame_needed = 0, uses_anonymous_args = 0
+ 659              		@ link register save eliminated.
+ 488:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOP);
+ 660              		.loc 1 488 0
+ 661 0000 024A     		ldr	r2, .L65
+ 662 0002 5368     		ldr	r3, [r2, #4]
+ 663 0004 43F00203 		orr	r3, r3, #2
+ARM GAS  /tmp/ccDPmcP8.s 			page 21
+
+
+ 664 0008 5360     		str	r3, [r2, #4]
+ 665 000a 7047     		bx	lr
+ 666              	.L66:
+ 667              		.align	2
+ 668              	.L65:
+ 669 000c 002004E0 		.word	-536600576
+ 670              		.cfi_endproc
+ 671              	.LFE148:
+ 673              		.section	.text.HAL_DBGMCU_DisableDBGStopMode,"ax",%progbits
+ 674              		.align	1
+ 675              		.global	HAL_DBGMCU_DisableDBGStopMode
+ 676              		.syntax unified
+ 677              		.thumb
+ 678              		.thumb_func
+ 679              		.fpu fpv4-sp-d16
+ 681              	HAL_DBGMCU_DisableDBGStopMode:
+ 682              	.LFB149:
+ 489:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 490:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 491:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 492:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Disable the Debug Module during STOP mode
+ 493:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 494:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 495:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** void HAL_DBGMCU_DisableDBGStopMode(void)
+ 496:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 683              		.loc 1 496 0
+ 684              		.cfi_startproc
+ 685              		@ args = 0, pretend = 0, frame = 0
+ 686              		@ frame_needed = 0, uses_anonymous_args = 0
+ 687              		@ link register save eliminated.
+ 497:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOP);
+ 688              		.loc 1 497 0
+ 689 0000 024A     		ldr	r2, .L68
+ 690 0002 5368     		ldr	r3, [r2, #4]
+ 691 0004 23F00203 		bic	r3, r3, #2
+ 692 0008 5360     		str	r3, [r2, #4]
+ 693 000a 7047     		bx	lr
+ 694              	.L69:
+ 695              		.align	2
+ 696              	.L68:
+ 697 000c 002004E0 		.word	-536600576
+ 698              		.cfi_endproc
+ 699              	.LFE149:
+ 701              		.section	.text.HAL_DBGMCU_EnableDBGStandbyMode,"ax",%progbits
+ 702              		.align	1
+ 703              		.global	HAL_DBGMCU_EnableDBGStandbyMode
+ 704              		.syntax unified
+ 705              		.thumb
+ 706              		.thumb_func
+ 707              		.fpu fpv4-sp-d16
+ 709              	HAL_DBGMCU_EnableDBGStandbyMode:
+ 710              	.LFB150:
+ 498:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 499:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 500:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 501:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Enable the Debug Module during STANDBY mode
+ 502:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ARM GAS  /tmp/ccDPmcP8.s 			page 22
+
+
+ 503:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 504:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** void HAL_DBGMCU_EnableDBGStandbyMode(void)
+ 505:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 711              		.loc 1 505 0
+ 712              		.cfi_startproc
+ 713              		@ args = 0, pretend = 0, frame = 0
+ 714              		@ frame_needed = 0, uses_anonymous_args = 0
+ 715              		@ link register save eliminated.
+ 506:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBY);
+ 716              		.loc 1 506 0
+ 717 0000 024A     		ldr	r2, .L71
+ 718 0002 5368     		ldr	r3, [r2, #4]
+ 719 0004 43F00403 		orr	r3, r3, #4
+ 720 0008 5360     		str	r3, [r2, #4]
+ 721 000a 7047     		bx	lr
+ 722              	.L72:
+ 723              		.align	2
+ 724              	.L71:
+ 725 000c 002004E0 		.word	-536600576
+ 726              		.cfi_endproc
+ 727              	.LFE150:
+ 729              		.section	.text.HAL_DBGMCU_DisableDBGStandbyMode,"ax",%progbits
+ 730              		.align	1
+ 731              		.global	HAL_DBGMCU_DisableDBGStandbyMode
+ 732              		.syntax unified
+ 733              		.thumb
+ 734              		.thumb_func
+ 735              		.fpu fpv4-sp-d16
+ 737              	HAL_DBGMCU_DisableDBGStandbyMode:
+ 738              	.LFB151:
+ 507:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 508:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 509:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 510:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Disable the Debug Module during STANDBY mode
+ 511:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 512:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 513:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** void HAL_DBGMCU_DisableDBGStandbyMode(void)
+ 514:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 739              		.loc 1 514 0
+ 740              		.cfi_startproc
+ 741              		@ args = 0, pretend = 0, frame = 0
+ 742              		@ frame_needed = 0, uses_anonymous_args = 0
+ 743              		@ link register save eliminated.
+ 515:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBY);
+ 744              		.loc 1 515 0
+ 745 0000 024A     		ldr	r2, .L74
+ 746 0002 5368     		ldr	r3, [r2, #4]
+ 747 0004 23F00403 		bic	r3, r3, #4
+ 748 0008 5360     		str	r3, [r2, #4]
+ 749 000a 7047     		bx	lr
+ 750              	.L75:
+ 751              		.align	2
+ 752              	.L74:
+ 753 000c 002004E0 		.word	-536600576
+ 754              		.cfi_endproc
+ 755              	.LFE151:
+ 757              		.section	.text.HAL_EnableCompensationCell,"ax",%progbits
+ARM GAS  /tmp/ccDPmcP8.s 			page 23
+
+
+ 758              		.align	1
+ 759              		.global	HAL_EnableCompensationCell
+ 760              		.syntax unified
+ 761              		.thumb
+ 762              		.thumb_func
+ 763              		.fpu fpv4-sp-d16
+ 765              	HAL_EnableCompensationCell:
+ 766              	.LFB152:
+ 516:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 517:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 518:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 519:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Enables the I/O Compensation Cell.
+ 520:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note   The I/O compensation cell can be used only when the device supply
+ 521:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *         voltage ranges from 2.4 to 3.6 V.  
+ 522:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 523:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 524:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** void HAL_EnableCompensationCell(void)
+ 525:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 767              		.loc 1 525 0
+ 768              		.cfi_startproc
+ 769              		@ args = 0, pretend = 0, frame = 0
+ 770              		@ frame_needed = 0, uses_anonymous_args = 0
+ 771              		@ link register save eliminated.
+ 526:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *(__IO uint32_t *)CMPCR_CMP_PD_BB = (uint32_t)ENABLE;
+ 772              		.loc 1 526 0
+ 773 0000 0122     		movs	r2, #1
+ 774 0002 014B     		ldr	r3, .L77
+ 775 0004 1A60     		str	r2, [r3]
+ 776 0006 7047     		bx	lr
+ 777              	.L78:
+ 778              		.align	2
+ 779              	.L77:
+ 780 0008 00042742 		.word	1109853184
+ 781              		.cfi_endproc
+ 782              	.LFE152:
+ 784              		.section	.text.HAL_DisableCompensationCell,"ax",%progbits
+ 785              		.align	1
+ 786              		.global	HAL_DisableCompensationCell
+ 787              		.syntax unified
+ 788              		.thumb
+ 789              		.thumb_func
+ 790              		.fpu fpv4-sp-d16
+ 792              	HAL_DisableCompensationCell:
+ 793              	.LFB153:
+ 527:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 528:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 529:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 530:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Power-down the I/O Compensation Cell.
+ 531:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @note   The I/O compensation cell can be used only when the device supply
+ 532:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *         voltage ranges from 2.4 to 3.6 V.  
+ 533:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval None
+ 534:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 535:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** void HAL_DisableCompensationCell(void)
+ 536:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 794              		.loc 1 536 0
+ 795              		.cfi_startproc
+ 796              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccDPmcP8.s 			page 24
+
+
+ 797              		@ frame_needed = 0, uses_anonymous_args = 0
+ 798              		@ link register save eliminated.
+ 537:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   *(__IO uint32_t *)CMPCR_CMP_PD_BB = (uint32_t)DISABLE;
+ 799              		.loc 1 537 0
+ 800 0000 0022     		movs	r2, #0
+ 801 0002 014B     		ldr	r3, .L80
+ 802 0004 1A60     		str	r2, [r3]
+ 803 0006 7047     		bx	lr
+ 804              	.L81:
+ 805              		.align	2
+ 806              	.L80:
+ 807 0008 00042742 		.word	1109853184
+ 808              		.cfi_endproc
+ 809              	.LFE153:
+ 811              		.section	.text.HAL_GetUIDw0,"ax",%progbits
+ 812              		.align	1
+ 813              		.global	HAL_GetUIDw0
+ 814              		.syntax unified
+ 815              		.thumb
+ 816              		.thumb_func
+ 817              		.fpu fpv4-sp-d16
+ 819              	HAL_GetUIDw0:
+ 820              	.LFB154:
+ 538:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 539:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 540:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 541:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Returns first word of the unique device identifier (UID based on 96 bits)
+ 542:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval Device identifier
+ 543:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 544:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** uint32_t HAL_GetUIDw0(void)
+ 545:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 821              		.loc 1 545 0
+ 822              		.cfi_startproc
+ 823              		@ args = 0, pretend = 0, frame = 0
+ 824              		@ frame_needed = 0, uses_anonymous_args = 0
+ 825              		@ link register save eliminated.
+ 546:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return (READ_REG(*((uint32_t *)UID_BASE)));
+ 547:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 826              		.loc 1 547 0
+ 827 0000 014B     		ldr	r3, .L83
+ 828 0002 1868     		ldr	r0, [r3]
+ 829 0004 7047     		bx	lr
+ 830              	.L84:
+ 831 0006 00BF     		.align	2
+ 832              	.L83:
+ 833 0008 107AFF1F 		.word	536836624
+ 834              		.cfi_endproc
+ 835              	.LFE154:
+ 837              		.section	.text.HAL_GetUIDw1,"ax",%progbits
+ 838              		.align	1
+ 839              		.global	HAL_GetUIDw1
+ 840              		.syntax unified
+ 841              		.thumb
+ 842              		.thumb_func
+ 843              		.fpu fpv4-sp-d16
+ 845              	HAL_GetUIDw1:
+ 846              	.LFB155:
+ARM GAS  /tmp/ccDPmcP8.s 			page 25
+
+
+ 548:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 549:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 550:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Returns second word of the unique device identifier (UID based on 96 bits)
+ 551:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval Device identifier
+ 552:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 553:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** uint32_t HAL_GetUIDw1(void)
+ 554:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 847              		.loc 1 554 0
+ 848              		.cfi_startproc
+ 849              		@ args = 0, pretend = 0, frame = 0
+ 850              		@ frame_needed = 0, uses_anonymous_args = 0
+ 851              		@ link register save eliminated.
+ 555:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return (READ_REG(*((uint32_t *)(UID_BASE + 4U))));
+ 556:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 852              		.loc 1 556 0
+ 853 0000 014B     		ldr	r3, .L86
+ 854 0002 1868     		ldr	r0, [r3]
+ 855 0004 7047     		bx	lr
+ 856              	.L87:
+ 857 0006 00BF     		.align	2
+ 858              	.L86:
+ 859 0008 147AFF1F 		.word	536836628
+ 860              		.cfi_endproc
+ 861              	.LFE155:
+ 863              		.section	.text.HAL_GetUIDw2,"ax",%progbits
+ 864              		.align	1
+ 865              		.global	HAL_GetUIDw2
+ 866              		.syntax unified
+ 867              		.thumb
+ 868              		.thumb_func
+ 869              		.fpu fpv4-sp-d16
+ 871              	HAL_GetUIDw2:
+ 872              	.LFB156:
+ 557:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** 
+ 558:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** /**
+ 559:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @brief  Returns third word of the unique device identifier (UID based on 96 bits)
+ 560:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   * @retval Device identifier
+ 561:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   */
+ 562:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** uint32_t HAL_GetUIDw2(void)
+ 563:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** {
+ 873              		.loc 1 563 0
+ 874              		.cfi_startproc
+ 875              		@ args = 0, pretend = 0, frame = 0
+ 876              		@ frame_needed = 0, uses_anonymous_args = 0
+ 877              		@ link register save eliminated.
+ 564:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c ****   return (READ_REG(*((uint32_t *)(UID_BASE + 8U))));
+ 565:/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/stm32f4xx_hal.c **** }
+ 878              		.loc 1 565 0
+ 879 0000 014B     		ldr	r3, .L89
+ 880 0002 1868     		ldr	r0, [r3]
+ 881 0004 7047     		bx	lr
+ 882              	.L90:
+ 883 0006 00BF     		.align	2
+ 884              	.L89:
+ 885 0008 187AFF1F 		.word	536836632
+ 886              		.cfi_endproc
+ 887              	.LFE156:
+ARM GAS  /tmp/ccDPmcP8.s 			page 26
+
+
+ 889              		.global	uwTickFreq
+ 890              		.global	uwTickPrio
+ 891              		.comm	uwTick,4,4
+ 892              		.section	.data.uwTickFreq,"aw",%progbits
+ 893              		.set	.LANCHOR0,. + 0
+ 896              	uwTickFreq:
+ 897 0000 01       		.byte	1
+ 898              		.section	.data.uwTickPrio,"aw",%progbits
+ 899              		.align	2
+ 900              		.set	.LANCHOR1,. + 0
+ 903              	uwTickPrio:
+ 904 0000 10000000 		.word	16
+ 905              		.text
+ 906              	.Letext0:
+ 907              		.file 2 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/machine/_default_t
+ 908              		.file 3 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/newlib/include/sys/_stdint.h"
+ 909              		.file 4 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/include/core_cm4.h"
+ 910              		.file 5 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 911              		.file 6 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 912              		.file 7 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/cmsis/device/stm32/stm32f4xx/incl
+ 913              		.file 8 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 914              		.file 9 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm3
+ 915              		.file 10 "/home/phong/Documents/thesis/stm32f4/stm-idf/components/stm32f4xx_hal_driver/include/stm
+ARM GAS  /tmp/ccDPmcP8.s 			page 27
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal.c
+     /tmp/ccDPmcP8.s:18     .text.HAL_MspInit:0000000000000000 $t
+     /tmp/ccDPmcP8.s:25     .text.HAL_MspInit:0000000000000000 HAL_MspInit
+     /tmp/ccDPmcP8.s:38     .text.HAL_MspDeInit:0000000000000000 $t
+     /tmp/ccDPmcP8.s:45     .text.HAL_MspDeInit:0000000000000000 HAL_MspDeInit
+     /tmp/ccDPmcP8.s:57     .text.HAL_DeInit:0000000000000000 $t
+     /tmp/ccDPmcP8.s:64     .text.HAL_DeInit:0000000000000000 HAL_DeInit
+     /tmp/ccDPmcP8.s:108    .text.HAL_DeInit:0000000000000028 $d
+     /tmp/ccDPmcP8.s:113    .text.HAL_InitTick:0000000000000000 $t
+     /tmp/ccDPmcP8.s:120    .text.HAL_InitTick:0000000000000000 HAL_InitTick
+     /tmp/ccDPmcP8.s:175    .text.HAL_InitTick:0000000000000040 $d
+     /tmp/ccDPmcP8.s:182    .text.HAL_Init:0000000000000000 $t
+     /tmp/ccDPmcP8.s:189    .text.HAL_Init:0000000000000000 HAL_Init
+     /tmp/ccDPmcP8.s:226    .text.HAL_Init:0000000000000028 $d
+     /tmp/ccDPmcP8.s:231    .text.HAL_IncTick:0000000000000000 $t
+     /tmp/ccDPmcP8.s:238    .text.HAL_IncTick:0000000000000000 HAL_IncTick
+     /tmp/ccDPmcP8.s:256    .text.HAL_IncTick:0000000000000010 $d
+                            *COM*:0000000000000004 uwTick
+     /tmp/ccDPmcP8.s:262    .text.HAL_GetTick:0000000000000000 $t
+     /tmp/ccDPmcP8.s:269    .text.HAL_GetTick:0000000000000000 HAL_GetTick
+     /tmp/ccDPmcP8.s:284    .text.HAL_GetTick:0000000000000008 $d
+     /tmp/ccDPmcP8.s:289    .text.HAL_GetTickPrio:0000000000000000 $t
+     /tmp/ccDPmcP8.s:296    .text.HAL_GetTickPrio:0000000000000000 HAL_GetTickPrio
+     /tmp/ccDPmcP8.s:310    .text.HAL_GetTickPrio:0000000000000008 $d
+     /tmp/ccDPmcP8.s:315    .text.HAL_SetTickFreq:0000000000000000 $t
+     /tmp/ccDPmcP8.s:322    .text.HAL_SetTickFreq:0000000000000000 HAL_SetTickFreq
+     /tmp/ccDPmcP8.s:368    .text.HAL_SetTickFreq:0000000000000024 $d
+     /tmp/ccDPmcP8.s:374    .text.HAL_GetTickFreq:0000000000000000 $t
+     /tmp/ccDPmcP8.s:381    .text.HAL_GetTickFreq:0000000000000000 HAL_GetTickFreq
+     /tmp/ccDPmcP8.s:395    .text.HAL_GetTickFreq:0000000000000008 $d
+     /tmp/ccDPmcP8.s:400    .text.HAL_Delay:0000000000000000 $t
+     /tmp/ccDPmcP8.s:407    .text.HAL_Delay:0000000000000000 HAL_Delay
+     /tmp/ccDPmcP8.s:448    .text.HAL_Delay:0000000000000024 $d
+     /tmp/ccDPmcP8.s:453    .text.HAL_SuspendTick:0000000000000000 $t
+     /tmp/ccDPmcP8.s:460    .text.HAL_SuspendTick:0000000000000000 HAL_SuspendTick
+     /tmp/ccDPmcP8.s:476    .text.HAL_SuspendTick:000000000000000c $d
+     /tmp/ccDPmcP8.s:481    .text.HAL_ResumeTick:0000000000000000 $t
+     /tmp/ccDPmcP8.s:488    .text.HAL_ResumeTick:0000000000000000 HAL_ResumeTick
+     /tmp/ccDPmcP8.s:504    .text.HAL_ResumeTick:000000000000000c $d
+     /tmp/ccDPmcP8.s:509    .text.HAL_GetHalVersion:0000000000000000 $t
+     /tmp/ccDPmcP8.s:516    .text.HAL_GetHalVersion:0000000000000000 HAL_GetHalVersion
+     /tmp/ccDPmcP8.s:529    .text.HAL_GetHalVersion:0000000000000004 $d
+     /tmp/ccDPmcP8.s:534    .text.HAL_GetREVID:0000000000000000 $t
+     /tmp/ccDPmcP8.s:541    .text.HAL_GetREVID:0000000000000000 HAL_GetREVID
+     /tmp/ccDPmcP8.s:557    .text.HAL_GetREVID:0000000000000008 $d
+     /tmp/ccDPmcP8.s:562    .text.HAL_GetDEVID:0000000000000000 $t
+     /tmp/ccDPmcP8.s:569    .text.HAL_GetDEVID:0000000000000000 HAL_GetDEVID
+     /tmp/ccDPmcP8.s:585    .text.HAL_GetDEVID:000000000000000c $d
+     /tmp/ccDPmcP8.s:590    .text.HAL_DBGMCU_EnableDBGSleepMode:0000000000000000 $t
+     /tmp/ccDPmcP8.s:597    .text.HAL_DBGMCU_EnableDBGSleepMode:0000000000000000 HAL_DBGMCU_EnableDBGSleepMode
+     /tmp/ccDPmcP8.s:613    .text.HAL_DBGMCU_EnableDBGSleepMode:000000000000000c $d
+     /tmp/ccDPmcP8.s:618    .text.HAL_DBGMCU_DisableDBGSleepMode:0000000000000000 $t
+     /tmp/ccDPmcP8.s:625    .text.HAL_DBGMCU_DisableDBGSleepMode:0000000000000000 HAL_DBGMCU_DisableDBGSleepMode
+     /tmp/ccDPmcP8.s:641    .text.HAL_DBGMCU_DisableDBGSleepMode:000000000000000c $d
+     /tmp/ccDPmcP8.s:646    .text.HAL_DBGMCU_EnableDBGStopMode:0000000000000000 $t
+     /tmp/ccDPmcP8.s:653    .text.HAL_DBGMCU_EnableDBGStopMode:0000000000000000 HAL_DBGMCU_EnableDBGStopMode
+ARM GAS  /tmp/ccDPmcP8.s 			page 28
+
+
+     /tmp/ccDPmcP8.s:669    .text.HAL_DBGMCU_EnableDBGStopMode:000000000000000c $d
+     /tmp/ccDPmcP8.s:674    .text.HAL_DBGMCU_DisableDBGStopMode:0000000000000000 $t
+     /tmp/ccDPmcP8.s:681    .text.HAL_DBGMCU_DisableDBGStopMode:0000000000000000 HAL_DBGMCU_DisableDBGStopMode
+     /tmp/ccDPmcP8.s:697    .text.HAL_DBGMCU_DisableDBGStopMode:000000000000000c $d
+     /tmp/ccDPmcP8.s:702    .text.HAL_DBGMCU_EnableDBGStandbyMode:0000000000000000 $t
+     /tmp/ccDPmcP8.s:709    .text.HAL_DBGMCU_EnableDBGStandbyMode:0000000000000000 HAL_DBGMCU_EnableDBGStandbyMode
+     /tmp/ccDPmcP8.s:725    .text.HAL_DBGMCU_EnableDBGStandbyMode:000000000000000c $d
+     /tmp/ccDPmcP8.s:730    .text.HAL_DBGMCU_DisableDBGStandbyMode:0000000000000000 $t
+     /tmp/ccDPmcP8.s:737    .text.HAL_DBGMCU_DisableDBGStandbyMode:0000000000000000 HAL_DBGMCU_DisableDBGStandbyMode
+     /tmp/ccDPmcP8.s:753    .text.HAL_DBGMCU_DisableDBGStandbyMode:000000000000000c $d
+     /tmp/ccDPmcP8.s:758    .text.HAL_EnableCompensationCell:0000000000000000 $t
+     /tmp/ccDPmcP8.s:765    .text.HAL_EnableCompensationCell:0000000000000000 HAL_EnableCompensationCell
+     /tmp/ccDPmcP8.s:780    .text.HAL_EnableCompensationCell:0000000000000008 $d
+     /tmp/ccDPmcP8.s:785    .text.HAL_DisableCompensationCell:0000000000000000 $t
+     /tmp/ccDPmcP8.s:792    .text.HAL_DisableCompensationCell:0000000000000000 HAL_DisableCompensationCell
+     /tmp/ccDPmcP8.s:807    .text.HAL_DisableCompensationCell:0000000000000008 $d
+     /tmp/ccDPmcP8.s:812    .text.HAL_GetUIDw0:0000000000000000 $t
+     /tmp/ccDPmcP8.s:819    .text.HAL_GetUIDw0:0000000000000000 HAL_GetUIDw0
+     /tmp/ccDPmcP8.s:833    .text.HAL_GetUIDw0:0000000000000008 $d
+     /tmp/ccDPmcP8.s:838    .text.HAL_GetUIDw1:0000000000000000 $t
+     /tmp/ccDPmcP8.s:845    .text.HAL_GetUIDw1:0000000000000000 HAL_GetUIDw1
+     /tmp/ccDPmcP8.s:859    .text.HAL_GetUIDw1:0000000000000008 $d
+     /tmp/ccDPmcP8.s:864    .text.HAL_GetUIDw2:0000000000000000 $t
+     /tmp/ccDPmcP8.s:871    .text.HAL_GetUIDw2:0000000000000000 HAL_GetUIDw2
+     /tmp/ccDPmcP8.s:885    .text.HAL_GetUIDw2:0000000000000008 $d
+     /tmp/ccDPmcP8.s:896    .data.uwTickFreq:0000000000000000 uwTickFreq
+     /tmp/ccDPmcP8.s:903    .data.uwTickPrio:0000000000000000 uwTickPrio
+     /tmp/ccDPmcP8.s:899    .data.uwTickPrio:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_SYSTICK_Config
+HAL_NVIC_SetPriority
+SystemCoreClock
+HAL_NVIC_SetPriorityGrouping
