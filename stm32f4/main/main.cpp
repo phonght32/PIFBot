@@ -14,9 +14,66 @@
 // static const char *TAG = "APP_MAIN";
 
 
-static void example_task(void* arg)
+static void main_task(void* arg)
 {
+    while (1)
+    {
+        uint32_t t = millis();              /*!< Update time counter */
+        updateTime();                       /*!< Update ROS time */
+        updateVariable(nh.connected());     /*!< Update variable */
+        updateTFPrefix(nh.connected());     /*!< Update TF */
 
+        /* Control motor*/
+        if ((t - tTime[CONTROL_MOTOR_TIME_INDEX] >= 1000 / CONTROL_MOTOR_SPEED_FREQUENCY))
+        {
+            updateGoalVelocity();
+            if ((t - tTime[CONTROL_MOTOR_TIMEOUT_TIME_INDEX]) > CONTROL_MOTOR_TIMEOUT)
+            {
+                controlMotor(zero_velocity);
+            }
+            else
+            {
+                controlMotor(goal_velocity);
+            }
+            tTime[CONTROL_MOTOR_TIME_INDEX] = t;
+        }
+
+        /* Publish motor speed to "cmd_vel_motor" topic */
+        if ((t - tTime[CMD_VEL_PUBLISH_TIME_INDEX]) >= (1000 / CMD_VEL_PUBLISH_FREQUENCY))
+        {
+            getMotorSpeed(goal_velocity_from_motor);
+            publishCmdVelFromMotorMsg();
+            tTime[CMD_VEL_PUBLISH_TIME_INDEX] = t;
+        }
+
+        /* Publish driver information */
+        if ((t - tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX]) >= (1000 / DRIVE_INFORMATION_PUBLISH_FREQUENCY))
+        {
+            /* Update motor tick */
+            int32_t left_tick, right_tick;
+            left_tick = (int32_t)robot_encoder_left_get_tick();
+            right_tick = (int32_t)robot_encoder_right_get_tick();
+            updateMotorInfo(left_tick, right_tick);
+
+            /* Publish Odom, TF and JointState, */
+            publishDriveInformation();
+            tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
+        }
+
+        /* Publish IMU to "imu" topic */
+        if ((t - tTime[IMU_PUBLISH_TIME_INDEX]) >= (1000 / IMU_PUBLISH_FREQUENCY))
+        {
+            robot_imu_update_quat();
+            publishImuMsg();
+            tTime[IMU_PUBLISH_TIME_INDEX] = t;
+        }
+
+        sendLogMsg();                       /*!< Send log message */
+//        updateIMU();                        /*!< Update IMU quaternion value consecutively */
+
+        nh.spinOnce();                      /*!< Spin NodeHandle to keep synchorus */
+//        waitForSerialLink(nh.connected());  /*!< Keep rosserial connection */
+    }
 }
 
 int main(void)
@@ -28,7 +85,22 @@ int main(void)
     stm_log_level_set("*", STM_LOG_NONE);
     stm_log_level_set("APP_MAIN", STM_LOG_INFO);
 
-    xTaskCreate(example_task, "example_task", 512, NULL, 5, NULL);
+    /* Motor configuration */
+    robot_motor_init();
+    robot_encoder_init();
+
+    /* IMU configuration */
+    robot_imu_init();
+    robot_madgwick_filter_init();
+    initIMUCovariance();
+
+    /* Initialize timer counts interval */
+    timer_interval_init();
+
+    /* ROS setup */
+    ros_setup();
+
+    xTaskCreate(main_task, "main_task", 4096, NULL, 1, NULL);
     vTaskStartScheduler();
 }
 
