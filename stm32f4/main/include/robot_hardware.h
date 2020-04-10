@@ -104,7 +104,6 @@ extern "C" {
  */
 void robot_motor_init(void);
 void robot_imu_init(void);
-void robot_rosserial_init(void);
 void robot_encoder_init(void);
 
 #ifdef __cplusplus

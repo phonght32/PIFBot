@@ -1,8 +1,8 @@
 #include "robot_hardware.h"
 
-static const char* ROBOT_HARDWARE_TAG = "ROBOT HARDWARE";
+static const char* TAG = "ROBOT HARDWARE";
 #define HARDWARE_CHECK(a, str, ret)  if(!(a)) {                                                     \
-        STM_LOGE(ROBOT_HARDWARE_TAG,"%s:%d (%s):%s", __FILE__, __LINE__, __FUNCTION__, str);        \
+        STM_LOGE(TAG,"%s:%d (%s):%s", __FILE__, __LINE__, __FUNCTION__, str);        \
         return (ret);                                                                               \
         }
 
@@ -27,4 +27,23 @@ void robot_motor_init(void)
     motorright_cfg.pulse_timer_pins_pack = MOTORRIGHT_PULSE_TIMER_PINSPACK;
     motorright_cfg.pulse_timer_channel = MOTORRIGHT_PULSE_TIMER_CHANNEL;
     motor_right = stepmotor_config(&motorright_cfg);
+
+    STM_LOGI(TAG, "Configure motor success.");
 }
+
+void robot_imu_init(void)
+{
+    mpu9250_config_t mpu9250_cfg;
+    mpu9250_cfg.afs_sel = MPU9250_AFS_SEL_8G;
+    mpu9250_cfg.clksel = MPU9250_CLKSEL_AUTO;
+    mpu9250_cfg.dlpf_cfg =  MPU9250_41ACEL_42GYRO_BW_HZ;
+    mpu9250_cfg.fs_sel = MPU9250_FS_SEL_2000;
+    mpu9250_cfg.sleep_mode = MPU9250_DISABLE_SLEEP_MODE;
+    mpu9250_cfg.i2c_num = I2C_NUM_1;
+    mpu9250_handle = mpu9250_config(&mpu9250_cfg);
+    STM_LOGI(TAG, "Configure IMU success.")
+
+    mpu9250_auto_calib(mpu9250_handle);
+    STM_LOGI(TAG, "Calibrate MPU9250 success.");
+}
+
