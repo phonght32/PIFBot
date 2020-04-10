@@ -50,6 +50,26 @@ stm_err_t robot_motor_init(void)
     motor_right = stepmotor_config(&motorright_cfg);
     HARDWARE_CHECK(motor_right, MOTOR_INIT_ERR_STR, STM_FAIL);
 
+    int ret;
+
+    ret = stepmotor_set_pwm_duty(motor_left, STEP_DRIVER_PWM_DUTYCYCLE);
+    HARDWARE_CHECK(!ret, MOTOR_INIT_ERR_STR, STM_FAIL);
+    ret = stepmotor_set_pwm_freq(motor_left, 0);
+    HARDWARE_CHECK(!ret, MOTOR_INIT_ERR_STR, STM_FAIL);
+    ret = stepmotor_set_dir(motor_left, MOTORLEFT_DIR_FORWARD);
+    HARDWARE_CHECK(!ret, MOTOR_INIT_ERR_STR, STM_FAIL);
+    ret = stepmotor_start(motor_left);
+    HARDWARE_CHECK(!ret, MOTOR_INIT_ERR_STR, STM_FAIL);
+
+    ret = stepmotor_set_pwm_duty(motor_right, STEP_DRIVER_PWM_DUTYCYCLE);
+    HARDWARE_CHECK(!ret, MOTOR_INIT_ERR_STR, STM_FAIL);
+    ret = stepmotor_set_pwm_freq(motor_right, 0);
+    HARDWARE_CHECK(!ret, MOTOR_INIT_ERR_STR, STM_FAIL);
+    ret = stepmotor_set_dir(motor_right, MOTORRIGHT_DIR_FORWARD);
+    HARDWARE_CHECK(!ret, MOTOR_INIT_ERR_STR, STM_FAIL);
+    ret = stepmotor_start(motor_right);
+    HARDWARE_CHECK(!ret, MOTOR_INIT_ERR_STR, STM_FAIL);
+
     STM_LOGI(TAG, "Configure motor success.");
     return STM_OK;
 }

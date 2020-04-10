@@ -102,6 +102,8 @@ extern "C" {
 #define MADGWICK_BETA                   0.1f
 #define MADGWICK_SAMPLE_FREQ            512.0f
 
+#define STEP_DRIVER_PWM_DUTYCYCLE       20
+
 
 
 stm_err_t robot_motor_init(void);
