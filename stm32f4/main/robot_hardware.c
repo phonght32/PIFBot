@@ -281,6 +281,20 @@ stm_err_t robot_imu_get_gyro(float *gyro)
     return STM_OK;
 }
 
+uint32_t robot_encoder_left_get_tick(void)
+{
+    uint32_t resolver_tick;
+    software_resolver_get_value(resolver_left, &resolver_tick);
+    return resolver_tick;
+}
+
+uint32_t robot_encoder_right_get_tick(void)
+{
+    uint32_t resolver_tick;
+    software_resolver_get_value(resolver_right, &resolver_tick);
+    return resolver_tick;
+}
+
 void system_clock_init(void)
 {
     __HAL_RCC_PWR_CLK_ENABLE();

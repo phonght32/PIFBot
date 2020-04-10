@@ -131,6 +131,9 @@ stm_err_t robot_imu_get_quat(float *quat);
 stm_err_t robot_imu_get_accel(float *accel);
 stm_err_t robot_imu_get_gyro(float *gyro);
 
+uint32_t robot_encoder_left_get_tick(void);
+uint32_t robot_encoder_right_get_tick(void);
+
 
 #ifdef __cplusplus
 }
