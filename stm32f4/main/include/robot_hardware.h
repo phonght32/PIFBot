@@ -107,6 +107,7 @@ extern "C" {
 
 #define STEP_DRIVER_PWM_DUTYCYCLE           20
 
+void system_clock_init(void);
 
 stm_err_t robot_motor_init(void);
 stm_err_t robot_imu_init(void);
