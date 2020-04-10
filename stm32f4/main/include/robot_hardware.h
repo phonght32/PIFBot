@@ -104,9 +104,10 @@ extern "C" {
 
 
 
-void robot_motor_init(void);
-void robot_imu_init(void);
-void robot_encoder_init(void);
+stm_err_t robot_motor_init(void);
+stm_err_t robot_imu_init(void);
+stm_err_t robot_madgwick_filter_init(void);
+stm_err_t robot_encoder_init(void);
 
 stm_err_t robot_motor_left_start(void);
 stm_err_t robot_motor_left_stop(void);

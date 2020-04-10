@@ -1,5 +1,10 @@
 #include "robot_hardware.h"
 
+#define MOTOR_INIT_ERR_STR              "motor init error"
+#define IMU_INIT_ERR_STR                "imu init error"
+#define RESOLVER_INIT_ERR_STR           "resolver init error"
+#define MADGWICK_INIT_ERR_STR           "madgwick filter init error"
+
 #define MOTORLEFT_START_ERR_STR         "motor left start error"
 #define MOTORLEFT_STOP_ERR_STR          "motor left stop error"
 #define MOTORLEFT_FORWARD_ERR_STR       "motor left forward error"
@@ -25,7 +30,7 @@ software_resolver_handle_t resolver_left, resolver_right;
 mpu9250_handle_t mpu9250_handle;
 madgwick_handle_t madgwick_handle;
 
-void robot_motor_init(void)
+stm_err_t robot_motor_init(void)
 {
     stepmotor_config_t motorleft_cfg;
     motorleft_cfg.dir_gpio_port = MOTORLEFT_DIR_GPIO_PORT;
@@ -34,6 +39,7 @@ void robot_motor_init(void)
     motorleft_cfg.pulse_timer_pins_pack = MOTORLEFT_PULSE_TIMER_PINSPACK;
     motorleft_cfg.pulse_timer_channel = MOTORLEFT_PULSE_TIMER_CHANNEL;
     motor_left = stepmotor_config(&motorleft_cfg);
+    HARDWARE_CHECK(motor_left, MOTOR_INIT_ERR_STR, STM_FAIL);
 
     stepmotor_config_t motorright_cfg;
     motorright_cfg.dir_gpio_port = MOTORRIGHT_DIR_GPIO_PORT;
@@ -42,17 +48,22 @@ void robot_motor_init(void)
     motorright_cfg.pulse_timer_pins_pack = MOTORRIGHT_PULSE_TIMER_PINSPACK;
     motorright_cfg.pulse_timer_channel = MOTORRIGHT_PULSE_TIMER_CHANNEL;
     motor_right = stepmotor_config(&motorright_cfg);
+    HARDWARE_CHECK(motor_right, MOTOR_INIT_ERR_STR, STM_FAIL);
 
     STM_LOGI(TAG, "Configure motor success.");
+    return STM_OK;
 }
 
-void robot_imu_init(void)
+stm_err_t robot_imu_init(void)
 {
+    int ret;
+
     i2c_config_t i2c_cfg;
     i2c_cfg.i2c_num = IMU_I2C_NUM;
     i2c_cfg.i2c_pins_pack = IMU_I2C_PINSPACK;
     i2c_cfg.clk_speed = IMU_CLOCK_SPEED;
-    i2c_config(&i2c_cfg);
+    ret = i2c_config(&i2c_cfg);
+    HARDWARE_CHECK(!ret, IMU_INIT_ERR_STR, STM_FAIL);
 
     mpu9250_config_t mpu9250_cfg;
     mpu9250_cfg.afs_sel = MPU9250_AFS_SEL_8G;
@@ -62,19 +73,27 @@ void robot_imu_init(void)
     mpu9250_cfg.sleep_mode = MPU9250_DISABLE_SLEEP_MODE;
     mpu9250_cfg.i2c_num = IMU_I2C_NUM;
     mpu9250_handle = mpu9250_config(&mpu9250_cfg);
-    STM_LOGI(TAG, "Configure IMU success.");
+    HARDWARE_CHECK(mpu9250_handle, IMU_INIT_ERR_STR, STM_FAIL);
 
     mpu9250_auto_calib(mpu9250_handle);
-    STM_LOGI(TAG, "Calibrate MPU9250 success.");
 
+    STM_LOGI(TAG, "Configure IMU success.");
+    return STM_OK;
+}
+
+stm_err_t robot_madgwick_filter_init(void)
+{
     madgwick_config_t madgwick_cfg;
     madgwick_cfg.beta = MADGWICK_BETA;
     madgwick_cfg.sample_freq = MADGWICK_SAMPLE_FREQ;
     madgwick_handle = madgwick_config(&madgwick_cfg);
+    HARDWARE_CHECK(madgwick_handle, MADGWICK_INIT_ERR_STR, STM_FAIL);
+
     STM_LOGI(TAG, "Configure Madgwick filter success");
+    return STM_OK;
 }
 
-void robot_encoder_init(void)
+stm_err_t robot_encoder_init(void)
 {
     software_resolver_config_t resolver_left_cfg;
     resolver_left_cfg.timer_num = MOTORLEFT_TICK_TIMER_NUM;
