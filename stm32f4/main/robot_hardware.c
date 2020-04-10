@@ -41,9 +41,27 @@ void robot_imu_init(void)
     mpu9250_cfg.sleep_mode = MPU9250_DISABLE_SLEEP_MODE;
     mpu9250_cfg.i2c_num = I2C_NUM_1;
     mpu9250_handle = mpu9250_config(&mpu9250_cfg);
-    STM_LOGI(TAG, "Configure IMU success.")
+    STM_LOGI(TAG, "Configure IMU success.");
 
     mpu9250_auto_calib(mpu9250_handle);
     STM_LOGI(TAG, "Calibrate MPU9250 success.");
 }
 
+void robot_encoder_init(void)
+{
+    software_resolver_config_t resolver_left_cfg;
+    resolver_left_cfg.timer_num = MOTORLEFT_TICK_TIMER_NUM;
+    resolver_left_cfg.timer_pins_pack = MOTORLEFT_TICK_TIMER_PINSPACK;
+    resolver_left_cfg.max_reload = 800;
+    resolver_left_cfg.counter_mode = TIMER_COUNTER_UP;
+    resolver_left = software_resolver_config(&resolver_left_cfg);
+
+    software_resolver_config_t resolver_right_cfg;
+    resolver_right_cfg.timer_num = MOTORRIGHT_TICK_TIMER_NUM;
+    resolver_right_cfg.timer_pins_pack = MOTORRIGHT_TICK_TIMER_PINSPACK;
+    resolver_right_cfg.max_reload = 800;
+    resolver_right_cfg.counter_mode = TIMER_COUNTER_UP;
+    resolver_right = software_resolver_config(&resolver_right_cfg);
+
+    STM_LOGI(TAG, "Configure resolver success");
+}
