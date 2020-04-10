@@ -35,9 +35,9 @@ void robot_motor_init(void)
 void robot_imu_init(void)
 {
     i2c_config_t i2c_cfg;
-    i2c_cfg.i2c_num = MPU9250_I2C_NUM;
-    i2c_cfg.i2c_pins_pack = MPU9250_I2C_PINSPACK;
-    i2c_cfg.clk_speed = 100000;
+    i2c_cfg.i2c_num = IMU_I2C_NUM;
+    i2c_cfg.i2c_pins_pack = IMU_I2C_PINSPACK;
+    i2c_cfg.clk_speed = IMU_CLOCK_SPEED;
     i2c_config(&i2c_cfg);
 
     mpu9250_config_t mpu9250_cfg;
@@ -46,7 +46,7 @@ void robot_imu_init(void)
     mpu9250_cfg.dlpf_cfg =  MPU9250_41ACEL_42GYRO_BW_HZ;
     mpu9250_cfg.fs_sel = MPU9250_FS_SEL_2000;
     mpu9250_cfg.sleep_mode = MPU9250_DISABLE_SLEEP_MODE;
-    mpu9250_cfg.i2c_num = I2C_NUM_1;
+    mpu9250_cfg.i2c_num = IMU_I2C_NUM;
     mpu9250_handle = mpu9250_config(&mpu9250_cfg);
     STM_LOGI(TAG, "Configure IMU success.");
 
@@ -54,9 +54,10 @@ void robot_imu_init(void)
     STM_LOGI(TAG, "Calibrate MPU9250 success.");
 
     madgwick_config_t madgwick_cfg;
-    madgwick_cfg.beta = 0.1f;
-    madgwick_cfg.sample_freq = 100;
+    madgwick_cfg.beta = MADGWICK_BETA;
+    madgwick_cfg.sample_freq = MADGWICK_SAMPLE_FREQ;
     madgwick_handle = madgwick_config(&madgwick_cfg);
+    STM_LOGI(TAG, "Configure Madgwick filter success");
 }
 
 void robot_encoder_init(void)

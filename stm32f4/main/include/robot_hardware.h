@@ -95,8 +95,12 @@ extern "C" {
 #define MOTORRIGHT_TICK_TIMER_NUM           TIMER_NUM_4
 #define MOTORRIGHT_TICK_TIMER_PINSPACK      TIMER_PINS_PACK_1
 
-#define MPU9250_I2C_NUM                     I2C_NUM_1
-#define MPU9250_I2C_PINSPACK                I2C_PINS_PACK_1
+#define IMU_I2C_NUM                     I2C_NUM_1
+#define IMU_I2C_PINSPACK                I2C_PINS_PACK_1
+#define IMU_CLOCK_SPEED                 100000
+
+#define MADGWICK_BETA                   0.1f
+#define MADGWICK_SAMPLE_FREQ            512.0f
 
 /*
  * Robot Initial Function.
