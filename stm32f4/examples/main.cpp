@@ -516,7 +516,7 @@ void sendLogMsg(void)
             sprintf(log_msg, "--------------------------");
             nh.loginfo(log_msg);
 
-            sprintf(log_msg, "Connected to limo-board v1.0");
+            sprintf(log_msg, "Connected to board STM-IDF v1.0");
             nh.loginfo(log_msg);
 
             sprintf(log_msg, "--------------------------");
