@@ -89,20 +89,28 @@ stm_err_t robot_imu_init(void)
     i2c_cfg.clk_speed = IMU_CLOCK_SPEED;
     ret = i2c_config(&i2c_cfg);
     HARDWARE_CHECK(!ret, IMU_INIT_ERR_STR, STM_FAIL);
-
+        
     mpu9250_config_t mpu9250_cfg;
     mpu9250_cfg.afs_sel = MPU9250_AFS_SEL_8G;
     mpu9250_cfg.clksel = MPU9250_CLKSEL_AUTO;
     mpu9250_cfg.dlpf_cfg =  MPU9250_41ACEL_42GYRO_BW_HZ;
-    mpu9250_cfg.fs_sel = MPU9250_FS_SEL_2000;
+    mpu9250_cfg.fs_sel = MPU9250_FS_SEL_1000;
     mpu9250_cfg.sleep_mode = MPU9250_DISABLE_SLEEP_MODE;
     mpu9250_cfg.i2c_num = IMU_I2C_NUM;
     mpu9250_handle = mpu9250_config(&mpu9250_cfg);
     HARDWARE_CHECK(mpu9250_handle, IMU_INIT_ERR_STR, STM_FAIL);
+    STM_LOGD(TAG, "Configure IMU success.");
 
     mpu9250_auto_calib(mpu9250_handle);
+    STM_LOGD(TAG, "Calibrate IMU success");
 
-    STM_LOGD(TAG, "Configure IMU success.");
+    imu_bias_data_t accel_bias, gyro_bias;
+    mpu9250_get_accel_bias(mpu9250_handle, &accel_bias);
+    mpu9250_get_gyro_bias(mpu9250_handle, &gyro_bias);
+    STM_LOGD(TAG, "MPU9250 bias value:");
+    STM_LOGD(TAG, "x accel: %d\t y accel %d\t z accel %d", accel_bias.x_axis, accel_bias.y_axis, accel_bias.z_axis);
+    STM_LOGD(TAG, "x gyro: %d\t y gyro %d\t z gyro %d", gyro_bias.x_axis, gyro_bias.y_axis, gyro_bias.z_axis);
+
     return STM_OK;
 }
 
@@ -252,6 +260,11 @@ stm_err_t robot_imu_get_quat(float *quat)
     imu_quat_data_t quat_data;
     madgwick_get_quaternion(madgwick_handle, &quat_data);
 
+    quat[0] = quat_data.q0;
+    quat[1] = quat_data.q1;
+    quat[2] = quat_data.q2;
+    quat[3] = quat_data.q3;
+
     return STM_OK;
 }
 
@@ -281,18 +294,16 @@ stm_err_t robot_imu_get_gyro(float *gyro)
     return STM_OK;
 }
 
-uint32_t robot_encoder_left_get_tick(void)
+stm_err_t robot_encoder_left_get_tick(uint32_t *left_tick)
 {
-    uint32_t resolver_tick;
-    software_resolver_get_value(resolver_left, &resolver_tick);
-    return resolver_tick;
+    software_resolver_get_value(resolver_left, left_tick);
+    return STM_OK;
 }
 
-uint32_t robot_encoder_right_get_tick(void)
+stm_err_t robot_encoder_right_get_tick(uint32_t *right_tick)
 {
-    uint32_t resolver_tick;
-    software_resolver_get_value(resolver_right, &resolver_tick);
-    return resolver_tick;
+    software_resolver_get_value(resolver_right, right_tick);
+    return STM_OK;
 }
 
 void system_clock_init(void)

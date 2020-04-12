@@ -11,11 +11,28 @@
 #include "robot_utils.h"
 #include "robot_ros_config.h"
 
-// static const char *TAG = "APP_MAIN";
+
+static const char *TAG = "APP_MAIN";
 
 
 static void main_task(void* arg)
 {
+    /* Initialize motor */
+    robot_motor_init();
+
+    /* Initialize encoder */
+    robot_encoder_init();
+
+    /* Initialize IMU */
+    robot_imu_init();
+
+    /* Initialize madgwick filter */
+    robot_madgwick_filter_init();
+    initIMUCovariance();
+
+    /* Set up ROS */
+    ros_setup();
+
     while (1)
     {
         uint32_t t = millis();              /*!< Update time counter */
@@ -50,10 +67,10 @@ static void main_task(void* arg)
         if ((t - tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX]) >= (1000 / DRIVE_INFORMATION_PUBLISH_FREQUENCY))
         {
             /* Update motor tick */
-            int32_t left_tick, right_tick;
-            left_tick = (int32_t)robot_encoder_left_get_tick();
-            right_tick = (int32_t)robot_encoder_right_get_tick();
-            updateMotorInfo(left_tick, right_tick);
+            uint32_t left_tick, right_tick;
+            robot_encoder_left_get_tick(&left_tick);
+            robot_encoder_right_get_tick(&right_tick);
+            updateMotorInfo((int32_t)left_tick, (int32_t)right_tick);
 
             /* Publish Odom, TF and JointState, */
             publishDriveInformation();
@@ -69,11 +86,10 @@ static void main_task(void* arg)
         }
 
         sendLogMsg();                       /*!< Send log message */
-//        updateIMU();                        /*!< Update IMU quaternion value consecutively */
-
         nh.spinOnce();                      /*!< Spin NodeHandle to keep synchorus */
 //        waitForSerialLink(nh.connected());  /*!< Keep rosserial connection */
     }
+
 }
 
 int main(void)
@@ -84,26 +100,11 @@ int main(void)
 
     stm_log_level_set("*", STM_LOG_NONE);
     stm_log_level_set("APP_MAIN", STM_LOG_INFO);
+    stm_log_level_set("ROBOT HARDWARE", STM_LOG_DEBUG);
 
-    /* Motor configuration */
-    robot_motor_init();
-    robot_encoder_init();
-
-    /* IMU configuration */
-    robot_imu_init();
-    robot_madgwick_filter_init();
-    initIMUCovariance();
-
-    /* Initialize timer counts interval */
-    timer_interval_init();
-
-    /* ROS setup */
-    ros_setup();
-
-    xTaskCreate(main_task, "main_task", 4096, NULL, 1, NULL);
+    xTaskCreate(main_task, "main_task", 512, NULL, 1, NULL);
     vTaskStartScheduler();
 }
-
 
 void ros_setup(void)
 {

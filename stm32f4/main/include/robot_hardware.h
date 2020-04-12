@@ -37,6 +37,7 @@ extern "C" {
 #include "stm_err.h"
 #include "stm_log.h"
 
+#include "imu.h"
 #include "stepmotor.h"
 #include "software_resolver.h"
 #include "mpu9250.h"
@@ -103,9 +104,9 @@ extern "C" {
 #define IMU_CLOCK_SPEED                     100000
 
 #define MADGWICK_BETA                       0.1f
-#define MADGWICK_SAMPLE_FREQ                512.0f
+#define MADGWICK_SAMPLE_FREQ                12.0f
 
-#define STEP_DRIVER_PWM_DUTYCYCLE           20
+#define STEP_DRIVER_PWM_DUTYCYCLE           50
 
 void system_clock_init(void);
 
@@ -131,8 +132,8 @@ stm_err_t robot_imu_get_quat(float *quat);
 stm_err_t robot_imu_get_accel(float *accel);
 stm_err_t robot_imu_get_gyro(float *gyro);
 
-uint32_t robot_encoder_left_get_tick(void);
-uint32_t robot_encoder_right_get_tick(void);
+stm_err_t robot_encoder_left_get_tick(uint32_t *left_tick);
+stm_err_t robot_encoder_right_get_tick(uint32_t *right_tick);
 
 
 #ifdef __cplusplus
