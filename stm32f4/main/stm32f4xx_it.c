@@ -5,10 +5,6 @@
 #include "freertos/task.h"
 
 
-extern DMA_HandleTypeDef hdma_uart4_rx;
-extern DMA_HandleTypeDef hdma_uart4_tx;
-extern UART_HandleTypeDef huart4;
-
 void NMI_Handler(void)
 {
 
