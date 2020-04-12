@@ -32,13 +32,6 @@ extern "C" {
 #include "stm32f4xx_hal.h"
 
 /*
- * @brief   Initialize timer to count system time.
- * @param   None.
- * @return  None.
- */
-void timer_interval_init(void);
-
-/*
  * @brief   Get embedded time in milisecond.
  * @param   None.
  * @return  Time in ms.
