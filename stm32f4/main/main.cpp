@@ -5,6 +5,7 @@
 #include "freertos/semphr.h"
 #include "freertos/task.h"
 
+#include "stm_err.h"
 #include "stm_log.h"
 
 #include "robot_hardware.h"
@@ -25,10 +26,10 @@ static void main_task(void* arg)
 
     /* Initialize IMU */
     robot_imu_init();
+    initIMUCovariance();
 
     /* Initialize madgwick filter */
     robot_madgwick_filter_init();
-    initIMUCovariance();
 
     /* Set up ROS */
     ros_setup();
