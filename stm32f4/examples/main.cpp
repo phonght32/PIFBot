@@ -5,6 +5,7 @@
 #include "freertos/semphr.h"
 #include "freertos/task.h"
 
+#include "stm_err.h"
 #include "stm_log.h"
 
 #include "robot_hardware.h"
@@ -25,10 +26,10 @@ static void main_task(void* arg)
 
     /* Initialize IMU */
     robot_imu_init();
+    initIMUCovariance();
 
     /* Initialize madgwick filter */
     robot_madgwick_filter_init();
-    initIMUCovariance();
 
     /* Set up ROS */
     ros_setup();
@@ -100,9 +101,9 @@ int main(void)
 
     stm_log_level_set("*", STM_LOG_NONE);
     stm_log_level_set("APP_MAIN", STM_LOG_INFO);
-    stm_log_level_set("ROBOT HARDWARE", STM_LOG_DEBUG);
+    stm_log_level_set("ROBOT HARDWARE", STM_LOG_INFO);
 
-    xTaskCreate(main_task, "main_task", 512, NULL, 1, NULL);
+    xTaskCreate(main_task, "main_task", 2048, NULL, 1, NULL);
     vTaskStartScheduler();
 }
 
@@ -516,7 +517,7 @@ void sendLogMsg(void)
             sprintf(log_msg, "--------------------------");
             nh.loginfo(log_msg);
 
-            sprintf(log_msg, "Connected to board STM-IDF v1.0");
+            sprintf(log_msg, "Connected to limo-board v1.0");
             nh.loginfo(log_msg);
 
             sprintf(log_msg, "--------------------------");
@@ -640,23 +641,6 @@ void controlMotor(float *goal_vel)
     {
         robot_motor_right_forward();
         robot_motor_right_set_speed(wheel_velocity_cmd[RIGHT]);
-    }
-
-    if (wheel_velocity_cmd[LEFT])
-    {
-        robot_motor_left_start();
-    }
-    else
-    {
-        robot_motor_left_stop();
-    }
-    if (wheel_velocity_cmd[RIGHT])
-    {
-        robot_motor_right_start();
-    }
-    else
-    {
-        robot_motor_right_stop();
     }
 }
 

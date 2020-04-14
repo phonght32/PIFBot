@@ -101,9 +101,9 @@ int main(void)
 
     stm_log_level_set("*", STM_LOG_NONE);
     stm_log_level_set("APP_MAIN", STM_LOG_INFO);
-    stm_log_level_set("ROBOT HARDWARE", STM_LOG_DEBUG);
+    stm_log_level_set("ROBOT HARDWARE", STM_LOG_INFO);
 
-    xTaskCreate(main_task, "main_task", 512, NULL, 1, NULL);
+    xTaskCreate(main_task, "main_task", 2048, NULL, 1, NULL);
     vTaskStartScheduler();
 }
 
@@ -641,23 +641,6 @@ void controlMotor(float *goal_vel)
     {
         robot_motor_right_forward();
         robot_motor_right_set_speed(wheel_velocity_cmd[RIGHT]);
-    }
-
-    if (wheel_velocity_cmd[LEFT])
-    {
-        robot_motor_left_start();
-    }
-    else
-    {
-        robot_motor_left_stop();
-    }
-    if (wheel_velocity_cmd[RIGHT])
-    {
-        robot_motor_right_start();
-    }
-    else
-    {
-        robot_motor_right_stop();
     }
 }
 
