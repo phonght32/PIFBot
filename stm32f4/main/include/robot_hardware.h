@@ -104,7 +104,7 @@ extern "C" {
 #define IMU_CLOCK_SPEED                     100000
 
 #define MADGWICK_BETA                       0.1f
-#define MADGWICK_SAMPLE_FREQ                12.0f
+#define MADGWICK_SAMPLE_FREQ                15.0f
 
 #define STEP_DRIVER_PWM_DUTYCYCLE           50
 
