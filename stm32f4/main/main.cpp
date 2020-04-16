@@ -54,6 +54,8 @@ static void main_task(void* arg)
                 controlMotor(goal_velocity);
             }
             tTime[CONTROL_MOTOR_TIME_INDEX] = t;
+            // sprintf(log_msg, "control motor");
+            // nh.loginfo(log_msg);
         }
 
         /* Publish motor speed to "cmd_vel_motor" topic */
@@ -62,6 +64,8 @@ static void main_task(void* arg)
             getMotorSpeed(goal_velocity_from_motor);
             publishCmdVelFromMotorMsg();
             tTime[CMD_VEL_PUBLISH_TIME_INDEX] = t;
+            // sprintf(log_msg, "publish motor speed");
+            // nh.loginfo(log_msg);
         }
 
         /* Publish driver information */
@@ -76,6 +80,8 @@ static void main_task(void* arg)
             /* Publish Odom, TF and JointState, */
             publishDriveInformation();
             tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
+            // sprintf(log_msg, "publish driver info");
+            // nh.loginfo(log_msg);
         }
 
         /* Publish IMU to "imu" topic */
@@ -84,11 +90,13 @@ static void main_task(void* arg)
             robot_imu_update_quat();
             publishImuMsg();
             tTime[IMU_PUBLISH_TIME_INDEX] = t;
+            // sprintf(log_msg, "publish imu info");
+            // nh.loginfo(log_msg);
         }
 
         sendLogMsg();                       /*!< Send log message */
         nh.spinOnce();                      /*!< Spin NodeHandle to keep synchorus */
-//        waitForSerialLink(nh.connected());  /*!< Keep rosserial connection */
+        waitForSerialLink(nh.connected());  /*!< Keep rosserial connection */
     }
 
 }
