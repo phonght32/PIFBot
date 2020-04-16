@@ -50,11 +50,11 @@
 #define CONTROL_MOTOR_TIMEOUT_TIME_INDEX        6       /*!< Time index control motor timeout */
 
 /* Frequency of publish/subscribe */
-#define CONTROL_MOTOR_SPEED_FREQUENCY          30       /*!< Frequency in Hz to control motor */
+#define CONTROL_MOTOR_SPEED_FREQUENCY          10       /*!< Frequency in Hz to control motor */
 #define CONTROL_MOTOR_TIMEOUT                  500      /*!< Period in ms to check control motor timeout */
-#define IMU_PUBLISH_FREQUENCY                  200      /*!< Frequency in Hz to publish IMU information */
-#define CMD_VEL_PUBLISH_FREQUENCY              30       /*!< Frequency in Hz to publish robot velocity */
-#define DRIVE_INFORMATION_PUBLISH_FREQUENCY    30       /*!< Frequency in Hz to publish drive information */
+#define IMU_PUBLISH_FREQUENCY                  15      	/*!< Frequency in Hz to publish IMU information */
+#define CMD_VEL_PUBLISH_FREQUENCY              5       	/*!< Frequency in Hz to publish robot velocity */
+#define DRIVE_INFORMATION_PUBLISH_FREQUENCY    5       	/*!< Frequency in Hz to publish drive information */
 #define DEBUG_LOG_FREQUENCY                    10       /*!< Frequency in Hz to send log debug messages */
 
 /* Linear & Angular velocity index */
