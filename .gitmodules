@@ -1,10 +1,8 @@
-[submodule "stm32f4_ros/stm32f4_library"]
-	path = stm32f4_ros/stm32f4_library
-	url = https://github.com/thanhphong98/stm32f4_library.git
 [submodule "kicad/mainboard_v2_0/kicad-library"]
 	path = kicad/mainboard_v2_0/kicad-library
 	url = git@github.com:thanhphong98/kicad-library.git
 	branch = feature/thesis
+
 [submodule "ros/src/lds_pkg/rplidar_ros"]
 	path = ros/src/lds_pkg/rplidar_ros
 	url = https://github.com/thanhphong98/rplidar_ros.git
@@ -12,9 +10,11 @@
 [submodule "stm32f4/stm-idf"]
 	path = stm32f4/stm-idf
 	url = git@github.com:thanhphong98/stm-idf.git
+
 [submodule "stm32f4/components/motor"]
 	path = stm32f4/components/motor
 	url = git@github.com:thanhphong98/motor.git
+	
 [submodule "stm32f4/components/imu"]
 	path = stm32f4/components/imu
 	url = git@github.com:thanhphong98/imu.git
