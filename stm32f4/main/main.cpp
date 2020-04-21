@@ -20,7 +20,6 @@ static void main_task(void* arg)
 
     /* Initialize IMU */
     robot_imu_init();
-    initIMUCovariance();
 
     /* Initialize madgwick filter */
     robot_madgwick_filter_init();
@@ -48,8 +47,6 @@ static void main_task(void* arg)
                 controlMotor(goal_velocity);
             }
             tTime[CONTROL_MOTOR_TIME_INDEX] = t;
-            // sprintf(log_msg, "control motor");
-            // nh.loginfo(log_msg);
         }
 
         /* Publish motor speed to "cmd_vel_motor" topic */
@@ -58,8 +55,6 @@ static void main_task(void* arg)
             getMotorSpeed(goal_velocity_from_motor);
             publishCmdVelFromMotorMsg();
             tTime[CMD_VEL_PUBLISH_TIME_INDEX] = t;
-            // sprintf(log_msg, "publish motor speed");
-            // nh.loginfo(log_msg);
         }
 
         /* Publish driver information */
@@ -74,8 +69,6 @@ static void main_task(void* arg)
             /* Publish Odom, TF and JointState, */
             publishDriveInformation();
             tTime[DRIVE_INFORMATION_PUBLISH_TIME_INDEX] = t;
-            // sprintf(log_msg, "publish driver info");
-            // nh.loginfo(log_msg);
         }
 
         /* Publish IMU to "imu" topic */
@@ -84,8 +77,6 @@ static void main_task(void* arg)
             robot_imu_update_quat();
             publishImuMsg();
             tTime[IMU_PUBLISH_TIME_INDEX] = t;
-            // sprintf(log_msg, "publish im");
-            // nh.loginfo(log_msg);
         }
 
         sendLogMsg();                       /*!< Send log message */
@@ -571,39 +562,36 @@ sensor_msgs::Imu getIMU(void)
     imu_msg_.orientation.y = quaternion[2];
     imu_msg_.orientation.z = quaternion[3];
 
+    imu_msg_.angular_velocity_covariance[1] = 0;
+    imu_msg_.angular_velocity_covariance[2] = 0;
+    imu_msg_.angular_velocity_covariance[3] = 0;
+    imu_msg_.angular_velocity_covariance[4] = 0.02;
+    imu_msg_.angular_velocity_covariance[5] = 0;
+    imu_msg_.angular_velocity_covariance[6] = 0;
+    imu_msg_.angular_velocity_covariance[7] = 0;
+    imu_msg_.angular_velocity_covariance[8] = 0.02;
+
+    imu_msg_.linear_acceleration_covariance[0] = 0.04;
+    imu_msg_.linear_acceleration_covariance[1] = 0;
+    imu_msg_.linear_acceleration_covariance[2] = 0;
+    imu_msg_.linear_acceleration_covariance[3] = 0;
+    imu_msg_.linear_acceleration_covariance[4] = 0.04;
+    imu_msg_.linear_acceleration_covariance[5] = 0;
+    imu_msg_.linear_acceleration_covariance[6] = 0;
+    imu_msg_.linear_acceleration_covariance[7] = 0;
+    imu_msg_.linear_acceleration_covariance[8] = 0.04;
+
+    imu_msg_.orientation_covariance[0] = 0.0025;
+    imu_msg_.orientation_covariance[1] = 0;
+    imu_msg_.orientation_covariance[2] = 0;
+    imu_msg_.orientation_covariance[3] = 0;
+    imu_msg_.orientation_covariance[4] = 0.0025;
+    imu_msg_.orientation_covariance[5] = 0;
+    imu_msg_.orientation_covariance[6] = 0;
+    imu_msg_.orientation_covariance[7] = 0;
+    imu_msg_.orientation_covariance[8] = 0.0025;
+
     return imu_msg_;
-}
-
-void initIMUCovariance(void)
-{
-    imu_msg.angular_velocity_covariance[1] = 0;
-    imu_msg.angular_velocity_covariance[2] = 0;
-    imu_msg.angular_velocity_covariance[3] = 0;
-    imu_msg.angular_velocity_covariance[4] = 0.02;
-    imu_msg.angular_velocity_covariance[5] = 0;
-    imu_msg.angular_velocity_covariance[6] = 0;
-    imu_msg.angular_velocity_covariance[7] = 0;
-    imu_msg.angular_velocity_covariance[8] = 0.02;
-
-    imu_msg.linear_acceleration_covariance[0] = 0.04;
-    imu_msg.linear_acceleration_covariance[1] = 0;
-    imu_msg.linear_acceleration_covariance[2] = 0;
-    imu_msg.linear_acceleration_covariance[3] = 0;
-    imu_msg.linear_acceleration_covariance[4] = 0.04;
-    imu_msg.linear_acceleration_covariance[5] = 0;
-    imu_msg.linear_acceleration_covariance[6] = 0;
-    imu_msg.linear_acceleration_covariance[7] = 0;
-    imu_msg.linear_acceleration_covariance[8] = 0.04;
-
-    imu_msg.orientation_covariance[0] = 0.0025;
-    imu_msg.orientation_covariance[1] = 0;
-    imu_msg.orientation_covariance[2] = 0;
-    imu_msg.orientation_covariance[3] = 0;
-    imu_msg.orientation_covariance[4] = 0.0025;
-    imu_msg.orientation_covariance[5] = 0;
-    imu_msg.orientation_covariance[6] = 0;
-    imu_msg.orientation_covariance[7] = 0;
-    imu_msg.orientation_covariance[8] = 0.0025;
 }
 
 void controlMotor(float *goal_vel)

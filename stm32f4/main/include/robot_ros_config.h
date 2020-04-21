@@ -253,13 +253,6 @@ void getMotorSpeed(float *vel);
 sensor_msgs::Imu getIMU(void);
 
 /*
- * @brieft  Initialize IMU covariance.
- * @param   None.
- * @return  None.
- */
-void initIMUCovariance(void);
-
-/*
  * Log message buffer.
  */
 char log_msg[100];
