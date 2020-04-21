@@ -173,6 +173,7 @@ stm_err_t robot_motor_left_forward(void)
 {
     int ret = stepmotor_set_dir(motor_left, MOTORLEFT_DIR_FORWARD);
     HARDWARE_CHECK(!ret, MOTORLEFT_FORWARD_ERR_STR, STM_FAIL);
+    software_resolver_set_mode(resolver_left, TIMER_COUNTER_UP);
 
     return STM_OK;
 }
@@ -181,6 +182,7 @@ stm_err_t robot_motor_left_backward(void)
 {
     int ret = stepmotor_set_dir(motor_left, MOTORLEFT_DIR_BACKWARD);
     HARDWARE_CHECK(!ret, MOTORLEFT_BACKWARD_ERR_STR, STM_FAIL);
+    software_resolver_set_mode(resolver_left, TIMER_COUNTER_DOWN);
 
     return STM_OK;
 }
@@ -213,6 +215,7 @@ stm_err_t robot_motor_right_forward(void)
 {
     int ret = stepmotor_set_dir(motor_right, MOTORRIGHT_DIR_FORWARD);
     HARDWARE_CHECK(!ret, MOTORRIGHT_FORWARD_ERR_STR, STM_FAIL);
+    software_resolver_set_mode(resolver_right, TIMER_COUNTER_UP);
 
     return STM_OK;
 }
@@ -221,6 +224,7 @@ stm_err_t robot_motor_right_backward(void)
 {
     int ret = stepmotor_set_dir(motor_right, MOTORRIGHT_DIR_BACKWARD);
     HARDWARE_CHECK(!ret, MOTORRIGHT_BACKWARD_ERR_STR, STM_FAIL);
+    software_resolver_set_mode(resolver_right, TIMER_COUNTER_DOWN);
 
     return STM_OK;
 }
