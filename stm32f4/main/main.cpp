@@ -1,5 +1,3 @@
-#include "stm32f4xx_hal.h"
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/semphr.h"
@@ -11,10 +9,6 @@
 #include "robot_hardware.h"
 #include "robot_utils.h"
 #include "robot_ros_config.h"
-
-
-static const char *TAG = "APP_MAIN";
-
 
 static void main_task(void* arg)
 {
@@ -90,7 +84,7 @@ static void main_task(void* arg)
             robot_imu_update_quat();
             publishImuMsg();
             tTime[IMU_PUBLISH_TIME_INDEX] = t;
-            // sprintf(log_msg, "publish imu info");
+            // sprintf(log_msg, "publish im");
             // nh.loginfo(log_msg);
         }
 
@@ -103,10 +97,6 @@ static void main_task(void* arg)
 
 int main(void)
 {
-    HAL_Init();
-    system_clock_init();
-    stm_log_init();
-
     stm_log_level_set("*", STM_LOG_NONE);
     stm_log_level_set("APP_MAIN", STM_LOG_INFO);
     stm_log_level_set("ROBOT HARDWARE", STM_LOG_INFO);
