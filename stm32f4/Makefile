@@ -1,2 +1,2 @@
 PROJECT_NAME := robot_thesis
-include stm-idf/make/project.mk
+include stm32f4-idf/make/project.mk
