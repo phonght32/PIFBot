@@ -2,7 +2,3 @@
 	path = ros/src/lds_pkg/rplidar_ros
 	url = https://github.com/thanhphong98/rplidar_ros.git
 
-[submodule "stm32f4/stm-idf"]
-	path = stm32f4/stm-idf
-	url = git@github.com:thanhphong98/stm-idf.git
-
