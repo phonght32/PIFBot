@@ -6,10 +6,3 @@
 	path = stm32f4/stm-idf
 	url = git@github.com:thanhphong98/stm-idf.git
 
-[submodule "stm32f4/components/motor"]
-	path = stm32f4/components/motor
-	url = git@github.com:thanhphong98/motor.git
-	
-[submodule "stm32f4/components/imu"]
-	path = stm32f4/components/imu
-	url = git@github.com:thanhphong98/imu.git
