@@ -2,7 +2,7 @@
   <!-- Arguments -->
   <arg name="map_file" default="$(find robot_navigation)/maps/map.yaml"/>
   <arg name="open_rviz" default="true"/>
-  <arg name="move_forward_only" default="false"/>
+  <arg name="move_forward_only" default="true"/>
 
   <include file="$(find robot_bringup)/launch/robot_remote.launch"/>
 
