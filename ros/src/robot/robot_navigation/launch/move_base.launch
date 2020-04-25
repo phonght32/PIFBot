@@ -1,6 +1,7 @@
 <launch>
   <!-- Arguments -->
-  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="map_topic" default="map" />
+  <arg name="cmd_vel_topic" default="cmd_vel" />
   <arg name="odom_topic" default="odom" />
   <arg name="move_forward_only" default="false"/>
 
@@ -15,6 +16,7 @@
     <rosparam file="$(find robot_navigation)/param/dwa_local_planner_params.yaml" command="load" />
     <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
     <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="map" to="$(arg map_topic)" />
     <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
   </node>
 </launch>
