@@ -55,7 +55,7 @@
   <build_export_depend>sensor_msgs</build_export_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
-  <exec_depend>turtlebot3_bringup</exec_depend>
+  <exec_depend>robot_bringup</exec_depend>
   <exec_depend>slam_gmapping</exec_depend>
   <exec_depend>cartographer</exec_depend>
   <exec_depend>cartographer_ros</exec_depend>
@@ -72,4 +72,4 @@
     <!-- Other tools can request additional information be placed here -->
 
   </export>
-</package>
+</package>  
