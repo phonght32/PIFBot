@@ -1,0 +1,31 @@
+<launch>
+
+  <!-- Arguments -->
+  <arg name="move_forward_only" default="true"/>
+  <arg name="configuration_basename" default="robot_lds_2d.lua"/>
+  <arg name="sensor_range" default="1.0"/>
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="odom" />
+  <arg name="slam_methods" default="gmapping" doc="slam type [gmapping, cartographer, hector, karto, frontier_exploration]"/>
+
+  <include file="$(find robot_bringup)/launch/robot_remote.launch"/>
+
+  <!-- SLAM: Gmapping, Cartographer, Hector, Karto, Frontier_exploration, RTAB-Map -->
+  <include file="$(find robot_slam)/launch/robot_$(arg slam_methods).launch">
+    <arg name="configuration_basename" value="$(arg configuration_basename)"/>
+  </include>
+
+  <!-- AMCL -->
+  <include file="$(find robot_navigation)/launch/amcl.launch"/>
+
+  <!-- move_base -->
+  <include file="$(find robot_navigation)/launch/move_base.launch">
+    <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+  </include>
+
+  <node pkg = "robot_explorer" type = "prometheus" name = "prometheus" output = "screen" launch-prefix="gnome-terminal --command"/>
+
+    <!-- Rviz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot_explorer)/rviz/robot_prometheus_frontier_explorer.rviz"/>
+
+</launch>
