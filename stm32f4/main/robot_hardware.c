@@ -35,14 +35,14 @@ software_resolver_handle_t resolver_left, resolver_right;
 mpu9250_handle_t mpu9250_handle;
 madgwick_handle_t madgwick_handle;
 
-stm_err_t robot_motor_init(void)
+stm_err_t robot_motor_init(void) 
 {
     stepmotor_config_t motorleft_cfg;
     motorleft_cfg.dir_gpio_port = MOTORLEFT_DIR_GPIO_PORT;
     motorleft_cfg.dir_gpio_num = MOTORLEFT_DIR_GPIO_NUM;
     motorleft_cfg.pulse_timer_num = MOTORLEFT_PULSE_TIMER_NUM;
     motorleft_cfg.pulse_timer_pins_pack = MOTORLEFT_PULSE_TIMER_PINSPACK;
-    motorleft_cfg.pulse_timer_channel = MOTORLEFT_PULSE_TIMER_CHANNEL;
+    motorleft_cfg.pulse_timer_chnl = MOTORLEFT_PULSE_TIMER_CHANNEL;
     motor_left = stepmotor_config(&motorleft_cfg);
     HARDWARE_CHECK(motor_left, MOTOR_INIT_ERR_STR, STM_FAIL);
 
@@ -51,7 +51,7 @@ stm_err_t robot_motor_init(void)
     motorright_cfg.dir_gpio_num = MOTORRIGHT_DIR_GPIO_NUM;
     motorright_cfg.pulse_timer_num = MOTORRIGHT_PULSE_TIMER_NUM;
     motorright_cfg.pulse_timer_pins_pack = MOTORRIGHT_PULSE_TIMER_PINSPACK;
-    motorright_cfg.pulse_timer_channel = MOTORRIGHT_PULSE_TIMER_CHANNEL;
+    motorright_cfg.pulse_timer_chnl = MOTORRIGHT_PULSE_TIMER_CHANNEL;
     motor_right = stepmotor_config(&motorright_cfg);
     HARDWARE_CHECK(motor_right, MOTOR_INIT_ERR_STR, STM_FAIL);
 
