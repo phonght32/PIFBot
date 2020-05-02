@@ -33,7 +33,7 @@
 
     <!-- Load model --> 
     <include>
-      <uri>model://turtlebot3_plaza</uri>
+      <uri>model://robot_plaza</uri>
     </include>
 
    
