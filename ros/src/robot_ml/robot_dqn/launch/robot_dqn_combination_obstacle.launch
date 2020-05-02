@@ -1,0 +1,7 @@
+<launch>
+  <arg name="stage" default="4"/>
+  <param name="stage_number"  value="$(arg stage)"/>
+  <node pkg="robot_dqn" type="robot_dqn_combination_obstacle" name="robot_dqn_combination_obstacle" output="screen" />
+  <node pkg="robot_dqn" type="combination_obstacle_1" name="combination_obstacle_1" output="screen" />
+  <node pkg="robot_dqn" type="combination_obstacle_2" name="combination_obstacle_2" output="screen" />
+</launch>

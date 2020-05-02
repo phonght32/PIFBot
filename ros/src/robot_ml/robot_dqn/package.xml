@@ -5,6 +5,8 @@
   <description>
     The robot_dqn package includes applications using reinforcement learning with DQN (Deep Q-Learning).
   </description>
+  <maintainer email="phong@todo.todo">phong</maintainer>
+  <license>TODO</license>
   <buildtool_depend>catkin</buildtool_depend>
   <depend>rospy</depend>
 </package>
