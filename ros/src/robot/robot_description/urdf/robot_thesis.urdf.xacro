@@ -13,7 +13,7 @@
 
   <link name="base_link">
     <visual>
-      <origin xyz="-0.032 0 0.0525" rpy="0 0 -1.5707"/>
+      <origin xyz="-0.0 0 0.0525" rpy="0 0 -1.5707"/>
       <geometry>
         <mesh filename="package://robot_description/meshes/stl/robot_base.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -21,7 +21,7 @@
     </visual>
 
     <collision>
-      <origin xyz="-0.032 0 0.070" rpy="0 0 0"/>
+      <origin xyz="-0.0 0 0.070" rpy="0 0 0"/>
       <geometry>
         <box size="0.20 0.20 0.143"/>
       </geometry>
@@ -134,7 +134,7 @@
   <joint name="scan_joint" type="fixed">
     <parent link="base_link"/>
     <child link="base_scan"/>
-    <origin xyz="-0.032 0 0.172" rpy="0 0 0"/>
+    <origin xyz="0.0 0 0.172" rpy="0 0 0"/>
   </joint>
 
   <link name="base_scan">
@@ -147,9 +147,9 @@
     </visual> -->
 
     <collision>
-      <origin xyz="0.015 0 -0.0065" rpy="0 0 0"/>
+      <origin xyz="0.0 0 0.05" rpy="0 0 0"/>
       <geometry>
-        <cylinder length="0.0315" radius="0.055"/>
+        <cylinder length="0.0315" radius="0.035"/>
       </geometry>
     </collision>
 
