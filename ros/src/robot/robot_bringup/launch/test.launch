@@ -1,0 +1,17 @@
+<launch>
+  <include file="$(find robot_bringup)/launch/robot_remote.launch"/>
+
+  <!-- Start a nodelet manager; the name must be unqualified here -->
+  <node pkg="nodelet" type="nodelet" name="pipeline" args="manager" />
+
+  <!-- Include the stereo_image_proc.launch file and pass in a qualified manager name -->
+  <include file="$(find stereo_image_proc)/launch/stereo_image_proc.launch" ns="stereo">
+    <arg name="manager" value="/pipeline" />
+    <arg name="approximate_sync" value="false" />
+    <remap from="left/image_raw" to="/camera_left/image_raw"/>
+    <remap from="left/camera_info" to="/camera_left/camera_info"/>
+    <remap from="right/image_raw" to="/camera_right/image_raw"/>
+    <remap from="right/camera_info" to="/camera_right/camera_info"/>
+  </include>
+
+</launch>
