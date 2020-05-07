@@ -1,6 +1,3 @@
-[submodule "ros/src/lds_pkg/rplidar_ros"]
-	path = ros/src/lds_pkg/rplidar_ros
-	url = https://github.com/thanhphong98/rplidar_ros.git
 [submodule "openSTM32F4_LQFP64"]
 	path = openSTM32F4_LQFP64
 	url = git@github.com:thanhphong98/openSTM32F4_LQFP64.git
