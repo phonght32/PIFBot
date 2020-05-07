@@ -1,16 +1,6 @@
 [submodule "ros/src/lds_pkg/rplidar_ros"]
 	path = ros/src/lds_pkg/rplidar_ros
 	url = https://github.com/thanhphong98/rplidar_ros.git
-
-[submodule "stm32f4/stm32f4-idf"]
-	path = stm32f4/stm32f4-idf
-	url = git@github.com:thanhphong98/stm32f4-idf.git
-[submodule "stm32f4/components/stm32_imu"]
-	path = stm32f4/components/stm32_imu
-	url = git@github.com:thanhphong98/stm32_imu.git
-[submodule "stm32f4/components/stm32_motor"]
-	path = stm32f4/components/stm32_motor
-	url = git@github.com:thanhphong98/stm32_motor.git
 [submodule "openSTM32F4_LQFP64"]
 	path = openSTM32F4_LQFP64
 	url = git@github.com:thanhphong98/openSTM32F4_LQFP64.git
