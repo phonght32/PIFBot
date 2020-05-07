@@ -7,3 +7,6 @@
 [submodule "ros-stm32f4-base-control"]
 	path = ros-stm32f4-base-control
 	url = git@github.com:thanhphong98/ros-stm32f4-base-control.git
+[submodule "ros-slam-nav"]
+	path = ros-slam-nav
+	url = git@github.com:thanhphong98/ros-slam-nav.git
