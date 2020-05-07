@@ -1,6 +1,0 @@
-(sym_lib_table
-  (lib (name stm32f4_disco_board)(type Legacy)(uri ${KIPRJMOD}/Kicad_Library/object/stm32f4_disco_board.lib)(options "")(descr ""))
-  (lib (name mpu_9250)(type Legacy)(uri ${KIPRJMOD}/Kicad_Library/object/mpu_9250.lib)(options "")(descr ""))
-  (lib (name ds1307_module)(type Legacy)(uri ${KIPRJMOD}/Kicad_Library/object/ds1307_module.lib)(options "")(descr ""))
-  (lib (name lm2596_module)(type Legacy)(uri ${KIPRJMOD}/Kicad_Library/object/lm2596_module.lib)(options "")(descr ""))
-)
