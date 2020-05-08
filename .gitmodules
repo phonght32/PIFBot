@@ -7,3 +7,6 @@
 [submodule "ros/src/ros-slam-nav"]
 	path = ros/src/ros-slam-nav
 	url = git@github.com:thanhphong98/ros-slam-nav.git
+[submodule "mechanical/freecad_library"]
+	path = mechanical/freecad_library
+	url = git@github.com:thanhphong98/freecad_library.git
