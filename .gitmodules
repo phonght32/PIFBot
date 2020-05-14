@@ -7,3 +7,6 @@
 [submodule "mechanical/freecad_library"]
 	path = mechanical/freecad_library
 	url = git@github.com:thanhphong98/freecad_library.git
+[submodule "ros-stm32-base-control"]
+	path = ros-stm32-base-control
+	url = git@github.com:thanhphong98/ros-stm32-base-control.git
