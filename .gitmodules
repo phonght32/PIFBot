@@ -1,9 +1,6 @@
 [submodule "openSTM32F4_LQFP64"]
 	path = openSTM32F4_LQFP64
 	url = git@github.com:thanhphong98/openSTM32F4_LQFP64.git
-[submodule "ros-stm32f4-base-control"]
-	path = ros-stm32f4-base-control
-	url = git@github.com:thanhphong98/ros-stm32f4-base-control.git
 [submodule "ros/src/ros-slam-nav"]
 	path = ros/src/ros-slam-nav
 	url = git@github.com:thanhphong98/ros-slam-nav.git
