@@ -1,6 +1,3 @@
-[submodule "openSTM32F4_LQFP64"]
-	path = openSTM32F4_LQFP64
-	url = git@github.com:thanhphong98/openSTM32F4_LQFP64.git
 [submodule "ros/src/ros-slam-nav"]
 	path = ros/src/ros-slam-nav
 	url = git@github.com:thanhphong98/ros-slam-nav.git
