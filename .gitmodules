@@ -4,9 +4,6 @@
 [submodule "mechanical/freecad_library"]
 	path = mechanical/freecad_library
 	url = git@github.com:thanhphong98/freecad_library.git
-[submodule "ros-stm32-base-control"]
-	path = ros-stm32-base-control
-	url = git@github.com:thanhphong98/ros-stm32-base-control.git
 [submodule "hardware/openSTM32F4_LQFP64"]
 	path = hardware/openSTM32F4_LQFP64
 	url = git@github.com:thanhphong98/openSTM32F4_LQFP64.git
