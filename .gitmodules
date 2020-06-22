@@ -7,6 +7,3 @@
 [submodule "hardware/openSTM32F4_LQFP64"]
 	path = hardware/openSTM32F4_LQFP64
 	url = git@github.com:thanhphong98/openSTM32F4_LQFP64.git
-[submodule "firmware/ros-stm32-base-control"]
-	path = firmware/ros-stm32-base-control
-	url = git@github.com:thanhphong98/ros-stm32-base-control.git
