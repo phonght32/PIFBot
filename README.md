@@ -1,31 +1,28 @@
 # PIFBot
 
-PIFBot implements SLAM and Navigation with ROS. Base control uses STM32 micro-controller to communicate with ROS over rosserial protocol. PIFBot equiped Lidar, RGB-D camera, IMU to compatible with many SLAM methods. This tutorial shows system design of PIFBot and the result when running SLAM and Navigation using RTAB-Map package. Many SLAM methods such as GMapping, Hector, Karto,... has been integrated in this ROS package and easy to implement.
+  
 
-### 1. Design system
+### 1. Overview 
 
-#### Mechanical
+PIFBot is a ROS-based mobile robot for running SLAM (Simultaneous Localization and Mapping) algorithms to build a map and driving around this map. This robot is primarily equiped LiDAR, RGB-D camera and odometer sensors that makes it compatible with many SLAM methods. The PIFBot can be customized in various ways depending on how you reconstruct mechanical parts and use optional parts such as sensors and the computer to meet many different purposes. 
 
-#### Hardware
+![real_robot](assets/demo/real_robot.jpg)
 
-#### Firmware
+### 2. Requirement
 
-#### ROS
+#### 2.1. Ubuntu 16.04 Xenial
 
-### 2. Practice
+Ubuntu has been the primary platform for ROS. The releases is available to download from [Ubuntu home page.](https://ubuntu.com/)
 
-### 3. Result
+#### 2.2. ROS Kinetic
 
-#### Mapping
+This project uses ROS Kinetic that compatible with Ubuntu 16.04 (Xenial) to have better support from ROS community. Follow this [link](http://wiki.ros.org/kinetic) to see the installation instructions. 
 
-#### Navigation
+#### 2.3. STM-IDF (STM32 Integrated Developement Framework)
 
-#### Loop-closure detection
+[STM-IDF](https://github.com/thanhphong98/stm-idf) is an open source framework for STM32 that using C/C++ programming languague. The majority of the components in STM-IDF are available in [Github](https://github.com/thanhphong98) under the MIT license. 
 
-#### Multi-session SLAM
 
-### 4. Problem
 
-### 5. Contact
 
-E-mail: thanhphongho1998@gmail.com 
+
