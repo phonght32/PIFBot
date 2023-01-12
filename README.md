@@ -13,11 +13,11 @@ Ubuntu has been the primary platform for ROS. The releases is available to downl
 This project uses ROS Kinetic that compatible with Ubuntu 16.04 (Xenial) to have better support from ROS community. Follow this [link](http://wiki.ros.org/kinetic) to see the installation instructions. 
 
 #### 2.3. STM-IDF (STM32 Integrated Developement Framework)
-[STM-IDF](https://github.com/thanhphong98/stm-idf) is an open source framework for STM32 that using C/C++ programming languague. The majority of the components in STM-IDF are available in [Github Repository](https://github.com/thanhphong98) under the MIT license. 
+[STM-IDF](https://github.com/phonght32/stm-idf) is an open source framework for STM32 that using C/C++ programming languague. The majority of the components in STM-IDF are available in [Github Repository](https://github.com/phonght32) under the MIT license. 
 
 ### 3. Mobile base control
 
-Main controller board for PIFBot is OpenSTM32. The OpenSTM32 board is developed for ROS embedded systems to provide completely open source hardware and software. Everything about the board; Schematic, PCB Gerber, BOM and the firmware source code for PIFBot are available in [Github Repository](https://github.com/thanhphong98/openSTM32F4_LQFP64) and free to distribute under MIT license. 
+Main controller board for PIFBot is OpenSTM32. The OpenSTM32 board is developed for ROS embedded systems to provide completely open source hardware and software. Everything about the board; Schematic, PCB Gerber, BOM and the firmware source code for PIFBot are available in [Github Repository](https://github.com/phonght32/openSTM32F4_LQFP64) and free to distribute under MIT license. 
 
 The STM32F4 series is a main chip inside the OpenSTM32 board which is based on a very powerful ARM Cortex-M4 with Floating Point Unit (FPU). The developement environment for OpenSTM32 is wide open but STM-IDF which mentioned above is selected as main programming tool. 
 
@@ -103,4 +103,4 @@ Real-Time Appearance-Based Mapping is used for practing SLAM and Navigation.
 Follow [this link](https://youtu.be/UWhPCQyU918) to watch video on Youtube. 
 
 #### 7. Problem
-For any problems, please report to [Issues](https://github.com/thanhphong98/PIFBot/issues) or contact email thanhphongho1998@gmail.com
+For any problems, please report to [Issues](https://github.com/phonght32/PIFBot/issues) or contact email thanhphongho1998@gmail.com
