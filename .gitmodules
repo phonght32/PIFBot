@@ -1,12 +1,12 @@
 [submodule "ros/src/ros-slam-nav"]
 	path = ros/src/ros-slam-nav
-	url = git@github.com:thanhphong98/ros-slam-nav.git
+	url = git@github.com:phonght32/ros-slam-nav.git
 [submodule "mechanical/freecad_library"]
 	path = mechanical/freecad_library
-	url = git@github.com:thanhphong98/freecad_library.git
+	url = git@github.com:phonght32/freecad_library.git
 [submodule "hardware/openSTM32F4_LQFP64"]
 	path = hardware/openSTM32F4_LQFP64
-	url = git@github.com:thanhphong98/openSTM32F4_LQFP64.git
+	url = git@github.com:phonght32/openSTM32F4_LQFP64.git
 [submodule "firmware/ros-stm32-base-control"]
 	path = firmware/ros-stm32-base-control
-	url = git@github.com:thanhphong98/ros-stm32-base-control.git
+	url = git@github.com:phonght32/ros-stm32-base-control.git
